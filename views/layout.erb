@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="no">
+
+<head>
+  <meta charset="utf-8">
+
+  <title><%= @title %></title>
+  <meta name="description" content="">
+  <meta name="author" content="Deichmanske Bibliotek">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  <!--[if lt IE 9]>
+    <script src="/js/html5.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+
+  <div id="container">
+    <header>
+      <div id="header-inner">
+        <img src="/img/logo.png" id="logo" alt="logo"/>
+        <form id="search-form">
+          <input type="search" id="search-input" placeholder="forfatter eller tittel">
+          <button type="submit" id="search-button">Søk</button>
+        </form>
+        <div id="header-links">
+          <a href="/om">Om bokanbefalinger</a><a href="/skrivetips">Skrivetips</a>
+        </div>
+      </div>
+    </header>
+
+    <div id="main" role="main">
+      <%= yield %>
+    </div>
+
+    <footer>
+
+    </footer>
+  </div>
+</body>
+</html>
