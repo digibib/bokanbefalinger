@@ -113,11 +113,7 @@ sub {
    Embedded content
    ========================================================================== */
 
-/*
- * Removes border when inside `a` element in IE 8/9.
- */
-
-
+s
 
 /*
  * Corrects overflow displayed oddly in IE 9.
@@ -209,7 +205,7 @@ body {
 }
 
 h1 { font-size: 2em; }
-h1, h2, h3 { color :#333; }
+h1, h2, h3 { color :#333; line-height: 1.1em;}
 
 /* main layout */
 
