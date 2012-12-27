@@ -36,9 +36,23 @@
     <div id="main" role="main">
 
       <ul id="navbar">
-        <li <%= 'class="active"' if request.path_info == '/' %>><a href="/"><span class="inner-navbutton">Forside</span></a></li>
-        <li <%= 'class="active"' if request.path_info == '/reviews' %>><a href="/reviews"><span class="inner-navbutton">Bokanbefalinger</span></a></li>
-        <li <%= 'class="active"' if request.path_info == '/feeds' %>><a href="/feeds"><span class="inner-navbutton">Lister</span></a></li>
+        <li <%= 'class="active"' if request.path_info == '/' %>>
+          <a href="/"><span class="inner-navbutton">Forside</span></a>
+        </li>
+        <li <%= 'class="active"' if request.path_info == '/reviews' %>>
+          <a href="/reviews"><span class="inner-navbutton">Bokanbefalinger</span></a>
+        </li>
+        <li <%= 'class="active"' if request.path_info == '/feeds' %>>
+          <a href="/feeds"><span class="inner-navbutton">Lister</span></a>
+        </li>
+        <% if session[:user] %>
+          <li <%= 'class="active"' if request.path_info == '/myreviews' %>>
+            <a href="/"><span class="inner-navbutton">Mine anbefalinger</span></a>
+          </li>
+          <li <%= 'class="active"' if request.path_info == '/newreview' %>>
+            <a href="/"><span class="inner-navbutton">Skriv anbefaling</span></a>
+          </li>
+        <% end %>
       </ul>
 
       <%= yield %>
