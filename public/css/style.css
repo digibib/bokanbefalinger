@@ -242,6 +242,7 @@ header {
 
 #header-inner {
   width: 1000px;
+  height: 100%;
   margin: auto;
 }
 
@@ -267,7 +268,6 @@ header {
   float: right;
   display: inline-block;
   margin-top:-7px;
-  margin-right: -40px;
 }
 
 #search-input {
