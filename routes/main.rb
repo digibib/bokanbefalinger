@@ -5,7 +5,7 @@ class BokanbefalingerApp < Sinatra::Application
     erb :index
   end
 
-  get "/" do
+  get "/skrivetips" do
     @title = "Skrivetips - Bokanbefalinger"
     erb :skrivetips
   end

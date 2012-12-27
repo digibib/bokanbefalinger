@@ -34,11 +34,13 @@
     </header>
 
     <div id="main" role="main">
+
       <ul id="navbar">
-        <li class="active"><strong>Forside</strong></li>
-        <li>Bokanbefalinger</li>
-        <li>Lister</li>
+        <li <%= 'class="active"' if request.path_info == '/' %>><a href="/">Forside</a></li>
+        <li <%= 'class="active"' if request.path_info == '/reviews' %>><a href="/reviews">Bokanbefalinger</a></li>
+        <li <%= 'class="active"' if request.path_info == '/feeds' %>><a href="/feeds">Lister</a></li>
       </ul>
+
       <%= yield %>
     </div>
 
