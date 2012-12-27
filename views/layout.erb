@@ -22,7 +22,7 @@
   <div id="container">
     <header>
       <div id="header-inner">
-        <img src="/img/logo.png" id="logo" alt="logo"/>
+        <img src="/img/logo.png" id="logo" alt="logo"/><br />
         <form id="search-form">
           <input type="search" id="search-input" placeholder="forfatter eller tittel">
           <button type="submit" id="search-button">Søk</button>
@@ -34,6 +34,11 @@
     </header>
 
     <div id="main" role="main">
+      <ul id="navbar">
+        <li class="active"><strong>Forside</strong></li>
+        <li>Bokanbefalinger</li>
+        <li>Lister</li>
+      </ul>
       <%= yield %>
     </div>
 

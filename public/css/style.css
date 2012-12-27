@@ -292,12 +292,19 @@ html {
 
 body {
     margin: 0;
+    color: #444;
 }
+
 ul { list-style:none;}
 
 /* main layout */
 
-#main { margin-top: 60px;}
+#main {
+  margin-top: 80px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 1000px;
+}
 
 /* header */
 
@@ -314,7 +321,7 @@ header {
 }
 
 #header-inner {
-  width: 900px;
+  width: 1000px;
   margin: auto;
 }
 
@@ -339,6 +346,7 @@ header {
 #search-form {
   float: right;
   display: inline-block;
+  margin-right: -40px;
 }
 
 #search-input {
@@ -357,4 +365,44 @@ header {
   letter-spacing:0.05em;
   height:28px;
   width:50px;
+}
+
+/* Navbar */
+
+#navbar {
+  position: relative;
+  background: #444;
+  color:#fff;
+  width: 100%;
+  height: 46px;
+  border-radius:5px;
+}
+
+#navbar li {
+  display: inline-block;
+  height: 100%;
+  width: 150px;
+  border-right:1px solid white;
+  text-align: center;
+  line-height:46px;
+}
+
+#navbar li.active {
+}
+
+#navbar .active :after {
+  position: absolute;
+  content: ' ';
+  height: 0;
+  position: absolute;
+  width: 0;
+  top: 45px;
+  left:100px;
+  border: 10px solid transparent;
+  border-top-color: #444;
+}
+
+#navbar li a {
+  color:#fff;
+
 }
