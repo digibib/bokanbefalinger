@@ -9,7 +9,9 @@ class BokanbefalingerApp < Sinatra::Application
   end
 
   configure :development do
-    # ...
+    require "sinatra/reloader"
+    register Sinatra::Reloader
+    also_reload '*.rb'
   end
 
   helpers do
