@@ -379,6 +379,12 @@ header {
   line-height:46px;
 }
 
+span.inner-navbutton {
+  width:100%;
+  height:100%;
+  display: inline-block;
+}
+
 #navbar li.active {
   font-weight: bold;
 }

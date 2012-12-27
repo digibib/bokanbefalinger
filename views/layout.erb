@@ -36,9 +36,9 @@
     <div id="main" role="main">
 
       <ul id="navbar">
-        <li <%= 'class="active"' if request.path_info == '/' %>><a href="/">Forside</a></li>
-        <li <%= 'class="active"' if request.path_info == '/reviews' %>><a href="/reviews">Bokanbefalinger</a></li>
-        <li <%= 'class="active"' if request.path_info == '/feeds' %>><a href="/feeds">Lister</a></li>
+        <li <%= 'class="active"' if request.path_info == '/' %>><a href="/"><span class="inner-navbutton">Forside</span></a></li>
+        <li <%= 'class="active"' if request.path_info == '/reviews' %>><a href="/reviews"><span class="inner-navbutton">Bokanbefalinger</span></a></li>
+        <li <%= 'class="active"' if request.path_info == '/feeds' %>><a href="/feeds"><span class="inner-navbutton">Lister</span></a></li>
       </ul>
 
       <%= yield %>
