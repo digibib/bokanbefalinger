@@ -39,11 +39,11 @@
         <li <%= 'class="active"' if request.path_info == '/' %>>
           <a href="/"><span class="inner-navbutton">Forside</span></a>
         </li>
-        <li <%= 'class="active"' if request.path_info == '/reviews' %>>
-          <a href="/reviews"><span class="inner-navbutton">Bokanbefalinger</span></a>
+        <li <%= 'class="active"' if request.path_info == '/anbefalinger' %>>
+          <a href="/anbefalinger"><span class="inner-navbutton">Bokanbefalinger</span></a>
         </li>
-        <li <%= 'class="active"' if request.path_info == '/feeds' %>>
-          <a href="/feeds"><span class="inner-navbutton">Lister</span></a>
+        <li <%= 'class="active"' if request.path_info == '/lister' %>>
+          <a href="/lister"><span class="inner-navbutton">Lister</span></a>
         </li>
         <% if session[:user] %>
           <li <%= 'class="active"' if request.path_info == '/myreviews' %>>

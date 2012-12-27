@@ -6,12 +6,12 @@ class BokanbefalingerApp < Sinatra::Application
     erb :reviews
   end
 
-  get "/reviews" do
+  get "/anbefalinger" do
     @title  = "Siste anbefalinger"
     erb :reviews
   end
 
-  get "/feeds" do
+  get "/lister" do
     @title = "Lister"
     erb :feeds
   end
