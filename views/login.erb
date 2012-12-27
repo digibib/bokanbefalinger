@@ -1,0 +1,13 @@
+<div id="login-box">
+	<% if session[:user] %>
+		<p>Hei, <%= session[:user] %>!</p>
+		<a href="/logout"><button class="button-big" id="logout-button" type="submit">Logg ut</button></a>
+	<% else %>
+		<p>Mine anbefalinger</p>
+		<form id="login-form" action="/login" method="POST">
+			<input name="username" type="text" placeholder="Brukernavn" />
+			<input name="password" type="password" placeholder="Passord" />
+			<button class="button-big" id="login-button" type="submit">Logg inn</button>
+		</form>
+	<% end %>
+</div>

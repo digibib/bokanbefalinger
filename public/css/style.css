@@ -113,8 +113,6 @@ sub {
    Embedded content
    ========================================================================== */
 
-s
-
 /*
  * Corrects overflow displayed oddly in IE 9.
  */
@@ -216,6 +214,17 @@ h1, h2, h3 { color :#333; line-height: 1.1em;}
   width: 1000px;
 }
 
+.main-left {
+  width: 760px;
+  float: left;
+}
+
+.main-right {
+  margin-top: 20px;
+  width: 240px;
+  float: left;
+}
+
 /* header */
 
 header {
@@ -285,7 +294,6 @@ header {
   list-style:none;
   background: #444;
   color:#fff;
-  width: 100%;
   height: 46px;
   border-radius:5px;
 }
@@ -324,4 +332,40 @@ span.inner-navbutton {
 #navbar a, #nabbar a:visited  {
   color: #fff;
   text-decoration: none;
+}
+
+/* Login-bar */
+
+#login-box {
+  border: 2px solid #ccc;
+  background: #eee;
+  width: 214px;
+  padding: 10px;
+  text-align: center;
+}
+
+#login-box p {
+  font-size: 1.4em;
+  letter-spacing: 0.03em;
+}
+#login-box input {
+ width: 140px;
+ margin: 4px;
+}
+
+.button-big {
+  margin:10px;
+  padding: 10px;
+  width: 145px;
+  color: #fff;
+  font-size: 1.3em;
+  background: #c21211;
+  border-radius: 3px;
+  border: none;
+  line-height:1.6em;
+}
+
+#login-form input {
+ font-size: 0.9em;
+ padding: 2px;
 }

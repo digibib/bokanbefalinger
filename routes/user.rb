@@ -1,18 +1,11 @@
 # encoding: utf-8
 class BokanbefalingerApp < Sinatra::Application
-  get "/login" do
-    @title  = "Login"
-    #erb :login
-  end
-
   post "/login" do
-    # Define your own check_login
-    # if user = check_login
-    #   session[ :user ] = user.pk
-    #   redirect '/'
-    # else
-    #   redirect '/login'
-    # end
+    puts request.params
+    unless request.params["username"].empty?||request.params["password"].empty?
+      session[:user] = request.params["username"]
+    end
+    redirect "/"
   end
 
   get "/logout" do
