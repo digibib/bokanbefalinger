@@ -23,8 +23,8 @@
     <header>
       <div id="header-inner">
         <a href="/"><img src="/img/logo.png" id="logo" alt="logo"/></a><br />
-        <form id="search-form">
-          <input type="search" id="search-input" placeholder="forfatter eller tittel">
+        <form id="search-form" action="/search" method="POST">
+          <input type="search" name="search" id="search-input" placeholder="forfatter eller tittel">
           <button type="submit" id="search-button">Søk</button>
         </form>
         <div id="header-links">
