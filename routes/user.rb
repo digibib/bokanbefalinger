@@ -1,7 +1,6 @@
 # encoding: utf-8
 class BokanbefalingerApp < Sinatra::Application
   post "/login" do
-    puts request.params
     unless request.params["username"].empty?||request.params["password"].empty?
       session[:user] = request.params["username"]
     end
