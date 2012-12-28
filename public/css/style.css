@@ -451,8 +451,9 @@ p.title {
 
 .review-snippet {
   padding-top: 20px;
-  border-top: 1px dashed #ccc;
-  margin-top: 30px;
+  padding-bottom: 30px;
+  border-bottom: 1px dashed #ccc;
+  margin-bottom: 30px;
   width: 100%;
 }
 .review-date {
