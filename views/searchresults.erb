@@ -11,7 +11,7 @@
 				<div class="search-work">
 					<div class="book-cover book-description">
 						<% if w["cover_url"] %>
-							<img class="cover" src="<%= w["cover_url"] %>"/></li>
+							<img class="cover" src="<%= w["cover_url"] %>"/>
 						<% end %>
 					</div>
 					<div class="book-description">
@@ -23,14 +23,13 @@
 					<div class="clearfix"></div>
 					<div class="review-snippet">
 						<div class="review-date">
-							<% puts r["modified"] %>
 							<%= r["modified"][8,2]+'.'+r["modified"][5,2]+'.'+r["modified"][0,4] %>
 						</div>
 						<div class="review-teaser">
 							<strong><%= r["title"] %></strong><br/>
 							<p>
 								<%= r["teaser"] %>
-								<a href="x">...les mer</a>
+								<a href="/anbefaling/<%= r["uri"][36,200] %>">...les mer</a>
 							</p>
 						</div>
 					</div>
@@ -51,7 +50,7 @@
 			<div class="search-work">
 				<div class="book-cover book-description">
 					<% if work["cover_url"] %>
-						<img class="cover" src="<%= work["cover_url"] %>"/></li>
+						<img class="cover" src="<%= work["cover_url"] %>"/>
 					<% end %>
 				</div>
 				<div class="book-description">
@@ -63,14 +62,13 @@
 				<div class="clearfix"></div>
 				<div class="review-snippet">
 					<div class="review-date">
-						<% puts r["modified"] %>
 						<%= r["modified"][8,2]+'.'+r["modified"][5,2]+'.'+r["modified"][0,4] %>
 					</div>
 					<div class="review-teaser">
 						<strong><%= r["title"] %></strong><br/>
 						<p>
 							<%= r["teaser"] %>
-							<a href="x">...les mer</a>
+							<a href="/anbefaling/<%= r["uri"][36,200] %>">...les mer</a>
 						</p>
 					</div>
 				</div>

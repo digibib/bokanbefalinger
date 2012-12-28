@@ -41,6 +41,23 @@ class BokanbefalingerApp < Sinatra::Application
     end
   end
 
+  aget '/anbefaling/*' do
+    url = "http://datatest.deichman.no/api/reviews"
+    @uri = create_uri(params[:splat])
+    req = EventMachine::HttpRequest.new(url).get(:body => {:uri => @uri}.to_json)
+
+    req.errback {
+      body { redirect "/" }
+    }
+    req.callback {
+      response = JSON.parse(req.response)
+      @review = response["works"][0]
+      body do
+        erb :review
+      end
+    }
+  end
+
   get "/anbefalinger" do
     @title  = "Siste anbefalinger"
     erb :reviews

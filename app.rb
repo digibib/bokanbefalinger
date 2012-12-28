@@ -2,6 +2,8 @@
 require "sinatra"
 require "sinatra/async"
 
+BASE_URI="http://data.deichman.no/bookreviews/"
+
 class BokanbefalingerApp < Sinatra::Application
   register Sinatra::Async
 
@@ -20,6 +22,11 @@ class BokanbefalingerApp < Sinatra::Application
   helpers do
     include Rack::Utils
     alias_method :h, :escape_html
+
+    def create_uri(path)
+      BASE_URI+path.join("")
+    end
+
   end
 
 end

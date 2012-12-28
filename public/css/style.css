@@ -426,9 +426,9 @@ span.inner-navbutton {
 
 #review-form select { padding: 4px;}
 
-#new-review-heading { width: 100%;}
-#new-review-heading div { float:left;}
-#new-review-heading p { margin-left:30px;}
+#review-heading { width: 100%;}
+#review-heading div { float:left;}
+#review-heading p { margin-left:30px;}
 
 
 /* search results */
@@ -463,4 +463,18 @@ p.title {
 .review-teaser {
   float: left;
   width: 700px;
+}
+
+/* single review page */
+
+.teaser {
+  background: #eee;
+  padding: 10px;
+  width:706px;
+  clear:both;
+}
+
+.review-text {
+  width:100%;
+  clear:both;
 }

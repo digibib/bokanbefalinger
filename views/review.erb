@@ -1,0 +1,26 @@
+<div class="main-left">
+	<h2><%= @review["title"] %></h2>
+	<div id="review-heading">
+		<div class="book-cover">
+			<% if @review["cover_url"] %>
+				<img class="cover" src="<%= @review["cover_url"] %>"/>
+			<% end %>
+		</div>
+		<div>
+			<p><strong><%= @review["author"] %></strong></p>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+	<% current = @review["reviews"].first %>
+	<h3><%= current["title"] %></h3>
+	<div class="teaser">
+		<%= current["teaser"] %>
+	</div>
+	<div class="review-text">
+		<%= current["text"] %>
+	</div>
+	<div class="clearfix" style="margin-top:100px"></div>
+</div>
+<div class="main-right">
+	<%= erb :login %>
+</div>
