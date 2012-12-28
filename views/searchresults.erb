@@ -1,6 +1,6 @@
 <input id="searchterms" type="hidden" value="<%= @searchterms %>"/>
 
-<h2><%= @num_authors %> treff på "<%= @searchterms %>" i forfattere:</h2>
+<h2><%= @num_authors %> treff på "<%= @searchterms %>" i forfattere</h2>
 <% if @num_authors > 0 %>
 	<div class="search-author">
 		<% @sorted.each_with_index do |(author, work), i| %>
@@ -30,7 +30,7 @@
 							<strong><%= r["title"] %></strong><br/>
 							<p>
 								<%= r["teaser"] %>
-								<a href="x">les mer</a>
+								<a href="x">...les mer</a>
 							</p>
 						</div>
 					</div>
@@ -70,7 +70,7 @@
 						<strong><%= r["title"] %></strong><br/>
 						<p>
 							<%= r["teaser"] %>
-							<a href="x">les mer</a>
+							<a href="x">...les mer</a>
 						</p>
 					</div>
 				</div>
@@ -78,3 +78,6 @@
 		<% end %>
 	</div>
 <% end %>
+
+<div class="clearfix"></div>
+<div style="margin-top:200px"></div>
