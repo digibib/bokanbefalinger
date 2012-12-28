@@ -28,11 +28,6 @@ abbr[title] {
  * Addresses style set to `bolder` in Firefox 4+, Safari 5, and Chrome.
  */
 
-b,
-strong {
-    font-weight: bold;
-}
-
 /*
  * Addresses styling not present in Safari 5 and Chrome.
  */
@@ -190,6 +185,7 @@ a { color: #c12121; }
 a:focus { outline: thin dotted; }
 a:active, a:hover { outline: 0; }
 img { border: 0; }
+b, strong { font-weight: bold; }
 html {
     font-family: Arial, sans-serif;
     -webkit-text-size-adjust: 100%;
@@ -215,14 +211,38 @@ h1, h2, h3 { color :#333; line-height: 1.1em;}
 }
 
 .main-left {
-  width: 760px;
+  width: 740px;
   float: left;
 }
 
 .main-right {
   margin-top: 20px;
-  width: 240px;
+  width: 260px;
   float: left;
+}
+
+/* global styles */
+
+.clearfix { clear:both;}
+
+.gray { background: #808080; }
+
+.red { background: #c12121;}
+
+button.medium {
+  padding: 4px;
+  width: 130px;
+  color: #fff;
+  border-radius: 3px;
+  border:0;
+  line-height:1.4em;
+  margin-right:0.5em;
+}
+
+.book-cover {
+  width: 140px;
+  height: 200px;
+  background: #ccc;
 }
 
 /* header */
@@ -334,20 +354,25 @@ span.inner-navbutton {
   text-decoration: none;
 }
 
-/* Login-bar */
+/* right bar */
 
-#login-box {
+.right-bar {
   border: 2px solid #ccc;
   background: #eee;
-  width: 214px;
+  width: 234px;
   padding: 10px;
-  text-align: center;
+  margin-bottom: 30px;
 }
+
+/* Login-bar */
+
+#login-box { text-align: center; }
 
 #login-box p {
   font-size: 1.4em;
   letter-spacing: 0.03em;
 }
+
 #login-box input {
  width: 140px;
  margin: 4px;
@@ -369,3 +394,33 @@ span.inner-navbutton {
  font-size: 0.9em;
  padding: 2px;
 }
+
+/* skrivetips bar */
+
+#tips-box img { margin-left:-10px;}
+
+#tips-box p {
+  font-size: 1.0em;
+  letter-spacing: 0.03em;
+}
+
+#tips-box ol { margin-left: -16px; font-weight: bold; }
+#tips-box li { font-size: 1.1em; height:2.5em; }
+#tips-box a, #tips-box a:visited  { color: #444;}
+
+/* new review */
+
+#review-form { width: 600px; margin-top: 30px;}
+
+#review-form input,#review-form textarea {
+  width:100%;
+  border: 2px solid #ccc;
+  padding: 8px;
+  margin-bottom:20px;
+}
+
+#review-form select { padding: 4px;}
+
+#new-review-heading { width: 100%;}
+#new-review-heading div { float:left;}
+#new-review-heading p { margin-left:30px;}

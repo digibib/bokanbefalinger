@@ -1,0 +1,31 @@
+<div class="main-left">
+	<h2>Skriv anbefaling</h2>
+	<div id="new-review-heading">
+		<div class="book-cover"></div>
+		<div>
+			<p><strong>Gummi-Tarzan</strong></p>
+			<p><strong>Ole Lund Kirkegård</strong></p>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+	<form id="review-form" action="/review" method="POST">
+		<input type="text" name="title" placeholder="Tittel på anbefalingen"/>
+		<textarea name="teaser" rows="2" placeholder="Skriv en teaser, maks to setninger"></textarea>
+		<textarea name="review" rows="20" placeholder="Skriv en omtale"></textarea>
+		<select name="audience">
+			<option value="unknown" selected>Målgruppe</option>
+			<option value="juvenile">Barn/ungdom</option>
+			<option value="adult">Voksne</option>
+		</select>
+		<div style="margin-top:20px">
+			<button class="medium gray">Slett</button>
+			<button class="medium gray">Forhåndsvisning</button>
+			<button class="medium gray">Oppdater</button>
+			<button class="medium red">Publisér</button>
+		</div>
+	</form>
+</div>
+<div class="main-right">
+	<%= erb :login %>
+	<%= erb :tipsbar %>
+</div>
