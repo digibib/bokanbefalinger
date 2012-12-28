@@ -1,12 +1,13 @@
 # encoding: utf-8
 require "sinatra"
 require "sinatra/async"
+require "redis"
 
 BASE_URI="http://data.deichman.no/bookreviews/"
 
 class BokanbefalingerApp < Sinatra::Application
   register Sinatra::Async
-
+  REDIS = Redis.new #(:driver => :synchrony)
   enable :sessions
 
   configure :production do
