@@ -1,0 +1,80 @@
+<input id="searchterms" type="hidden" value="<%= @searchterms %>"/>
+
+<h2><%= @num_authors %> treff på "<%= @searchterms %>" i forfattere:</h2>
+<% if @num_authors > 0 %>
+	<div class="search-author">
+		<% @sorted.each_with_index do |(author, work), i| %>
+			<div class="clearfix"></div>
+			<h3 class="author"><%= i+1 %>. <%= author %></h3>
+
+			<% work.each do |w| %>
+				<div class="search-work">
+					<div class="book-cover book-description">
+						<% if w["cover_url"] %>
+							<img class="cover" src="<%= w["cover_url"] %>"/></li>
+						<% end %>
+					</div>
+					<div class="book-description">
+						<p class="title"><strong><%= w["title"] %></strong></p>
+						<p class="author"><%= w["author"] %></p>
+					</div>
+				</div>
+				<% w["reviews"].each do |r| %>
+					<div class="clearfix"></div>
+					<div class="review-snippet">
+						<div class="review-date">
+							<% puts r["modified"] %>
+							<%= r["modified"][8,2]+'.'+r["modified"][5,2]+'.'+r["modified"][0,4] %>
+						</div>
+						<div class="review-teaser">
+							<strong><%= r["title"] %></strong><br/>
+							<p>
+								<%= r["teaser"] %>
+								<a href="x">les mer</a>
+							</p>
+						</div>
+					</div>
+				<% end %>
+			<% end %>
+		<% end %>
+	</div>
+<% end %>
+
+<div class="clearfix"></div>
+
+<h2><%= @num_titles %> treff på "<%= @searchterms %>" i tittel</h2>
+<% if @num_titles > 0 %>
+	<div class="search-title">
+		<% @titles["works"].each_with_index do |work, i| %>
+			<div class="clearfix"></div>
+			<h3 class="author"><%= i+1 %>. <%= work["title"] %></h3>
+			<div class="search-work">
+				<div class="book-cover book-description">
+					<% if work["cover_url"] %>
+						<img class="cover" src="<%= work["cover_url"] %>"/></li>
+					<% end %>
+				</div>
+				<div class="book-description">
+					<p class="title"><strong><%= work["title"] %></strong></p>
+					<p class="author"><%= work["author"] %></p>
+				</div>
+			</div>
+			<% work["reviews"].each do |r| %>
+				<div class="clearfix"></div>
+				<div class="review-snippet">
+					<div class="review-date">
+						<% puts r["modified"] %>
+						<%= r["modified"][8,2]+'.'+r["modified"][5,2]+'.'+r["modified"][0,4] %>
+					</div>
+					<div class="review-teaser">
+						<strong><%= r["title"] %></strong><br/>
+						<p>
+							<%= r["teaser"] %>
+							<a href="x">les mer</a>
+						</p>
+					</div>
+				</div>
+			<% end %>
+		<% end %>
+	</div>
+<% end %>

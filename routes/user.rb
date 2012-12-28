@@ -2,8 +2,11 @@
 class BokanbefalingerApp < Sinatra::Application
   post "/login" do
     unless request.params["username"].empty?||request.params["password"].empty?
+      # Gjør autentisering mot protected-graph i virtuoso her
+
       session[:user] = request.params["username"]
     end
+
     redirect "/"
   end
 

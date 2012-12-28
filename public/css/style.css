@@ -229,6 +229,11 @@ h1, h2, h3 { color :#333; line-height: 1.1em;}
 
 .red { background: #c12121;}
 
+img.cover {
+  width: 150px;
+  height: 200px;
+}
+
 button.medium {
   padding: 4px;
   width: 130px;
@@ -240,7 +245,7 @@ button.medium {
 }
 
 .book-cover {
-  width: 140px;
+  width: 150px;
   height: 200px;
   background: #ccc;
 }
@@ -424,3 +429,38 @@ span.inner-navbutton {
 #new-review-heading { width: 100%;}
 #new-review-heading div { float:left;}
 #new-review-heading p { margin-left:30px;}
+
+
+/* search results */
+
+.search-work {
+  clear:both;
+  padding-top: 30px;
+  width:100%;
+}
+
+.book-description { float: left; text-align:top;}
+
+h3.author { background: #eee; font-weight:bold; line-height:2em; padding:0.2em;}
+p.author { margin-left:30px; }
+p.title {
+  margin-left:30px;
+  font-size: 1.3em;
+  color: #c21211;
+}
+
+.review-snippet {
+  padding-top: 20px;
+  border-top: 1px dashed #ccc;
+  margin-top: 30px;
+  width: 100%;
+}
+.review-date {
+  float: left;
+  width: 180px;
+  text-align: center;
+}
+.review-teaser {
+  float: left;
+  width: 700px;
+}
