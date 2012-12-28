@@ -5,6 +5,7 @@ class BokanbefalingerApp < Sinatra::Application
       # Gjør autentisering mot protected-graph i virtuoso her
 
       session[:user] = request.params["username"]
+      redirect params["take_me_back"]
     end
 
     redirect "/"

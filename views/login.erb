@@ -5,6 +5,7 @@
 	<% else %>
 		<p>Mine anbefalinger</p>
 		<form id="login-form" action="/login" method="POST">
+			<input name="take_me_back" type="hidden" value="<%= request.path %>">
 			<input name="username" type="text" placeholder="Brukernavn" />
 			<input name="password" type="password" placeholder="Passord" />
 			<button class="button-big" id="login-button" type="submit">Logg inn</button>
