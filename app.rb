@@ -13,6 +13,8 @@ class BokanbefalingerApp < Sinatra::Application
   set :caching, true
   CACHE = Redis.new      # Assumes Redis is running on http://localhost:6379
 
+  API = "http://datatest.deichman.no/api/reviews"
+
   configure :production do
     #set :clean_trace, true
   end
