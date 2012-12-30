@@ -371,9 +371,10 @@ span.inner-navbutton {
 
 /* Login-bar */
 
-#login-box { text-align: center; }
+#login-box { text-align: center; position: relative;}
 
 #login-box p {
+  margin-top: 40px;
   font-size: 1.4em;
   letter-spacing: 0.03em;
 }
@@ -399,6 +400,9 @@ span.inner-navbutton {
  font-size: 0.9em;
  padding: 2px;
 }
+
+#logg-inn-her { margin-left: -10px; }
+#logg-inn-pil { position: absolute; left:5px;}
 
 /* skrivetips bar */
 
