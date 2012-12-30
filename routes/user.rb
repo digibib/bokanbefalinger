@@ -8,6 +8,7 @@ class BokanbefalingerApp < Sinatra::Application
       redirect params["take_me_back"]
     end
 
+    redirect params["take_me_back"] if params["take_me_back"]
     redirect "/"
   end
 
