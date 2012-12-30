@@ -5,6 +5,25 @@ require "em-http-request"
 
 class BokanbefalingerApp < Sinatra::Application
 
+  aget "/benchmark" do
+    @searchtearms = "hamsun"
+
+    url = "http://datatest.deichman.no/api/reviews"
+
+    start_time = Time.now
+
+    multi = EventMachine::MultiRequest.new
+    multi.add :author, EventMachine::HttpRequest.new(url).get(:body => {:author => @searchterms}.to_json)
+    multi.add :title, EventMachine::HttpRequest.new(url).get(:body => {:title => @searchterms}.to_json)
+
+    multi.callback do
+      body do
+        end_time = Time.now
+        "2 parallell requests to datatest.deichman.no: #{end_time - start_time} sek"
+      end
+    end
+  end
+
   apost "/search" do
     @searchterms = request.params["search"]
     @title = "Søk i anbefalinger: #{@searchterms}"
@@ -14,11 +33,12 @@ class BokanbefalingerApp < Sinatra::Application
     multi.add :author, EventMachine::HttpRequest.new(url).get(:body => {:author => @searchterms}.to_json)
     multi.add :title, EventMachine::HttpRequest.new(url).get(:body => {:title => @searchterms}.to_json)
 
-    cached = REDIS.get "author_"+@searchterms
+    cached = get_cache "author_"+@searchterms
     if cached.nil?
       multi.callback do
-        #puts multi.responses[:callback][:author].response
-        REDIS.set "author_"+@searchterms, multi.responses[:callback][:author].response
+        #Note that Multi will always invoke the callback function, regardless of whether the request succeed or failed.
+
+        set_cache "author_"+@searchterms, multi.responses[:callback][:author].response
         response = JSON.parse(multi.responses[:callback][:author].response)
         # sort results by author
         @num_authors = 0
@@ -33,8 +53,8 @@ class BokanbefalingerApp < Sinatra::Application
         end
 
         #authors = response
-        @num_titles =0
-        REDIS.set "title_"+@searchterms, multi.responses[:callback][:title].response
+        @num_titles = 0
+        set_cache "title_"+@searchterms, multi.responses[:callback][:title].response
         @titles = JSON.parse(multi.responses[:callback][:title].response)
         if @titles["works"]
           @num_titles = @titles["works"].collect { |w| w["author"] }.uniq.size
@@ -59,7 +79,7 @@ class BokanbefalingerApp < Sinatra::Application
 
         #authors = response
         @num_titles =0
-        @titles = JSON.parse(REDIS.get "title_"+@searchterms)
+        @titles = JSON.parse(get_cache "title_"+@searchterms)
         if @titles["works"]
           @num_titles = @titles["works"].collect { |w| w["author"] }.uniq.size
         end
@@ -72,17 +92,21 @@ class BokanbefalingerApp < Sinatra::Application
     url = "http://datatest.deichman.no/api/reviews"
     @uri = create_uri(params[:splat])
 
-    cached = REDIS.get @uri
+    cached = get_cache(@uri)
+
     if cached.nil?
       req = EventMachine::HttpRequest.new(url).get(:body => {:uri => @uri}.to_json)
 
       req.errback {
+        puts "DEBUG: Coulnd't connect to datatest.deichman.no"
         body { redirect "/" }
       }
       req.callback {
         response = JSON.parse(req.response)
         @review = response["works"][0]
-        REDIS.set @uri, @review.to_json
+
+        set_cache @uri, @review.to_json
+
         body do
           erb :review
         end
