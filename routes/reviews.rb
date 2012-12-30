@@ -83,13 +83,13 @@ class BokanbefalingerApp < Sinatra::Application
 
     req.errback do
       @title = "Feil"
-      @message = "Får ikke kontakt med ekstern ressurs (#{API})."
+      @error_message = "Får ikke kontakt med ekstern ressurs (#{API})."
       body { erb :error }
     end
 
     req.callback do
       if req.response.match(/error/)
-        @message = "Finner ingen anbefaling med denne ID-en (#{@uri})."
+        @error_message = "Finner ingen anbefaling med denne ID-en (#{@uri})."
         @title = "Feil"
         body { erb :error }
       else
