@@ -1,4 +1,7 @@
-/* base (extracted from normalize.css) */
+/* ------------------------------------------------------------------------
+   BASE (extracted from normalize.css)
+   ------------------------------------------------------------------------ */
+
 [hidden] { display: none; }
 article, aside, details, figcaption, figure, footer, header, hgroup, nav,
 section, summary { display: block; }
@@ -87,10 +90,12 @@ h1, h2, h3 { color :#333; line-height: 1.1em;}
 
 .gray { background: #808080; }
 
+.light-gray { background: #ccc;}
+
 .red { background: #c12121;}
 
 img.cover {
-  width: 150px;
+  max-width: 150px;
   height: 200px;
 }
 
@@ -105,9 +110,17 @@ button.medium {
 }
 
 .book-cover {
+  text-align: center;
   width: 150px;
   height: 200px;
-  background: #ccc;
+}
+
+p.error {
+  background: #F9D654;
+  padding: 10px;
+  width: 980px;
+  clear: both;
+  color: #222;
 }
 
 /* header */
@@ -303,9 +316,25 @@ span.inner-navbutton {
   width:100%;
 }
 
+ul.search-list { list-style: none; }
+ul.search-list li { display:inline-block; float:left; margin:8px;}
+
 .book-description { float: left; text-align:top;}
 
-h3.author { background: #eee; font-weight:bold; line-height:2em; padding:0.2em;}
+h3.author {
+  background: #eee;
+  font-weight: bold;
+  line-height: 2em;
+  padding: 0.2em;
+}
+
+.top-link { position: relative;}
+.top-link a {
+  position: absolute;
+  left: 900px; top: -50px;
+  text-decoration: none;
+  font-size: small;}
+
 p.author { margin-left:30px; }
 p.title {
   margin-left:30px;
