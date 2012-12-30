@@ -1,15 +1,34 @@
 <input id="searchterms" type="hidden" value="<%= @searchterms %>"/>
-
-<h2><%= @num_authors %> treff på "<%= @searchterms %>" i forfattere</h2>
+<h2>Søk etter "<%= @searchterms %>" ga</h2>
+<h3><%= @num_authors %> treff i forfattere</h3>
+<% if @num_authors > 0 %>
+	<% @sorted.each_with_index do |(author, work), i| %>
+		<ul class="search-list">
+			<li><a href="#a_<%= i+1 %>"><%= author %></a></li>
+		</ul>
+	<% end %>
+<% end %>
+<div class="clearfix"></div>
+<% if @num_titles > 0 %>
+	<h3><%= @num_titles %> treff i titler</h3>
+	<% @titles["works"].each_with_index do |work, i| %>
+		<ul class="search-list">
+			<li><a href="#t_<%= i+1 %>"><%= work["title"] %></a></li>
+		</ul>
+	<% end %>
+<% end %>
+<div class="clearfix"></div>
 <% if @num_authors > 0 %>
 	<div class="search-author">
+		<h2>Forfattere</h2>
 		<% @sorted.each_with_index do |(author, work), i| %>
-			<div class="clearfix"></div>
+			<div id="a_<%= i+1 %>" class="clearfix"></div>
 			<h3 class="author"><%= i+1 %>. <%= author %></h3>
+			<div class="top-link"><a href="#top">til toppen ↑</a></div>
 
 			<% work.each do |w| %>
 				<div class="search-work">
-					<div class="book-cover book-description">
+					<div class="book-cover book-description <%= "light-gray" unless w["cover_url"] %>">
 						<% if w["cover_url"] %>
 							<img class="cover" src="<%= w["cover_url"] %>"/>
 						<% end %>
@@ -41,12 +60,13 @@
 
 <div class="clearfix"></div>
 
-<h2><%= @num_titles %> treff på "<%= @searchterms %>" i tittel</h2>
 <% if @num_titles > 0 %>
 	<div class="search-title">
+		<h2>Titler</h2>
 		<% @titles["works"].each_with_index do |work, i| %>
-			<div class="clearfix"></div>
+			<div id="t_<%= i+1 %>" class="clearfix"></div>
 			<h3 class="author"><%= i+1 %>. <%= work["title"] %></h3>
+			<div class="top-link"><a href="#top">til toppen ↑</a></div>
 			<div class="search-work">
 				<div class="book-cover book-description">
 					<% if work["cover_url"] %>
