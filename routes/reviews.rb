@@ -5,116 +5,99 @@ require "em-http-request"
 
 class BokanbefalingerApp < Sinatra::Application
 
-  aget "/benchmark" do
-    @searchtearms = "hamsun"
-
-    url = "http://datatest.deichman.no/api/reviews"
-
-    start_time = Time.now
-
-    multi = EventMachine::MultiRequest.new
-    multi.add :author, EventMachine::HttpRequest.new(url).get(:body => {:author => @searchterms}.to_json)
-    multi.add :title, EventMachine::HttpRequest.new(url).get(:body => {:title => @searchterms}.to_json)
-
-    multi.callback do
-      body do
-        end_time = Time.now
-        "2 parallell requests to datatest.deichman.no: #{end_time - start_time} sek"
-      end
-    end
-  end
-
   apost "/search" do
     @searchterms = request.params["search"]
     @title = "Søk i anbefalinger: #{@searchterms}"
 
-    url = "http://datatest.deichman.no/api/reviews"
-    multi = EventMachine::MultiRequest.new
-    multi.add :author, EventMachine::HttpRequest.new(url).get(:body => {:author => @searchterms}.to_json)
-    multi.add :title, EventMachine::HttpRequest.new(url).get(:body => {:title => @searchterms}.to_json)
-
     cached = get_cache "author_"+@searchterms
-    if cached.nil?
-      multi.callback do
-        #Note that Multi will always invoke the callback function, regardless of whether the request succeed or failed.
 
-        set_cache "author_"+@searchterms, multi.responses[:callback][:author].response
-        response = JSON.parse(multi.responses[:callback][:author].response)
-        # sort results by author
-        @num_authors = 0
-        if response["works"]
-          @sorted = Hash.new { |hash, key| hash[key] = [] }
-          authors = []
-          response["works"].each do |work|
-            @sorted[work["author"]] << work
-            authors << work["author"]
-          end
-          @num_authors = authors.uniq.size
-        end
-
-        #authors = response
-        @num_titles = 0
-        set_cache "title_"+@searchterms, multi.responses[:callback][:title].response
-        @titles = JSON.parse(multi.responses[:callback][:title].response)
-        if @titles["works"]
-          @num_titles = @titles["works"].collect { |w| w["author"] }.uniq.size
-        end
-        body do
-          erb :searchresults
-        end
-      end
-    else
+    if cached
       response = JSON.parse(cached)
-      body do
-        @num_authors = 0
-        if response["works"]
-          @sorted = Hash.new { |hash, key| hash[key] = [] }
-          authors = []
-          response["works"].each do |work|
-            @sorted[work["author"]] << work
-            authors << work["author"]
-          end
-          @num_authors = authors.uniq.size
-        end
 
-        #authors = response
-        @num_titles =0
-        @titles = JSON.parse(get_cache "title_"+@searchterms)
-        if @titles["works"]
-          @num_titles = @titles["works"].collect { |w| w["author"] }.uniq.size
+      @num_authors = 0
+
+      if response["works"]
+        @sorted = Hash.new { |hash, key| hash[key] = [] }
+        authors = []
+        response["works"].each do |work|
+          @sorted[work["author"]] << work
+          authors << work["author"]
         end
-        erb :searchresults
+        @num_authors = authors.uniq.size
       end
+
+      @num_titles = 0
+      @titles = JSON.parse(get_cache "title_"+@searchterms)
+
+      if @titles["works"]
+        @num_titles = @titles["works"].collect { |w| w["author"] }.uniq.size
+      end
+
+      body { erb :searchresults }
+    end #end cached
+
+    multi = EventMachine::MultiRequest.new
+    multi.add :author, EventMachine::HttpRequest.new(API).get(:body => {:author => @searchterms}.to_json)
+    multi.add :title, EventMachine::HttpRequest.new(API).get(:body => {:title => @searchterms}.to_json)
+
+    multi.callback do
+      #Note that Multi will always invoke the callback function, regardless of whether the request succeed or failed.
+      set_cache "author_"+@searchterms, multi.responses[:callback][:author].response
+      response = JSON.parse(multi.responses[:callback][:author].response)
+      # sort results by author
+      @num_authors = 0
+      if response["works"]
+        @sorted = Hash.new { |hash, key| hash[key] = [] }
+        authors = []
+        response["works"].each do |work|
+          @sorted[work["author"]] << work
+          authors << work["author"]
+        end
+        @num_authors = authors.uniq.size
+      end
+
+      @num_titles = 0
+      set_cache "title_"+@searchterms, multi.responses[:callback][:title].response
+      @titles = JSON.parse(multi.responses[:callback][:title].response)
+      if @titles["works"]
+        @num_titles = @titles["works"].collect { |w| w["author"] }.uniq.size
+      end
+      body { erb :searchresults }
     end
   end
 
   aget '/anbefaling/*' do
-    url = "http://datatest.deichman.no/api/reviews"
     @uri = create_uri(params[:splat])
 
     cached = get_cache(@uri)
 
-    if cached.nil?
-      req = EventMachine::HttpRequest.new(url).get(:body => {:uri => @uri}.to_json)
+    if cached
+      puts "reading #{@uri} from cache"
+      @review = JSON.parse(cached)
+      @title = @review["reviews"].first["title"]
+      body { erb :review }
+    end
 
-      req.errback {
-        puts "DEBUG: Coulnd't connect to datatest.deichman.no"
-        body { redirect "/" }
-      }
-      req.callback {
+    req = EventMachine::HttpRequest.new(API).get(:body => {:uri => @uri}.to_json)
+    puts "API request: #{@uri}"
+
+    req.errback do
+      @title = "Feil"
+      @message = "Får ikke kontakt med ekstern ressurs (#{API})."
+      body { erb :error }
+    end
+
+    req.callback do
+      if req.response.match(/error/)
+        @message = "Finner ingen anbefaling med denne ID-en (#{@uri})."
+        @title = "Feil"
+        body { erb :error }
+      else
         response = JSON.parse(req.response)
         @review = response["works"][0]
-
+        @title = @review["reviews"].first["title"]
         set_cache @uri, @review.to_json
-
-        body do
-          erb :review
-        end
-      }
-    else
-      body do
-        @review = JSON.parse(cached)
-        erb :review
+        body { erb :review }
       end
     end
   end
@@ -135,4 +118,5 @@ class BokanbefalingerApp < Sinatra::Application
     @title = "Skriv en anbefaling"
     erb :ny
   end
+
 end
