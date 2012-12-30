@@ -13,6 +13,7 @@ class BokanbefalingerApp < Sinatra::Application
 
   get "/logout" do
     session[:user] = session[:pass] = nil
+    redirect params["take_me_back"] if params["take_me_back"]
     redirect '/'
   end
 end
