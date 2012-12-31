@@ -372,3 +372,9 @@ p.title {
   width:100%;
   clear:both;
 }
+
+.other-reviews {
+  clear:both;
+  padding: 10px;
+  border-top: 1px dashed #ccc;
+}

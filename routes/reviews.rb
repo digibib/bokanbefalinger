@@ -1,7 +1,4 @@
 # encoding: utf-8
-require "json"
-require "em-http-request"
-require "faraday"
 
 
 class BokanbefalingerApp < Sinatra::Application
@@ -24,40 +21,18 @@ class BokanbefalingerApp < Sinatra::Application
     erb :searchresults
   end
 
-  aget '/anbefaling/*' do
+  get '/anbefaling/*' do
     @uri = create_uri(params[:splat])
 
-    cached = Cache.get(@uri)
+    @review, @other_reviews, @error_mesage = Review.get_reviews_from_uri(@uri)
 
-    if cached
-      puts "reading #{@uri} from cache"
-      @review = JSON.parse(cached)
-      @title = @review["reviews"].first["title"]
-      body { erb :review }
+    if @error_message
+      @title ="Feil"
+      erb :error
     end
 
-    req = EventMachine::HttpRequest.new(API).get(:body => {:uri => @uri}.to_json)
-    puts "API request: #{@uri}"
-
-    req.errback do
-      @title = "Feil"
-      @error_message = "Får ikke kontakt med ekstern ressurs (#{API})."
-      body { erb :error }
-    end
-
-    req.callback do
-      if req.response.match(/error/)
-        @error_message = "Finner ingen anbefaling med denne ID-en (#{@uri})."
-        @title = "Feil"
-        body { erb :error }
-      else
-        response = JSON.parse(req.response)
-        @review = response["works"][0]
-        @title = @review["reviews"].first["title"]
-        set_cache @uri, @review.to_json
-        body { erb :review }
-      end
-    end
+    @title = @review["reviews"].first["title"]
+    erb :review
   end
 
   get "/anbefalinger" do

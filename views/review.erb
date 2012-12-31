@@ -1,3 +1,4 @@
+<% puts @reivew %>
 <div class="main-left">
 	<h2><%= @review["title"] %></h2>
 	<div id="review-heading">
@@ -11,15 +12,26 @@
 		</div>
 	</div>
 	<div class="clearfix"></div>
-	<% current = @review["reviews"].first %>
-	<h3><%= current["title"] %></h3>
+	<h3><%= @review["reviews"].first["title"] %></h3>
 	<div class="teaser">
-		<%= current["teaser"] %>
+		<%= @review["reviews"].first["teaser"] %>
 	</div>
 	<div class="review-text">
-		<%= current["text"] %>
+		<%= @review["reviews"].first["text"] %>
 	</div>
-	<div class="clearfix" style="margin-top:100px"></div>
+	<div class="clearfix" style="margin-top:50px"></div>
+	<% if @other_reviews.size > 0 %>
+		<h3>Det finnes andre anbefalinger av denne boka:</h3>
+		<% @other_reviews.each do |r| %>
+			<div class="other-reviews"><div class="review-teaser">
+				<p>
+					<%= r["teaser"] %>
+					<a href="/anbefaling/<%= r["uri"][36,200] %>">...les mer</a>
+				</p>
+			</div></div>
+		<% end %>
+
+	<% end %>
 </div>
 <div class="main-right">
 	<%= erb :login %>
