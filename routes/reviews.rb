@@ -1,75 +1,38 @@
 # encoding: utf-8
 require "json"
 require "em-http-request"
+require "faraday"
 
 
 class BokanbefalingerApp < Sinatra::Application
 
-  apost "/search" do
+  post "/search" do
     @searchterms = request.params["search"]
-    @title = "Søk i anbefalinger: #{@searchterms}"
 
-    cached = get_cache "author_"+@searchterms
+    cached_author = Cache.get "author_"+@searchterms
+    cached_title = Cache.get "title_"+@searchterms
 
-    if cached
-      response = JSON.parse(cached)
-
-      @num_authors = 0
-
-      if response["works"]
-        @sorted = Hash.new { |hash, key| hash[key] = [] }
-        authors = []
-        response["works"].each do |work|
-          @sorted[work["author"]] << work
-          authors << work["author"]
-        end
-        @num_authors = authors.uniq.size
-      end
-
-      @num_titles = 0
-      @titles = JSON.parse(get_cache "title_"+@searchterms)
-
-      if @titles["works"]
-        @num_titles = @titles["works"].collect { |w| w["author"] }.uniq.size
-      end
-
-      body { erb :searchresults }
-    end #end cached
-
-    multi = EventMachine::MultiRequest.new
-    multi.add :author, EventMachine::HttpRequest.new(API).get(:body => {:author => @searchterms}.to_json)
-    multi.add :title, EventMachine::HttpRequest.new(API).get(:body => {:title => @searchterms}.to_json)
-
-    multi.callback do
-      #Note that Multi will always invoke the callback function, regardless of whether the request succeed or failed.
-      set_cache "author_"+@searchterms, multi.responses[:callback][:author].response
-      response = JSON.parse(multi.responses[:callback][:author].response)
-      # sort results by author
-      @num_authors = 0
-      if response["works"]
-        @sorted = Hash.new { |hash, key| hash[key] = [] }
-        authors = []
-        response["works"].each do |work|
-          @sorted[work["author"]] << work
-          authors << work["author"]
-        end
-        @num_authors = authors.uniq.size
-      end
-
-      @num_titles = 0
-      set_cache "title_"+@searchterms, multi.responses[:callback][:title].response
-      @titles = JSON.parse(multi.responses[:callback][:title].response)
-      if @titles["works"]
-        @num_titles = @titles["works"].collect { |w| w["author"] }.uniq.size
-      end
-      body { erb :searchresults }
+    if cached_author.nil?
+      @sorted, @num_authors, @error_message = Review.search_by_author(@searchterms)
     end
+
+    if cached_title.nil?
+      @titles, @num_titles, @error_message = Review.search_by_title(@searchterms)
+    end
+
+    if @error_message
+      @title = "Feil"
+      erb :error
+    end
+
+    @title = "Søk i anbefalinger: #{@searchterms}"
+    erb :searchresults
   end
 
   aget '/anbefaling/*' do
     @uri = create_uri(params[:splat])
 
-    cached = get_cache(@uri)
+    cached = Cache.get(@uri)
 
     if cached
       puts "reading #{@uri} from cache"
