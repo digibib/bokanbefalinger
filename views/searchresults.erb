@@ -9,8 +9,8 @@
 	<% end %>
 <% end %>
 <div class="clearfix"></div>
+<h3><%= @num_titles %> treff i titler</h3>
 <% if @num_titles > 0 %>
-	<h3><%= @num_titles %> treff i titler</h3>
 	<% @titles["works"].each_with_index do |work, i| %>
 		<ul class="search-list">
 			<li><a href="#t_<%= i+1 %>"><%= work["title"] %></a></li>

@@ -9,16 +9,11 @@ class BokanbefalingerApp < Sinatra::Application
   post "/search" do
     @searchterms = request.params["search"]
 
-    cached_author = Cache.get "author_"+@searchterms
-    cached_title = Cache.get "title_"+@searchterms
+    # search by author
+    @sorted, @num_authors, @error_message = Review.search_by_author(@searchterms)
 
-    if cached_author.nil?
-      @sorted, @num_authors, @error_message = Review.search_by_author(@searchterms)
-    end
-
-    if cached_title.nil?
-      @titles, @num_titles, @error_message = Review.search_by_title(@searchterms)
-    end
+    # search by title
+    @titles, @num_titles, @error_message = Review.search_by_title(@searchterms)
 
     if @error_message
       @title = "Feil"

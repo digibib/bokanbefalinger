@@ -7,16 +7,25 @@ class Review
   @@conn = Faraday.new(:url => API)
 
   def self.search_by_author(searchterms)
-    # http get datatest.deichman.no/api/reviews author=searchterms
+    cached_author = Cache.get "author_"+searchterms
+    result = {}
 
-    resp = @@conn.get do |req|
-      req.body = {:author => searchterms}.to_json
+    if cached_author
+      puts "reading author_#{searchterms} from cache"
+      result = JSON.parse(cached_author)
+    else
+      # http get datatest.deichman.no/api/reviews author=searchterms
+      resp = @@conn.get do |req|
+        req.body = {:author => searchterms}.to_json
+      end
+
+      return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{API})."] if resp.status != 200
+
+      unless resp.body.match(/error/)
+        result = JSON.parse(resp.body)
+        Cache.set "author_"+searchterms.force_encoding("UTF-8"), result.to_json
+      end
     end
-
-    return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{API})."] if resp.status != 200
-
-    result = JSON.parse(resp.body)
-    Cache.set "author_"+searchterms, result
 
     # sort results by author:
     num_authors = 0
@@ -37,29 +46,37 @@ class Review
   end
 
   def self.search_by_title(searchterms)
-    # http get datatest.deichman.no/api/reviews title=searchterms
+    cached_title = Cache.get "title_"+searchterms
+    result = {}
 
-    resp = @@conn.get do |req|
-      req.body = {:title => searchterms}.to_json
+    if cached_title
+      puts "reading title_#{searchterms} from cache"
+      result = JSON.parse(cached_title)
+    else
+      # http get datatest.deichman.no/api/reviews title=searchterms
+      resp = @@conn.get do |req|
+        req.body = {:title => searchterms}.to_json
+      end
+
+      return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{API})."] if resp.status != 200
+
+      unless resp.body.match(/error/)
+        result = JSON.parse(resp.body)
+        Cache.set "title_"+ searchterms.force_encoding("UTF-8"), result.to_json
+      end
     end
 
-    return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{API})."] if resp.status != 200
-
-    result = JSON.parse(resp.body)
-    Cache.set "title_"+ searchterms, result
-
     num_titles = 0
-    titles = result
 
     # count number of title hits
-    if titles["works"]
-      num_titles = titles["works"].collect { |w| w["author"] }.uniq.size
+    if result["works"]
+      num_titles = result["works"].collect { |w| w["author"] }.uniq.size
 
       # cache by work_id
-      titles["works"].each do |work|
+      result["works"].each do |work|
         Cache.set work["work_id"], {:works => [work]}.to_json
       end
     end
-    [titles, num_titles, nil]
+    [result, num_titles, nil]
   end
 end
