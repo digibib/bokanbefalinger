@@ -21,7 +21,10 @@ class Review
 
       return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{API})."] if resp.status != 200
 
-      unless resp.body.match(/error/)
+      if resp.body.match(/error/)
+        #set cache to "empty"
+        Cache.set "author_"+searchterms.force_encoding("UTF-8"), {:works => []}.to_json
+      else
         result = JSON.parse(resp.body)
         Cache.set "author_"+searchterms.force_encoding("UTF-8"), result.to_json
       end
@@ -60,7 +63,10 @@ class Review
 
       return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{API})."] if resp.status != 200
 
-      unless resp.body.match(/error/)
+      if resp.body.match(/error/)
+        #set cache to "empty"
+        Cache.set "title_"+searchterms.force_encoding("UTF-8"), {:works => []}.to_json
+      else
         result = JSON.parse(resp.body)
         Cache.set "title_"+ searchterms.force_encoding("UTF-8"), result.to_json
       end
