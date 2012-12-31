@@ -19,9 +19,12 @@ GEM
     em-synchrony (1.0.2)
       eventmachine (>= 1.0.0.beta.1)
     eventmachine (1.0.0)
+    faraday (0.8.4)
+      multipart-post (~> 1.1)
     hiredis (0.4.5)
     http_parser.rb (0.5.3)
     method_source (0.8.1)
+    multipart-post (1.1.5)
     pry (0.9.10)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
@@ -55,6 +58,7 @@ DEPENDENCIES
   async_sinatra
   em-http-request
   em-synchrony
+  faraday
   hiredis
   pry
   rack-test

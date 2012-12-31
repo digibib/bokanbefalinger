@@ -1,10 +1,9 @@
 source :rubygems
 gem "sinatra"
-gem "em-http-request"
-gem "async_sinatra"
 gem "redis"
 gem "hiredis"
 gem "em-synchrony"
+gem "faraday"
 
 group :development do
   gem "sinatra-reloader"

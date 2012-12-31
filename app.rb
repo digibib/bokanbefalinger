@@ -1,6 +1,5 @@
 # encoding: utf-8
 require "sinatra"
-require "sinatra/async"
 require "redis"
 
 
@@ -33,7 +32,6 @@ class Cache
 end
 
 class BokanbefalingerApp < Sinatra::Application
-  register Sinatra::Async
   enable :sessions
 
   API = "http://datatest.deichman.no/api/reviews"
