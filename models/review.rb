@@ -40,15 +40,15 @@ class Review
       authors = []
       result["works"].each do |work|
         # cache by work_id
-        Cache.set work["work_id"], {:works => [work]}.to_json
-        puts "cache set for #{work["work_id"]}"
+        Cache.set(work["work_id"], {:works => [work]}.to_json) unless cached_author
+        puts "cache set for #{work["work_id"]}" unless cached_author
 
         #cache by review_id
         work["reviews"].each do |r|
           temp = work.clone
           temp["reviews"] = [r]
-          Cache.set r["uri"], {:works => [temp]}.to_json
-          puts "cache set for #{r["uri"]}"
+          Cache.set(r["uri"], {:works => [temp]}.to_json) unless cached_author
+          puts "cache set for #{r["uri"]}" unless cached_author
         end
         sorted[work["author"]] << work
         authors << work["author"]
@@ -95,14 +95,14 @@ class Review
 
       # cache by work_id
       result["works"].each do |work|
-        Cache.set work["work_id"], {:works => [work]}.to_json
-        puts "cache set for #{work["work_id"]}"
+        Cache.set(work["work_id"], {:works => [work]}.to_json) unless cached_title
+        puts "cache set for #{work["work_id"]}" unless cached_title
         # cache by review_id
         work["reviews"].each do |r|
           temp = work.clone
           temp["reviews"] = [r]
-          Cache.set r["uri"], {:works => [temp]}.to_json
-          puts "cache set for #{r["uri"]}"
+          Cache.set(r["uri"], {:works => [temp]}.to_json) unless cached_title
+          puts "cache set for #{r["uri"]}" unless cached_title
         end
       end
     end
