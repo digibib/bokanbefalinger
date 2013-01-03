@@ -34,7 +34,7 @@
 						<% end %>
 					</div>
 					<div class="book-description">
-						<p class="title"><strong><%= w["title"] %></strong></p>
+						<p class="title"><a href="/verk<%= w["work_id"][28..-1] %>"><strong><%= w["title"] %></strong></a></p>
 						<p class="author"><%= w["author"] %></p>
 					</div>
 				</div>
@@ -74,7 +74,7 @@
 					<% end %>
 				</div>
 				<div class="book-description">
-					<p class="title"><strong><%= work["title"] %></strong></p>
+					<p class="title"><a href="/verk<%= work["work_id"][28..-1] %>"><strong><%= work["title"] %></strong></a></p>
 					<p class="author"><%= work["author"] %></p>
 				</div>
 			</div>

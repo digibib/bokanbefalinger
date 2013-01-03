@@ -303,7 +303,7 @@ span.inner-navbutton {
 
 #review-form select { padding: 4px;}
 
-#review-heading { width: 100%;}
+#review-heading { width: 100%; }
 #review-heading div { float:left;}
 #review-heading p { margin-left:30px;}
 
@@ -320,6 +320,7 @@ ul.search-list { list-style: none; }
 ul.search-list li { display:inline-block; float:left; margin:8px;}
 
 .book-description { float: left; text-align:top;}
+.book-description a { text-decoration: none; }
 
 h3.author {
   background: #eee;
@@ -377,4 +378,11 @@ p.title {
   clear:both;
   padding: 10px;
   border-top: 1px dashed #ccc;
+}
+
+/* work page */
+
+.review-teaser-work {
+  float: left;
+  width: 535px;
 }
