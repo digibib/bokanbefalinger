@@ -15,10 +15,10 @@ class BokanbefalingerApp < Sinatra::Application
     if @error_message
       @title = "Feil"
       erb :error
+    else
+      @title = "Søk i anbefalinger: #{@searchterms}"
+      erb :searchresults
     end
-
-    @title = "Søk i anbefalinger: #{@searchterms}"
-    erb :searchresults
   end
 
   get '/anbefaling/*' do
@@ -29,10 +29,10 @@ class BokanbefalingerApp < Sinatra::Application
     if @error_message
       @title ="Feil"
       erb :error
+    else
+      @title = @review["reviews"].first["title"]
+      erb :review
     end
-
-    @title = @review["reviews"].first["title"]
-    erb :review
   end
 
   get "/anbefalinger" do
