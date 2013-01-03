@@ -1,6 +1,8 @@
-<% puts @reivew %>
 <div class="main-left">
-	<h2><%= @review["title"] %></h2>
+	<% if request.referrer =~ /search$/ %>
+		<p><a href="javascript: history.back()">← tilbake til trefflisten</a></p>
+	<% end %>
+ 	<h2><%= @review["title"] %></h2>
 	<div id="review-heading">
 		<div class="book-cover <%= "light-gray" unless @review["cover_url"] %>">
 			<% if @review["cover_url"] %>
