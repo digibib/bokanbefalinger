@@ -45,11 +45,11 @@ class BokanbefalingerApp < Sinatra::Application
     erb :feeds
   end
 
-  get "/ny" do
-    redirect "/" unless session[:user]
+  get "/find" do
+    #redirect "/" unless session[:user]
 
     @title = "Skriv en anbefaling"
-    erb :ny
+    erb :find
   end
 
 end

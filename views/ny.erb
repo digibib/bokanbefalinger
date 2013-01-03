@@ -1,10 +1,14 @@
 <div class="main-left">
-	<h2>Skriv anbefaling</h2>
+	<h2>Skriv ny anbefaling av:</h2>
 	<div id="review-heading">
-		<div class="book-cover light-gray"></div>
+		<div class="book-cover <%= "light-gray" unless @work["cover_url"] %>">
+			<% if @work["cover_url"] %>
+				<img class="cover" src="<%= @work["cover_url"] %>"/>
+			<% end %>
+		</div>
 		<div>
-			<p><strong>Gummi-Tarzan</strong></p>
-			<p><strong>Ole Lund Kirkegård</strong></p>
+			<p><strong><%= @work["title"] %></strong></p>
+			<p><strong><%= @work["author"] %></strong></p>
 		</div>
 	</div>
 	<div class="clearfix"></div>

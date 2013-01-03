@@ -35,7 +35,19 @@
 			</div>
 		</div>
 	<% end %>
+	<% if session[:user] %>
+		<div class="clearfix"></div>
+		<div class="review-snippet">
+			<div class="review-date">
+				&nbsp;
+			</div>
+			<div class="review-teaser-work">
+				<strong>Din anbefaling her!</strong><br/>
+				<p><a href="/verk<%= @work["work_id"][28..-1] %>/ny"><button class="medium red">Anbefal denne boka</button></a></p>
+			</div>
+		</div>
 
+	<% end %>
 </div>
 <div class="main-right">
 	<%= erb :login %>

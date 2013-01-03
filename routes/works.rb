@@ -4,10 +4,13 @@ class BokanbefalingerApp < Sinatra::Application
 
   get "/verk/*" do
     path = params[:splat].first
+    create_new = false
 
     if path =~ /\/ny$/
       # create a new review
       work = path[0..-4]
+      redirect "/verk/"+work unless session[:user]
+      create_new = true
     else
       work = path
       # show book info and reviews if any
@@ -19,6 +22,9 @@ class BokanbefalingerApp < Sinatra::Application
     if @error_message
       @title ="Feil"
       erb :error
+    elsif create_new
+      @title = "Skriv ny anbefaling"
+      erb :ny
     else
       @title = @work["title"]
       erb :work
