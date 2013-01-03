@@ -4,6 +4,7 @@ class BokanbefalingerApp < Sinatra::Application
 
   get "/verk/*" do
     path = params[:splat].first
+    redirect request.path.chop if request.path =~ /\/$/
     create_new = false
 
     if path =~ /\/ny$/
