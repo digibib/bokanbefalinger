@@ -124,7 +124,7 @@ class Review
        end
 
        return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{API})."] if resp.status != 200
-       return [nil, nil, "Finner ingen anbefaling med denne ID-en (#{uri})."] unless resp.body.match(/works/)
+       return [nil, nil, "Finner ingen anbefaling med denne ID-en (#{uri})."] if resp.body.match(/no reviews found/)
 
        review = JSON.parse(resp.body)
        Cache.set uri, review.to_json

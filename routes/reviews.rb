@@ -24,7 +24,7 @@ class BokanbefalingerApp < Sinatra::Application
   get '/anbefaling/*' do
     @uri = create_uri(params[:splat])
 
-    @review, @other_reviews, @error_mesage = Review.get_reviews_from_uri(@uri)
+    @review, @other_reviews, @error_message = Review.get_reviews_from_uri(@uri)
 
     if @error_message
       @title ="Feil"
