@@ -19,7 +19,7 @@ class Work
       end
 
       return [nil, "Får ikke kontakt med ekstern ressurs (#{API})."] if resp.status != 200
-      return [nil,  "Finner ingen verk med denne ID-en (#{work_id})."] unless resp.body.match(/works/)
+      return [nil, "Finner ingen verk med denne ID-en (#{work_id})."] unless resp.body.match(/works/)
       work = JSON.parse(resp.body)
       Cache.set work_id, work.to_json
       puts "cache set for #{work_id}"
