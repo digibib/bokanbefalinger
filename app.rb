@@ -3,7 +3,7 @@ require "sinatra"
 require "redis"
 
 
-BASE_URI="http://data.deichman.no/bookreviews/"
+BASE_URI="http://data.deichman.no/"
 
 class Cache
   # Assumes Redis is running on http://localhost:6379
