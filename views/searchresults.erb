@@ -68,7 +68,7 @@
 			<h3 class="author"><%= i+1 %>. <%= work["title"] %></h3>
 			<div class="top-link"><a href="#top">til toppen ↑</a></div>
 			<div class="search-work">
-				<div class="book-cover book-description">
+				<div class="book-cover book-description <%= "light-gray" unless work["cover_url"] %>">
 					<% if work["cover_url"] %>
 						<img class="cover" src="<%= work["cover_url"] %>"/>
 					<% end %>
