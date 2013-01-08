@@ -9,8 +9,8 @@
 	<% end %>
 <% end %>
 <div class="clearfix"></div>
-<h3><%= @num_titles %> treff i titler</h3>
 <% if @num_titles > 0 %>
+<h3><%= @num_titles %> treff i titler</h3>
 	<% @titles["works"].each_with_index do |work, i| %>
 		<ul class="search-list">
 			<li><a href="#t_<%= i+1 %>"><%= work["title"] %></a></li>
@@ -35,7 +35,7 @@
 					</div>
 					<div class="book-description">
 						<p class="title"><a href="/verk<%= w["work_id"][28..-1] %>"><strong><%= w["title"] %></strong></a></p>
-						<p class="author"><%= w["author"] %></p>
+						<p class="author"><a href="/search?author=<%= w["author"] %>"><%= w["author"] %></a></p>
 					</div>
 				</div>
 				<% w["reviews"].each do |r| %>
@@ -75,7 +75,7 @@
 				</div>
 				<div class="book-description">
 					<p class="title"><a href="/verk<%= work["work_id"][28..-1] %>"><strong><%= work["title"] %></strong></a></p>
-					<p class="author"><%= work["author"] %></p>
+					<p class="author"><a href="/search?author=<%= work["author"] %>"><%= work["author"] %></a></p>
 				</div>
 			</div>
 			<% work["reviews"].each do |r| %>

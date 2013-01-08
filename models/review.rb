@@ -7,7 +7,7 @@ class Review
   @@conn = Faraday.new(:url => API)
 
   def self.search_by_author(searchterms)
-    cached_author = Cache.get "author_"+searchterms
+    cached_author = Cache.get("author_"+searchterms) || Cache.get(searchterms)
     result = {}
 
     if cached_author
@@ -52,6 +52,16 @@ class Review
         end
         sorted[work["author"]] << work
         authors << work["author"]
+      end
+
+      # set cache of by key of authors full name
+      sorted.each do |k,v|
+        cached_single_author = Cache.get(k)
+        if cached_single_author.nil?
+          # set cache
+          puts "Setting cache for author #{k}"
+          Cache.set(k, {:works => v}.to_json)
+        end
       end
 
       num_authors = authors.uniq.size

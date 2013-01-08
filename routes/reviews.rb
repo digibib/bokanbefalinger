@@ -3,14 +3,18 @@
 
 class BokanbefalingerApp < Sinatra::Application
 
-  post "/search" do
-    @searchterms = request.params["search"]
+  get "/search" do
+    if request.params["author"]
+      @searchterms = request.params["author"]
+      @titles, @num_titles, @error_message = [], 0, nil
+    else
+      @searchterms = request.params["search"]
+      # search by title
+      @titles, @num_titles, @error_message = Review.search_by_title(@searchterms)
+    end
 
     # search by author
     @sorted, @num_authors, @error_message = Review.search_by_author(@searchterms)
-
-    # search by title
-    @titles, @num_titles, @error_message = Review.search_by_title(@searchterms)
 
     if @error_message
       @title = "Feil"

@@ -337,10 +337,12 @@ h3.author {
   font-size: small;}
 
 p.author { margin-left:30px; }
+p.author a { color: #444; font-weight: bold;}
 p.title {
   margin-left:30px;
   font-size: 1.3em;
   color: #c21211;
+  border-bottom: 1px dashed #ccc;
 }
 
 .review-snippet {
