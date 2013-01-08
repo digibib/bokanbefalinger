@@ -1,7 +1,7 @@
 <input id="searchterms" type="hidden" value="<%= @searchterms %>"/>
 <h2>Søk etter "<%= @searchterms %>" ga</h2>
-<h3><%= @num_authors %> treff i forfattere</h3>
 <% if @num_authors > 0 %>
+<h3><%= @num_authors %> treff i forfattere</h3>
 	<% @sorted.each_with_index do |(author, work), i| %>
 		<ul class="search-list">
 			<li><a href="#a_<%= i+1 %>"><%= author %></a></li>
