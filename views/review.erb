@@ -12,7 +12,7 @@
 		<div>
 			<p><strong><a href="/search?author=<%= @review["author"] %>"><%= @review["author"] %></a></strong></p>
 			<% if session[:user] %>
-				<p><a href="/verk<%= @review["work_id"][28..-1] %>/ny"><button class="medium red">Anbefal denne boka</button></a></p>
+				<p><a href="/verk<%= @review["work_id"][28..-1] %>/ny"><button class="medium green">Anbefal denne boka</button></a></p>
 			<% end %>
 		</div>
 	</div>
