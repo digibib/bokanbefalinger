@@ -364,6 +364,8 @@ p.title {
 
 /* single review page */
 
+a.work-link { text-decoration: none; color:#444; }
+a:hover.work-link { text-decoration: underline }
 .teaser {
   background: #eee;
   padding: 10px;

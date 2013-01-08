@@ -2,7 +2,7 @@
 	<% if request.referrer =~ /search?/ %>
 		<p><a href="javascript: history.back()">← tilbake til trefflista</a></p>
 	<% end %>
- 	<h2>Anbefaling: <%= @review["title"] %></h2>
+ 	<h2>Anbefaling av: <a class="work-link" href="/verk<%= @review["work_id"][28..-1] %>"><%= @review["title"] %></a></h2>
 	<div id="review-heading">
 		<div class="book-cover <%= "light-gray" unless @review["cover_url"] %>">
 			<% if @review["cover_url"] %>
