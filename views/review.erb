@@ -1,5 +1,5 @@
 <div class="main-left">
-	<% if request.referrer =~ /søk?/ %>
+	<% if request.referrer =~ /s%C3%B8k?\?/ %>
 		<p><a href="javascript: history.back()">← tilbake til trefflista</a></p>
 	<% end %>
  	<h2>Anbefaling av: <a class="work-link" href="/verk<%= @review["work_id"][28..-1] %>"><%= @review["title"] %></a></h2>
