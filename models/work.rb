@@ -14,8 +14,12 @@ class Work
       work = JSON.parse(cached_work)
     else
       puts "API call for work=#{work_id}"
-      resp = @@conn.get do |req|
-        req.body = {:work => work_id}.to_json
+      begin
+        resp = @@conn.get do |req|
+          req.body = {:work => work_id}.to_json
+        end
+      rescue Faraday::Error::TimeoutError
+        return [nil, "Forespørsel til eksternt API(#{API}) brukte for lang tid å svare"]
       end
 
       return [nil, "Får ikke kontakt med ekstern ressurs (#{API})."] if resp.status != 200

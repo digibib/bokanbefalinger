@@ -16,8 +16,12 @@ class Review
     else
       # http get datatest.deichman.no/api/reviews author=searchterms
       puts "API call for author=#{searchterms}"
-      resp = @@conn.get do |req|
-        req.body = {:author => searchterms}.to_json
+      begin
+        resp = @@conn.get do |req|
+          req.body = {:author => searchterms}.to_json
+        end
+      rescue Faraday::Error::TimeoutError
+        return [nil, nil, "Forespørsel til eksternt API(#{API}) brukte for lang tid å svare"]
       end
 
       return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{API})."] if resp.status != 200
@@ -150,8 +154,12 @@ class Review
       work = JSON.parse(cached_work)
     else
       puts "API call for work=#{work_id}"
-      resp = @@conn.get do |req|
-        req.body = {:work => work_id}.to_json
+      begin
+        resp = @@conn.get do |req|
+          req.body = {:work => work_id}.to_json
+        end
+      rescue Faraday::Error::TimeoutError
+        return [nil, nil, "Forespørsel til eksternt API(#{API}) brukte for lang tid å svare"]
       end
 
       return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{API})."] if resp.status != 200
