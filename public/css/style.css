@@ -312,6 +312,9 @@ span.inner-navbutton {
 
 /* search results */
 
+a.work-link-big { text-decoration: none; color:#c12121; }
+a:hover.work-link-big { text-decoration: underline }
+
 .search-work {
   clear:both;
   padding-top: 30px;
@@ -344,7 +347,6 @@ p.title {
   margin-left:30px;
   font-size: 1.3em;
   color: #c21211;
-  border-bottom: 1px dashed #ccc;
 }
 
 .review-snippet {

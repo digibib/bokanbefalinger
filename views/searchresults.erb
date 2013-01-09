@@ -34,8 +34,8 @@
 						<% end %>
 					</div>
 					<div class="book-description">
-						<p class="title"><a href="/verk<%= w["work_id"][28..-1] %>"><strong><%= w["title"] %></strong></a></p>
-						<p class="author"><a href="/søk?forfatter=<%= w["author"] %>"><%= w["author"] %></a></p>
+						<p class="title"><a class="work-link-big" href="/verk<%= w["work_id"][28..-1] %>"><strong><%= w["title"] %></strong></a></p>
+						<p class="author"><a class="author-link" href="/søk?forfatter=<%= w["author"] %>"><%= w["author"] %></a></p>
 					</div>
 				</div>
 				<% w["reviews"].each do |r| %>
@@ -45,7 +45,7 @@
 							<%= r["modified"][8,2]+'.'+r["modified"][5,2]+'.'+r["modified"][0,4] %>
 						</div>
 						<div class="review-teaser">
-							<strong><%= r["title"] %></strong><br/>
+							<strong><a class="work-link" href="/anbefaling/<%= r["uri"][24,200] %>"><%= r["title"] %></strong></a><br/>
 							<p>
 								<%= r["teaser"] %>
 								<a href="/anbefaling/<%= r["uri"][24,200] %>">...les mer</a>
@@ -74,8 +74,8 @@
 					<% end %>
 				</div>
 				<div class="book-description">
-					<p class="title"><a href="/verk<%= work["work_id"][28..-1] %>"><strong><%= work["title"] %></strong></a></p>
-					<p class="author"><a href="/søk?forfatter=<%= work["author"] %>"><%= work["author"] %></a></p>
+					<p class="title"><a class="work-link-big" href="/verk<%= work["work_id"][28..-1] %>"><strong><%= work["title"] %></strong></a></p>
+					<p class="author"><a class="author-link" href="/søk?forfatter=<%= work["author"] %>"><%= work["author"] %></a></p>
 				</div>
 			</div>
 			<% work["reviews"].each do |r| %>
@@ -85,7 +85,7 @@
 						<%= r["modified"][8,2]+'.'+r["modified"][5,2]+'.'+r["modified"][0,4] %>
 					</div>
 					<div class="review-teaser">
-						<strong><%= r["title"] %></strong><br/>
+						<strong><a class="work-link" href="/anbefaling/<%= r["uri"][24,200] %>"><%= r["title"] %></strong></a><br/>
 						<p>
 							<%= r["teaser"] %>
 							<a href="/anbefaling/<%= r["uri"][24,200] %>">...les mer</a>
