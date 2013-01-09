@@ -1,5 +1,5 @@
 <input id="searchterms" type="hidden" value="<%= @searchterms %>"/>
-<h2>Søk etter "<%= @searchterms %>" ga</h2>
+<h2>Søk etter "<%= @searchterms %>" ga<% if @num_authors <= 0 and @num_titles <= 0 %> ingen treff<% end %></h2>
 <% if @num_authors > 0 %>
 <h3><%= @num_authors %> treff i forfattere</h3>
 	<% @sorted.each_with_index do |(author, work), i| %>
@@ -35,7 +35,7 @@
 					</div>
 					<div class="book-description">
 						<p class="title"><a href="/verk<%= w["work_id"][28..-1] %>"><strong><%= w["title"] %></strong></a></p>
-						<p class="author"><a href="/search?author=<%= w["author"] %>"><%= w["author"] %></a></p>
+						<p class="author"><a href="/search?søk?author=<%= w["author"] %>"><%= w["author"] %></a></p>
 					</div>
 				</div>
 				<% w["reviews"].each do |r| %>
@@ -75,7 +75,7 @@
 				</div>
 				<div class="book-description">
 					<p class="title"><a href="/verk<%= work["work_id"][28..-1] %>"><strong><%= work["title"] %></strong></a></p>
-					<p class="author"><a href="/search?author=<%= work["author"] %>"><%= work["author"] %></a></p>
+					<p class="author"><a href="/søk?author=<%= work["author"] %>"><%= work["author"] %></a></p>
 				</div>
 			</div>
 			<% work["reviews"].each do |r| %>

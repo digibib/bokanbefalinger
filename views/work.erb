@@ -1,5 +1,5 @@
 <div class="main-left">
-	<% if request.referrer =~ /search?/ %>
+	<% if request.referrer =~ /søk?/ %>
 		<p><a href="javascript: history.back()">← tilbake til trefflista</a></p>
 	<% end %>
  	<h2>Verk: <%= @work["title"] %></h2>
@@ -10,7 +10,7 @@
 			<% end %>
 		</div>
 		<div>
-			<p><strong><a href="/search?author=<%= @work["author"] %>"><%= @work["author"] %></a></strong></p>
+			<p><strong><a href="/søk?author=<%= @work["author"] %>"><%= @work["author"] %></a></strong></p>
 		</div>
 	</div>
 	<div class="clearfix"></div>

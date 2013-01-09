@@ -1,5 +1,5 @@
 <div class="main-left">
-	<% if request.referrer =~ /search?/ %>
+	<% if request.referrer =~ /søk?/ %>
 		<p><a href="javascript: history.back()">← tilbake til trefflista</a></p>
 	<% end %>
  	<h2>Anbefaling av: <a class="work-link" href="/verk<%= @review["work_id"][28..-1] %>"><%= @review["title"] %></a></h2>
@@ -10,7 +10,7 @@
 			<% end %>
 		</div>
 		<div>
-			<p><strong><a href="/search?author=<%= @review["author"] %>"><%= @review["author"] %></a></strong></p>
+			<p><strong><a href="/søk?author=<%= @review["author"] %>"><%= @review["author"] %></a></strong></p>
 			<% if session[:user] %>
 				<p><a href="/verk<%= @review["work_id"][28..-1] %>/ny"><button class="medium green">Anbefal denne boka</button></a></p>
 			<% end %>
