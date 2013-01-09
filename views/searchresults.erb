@@ -35,7 +35,7 @@
 					</div>
 					<div class="book-description">
 						<p class="title"><a href="/verk<%= w["work_id"][28..-1] %>"><strong><%= w["title"] %></strong></a></p>
-						<p class="author"><a href="/search?søk?author=<%= w["author"] %>"><%= w["author"] %></a></p>
+						<p class="author"><a href="/søk?forfatter=<%= w["author"] %>"><%= w["author"] %></a></p>
 					</div>
 				</div>
 				<% w["reviews"].each do |r| %>
@@ -75,7 +75,7 @@
 				</div>
 				<div class="book-description">
 					<p class="title"><a href="/verk<%= work["work_id"][28..-1] %>"><strong><%= work["title"] %></strong></a></p>
-					<p class="author"><a href="/søk?author=<%= work["author"] %>"><%= work["author"] %></a></p>
+					<p class="author"><a href="/søk?forfatter=<%= work["author"] %>"><%= work["author"] %></a></p>
 				</div>
 			</div>
 			<% work["reviews"].each do |r| %>

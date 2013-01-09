@@ -4,11 +4,11 @@
 class BokanbefalingerApp < Sinatra::Application
 
   get "/søk" do
-    if request.params["author"]
-      @searchterms = request.params["author"]
+    if request.params["forfatter"]
+      @searchterms = request.params["forfatter"]
       @titles, @num_titles, @error_message = [], 0, nil
     else
-      @searchterms = request.params["search"]
+      @searchterms = request.params["term"]
       # search by title
       @titles, @num_titles, @error_message = Review.search_by_title(@searchterms)
     end
