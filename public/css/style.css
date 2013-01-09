@@ -321,7 +321,7 @@ span.inner-navbutton {
 ul.search-list { list-style: none; }
 ul.search-list li { display:inline-block; float:left; margin:8px;}
 
-.book-description { float: left; text-align:top;}
+.book-description { float: left; text-align:top; max-width: 800px;}
 .book-description a { text-decoration: none; }
 
 h3.author {
@@ -349,10 +349,11 @@ p.title {
 
 .review-snippet {
   padding-top: 20px;
-  padding-bottom: 30px;
-  border-bottom: 1px dashed #ccc;
-  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-top: 1px dashed #ccc;
+  margin-top: 20px;
   width: 100%;
+  overflow: auto;
 }
 .review-date {
   float: left;
