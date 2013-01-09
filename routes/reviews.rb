@@ -7,14 +7,17 @@ class BokanbefalingerApp < Sinatra::Application
     if request.params["forfatter"]
       @searchterms = request.params["forfatter"]
       @titles, @num_titles, @error_message = [], 0, nil
-    else
+    elsif request.params["term"] and not request.params["term"].strip.empty?
       @searchterms = request.params["term"]
       # search by title
       @titles, @num_titles, @error_message = Review.search_by_title(@searchterms)
+    else
+      @error_message = "Mangler søkestreng"
+      erb :error
     end
 
     # search by author
-    @sorted, @num_authors, @error_message = Review.search_by_author(@searchterms)
+    @sorted, @num_authors, @error_message = Review.search_by_author(@searchterms) unless @searchterms.nil?
 
     if @error_message
       @title = "Feil"
