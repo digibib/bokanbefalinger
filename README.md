@@ -7,7 +7,7 @@ For å stare kjør `rackup` eller `thin start`
 ### Redis
 Applikasjonen bruker [Redis](http://redis.io/) til å cache anbefalingene.
 
-For å installere Reids:
+For å installere Redis:
 ```shell
 wget http://download.redis.io/redis-stable.tar.gz
 tar xvzf redis-stable.tar.gz
@@ -15,7 +15,7 @@ cd redis-stable
 make
 ```
 
-Starte ved å kjøre `/redis-stable/src/redis-server`. Hvis du ikke angir en konfigurasjonsfil som første parameter, vil Redis bruke standardverdier.
+Starte ved å kjøre `/redis-stable/src/redis-server`. Hvis du ikke angir en konfigurasjonsfil som første parameter, vil Redis bruke standardverdier, og serve fra port 6379.
 
 #### Foreløbige innstillinger i redis.conf
 `deamonize yes`
