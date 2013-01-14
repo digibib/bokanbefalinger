@@ -53,10 +53,10 @@ class BokanbefalingerApp < Sinatra::Application
     erb :feeds
   end
 
-  get "/find" do
+  get "/finn" do
     #redirect "/" unless session[:user]
 
-    @title = "Skriv en anbefaling"
+    @title = "Søk opp et verk"
     erb :find
   end
 

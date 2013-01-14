@@ -4,7 +4,7 @@
 <h3><%= @num_authors %> treff i forfattere</h3>
 	<% @sorted.each_with_index do |(author, work), i| %>
 		<ul class="search-list">
-			<li><a href="#a_<%= i+1 %>"><%= author %></a></li>
+			<li><a href="#forfatter_<%= i+1 %>"><%= author %></a></li>
 		</ul>
 	<% end %>
 <% end %>
@@ -13,7 +13,7 @@
 <h3><%= @num_titles %> treff i titler</h3>
 	<% @titles["works"].each_with_index do |work, i| %>
 		<ul class="search-list">
-			<li><a href="#t_<%= i+1 %>"><%= work["title"] %></a></li>
+			<li><a href="#tittel_<%= i+1 %>"><%= work["title"] %></a></li>
 		</ul>
 	<% end %>
 <% end %>
@@ -22,7 +22,7 @@
 	<div class="search-author">
 		<h2>Forfattere</h2>
 		<% @sorted.each_with_index do |(author, work), i| %>
-			<div id="a_<%= i+1 %>" class="clearfix"></div>
+			<div id="forfatter_<%= i+1 %>" class="clearfix"></div>
 			<h3 class="author"><%= i+1 %>. <%= author %></h3>
 			<div class="top-link"><a href="#top">til toppen ↑</a></div>
 
@@ -64,7 +64,7 @@
 	<div class="search-title">
 		<h2>Titler</h2>
 		<% @titles["works"].each_with_index do |work, i| %>
-			<div id="t_<%= i+1 %>" class="clearfix"></div>
+			<div id="tittel_<%= i+1 %>" class="clearfix"></div>
 			<h3 class="author"><%= i+1 %>. <%= work["title"] %></h3>
 			<div class="top-link"><a href="#top">til toppen ↑</a></div>
 			<div class="search-work">
