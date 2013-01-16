@@ -13,8 +13,8 @@ class BokanbefalingerApp < Sinatra::Application
       @sorted, @num_authors, @error_message = Review.search_by_author(@searchterms) unless @searchterms.nil?
     end
 
-    if request.params["tittel"] and not request.params["forfatter"].strip.empty?
-      @searchterms = request.params["forfatter"]
+    if request.params["tittel"] and not request.params["tittel"].strip.empty?
+      @searchterms = request.params["tittel"]
       @titles, @num_titles, @error_message = Review.search_by_title(@searchterms)
     end
 
