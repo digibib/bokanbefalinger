@@ -11,9 +11,6 @@
 		</div>
 		<div>
 			<p><strong><a class="author-link" href="/søk?forfatter=<%= @review["author"] %>"><%= @review["author"] %></a></strong></p>
-			<% if session[:user] %>
-				<p><a href="/verk<%= @review["work_id"][28..-1] %>/ny"><button class="medium green">Anbefal denne boka</button></a></p>
-			<% end %>
 		</div>
 	</div>
 	<div class="clearfix"></div>
@@ -41,6 +38,12 @@
 				</p>
 			</div></div>
 		<% end %>
+	<% end %>
+	<% if session[:user] %>
+		<div class="clearfix"></div>
+		<div class="review-snippet" style="text-align:right;">
+				<p><a href="/verk<%= @review["work_id"][28..-1] %>/ny"><button class="medium green" style="margin-right:150px">Skriv ny anbefaling</button></a></p>
+		</div>
 	<% end %>
 </div>
 <div class="main-right">
