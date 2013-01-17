@@ -19,10 +19,16 @@
 	<div class="clearfix"></div>
 	<h3><%= @review["reviews"].first["title"] %></h3>
 	<div class="teaser">
-		<%= @review["reviews"].first["teaser"] %>
+		<% teaser = @review["reviews"].first["teaser"] %>
+		<%= teaser %>
 	</div>
 	<div class="review-text">
-		<%= @review["reviews"].first["text"] %>
+		<% text = @review["reviews"].first["text"] %>
+		<% if text[3...-1].start_with? teaser %>
+			<%= text[0...3]+text[teaser.length+4...text.size] %>
+		<% else %>
+			<%= text %>
+		<% end %>
 	</div>
 	<div class="clearfix" style="margin-top:50px"></div>
 	<% if @other_reviews.size > 0 %>
