@@ -32,7 +32,7 @@ class Review
         puts "cache set to [] for #{"author_"+searchterms}"
       else
         result = JSON.parse(resp.body)
-        Cache.set "author_"+searchterms, result.to_json
+        Cache.set "author_"+searchterms, resp.body
         puts "cache set for #{"author_"+searchterms}"
       end
     end
@@ -165,7 +165,7 @@ class Review
       return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{API})."] if resp.status != 200
       return [nil, nil, "Finner ingen verk med denne ID-en (#{work_id})."] unless resp.body.match(/works/)
       work = JSON.parse(resp.body)
-      Cache.set work_id, work.to_json
+      Cache.set work_id, resp.body
       puts "cache set for #{work_id}"
     end
 
