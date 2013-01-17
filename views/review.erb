@@ -21,7 +21,8 @@
 	</div>
 	<div class="review-text">
 		<% text = @review["reviews"].first["text"] %>
-		<% if text[3...-1].start_with? teaser %>
+		<% puts teaser, text %>
+		<% if text[3...-1].gsub(" ", " ").start_with? teaser %>
 			<%= text[0...3]+text[teaser.length+4...text.size] %>
 		<% else %>
 			<%= text %>
