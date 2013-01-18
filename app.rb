@@ -54,6 +54,14 @@ class BokanbefalingerApp < Sinatra::Application
       BASE_URI+path.join("")
     end
 
+    def compare_clean(s)
+      # Convert <br/> to space and remove all other html tags in order to
+      # compare teaser and text, as in text.start_with?(teaser)
+      # It also converts carriage return to space
+       re = /<("[^"]*"|'[^']*'|[^'">])*>/
+       br = /<br\/>/
+       s.gsub(" ", " ").gsub(br, " ").gsub(re, '')
+    end
   end
 
 end
