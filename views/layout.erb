@@ -51,7 +51,7 @@
           <li <%= 'class="active"' if request.path_info == '/myreviews' %>>
             <a href="/"><span class="inner-navbutton">Mine anbefalinger</span></a>
           </li>
-          <li <%= 'class="active"' if request.path_info =~ /\/ny$/ %>>
+          <li <%= 'class="active"' if request.path_info =~ /\/ny|finn$/ %>>
             <a href="/finn"><span class="inner-navbutton">Skriv anbefaling</span></a>
           </li>
         <% end %>

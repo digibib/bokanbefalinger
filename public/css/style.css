@@ -96,6 +96,8 @@ h1, h2, h3 { color :#333; line-height: 1.1em;}
 
 .green { background: #71C120;}
 
+.loading-message { display: none;}
+
 img.cover {
   max-width: 150px;
   height: 200px;
@@ -104,6 +106,16 @@ img.cover {
 button.medium {
   padding: 4px;
   width: 130px;
+  color: #fff;
+  border-radius: 3px;
+  border:0;
+  line-height:1.4em;
+  margin-right:0.5em;
+}
+
+button.long {
+  padding: 4px;
+  width: 200px;
   color: #fff;
   border-radius: 3px;
   border:0;
@@ -120,10 +132,12 @@ button.medium {
 p.error {
   background: #F9D654;
   padding: 15px;
-  width: 980px;
+  width: 90%;
   clear: both;
   color: #222;
 }
+
+label { font-weight: bold;}
 
 /* tooltips */
 
@@ -323,7 +337,18 @@ span.inner-navbutton {
 #review-heading div { float:left;}
 #review-heading p { margin-left:30px;}
 
-
+/* isbn search */
+.isbn-form { background-color:#eee; padding:15px; width:90%;}
+#isbn { margin:10px}
+#isbn-notfound { display: none;}
+#isbn-results { margin-top:20px; padding: 15px; border: 1px dashed #ccc;
+                height:265px; width:90%; display:none;}
+#isbn-results div { float: left; }
+#isbn-results p { margin-left: 30px;}
+#isbn-results button { margin: 50px;}
+.isbn-author { font-weight: bold; }
+.isbn-title { font-size: 1.5em;}
+.isbn-work-title { font-size:0.9em;}
 /* search results */
 
 a.work-link-big { text-decoration: none; color:#c12121; }

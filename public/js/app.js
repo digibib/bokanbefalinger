@@ -13,7 +13,55 @@ $(".tooltip-target").ezpz_tooltip({
   offset:0
 });
 
+ // loading animation
+var i = 0;
+setInterval(function() {
+  i = ++i % 4;
+  $("#loading").html(""+Array(i+1).join("."));
+}, 500);
+
 // set tittel=forfatter som get parameter
 $("#search-button").on('click', function() {
 	$("#search-input-copy").val($("#search-input").val());
-})
+});
+
+// Søk etter bok via ISBN
+$("#isbn-button").on('click', function() {
+	var isbn_input = $('#isbn').val();
+
+	if (isbn == "") {
+	 return;
+	}
+
+	$('#isbn').val('');
+
+	var request = $.ajax({
+	  url: '/work_by_isbn/',
+	  type: "GET",
+	  data: { isbn: isbn_input },
+	  dataType: "json"
+	});
+
+	$('#isbn').prop("disabled", true);
+	$('.loading-message').show();
+	$('#isbn-results').hide()
+
+	request.done(function(data) {
+		$('#isbn').prop("disabled", false);
+		$('.loading-message').hide();
+		$('#isbn-notfound').hide();
+		$('#isbn-author').html(data.author);
+		$('#isbn-title').html(data.title);
+		$('#isbn-work-title').html("(originaltittel: "+data.work_title+")");
+		$('#isbn-cover').html("<img src='"+data.cover_url+"'>");
+		$('#isbn-results').show()
+	});
+
+	request.fail(function(jqXHR, textStatus, errorThrown) {
+		$('#isbn-error').html(isbn_input);
+		$('#isbn').prop("disabled", false);
+		$('.loading-message').hide();
+		$('#isbn-notfound').show();
+	});
+
+});
