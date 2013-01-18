@@ -43,7 +43,7 @@ class Work
                 [:book_id, RDF::DC.title, :title],
                 [:work_id, RDF::FABIO.hasManifestation, :book_id],
                 [:work_id, RDF::DC.creator, :creator],
-                [:creator, RDF::RADATANA.catalogueName, :author],
+                [:creator, RDF::FOAF.name, :author],
                 [:work_id, RDF::DC.title, :work_title])
     query.optional([:book_id, RDF::FOAF.depiction, :cover_url])
 
