@@ -39,11 +39,12 @@ class Work
     query = QUERY.select(:work_id, :author, :title, :work_title)
     query.sample(:cover_url)
     query.distinct.from(BOOKGRAPH)
-    query.where([:book_id, RDF::BIBO.isbn, RDF::Literal(isbn_sanitized)],
-                             [:book_id, RDF::DC.title, :title],
-                             [:book_id, RDF::DC.creator, :author],
-                             [:work_id, RDF::FABIO.hasManifestation, :book_id],
-                             [:work_id, RDF::DC.title, :work_title])
+    query.where([:book_id, RDF::BIBO.isbn, isbn_sanitized],
+                [:book_id, RDF::DC.title, :title],
+                [:work_id, RDF::FABIO.hasManifestation, :book_id],
+                [:work_id, RDF::DC.creator, :creator],
+                [:creator, RDF::RADATANA.catalogueName, :author],
+                [:work_id, RDF::DC.title, :work_title])
     query.optional([:book_id, RDF::FOAF.depiction, :cover_url])
 
     result = REPO.select(query)
