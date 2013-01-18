@@ -67,6 +67,7 @@ $("#isbn-button").on('click', function() {
 			$('#isbn-cover').html("<img class='cover' src='"+data.cover_url+"'>");
 		} else {
 			$('.book-cover').addClass("gray");
+			$('#isbn-cover').html("");
 		}
 		$('#isbn-results').show()
 	});
