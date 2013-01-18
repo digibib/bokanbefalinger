@@ -25,6 +25,13 @@ $("#search-button").on('click', function() {
 	$("#search-input-copy").val($("#search-input").val());
 });
 
+// Enter = søk
+$('#isbn').on('keypress', function(evt) {
+	if (evt.which == 13) {
+		$("#isbn-button").trigger('click');
+	}
+});
+
 // Søk etter bok via ISBN
 $("#isbn-button").on('click', function() {
 	var isbn_input = $('#isbn').val();
