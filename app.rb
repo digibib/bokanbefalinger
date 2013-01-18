@@ -2,8 +2,9 @@
 require "sinatra"
 require "redis"
 
+require_relative "settings.rb"
 
-BASE_URI="http://data.deichman.no/"
+BASE_URI = Settings::GRAPHS[:base]
 
 class Cache
   # Assumes Redis is running on http://localhost:6379
