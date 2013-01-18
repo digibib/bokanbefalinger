@@ -1,0 +1,11 @@
+module Settings
+  SPARQL = "http://host:8890/sparql/"
+  SPARUL = "http://host:8890/sparql-auth/"
+  USER = "user"
+  PASSWORD = "password"
+  AUTH_METHOD = "digest"
+  GRAPHS = {:review => "http://data.deichman.no/reviews",
+            :book => "http://data.deichman.no/books",
+            :api => "http://data.deichman.no/apigraph",
+            :base => "http://data.deichman.no" }
+end
