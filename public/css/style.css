@@ -342,10 +342,10 @@ span.inner-navbutton {
 #isbn { margin:10px}
 #isbn-notfound { display: none;}
 #isbn-results { margin-top:20px; padding: 15px; border: 1px dashed #ccc;
-                height:265px; width:90%; display:none;}
+                height:200px; width:90%; display:none;}
 #isbn-results div { float: left; }
 #isbn-results p { margin-left: 30px;}
-#isbn-results button { margin: 50px;}
+#isbn-results button { margin: 30px;}
 .isbn-author { font-weight: bold; }
 .isbn-title { font-size: 1.5em;}
 .isbn-work-title { font-size:0.9em;}
