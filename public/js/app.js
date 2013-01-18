@@ -52,8 +52,10 @@ $("#isbn-button").on('click', function() {
 		$('#isbn-notfound').hide();
 		$('#isbn-author').html(data.author);
 		$('#isbn-title').html(data.title);
-		$('#isbn-work-title').html("(originaltittel: "+data.work_title+")");
-		$('#isbn-cover').html("<img src='"+data.cover_url+"'>");
+		if (data.work_title != data.title) {
+			$('#isbn-work-title').html("(originaltittel: "+data.work_title+")");
+		}
+		$('#isbn-cover').html("<img class='cover' src='"+data.cover_url+"'>");
 		$('#isbn-results').show()
 	});
 
