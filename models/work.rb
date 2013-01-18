@@ -32,4 +32,28 @@ class Work
     return work["works"].first, nil
   end
 
+  def self.find_by_isbn(isbn)
+    isbn_sanitized = isbn.gsub(/[^0-9]/, "")
+    return nil if isbn_sanitized.empty?
+
+    query = QUERY.select(:work_id, :author, :title, :work_title)
+    query.sample(:cover_url)
+    query.distinct.from(BOOKGRAPH)
+    query.where([:book_id, RDF::BIBO.isbn, RDF::Literal(isbn_sanitized)],
+                             [:book_id, RDF::DC.title, :title],
+                             [:book_id, RDF::DC.creator, :author],
+                             [:work_id, RDF::FABIO.hasManifestation, :book_id],
+                             [:work_id, RDF::DC.title, :work_title])
+    query.optional([:book_id, RDF::FOAF.depiction, :cover_url])
+
+    result = REPO.select(query)
+    return nil if result.empty?
+
+    work = {}
+    result.first.bindings.each do |k,v|
+      work[k] = v.to_s
+    end
+
+    work.merge :isbn => isbn_sanitized
+  end
 end
