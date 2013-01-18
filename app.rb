@@ -52,7 +52,7 @@ class BokanbefalingerApp < Sinatra::Application
     alias_method :h, :escape_html
 
     def create_uri(path)
-      BASE_URI+path.join("")
+      BASE_URI+"/"+path.join("")
     end
 
     def compare_clean(s)
