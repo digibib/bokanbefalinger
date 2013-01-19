@@ -20,10 +20,20 @@ setInterval(function() {
   $("#loading").html(""+Array(i+1).join("."));
 }, 500);
 
-// set tittel=forfatter som get parameter
+// set isbn as query param if searchstring matches only /^[0-9-]/
+// set tittel=forfatter som get parameter hvis ikke
 $("#search-button").on('click', function() {
-	$("#search-input-copy").val($("#search-input").val());
+	var searchterm = $("#search-input").val();
+	if (/^[0-9-]*$/.test(searchterm)) {
+		$("#search-input-isbn").val(searchterm);
+		$("#search-input").prop("disabled", true);
+		$("#search-input-copy").prop("disabled", true);
+	} else {
+		$("#search-input-copy").val(searchterm);
+		$("#search-input-isbn").prop("disabled", true);
+	}
 });
+
 
 // Enter = søk
 $('#isbn').on('keypress', function(evt) {

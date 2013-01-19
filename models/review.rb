@@ -123,6 +123,20 @@ class Review
     [result, num_titles, nil]
   end
 
+  def self.search_by_isbn(isbn)
+    puts "API call for isbn=#{isbn}"
+    resp = @@conn.get do |req|
+      req.body = {:isbn => isbn}.to_json
+    end
+
+    return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{API})."] if resp.status != 200
+
+    result = JSON.parse(resp.body)
+    num_isbn = 1 if result["works"]
+
+    return [result, num_isbn || 0, nil]
+  end
+
   def self.get_reviews_from_uri(uri)
 
     # 1. Get review by id

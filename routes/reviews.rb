@@ -5,8 +5,9 @@ class BokanbefalingerApp < Sinatra::Application
 
   get "/søk" do
     # default values to avoid nil in views
-    @titles, @num_titles, @error_message = [], 0, nil
-    @sorted, @num_authors, @error_message = [], 0, nil
+    @num_titles, @num_authors, @num_isbn = 0, 0, 0
+    @isbn, @sorted, @authors = [], [], []
+    @error_message = nil
 
     if request.params["forfatter"] and not request.params["forfatter"].strip.empty?
       @searchterms = request.params["forfatter"]
@@ -16,6 +17,11 @@ class BokanbefalingerApp < Sinatra::Application
     if request.params["tittel"] and not request.params["tittel"].strip.empty?
       @searchterms = request.params["tittel"]
       @titles, @num_titles, @error_message = Review.search_by_title(@searchterms)
+    end
+
+    if request.params["isbn"] and not request.params["isbn"].strip.empty?
+      @searchterms = request.params["isbn"]
+      @isbn, @num_isbn, @error_message = Review.search_by_isbn(@searchterms)
     end
 
     @error_message = "Mangler søkestreng" unless @searchterms
