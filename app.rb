@@ -26,7 +26,7 @@ class Cache
     return nil unless @@caching
     begin
       @@redis.set key, value
-    rescue Redis::CannotConnectError
+    rescue Redis::CannotConnectError, Redis::Encoding::CompatibilityError
       puts "DEBUG: Redis not available. Cannot write to cache."
     end
   end
