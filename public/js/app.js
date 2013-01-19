@@ -40,8 +40,6 @@ $("#isbn-button").on('click', function() {
 	 return;
 	}
 
-	$('#isbn').val('');
-
 	var request = $.ajax({
 	  url: '/work_by_isbn/',
 	  type: "GET",
@@ -54,6 +52,7 @@ $("#isbn-button").on('click', function() {
 	$('#isbn-results').hide()
 
 	request.done(function(data) {
+		$('#isbn').val('');
 		$('#isbn').prop("disabled", false);
 		$('.loading-message').hide();
 		$('#isbn-notfound').hide();
@@ -73,6 +72,7 @@ $("#isbn-button").on('click', function() {
 	});
 
 	request.fail(function(jqXHR, textStatus, errorThrown) {
+		$('#isbn').val('');
 		$('#isbn-error').html(isbn_input);
 		$('#isbn').prop("disabled", false);
 		$('.loading-message').hide();
