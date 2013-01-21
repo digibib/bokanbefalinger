@@ -114,6 +114,5 @@ $('#kriterium-container').on('change', 'select.kriterium', function() {
 });
 
 $('#kriterium-container').on('click', 'button.fjern', function() {
-	console.log("fjern");
 	$(this).parents('.kriterium-outer').remove();
 });
