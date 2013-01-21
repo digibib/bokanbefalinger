@@ -56,7 +56,7 @@ class BokanbefalingerApp < Sinatra::Application
 
   get "/lister" do
     @title = "Lister"
-    erb :feeds
+    erb :lists
   end
 
   get "/finn" do
