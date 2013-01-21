@@ -90,3 +90,30 @@ $("#isbn-button").on('click', function() {
 	});
 
 });
+
+
+
+/* liste-generator logikk */
+
+$('#kriterium-container').on('change', 'select.kriterium', function() {
+	var k = $(this).find("option:selected").val();
+	var $kdiv = $(this).parents(".kriterium-outer");
+	$kdiv.find('.kriterium-inner').remove();
+	if (k != "s0") {
+		$kdiv.addClass("chosen");
+		if ( $('.kriterium-outer:last').hasClass("chosen") ) {
+			$('#kriterium-container').append($kdiv.clone().removeClass("chosen"));
+		}
+		var $kspan = $('.'+k+':last').clone().appendTo($kdiv).show();
+	} else {
+		$kdiv.removeClass("chosen");
+		if ($('.kriterium-outer').not('.chosen').length >= 2) {
+			$('.kriterium-outer:last').remove();
+		}
+	}
+});
+
+$('#kriterium-container').on('click', 'button.fjern', function() {
+	console.log("fjern");
+	$(this).parents('.kriterium-outer').remove();
+});
