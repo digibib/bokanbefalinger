@@ -17,10 +17,10 @@
 	<div class="clearfix" style="margin-top:50px"></div>
 	<% if @work["reviews"].size == 1 %>
 		<h3>Det finnes 1 anbefaling av denne boka: </h3>
-	<% elsif @work["reviews"].size > 1 %>
-		<h3>Det finnes <%= @work["reviews"].size %> anbefalinger av denne boka: </h3>
+	<% elsif @work["reviews"].uniq.size > 1 %>
+		<h3>Det finnes <%= @work["reviews"].uniq.size %> anbefalinger av denne boka: </h3>
 	<% end %>
-	<% @work["reviews"].each do |r| %>
+	<% @work["reviews"].uniq.each do |r| %>
 		<div class="clearfix"></div>
 		<div class="review-snippet">
 			<div class="review-date">

@@ -39,7 +39,7 @@
 						<p class="author"><a class="author-link" href="/søk?forfatter=<%= w["author"] %>"><%= w["author"] %></a></p>
 					</div>
 				</div>
-				<% w["reviews"].each do |r| %>
+				<% w["reviews"].uniq.each do |r| %>
 					<div class="clearfix"></div>
 					<div class="review-snippet">
 						<div class="review-date">
@@ -79,7 +79,7 @@
 					<p class="author"><a class="author-link" href="/søk?forfatter=<%= work["author"] %>"><%= work["author"] %></a></p>
 				</div>
 			</div>
-			<% work["reviews"].each do |r| %>
+			<% work["reviews"].uniq.each do |r| %>
 				<div class="clearfix"></div>
 				<div class="review-snippet">
 					<div class="review-date">

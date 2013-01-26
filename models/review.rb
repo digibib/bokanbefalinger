@@ -189,7 +189,7 @@ class Review
       other_reviews << r unless r["uri"] == uri
     end
 
-    return review["works"].first, other_reviews, nil
+    return review["works"].first, other_reviews.uniq, nil
   end
 
 
