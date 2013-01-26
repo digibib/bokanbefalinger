@@ -113,6 +113,17 @@ $('#kriterium-container').on('change', 'select.kriterium', function() {
 	}
 });
 
+$('#kriterium-container').on('change', '.inner-input', function() {
+	var k = $(this).find("option:selected").val();
+	if (k === $(this).find("option:first").val() ) {
+		console.log("inner unchosen");
+		$(this).parents('.kriterium-inner').removeClass('chosen');
+	} else {
+		console.log("inner chosen");
+		$(this).parents('.kriterium-inner').addClass('chosen');
+	}
+});
+
 $('#kriterium-container').on('click', 'button.fjern', function() {
 	$(this).parents('.kriterium-outer').remove();
 });
