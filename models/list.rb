@@ -1,10 +1,6 @@
 # encoding: utf-8
-require "json"
-require "faraday"
 
 class List
-
-  @@conn = Faraday.new(:url => API)
 
   def self.populate_dropdowns()
     subjects, persons = Cache.get("subjects"), Cache.get("persons")
