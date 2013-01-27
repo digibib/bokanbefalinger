@@ -5,39 +5,44 @@
 	<div class="kriterium-outer">
 		<select class="kriterium">
 			<option value="s0">Velg kriterium</option>
-			<option value="s1">Sjanger</option>
+			<!-- <option value="s1">Sjanger</option> -->
 			<option value="s2">Emne</option>
-			<option value="s3">Litterær form</option>
-			<option value="s4">Målgruppe</option>
+			<!-- <option value="s3">Litterær form</option> -->
+			<!-- <option value="s4">Målgruppe</option> -->
 			<option value="s5">Forfatter</option>
-			<option value="s6">Forfatters nasjonalitet</option>
+			<!-- <option value="s6">Forfatters nasjonalitet</option> -->
 			<option value="s7">Omtalte personer</option>
-			<option value="s8">Sidetall</option>
-			<option value="s9">Utgivelsesår</option>
-			<option value="s10">Dokumentspråk</option>
+			<!-- <option value="s8">Sidetall</option> -->
+			<!-- <option value="s9">Utgivelsesår</option> -->
+			<!-- <option value="s10">Dokumentspråk</option> -->
 		</select>
 	</div>
 </div>
 
 <div class="clearfix"></div>
+<button id="generate-list" style="margin:40px" class="long green">Gi meg lista!</button>
+<div class="clearfix"></div>
+<div id ="list-results"></div>
+
+<div class="clearfix"></div>
 <span class="kriterium-inner s1">
-	<select class="sjanger">
+	<select class="sjanger inner-input">
 		<option>Velg sjanger</option>
-		<option>sjanger 1</option>
-		<option>sjanger 2</option>
+		<option>Sjanger 1</option>
 	</select>
 	<button class="fjern small">fjern kriterium</button>
 </span>
 <span class="kriterium-inner s2">
-	<select class="emne">
-		<option>Velg emne</option>
-		<option>emne 1</option>
-		<option>emne 2</option>
+	<select data-placeholder="velg emne" class="emne inner-input">
+		<option></option>
+		<% @subjects.sort_by { |k,v| v }.each do |k,v| %>
+		<option value="<%= k %>"><%= v %></option>
+		<% end %>
 	</select>
 	<button class="fjern small">fjern kriterium</button>
 </span>
 <span class="kriterium-inner s3">
-	<select class="litform">
+	<select class="litform inner-input">
 		<option>Velg literær form</option>
 		<option>litform 1</option>
 		<option>litform 2</option>
@@ -45,7 +50,7 @@
 	<button class="fjern small">fjern kriterium</button>
 </span>
 <span class="kriterium-inner s4">
-	<select class="audience">
+	<select class="audience inner-input">
 		<option>Velg målgruppe</option>
 		<option>barn</option>
 		<option>unge</option>
@@ -58,7 +63,7 @@
 	<button class="fjern small">fjern kriterium</button>
 </span>
 <span class="kriterium-inner s6">
-	<select class="nasjonalitet">
+	<select class="nasjonalitet inner-input">
 		<option>Velg forfatters nasjonalitet</option>
 		<option>norsk</option>
 		<option>svensk</option>
@@ -67,11 +72,11 @@
 	<button class="fjern small">fjern kriterium</button>
 </span>
 <span class="kriterium-inner s7">
-	<select class="person">
-		<option>Velg omtalt person</option>
-		<option>Ole</option>
-		<option>Dole</option>
-		<option>Doffen</option>
+	<select data-placeholder="velg omtalt person" class="person inner-input">
+		<option></option>
+		<% @persons.sort_by { |k,v| v }.each do |k,v| %>
+		<option value="<%= k %>"><%= v %></option>
+		<% end %>
 	</select>
 	<button class="fjern small">fjern kriterium</button>
 </span>
@@ -87,7 +92,7 @@
 	<button class="fjern small">fjern kriterium</button>
 </span>
 <span class="kriterium-inner s10">
-	<select class="language">
+	<select class="language inner-input">
 		<option>Velg dokumentspråk</option>
 		<option>norsk</option>
 		<option>engelsk</option>
