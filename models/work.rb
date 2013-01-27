@@ -18,7 +18,7 @@ class Work
         resp = @@conn.get do |req|
           req.body = {:work => work_id}.to_json
         end
-      rescue Faraday::Error::TimeoutError
+      rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
         return [nil, "Forespørsel til eksternt API(#{API}) brukte for lang tid å svare"]
       end
 

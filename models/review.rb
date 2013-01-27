@@ -13,7 +13,7 @@ class Review
         req.body = {:limit => limit, :offset => offset,
                     :order_by => order_by, :order => order}.to_json
       end
-    rescue Faraday::Error::TimeoutError
+    rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
       return [nil, "Forespørsel til eksternt API(#{API}) brukte for lang tid å svare"]
     end
 
@@ -36,7 +36,7 @@ class Review
         resp = @@conn.get do |req|
           req.body = {:author => searchterms}.to_json
         end
-      rescue Faraday::Error::TimeoutError
+      rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
         return [nil, nil, "Forespørsel til eksternt API(#{API}) brukte for lang tid å svare"]
       end
 
@@ -188,7 +188,7 @@ class Review
         resp = @@conn.get do |req|
           req.body = {:work => work_id}.to_json
         end
-      rescue Faraday::Error::TimeoutError
+      rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
         return [nil, nil, "Forespørsel til eksternt API(#{API}) brukte for lang tid å svare"]
       end
 
