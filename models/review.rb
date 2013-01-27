@@ -6,6 +6,22 @@ class Review
 
   @@conn = Faraday.new(:url => API)
 
+  def self.get_latest(limit, offset, order_by, order)
+    puts "Fetching all reviews from API"
+    begin
+      resp = @@conn.get do |req|
+        req.body = {:limit => limit, :offset => offset,
+                    :order_by => order_by, :order => order}.to_json
+      end
+    rescue Faraday::Error::TimeoutError
+      return [nil, "Forespørsel til eksternt API(#{API}) brukte for lang tid å svare"]
+    end
+
+    return [nil, "Får ikke kontakt med ekstern ressurs (#{API})."] if resp.status != 200
+
+    return JSON.parse(resp.body), nil
+  end
+
   def self.search_by_author(searchterms)
     cached_author = Cache.get("author_"+searchterms) || Cache.get(searchterms)
     result = {}
