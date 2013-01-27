@@ -104,7 +104,8 @@ $('#kriterium-container').on('change', 'select.kriterium', function() {
 		if ( $('.kriterium-outer:last').hasClass("chosen") ) {
 			$('#kriterium-container').append($kdiv.clone().removeClass("chosen"));
 		}
-		var $kspan = $('.'+k+':last').clone().appendTo($kdiv).show();
+		var $kspan = $('.'+k+':last').clone().appendTo($kdiv).show().
+			find('.inner-input').chosen({no_results_text: "Ingen treff for"});
 	} else {
 		$kdiv.removeClass("chosen");
 		if ($('.kriterium-outer').not('.chosen').length >= 2) {
@@ -127,3 +128,38 @@ $('#kriterium-container').on('change', '.inner-input', function() {
 $('#kriterium-container').on('click', 'button.fjern', function() {
 	$(this).parents('.kriterium-outer').remove();
 });
+
+$('#generate-list').on('click', function() {
+	var subjects = [];
+	$('.inner-input.emne option:selected').each(function(i, e) {
+		if (e.value != "" ) {
+			subjects.push(e.value);
+		}
+	});
+
+	var persons = [];
+	$('.inner-input.person option:selected').each(function(i, e) {
+		if (e.value != "" ) {
+			persons.push(e.value);
+		}
+	});
+
+	var authors = [];
+	$('.forfatter').each(function(i, e) {
+		if (e.value != "" ) {
+			authors.push(e.value);
+		}
+	});
+
+	var request = $.ajax({
+	  url: '/lister',
+	  type: "POST",
+	  data: { authors: authors, persons: persons, subjects: subjects },
+	  dataType: "json"
+	});
+
+	request.done(function(data) {
+		console.log(data);
+	});
+});
+
