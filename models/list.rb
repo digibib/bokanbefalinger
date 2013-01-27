@@ -28,7 +28,9 @@ class List
     persons,subjects = {}, {}
     result.each do |s|
       persons[s[:person_id].to_s] = s[:person_label].to_s
-      subjects[s[:subject_id].to_s] = s[:subject_label].to_s
+      sub_label = s[:subject_label].to_s
+      sub_label += " (ungdom)" if s[:subject_id].to_s.match(/Juvenile/)
+      subjects[s[:subject_id].to_s] = sub_label
     end
     puts "Setting persons and subjects cache"
     Cache.set "subjects", subjects
@@ -45,6 +47,9 @@ class List
   def self.get(authors, subjects, persons)
     # all parameters are arrays
 
+    authors_regex = authors.join("|") unless authors.empty?
+    subj = subjects + persons # both subjecs & personss are dct:subject of book
+
     query = QUERY.select(:review)
     query.distinct.from(BOOKGRAPH)
     query.where([:work, RDF::FABIO.hasManifestation, :book],
@@ -54,10 +59,7 @@ class List
 
     query.where([:book, RDF::DC.subject, :subject]) unless subj.empty?
 
-    authors_regex = authors.join("|") unless authors.empty?
     query.filter("(regex(?author, \"#{authors_regex}\", \"i\"))") unless authors.empty?
-
-    subj = subjects + persons # both subjecs & personss are dct:subject of book
     query.filter("?subject = <" + subj.join("> || ?subject = <") +">") unless subj.empty?
 
     puts query
