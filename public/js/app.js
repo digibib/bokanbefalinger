@@ -158,8 +158,14 @@ $('#generate-list').on('click', function() {
 	  dataType: "json"
 	});
 
+	$('#list-results').html("Et øyeblikk...");
+
+    function printReviews(element, index, array) {
+    	$('#list-results').append('<p>'+element+'</p>');
+    }
 	request.done(function(data) {
-		console.log(data);
+		$('#list-results').html("<h2>Lista di</h2>");
+		data.forEach(printReviews);
 	});
 });
 
