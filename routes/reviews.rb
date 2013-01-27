@@ -50,13 +50,29 @@ class BokanbefalingerApp < Sinatra::Application
   end
 
   get "/anbefalinger" do
-    @title  = "Siste anbefalinger"
-    erb :reviews
+    @reviews, @error_message = Review.get_latest(10, 0, 'issued', 'desc')
+    puts "@reviews = #{@reviews}"
+
+    if @error_message
+      @title ="Feil"
+      erb :error
+    else
+      @title  = "Siste anbefalinger"
+      erb :reviews
+    end
   end
 
   get "/lister" do
     @title = "Lister"
+    @subjects, @persons = List.populate_dropdowns
     erb :lists
+  end
+
+  post "/lister" do
+    puts params["authors"], params["subjects"], params["persons"]
+    reviews = List.get(Array(params["authors"]), Array(params["subjects"]), Array(params["persons"]))
+
+    reviews.to_json
   end
 
   get "/finn" do
