@@ -164,7 +164,7 @@ $('#generate-list').on('click', function() {
     	$('#list-results').append('<p>'+element+'</p>');
     }
 	request.done(function(data) {
-		$('#list-results').html("<h2>Lista di</h2>");
+		$('#list-results').html("<h2>"+ data.length +" treff</h2>");
 		data.forEach(printReviews);
 	});
 });
