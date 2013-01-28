@@ -151,23 +151,13 @@ $('#generate-list').on('click', function() {
 		}
 	});
 
-	var pages_from = new Array();
+	var pages_from = [], pages_to = [];
 	$('#kriterium-container input.pages-from').each(function(i, e) {
-		var v;
-		if (e.value == "") {
-			pages_from.push(0);
-		} else {
-			pages_from.push(e.value);
-		}
+		e.value == "" ? pages_from.push(0) : pages_from.push(e.value);
 	});
-	var pages_to = new Array();
+
 	$('#kriterium-container input.pages-to').each(function(i, e) {
-		var v;
-		if (e.value == "") {
-			pages_to.push(10000);
-		} else {
-			pages_to.push(e.value);
-		}
+		e.value == "" ? pages_to.push(10000) : pages_to.push(e.value);
 	});
 
 	var pages = _.zip(pages_from, pages_to);
