@@ -40,7 +40,7 @@ class List
 
   end
 
-  def self.get(authors, subjects, persons, pages)
+  def self.get(authors, subjects, persons, pages, years)
     # all parameters are arrays
 
     query = QUERY.select(:review)
@@ -53,6 +53,7 @@ class List
     query.where([:book, RDF::DC.subject, :subject]) unless subjects.empty?
     query.where([:book, RDF::DC.subject, :person]) unless persons.empty?
     query.where([:book, RDF::BIBO.numPages, :pages]) unless pages.empty?
+    query.where([:book, RDF::DC.issued, :year]) unless years.empty?
 
     query.filter("?subject = <" + subjects.join("> || ?subject = <") +">") unless subjects.empty?
     query.filter("?person = <" + persons.join("> || ?person = <") +">") unless persons.empty?
@@ -60,10 +61,18 @@ class List
 
     unless pages.empty?
       pages_filter = []
-      pages.each do |ppair|
-        pages_filter.push("(xsd:integer(?pages) > #{ppair[0]} && xsd:integer(?pages) < #{ppair[1]})")
+      pages.each do |from_to|
+        pages_filter.push("(xsd:integer(?pages) > #{from_to[0]} && xsd:integer(?pages) < #{from_to[1]})")
       end
       query.filter(pages_filter.join(" || "))
+    end
+
+    unless years.empty?
+      years_filter = []
+      years.each do |from_to|
+        years_filter.push("(xsd:integer(?year) > #{from_to[0]} && xsd:integer(?year) < #{from_to[1]})")
+      end
+      query.filter(years_filter.join(" || "))
     end
 
 

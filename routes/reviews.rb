@@ -71,7 +71,8 @@ class BokanbefalingerApp < Sinatra::Application
   post "/lister" do
     puts params
     reviews = List.get(Array(params["authors"]), Array(params["subjects"]),
-                      Array(params["persons"]), JSON.parse(params["pages"]))
+                      Array(params["persons"]), JSON.parse(params["pages"]),
+                      JSON.parse(params["years"]))
 
     reviews.to_json
   end

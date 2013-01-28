@@ -162,11 +162,22 @@ $('#generate-list').on('click', function() {
 
 	var pages = _.zip(pages_from, pages_to);
 
+	var years_from = [], years_to = [];
+	$('#kriterium-container input.years-from').each(function(i, e) {
+		e.value == "" ? years_from.push(0) : years_from.push(e.value);
+	});
+
+	$('#kriterium-container input.years-to').each(function(i, e) {
+		e.value == "" ? years_to.push(10000) : years_to.push(e.value);
+	});
+
+	var years = _.zip(years_from, years_to);
+
 	var request = $.ajax({
 	  url: '/lister',
 	  type: "POST",
 	  data: { authors: authors, persons: persons, subjects: subjects,
-	          pages: JSON.stringify(pages) },
+	          pages: JSON.stringify(pages), years: JSON.stringify(years) },
 	  dataType: "json"
 	});
 
