@@ -67,7 +67,7 @@ class List
     end
 
 
-    puts query
+    puts "Fra LISTE-generator:\n", query.to_s.gsub(/\s\.\s/, " .\n")
 
     result = REPO.select(query)
     return [] if result.empty?
