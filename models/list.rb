@@ -43,9 +43,6 @@ class List
   def self.get(authors, subjects, persons)
     # all parameters are arrays
 
-    authors_regex = authors.join("|") unless authors.empty?
-    subj = subjects + persons # both subjecs & personss are dct:subject of book
-
     query = QUERY.select(:review)
     query.distinct.from(BOOKGRAPH)
     query.where([:work, RDF::FABIO.hasManifestation, :book],
@@ -53,10 +50,12 @@ class List
                 [:creator, RDF::FOAF.name, :author],
                 [:book, RDF::REV.hasReview, :review])
 
-    query.where([:book, RDF::DC.subject, :subject]) unless subj.empty?
+    query.where([:book, RDF::DC.subject, :subject]) unless subjects.empty?
+    query.where([:book, RDF::DC.subject, :person]) unless persons.empty?
 
-    query.filter("(regex(?author, \"#{authors_regex}\", \"i\"))") unless authors.empty?
-    query.filter("?subject = <" + subj.join("> || ?subject = <") +">") unless subj.empty?
+    query.filter("?subject = <" + subjects.join("> || ?subject = <") +">") unless subjects.empty?
+    query.filter("?person = <" + persons.join("> || ?person = <") +">") unless persons.empty?
+    query.filter("(regex(?author, \"#{authors.join("|")}\", \"i\"))") unless authors.empty?
 
     puts query
 
