@@ -1,5 +1,5 @@
 # encoding: utf-8
-
+require "json"
 
 class BokanbefalingerApp < Sinatra::Application
 
@@ -69,8 +69,9 @@ class BokanbefalingerApp < Sinatra::Application
   end
 
   post "/lister" do
-    puts params["authors"], params["subjects"], params["persons"]
-    reviews = List.get(Array(params["authors"]), Array(params["subjects"]), Array(params["persons"]))
+    puts params
+    reviews = List.get(Array(params["authors"]), Array(params["subjects"]),
+                      Array(params["persons"]), JSON.parse(params["pages"]))
 
     reviews.to_json
   end

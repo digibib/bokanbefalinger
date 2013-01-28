@@ -40,7 +40,7 @@ class List
 
   end
 
-  def self.get(authors, subjects, persons)
+  def self.get(authors, subjects, persons, pages)
     # all parameters are arrays
 
     query = QUERY.select(:review)
@@ -52,10 +52,20 @@ class List
 
     query.where([:book, RDF::DC.subject, :subject]) unless subjects.empty?
     query.where([:book, RDF::DC.subject, :person]) unless persons.empty?
+    query.where([:book, RDF::BIBO.numPages, :pages]) unless pages.empty?
 
     query.filter("?subject = <" + subjects.join("> || ?subject = <") +">") unless subjects.empty?
     query.filter("?person = <" + persons.join("> || ?person = <") +">") unless persons.empty?
     query.filter("(regex(?author, \"#{authors.join("|")}\", \"i\"))") unless authors.empty?
+
+    unless pages.empty?
+      pages_filter = []
+      pages.each do |ppair|
+        pages_filter.push("(xsd:integer(?pages) > #{ppair[0]} && xsd:integer(?pages) < #{ppair[1]})")
+      end
+      query.filter(pages_filter.join(" || "))
+    end
+
 
     puts query
 
