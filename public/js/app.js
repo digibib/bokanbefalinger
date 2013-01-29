@@ -187,12 +187,21 @@ $('#generate-list').on('click', function() {
 		}
 	});
 
+	var genres = [];
+	$('.inner-input.genre option:selected').each(function(i, e) {
+		if (e.value != "" ) {
+			genres.push(e.value);
+		}
+	});
+
+
 	var request = $.ajax({
 	  url: '/lister',
 	  type: "POST",
 	  data: { authors: authors, persons: persons, subjects: subjects,
 	          pages: JSON.stringify(pages), years: JSON.stringify(years),
-	          audience: audience, review_audience: review_audience },
+	          audience: audience, review_audience: review_audience,
+	          genres: genres},
 	  dataType: "json"
 	});
 

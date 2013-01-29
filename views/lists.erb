@@ -5,7 +5,7 @@
 	<div class="kriterium-outer">
 		<select class="kriterium">
 			<option value="s0">Velg kriterium</option>
-			<!-- <option value="s1">Sjanger</option> -->
+			<option value="s1">Sjanger</option>
 			<option value="s2">Emne</option>
 			<!-- <option value="s3">Litterær form</option> -->
 			<option value="s4">Målgruppe (boka)</option>
@@ -27,9 +27,11 @@
 
 <div class="clearfix"></div>
 <span class="kriterium-inner s1">
-	<select class="sjanger inner-input">
-		<option>Velg sjanger</option>
-		<option>Sjanger 1</option>
+	<select data-placeholder="velg sjanger" class="genre inner-input">
+		<option></option>
+		<% @genres.sort_by { |k,v| v }.each do |k,v| %>
+		<option value="<%= k %>"><%= v %></option>
+		<% end %>
 	</select>
 	<button class="fjern small">fjern kriterium</button>
 </span>
