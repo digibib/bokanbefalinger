@@ -163,8 +163,12 @@ class Review
       review = JSON.parse(cached_review)
     else
        puts "API call for uri=#{uri}"
-       resp = @@conn.get do |req|
-         req.body = {:uri => uri}.to_json
+       begin
+         resp = @@conn.get do |req|
+           req.body = {:uri => uri}.to_json
+         end
+       rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
+          return [nil, nil, "Forespørsel til eksternt API(#{API}) brukte for lang tid å svare"]
        end
 
        return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{API})."] if resp.status != 200
