@@ -50,8 +50,8 @@ class BokanbefalingerApp < Sinatra::Application
   end
 
   get "/anbefalinger" do
-    @reviews, @error_message = Review.get_latest(10, 0, 'issued', 'desc')
-    puts "@reviews = #{@reviews}"
+    @reviews, @error_message = [nil,nil] #Review.get_latest(10, 0, 'issued', 'desc')
+
 
     if @error_message
       @title ="Feil"

@@ -1,13 +1,2 @@
 <h2>Siste anbefalinger:</h2>
 
-<% @reviews["works"].each do |r| %>
-	<div class="search-all">
-		<div class="book-cover book-description <%= "light-gray" unless r["cover_url"] %>">
-			<% if r["cover_url"] %>
-				<img class="cover" src="<%= r["cover_url"] %>"/>
-			<% end %>
-		</div>
-
-	</div>
-	<div class="clearfix"></div>
-<% end %>
