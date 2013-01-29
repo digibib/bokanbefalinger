@@ -40,26 +40,28 @@ class List
 
   end
 
-  def self.get(authors, subjects, persons, pages, years, audience)
+  def self.get(authors, subjects, persons, pages, years, audience, review_audience)
     # all parameters are arrays
 
     query = QUERY.select(:review)
-    query.distinct.from(BOOKGRAPH)
-    query.where([:work, RDF::FABIO.hasManifestation, :book],
-                [:work, RDF::DC.creator, :creator],
-                [:creator, RDF::FOAF.name, :author],
-                [:book, RDF::REV.hasReview, :review])
+    query.distinct
+    query.where([:work, RDF::FABIO.hasManifestation, :book, :context => BOOKGRAPH],
+                [:work, RDF::DC.creator, :creator, :context => BOOKGRAPH],
+                [:creator, RDF::FOAF.name, :author, :context => BOOKGRAPH],
+                [:book, RDF::REV.hasReview, :review, :context => BOOKGRAPH])
 
-    query.where([:book, RDF::DC.subject, :subject]) unless subjects.empty?
-    query.where([:book, RDF::DC.subject, :person]) unless persons.empty?
-    query.where([:book, RDF::BIBO.numPages, :pages]) unless pages.empty?
-    query.where([:book, RDF::DC.issued, :year]) unless years.empty?
-    query.where([:book, RDF::DC.audience, :audience]) unless audience.empty?
+    query.where([:book, RDF::DC.subject, :subject, :context => BOOKGRAPH]) unless subjects.empty?
+    query.where([:book, RDF::DC.subject, :person, :context => BOOKGRAPH]) unless persons.empty?
+    query.where([:book, RDF::BIBO.numPages, :pages, :context => BOOKGRAPH]) unless pages.empty?
+    query.where([:book, RDF::DC.issued, :year, :context => BOOKGRAPH]) unless years.empty?
+    query.where([:book, RDF::DC.audience, :audience, :context => BOOKGRAPH]) unless audience.empty?
+    query.where([:review, RDF::DC.audience, :review_audience, :context => REVIEWGRAPH]) unless review_audience.empty?
 
     query.filter("?subject = <" + subjects.join("> || ?subject = <") +">") unless subjects.empty?
     query.filter("?person = <" + persons.join("> || ?person = <") +">") unless persons.empty?
     query.filter("(regex(?author, \"#{authors.join("|")}\", \"i\"))") unless authors.empty?
     query.filter("?audience = <" + audience.join("> || ?audience = <") +">") unless audience.empty?
+    query.filter("?review_audience = <" + review_audience.join("> || ?review_audience = <") +">") unless review_audience.empty?
 
     unless pages.empty?
       pages_filter = []

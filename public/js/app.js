@@ -180,12 +180,19 @@ $('#generate-list').on('click', function() {
 		}
 	});
 
+	var review_audience = [];
+	$('.inner-input.review-audience option:selected').each(function(i, e) {
+		if (e.value != "" ) {
+			review_audience.push(e.value);
+		}
+	});
+
 	var request = $.ajax({
 	  url: '/lister',
 	  type: "POST",
 	  data: { authors: authors, persons: persons, subjects: subjects,
 	          pages: JSON.stringify(pages), years: JSON.stringify(years),
-	          audience: audience },
+	          audience: audience, review_audience: review_audience },
 	  dataType: "json"
 	});
 

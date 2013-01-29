@@ -8,7 +8,8 @@
 			<!-- <option value="s1">Sjanger</option> -->
 			<option value="s2">Emne</option>
 			<!-- <option value="s3">Litterær form</option> -->
-			<option value="s4">Målgruppe</option>
+			<option value="s4">Målgruppe (boka)</option>
+			<option value="s11">Målgruppe (anbefalingen)</option>
 			<option value="s5">Forfatter</option>
 			<!-- <option value="s6">Forfatters nasjonalitet</option> -->
 			<option value="s7">Omtalte personer</option>
@@ -101,6 +102,15 @@
 		<option>norsk</option>
 		<option>engelsk</option>
 		<option>finsk</option>
+	</select>
+	<button class="fjern small">fjern kriterium</button>
+</span>
+<span class="kriterium-inner s11">
+	<select data-placeholder="velg målgruppe (for anbefalingen)" class="review-audience inner-input">
+		<option></option>
+		<option value="http://data.deichman.no/audience/children">barn</option>
+		<option value="http://data.deichman.no/audience/youth">unge/ungdom?</option>
+		<option value="http://data.deichman.no/audience/adult">voksne</option>
 	</select>
 	<button class="fjern small">fjern kriterium</button>
 </span>
