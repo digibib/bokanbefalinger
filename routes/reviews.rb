@@ -72,7 +72,7 @@ class BokanbefalingerApp < Sinatra::Application
     puts params
     reviews = List.get(Array(params["authors"]), Array(params["subjects"]),
                       Array(params["persons"]), JSON.parse(params["pages"]),
-                      JSON.parse(params["years"]))
+                      JSON.parse(params["years"]), Array(params["audience"]))
 
     reviews.to_json
   end

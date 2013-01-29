@@ -8,7 +8,7 @@
 			<!-- <option value="s1">Sjanger</option> -->
 			<option value="s2">Emne</option>
 			<!-- <option value="s3">Litterær form</option> -->
-			<!-- <option value="s4">Målgruppe</option> -->
+			<option value="s4">Målgruppe</option>
 			<option value="s5">Forfatter</option>
 			<!-- <option value="s6">Forfatters nasjonalitet</option> -->
 			<option value="s7">Omtalte personer</option>
@@ -50,11 +50,15 @@
 	<button class="fjern small">fjern kriterium</button>
 </span>
 <span class="kriterium-inner s4">
-	<select class="audience inner-input">
-		<option>Velg målgruppe</option>
-		<option>barn</option>
-		<option>unge</option>
-		<option>voksne</option>
+	<select data-placeholder="velg målgruppe (for boka)" class="audience inner-input">
+		<option></option>
+		<option value="http://data.deichman.no/audience/adult">voksne</option>
+		<option value="http://data.deichman.no/audience/juvenile">ungdom? (juvenile)</option>
+		<option value="http://data.deichman.no/audience/ages_0-5">0-5 år</option>
+		<option value="http://data.deichman.no/audience/ages_6-7">6-7 år</option>
+		<option value="http://data.deichman.no/audience/ages_8-9">8-9 år</option>
+		<option value="http://data.deichman.no/audience/ages_10-11">10-11 år</option>
+		<option value="http://data.deichman.no/audience/ages_12-15">12-15 år</option>
 	</select>
 	<button class="fjern small">fjern kriterium</button>
 </span>

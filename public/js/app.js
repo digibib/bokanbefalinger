@@ -173,11 +173,19 @@ $('#generate-list').on('click', function() {
 
 	var years = _.zip(years_from, years_to);
 
+	var audience = [];
+	$('.inner-input.audience option:selected').each(function(i, e) {
+		if (e.value != "" ) {
+			audience.push(e.value);
+		}
+	});
+
 	var request = $.ajax({
 	  url: '/lister',
 	  type: "POST",
 	  data: { authors: authors, persons: persons, subjects: subjects,
-	          pages: JSON.stringify(pages), years: JSON.stringify(years) },
+	          pages: JSON.stringify(pages), years: JSON.stringify(years),
+	          audience: audience },
 	  dataType: "json"
 	});
 
