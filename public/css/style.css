@@ -337,6 +337,9 @@ span.inner-navbutton {
 #review-heading div { float:left;}
 #review-heading p { margin-left:30px;}
 
+.audiences { float:left; width:15px !important; height:15px; display:inline;}
+.checklabel { margin-left:15px; float:left; width:60px; line-height:15px; display:inline-block;}
+
 /* isbn search */
 .isbn-form { background-color:#eee; padding:15px; width:90%;}
 #isbn { margin:10px}
