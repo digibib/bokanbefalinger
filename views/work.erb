@@ -15,7 +15,9 @@
 	</div>
 	<div class="clearfix"></div>
 	<div class="clearfix" style="margin-top:50px"></div>
-	<% if @work["reviews"].size == 1 %>
+	<% if @work["reviews"].size == 0 %>
+		<h3>Ingen har anmeldt denne boka ennå!</h3>
+	<% elsif @work["reviews"].size == 1 %>
 		<h3>Det finnes 1 anbefaling av denne boka: </h3>
 	<% elsif @work["reviews"].uniq.size > 1 %>
 		<h3>Det finnes <%= @work["reviews"].uniq.size %> anbefalinger av denne boka: </h3>
