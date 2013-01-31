@@ -92,6 +92,28 @@ $("#isbn-button").on('click', function() {
 });
 
 
+/* Skriv ny anbefaling */
+
+// validering
+$('#publish').on('click', function(event) {
+	var missing=0;
+	$('.required').each(function(i) {
+		if (this.value == "") {
+			this.className += " missing";
+			missing += 1;
+		}
+	});
+	if (missing > 0) {
+		event.preventDefault();
+	}
+});
+
+$('#review-form').on('focus', '.required', function () {
+if ($(this).hasClass('missing')) {
+  $(this).removeClass('missing');
+  }
+});
+
 
 /* liste-generator logikk */
 

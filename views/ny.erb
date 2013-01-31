@@ -13,9 +13,9 @@
 	</div>
 	<div class="clearfix"></div>
 	<form id="review-form" action="/review" method="POST">
-		<input type="text" name="title" placeholder="Tittel på anbefalingen"/>
-		<textarea name="teaser" rows="2" placeholder="Skriv en teaser, maks to setninger"></textarea>
-		<textarea name="review" rows="20" placeholder="Skriv en omtale"></textarea>
+		<input class="required" type="text" name="title" placeholder="Tittel på anbefalingen"/>
+		<textarea class="required" name="teaser" rows="2" placeholder="Skriv en teaser, maks to setninger"></textarea>
+		<textarea class="required" name="review" rows="20" placeholder="Skriv en omtale"></textarea>
 
 		<div>
 		<p>Målgruppe(r) (for <em>anbefalingen</em>, ikke for boka):</p>
@@ -36,7 +36,7 @@
 			</div> -->
 			<div style="float:right;margin-right:-25px">
 				<button class="medium gray">Lagre kladd</button>
-				<button class="medium red">Publisér</button>
+				<button id="publish" class="medium red">Publisér</button>
 			</div>
 		</div>
 		<div class="clearfix"></div><div style="margin-top: 100px"></div>
