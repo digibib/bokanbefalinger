@@ -36,25 +36,19 @@ class Work
     isbn_sanitized = isbn.gsub(/[^0-9]/, "")
     return nil if isbn_sanitized.empty?
 
-    query = QUERY.select(:work_id, :author, :title, :work_title)
-    query.sample(:cover_url)
-    query.distinct.from(BOOKGRAPH)
-    query.where([:book_id, RDF::BIBO.isbn, isbn_sanitized],
-                [:book_id, RDF::DC.title, :title],
-                [:work_id, RDF::FABIO.hasManifestation, :book_id],
-                [:work_id, RDF::DC.creator, :creator],
-                [:creator, RDF::FOAF.name, :author],
-                [:work_id, RDF::DC.title, :work_title])
-    query.optional([:book_id, RDF::FOAF.depiction, :cover_url])
-
-    result = REPO.select(query)
-    return nil if result.empty?
-
-    work = {}
-    result.first.bindings.each do |k,v|
-      work[k] = v.to_s
+    puts "API call for /work isbn=#{isbn}"
+    works_conn = Faraday.new(:url => "http://datatest.deichman.no/api/works")
+    begin
+      resp = works_conn.get do |req|
+        req.body = {:isbn => isbn}.to_json
+      end
+    rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
+      return [nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
     end
 
-    work.merge :isbn => isbn_sanitized
+    return [nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
+    return [nil, "Finner ingen verk med denne ID-en (#{work_id})."] unless resp.body.match(/work/)
+
+    resp.body
   end
 end

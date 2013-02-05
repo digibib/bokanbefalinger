@@ -66,14 +66,11 @@ $("#isbn-button").on('click', function() {
 		$('#isbn').prop("disabled", false);
 		$('.loading-message').hide();
 		$('#isbn-notfound').hide();
-		$('#isbn-author').html(data.author);
-		$('#isbn-title').html(data.title);
-		if (data.work_title != data.title) {
-			$('#isbn-work-title').html("(originaltittel: "+data.work_title+")");
-		}
-		if (data.cover_url) {
+		$('#isbn-author').html(data.work[0].author);
+		$('#isbn-title').html(data.work[0].title);
+		if (data.work[0].cover_url) {
 			$('.book-cover').removeClass("gray");
-			$('#isbn-cover').html("<img class='cover' src='"+data.cover_url+"'>");
+			$('#isbn-cover').html("<img class='cover' src='"+data.work[0].cover_url+"'>");
 		} else {
 			$('.book-cover').addClass("gray");
 			$('#isbn-cover').html("");
