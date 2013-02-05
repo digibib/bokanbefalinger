@@ -49,6 +49,9 @@ class Work
     return [nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
     return [nil, "Finner ingen verk med denne ID-en (#{work_id})."] unless resp.body.match(/work/)
 
+    res = JSON.parse(resp.body)
+    puts "setting cache for #{res['work'].first['manifestation']}"
+    Cache.set res["work"].first["manifestation"], resp.body
     resp.body
   end
 end
