@@ -54,4 +54,17 @@ class Work
     Cache.set res["work"].first["manifestation"], resp.body
     resp.body
   end
+
+  def self.find_by_manifestation(uri)
+    cached_manifest = Cache.get(uri)
+
+    if cached_manifest
+      manifestation = JSON.parse(cached_manifest)
+    else
+      return nil, "Not yet in cache"
+      #API works/ uri=x not yet implemented
+    end
+
+    return manifestation, nil
+  end
 end
