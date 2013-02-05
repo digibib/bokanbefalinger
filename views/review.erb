@@ -14,18 +14,22 @@
 		</div>
 	</div>
 	<div class="clearfix"></div>
-	<h3><%= @review["reviews"].first["title"] %></h3>
+	<% r = @review["reviews"].first %>
+	<h3><%= r["title"] %></h3>
 	<div class="teaser">
-		<% teaser = @review["reviews"].first["teaser"] %>
+		<% teaser = r["teaser"] %>
 		<%= teaser %>
 	</div>
 	<div class="review-text">
-		<% text = @review["reviews"].first["text"] %>
+		<% text = r["text"] %>
 		<% if compare_clean(text).start_with? teaser %>
 			<%= text[0...3]+text[teaser.length+4...text.size] %>
 		<% else %>
 			<%= text %>
 		<% end %>
+		<div class="reviewer">
+			Skrevet av: <%= r["reviewer"] %> <%= "/#{r['workplace']}" if r["workplace"] %>
+		</div>
 	</div>
 	<div class="clearfix" style="margin-top:50px"></div>
 	<% if @other_reviews.size > 0 %>
