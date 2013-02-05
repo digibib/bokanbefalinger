@@ -4,7 +4,7 @@ require "faraday"
 
 class Work
 
-  @@conn = Faraday.new(:url => API)
+  @@conn = Faraday.new(:url => Settings::API)
 
   def self.get(work_id)
     cached_work = Cache.get(work_id)
@@ -19,10 +19,10 @@ class Work
           req.body = {:work => work_id}.to_json
         end
       rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
-        return [nil, "Forespørsel til eksternt API(#{API}) brukte for lang tid å svare"]
+        return [nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
       end
 
-      return [nil, "Får ikke kontakt med ekstern ressurs (#{API})."] if resp.status != 200
+      return [nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
       return [nil, "Finner ingen verk med denne ID-en (#{work_id})."] unless resp.body.match(/works/)
       work = JSON.parse(resp.body)
       Cache.set work_id, resp.body

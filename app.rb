@@ -35,8 +35,6 @@ end
 class BokanbefalingerApp < Sinatra::Application
   enable :sessions
 
-  API = "http://datatest.deichman.no/api/reviews"
-
   configure :production do
     #set :clean_trace, true
   end

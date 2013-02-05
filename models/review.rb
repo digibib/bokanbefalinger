@@ -4,7 +4,7 @@ require "faraday"
 
 class Review
 
-  @@conn = Faraday.new(:url => API)
+  @@conn = Faraday.new(:url => Settings::API)
 
   def self.get_latest(limit, offset, order_by, order)
     puts "Fetching all reviews from API"
@@ -14,10 +14,10 @@ class Review
                     :order_by => order_by, :order => order}.to_json
       end
     rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
-      return [nil, "Forespørsel til eksternt API(#{API}) brukte for lang tid å svare"]
+      return [nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
     end
 
-    return [nil, "Får ikke kontakt med ekstern ressurs (#{API})."] if resp.status != 200
+    return [nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
 
     return JSON.parse(resp.body), nil
   end
@@ -37,10 +37,10 @@ class Review
           req.body = {:author => searchterms}.to_json
         end
       rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
-        return [nil, nil, "Forespørsel til eksternt API(#{API}) brukte for lang tid å svare"]
+        return [nil, nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
       end
 
-      return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{API})."] if resp.status != 200
+      return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
 
       unless resp.body.match(/works/)
         #set cache to "empty"
@@ -104,7 +104,7 @@ class Review
         req.body = {:title => searchterms}.to_json
       end
 
-      return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{API})."] if resp.status != 200
+      return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
 
       unless resp.body.match(/works/)
         #set cache to "empty"
@@ -145,7 +145,7 @@ class Review
       req.body = {:isbn => isbn}.to_json
     end
 
-    return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{API})."] if resp.status != 200
+    return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
 
     result = JSON.parse(resp.body)
     num_isbn = 1 if result["works"]
@@ -168,10 +168,10 @@ class Review
            req.body = {:uri => uri}.to_json
          end
        rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
-          return [nil, nil, "Forespørsel til eksternt API(#{API}) brukte for lang tid å svare"]
+          return [nil, nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
        end
 
-       return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{API})."] if resp.status != 200
+       return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
        return [nil, nil, "Finner ingen anbefaling med denne ID-en (#{uri})."] if resp.body.match(/no reviews found/)
 
        review = JSON.parse(resp.body)
@@ -193,10 +193,10 @@ class Review
           req.body = {:work => work_id}.to_json
         end
       rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
-        return [nil, nil, "Forespørsel til eksternt API(#{API}) brukte for lang tid å svare"]
+        return [nil, nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
       end
 
-      return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{API})."] if resp.status != 200
+      return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
       return [nil, nil, "Finner ingen verk med denne ID-en (#{work_id})."] unless resp.body.match(/works/)
       work = JSON.parse(resp.body)
       Cache.set work_id, resp.body

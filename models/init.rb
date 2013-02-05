@@ -13,7 +13,6 @@ BOOKGRAPH   = RDF::URI(Settings::GRAPHS[:book])
 APIGRAPH    = RDF::URI(Settings::GRAPHS[:api])
 QUERY       = RDF::Virtuoso::Query
 
-API = "http://datatest.deichman.no/api/reviews"
 require_relative "review"
 require_relative "work"
 require_relative "list"
