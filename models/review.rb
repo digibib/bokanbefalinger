@@ -180,17 +180,17 @@ class Review
     end
 
     # 2. Fetch other reviews if any by work_id
-    uri = review["works"].first["uri"]
+    work_uri = review["works"].first["uri"]
     cached_work = Cache.get(uri)
 
     if cached_work
-      puts "reading #{uri} from cache"
+      puts "reading #{work_uri} from cache"
       work = JSON.parse(cached_work)
     else
       puts "API call for work=#{uri}"
       begin
         resp = @@conn.get do |req|
-          req.body = {:work => uri}.to_json
+          req.body = {:work => work_uri}.to_json
         end
       rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
         return [nil, nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
@@ -200,7 +200,7 @@ class Review
       return [nil, nil, "Finner ingen verk med denne ID-en (#{uri})."] unless resp.body.match(/works/)
       work = JSON.parse(resp.body)
       Cache.set uri, resp.body
-      puts "cache set for #{uri}"
+      puts "cache set for #{work_uri}"
     end
 
     # 3. Check if there are other reviews other than uri
