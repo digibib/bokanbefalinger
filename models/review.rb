@@ -60,8 +60,8 @@ class Review
       authors = []
       result["works"].each do |work|
         # cache by work_id
-        Cache.set(work["work_id"], {:works => [work]}.to_json) unless cached_author
-        puts "cache set for #{work["work_id"]}" unless cached_author
+        Cache.set(work["uri"], {:works => [work]}.to_json) unless cached_author
+        puts "cache set for #{work["uri"]}" unless cached_author
 
         #cache by review_id
         work["reviews"].each do |r|
@@ -125,8 +125,8 @@ class Review
 
       # cache by work_id
       result["works"].each do |work|
-        Cache.set(work["work_id"], {:works => [work]}.to_json) unless cached_title
-        puts "cache set for #{work["work_id"]}" unless cached_title
+        Cache.set(work["uri"], {:works => [work]}.to_json) unless cached_title
+        puts "cache set for #{work["uri"]}" unless cached_title
         # cache by review_id
         work["reviews"].each do |r|
           temp = work.clone
@@ -180,27 +180,27 @@ class Review
     end
 
     # 2. Fetch other reviews if any by work_id
-    work_id = review["works"].first["work_id"]
-    cached_work = Cache.get(work_id)
+    uri = review["works"].first["uri"]
+    cached_work = Cache.get(uri)
 
     if cached_work
-      puts "reading #{work_id} from cache"
+      puts "reading #{uri} from cache"
       work = JSON.parse(cached_work)
     else
-      puts "API call for work=#{work_id}"
+      puts "API call for work=#{uri}"
       begin
         resp = @@conn.get do |req|
-          req.body = {:work => work_id}.to_json
+          req.body = {:work => uri}.to_json
         end
       rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
         return [nil, nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
       end
 
       return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
-      return [nil, nil, "Finner ingen verk med denne ID-en (#{work_id})."] unless resp.body.match(/works/)
+      return [nil, nil, "Finner ingen verk med denne ID-en (#{uri})."] unless resp.body.match(/works/)
       work = JSON.parse(resp.body)
-      Cache.set work_id, resp.body
-      puts "cache set for #{work_id}"
+      Cache.set uri, resp.body
+      puts "cache set for #{uri}"
     end
 
     # 3. Check if there are other reviews other than uri

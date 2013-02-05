@@ -35,7 +35,7 @@
 						<% end %>
 					</div>
 					<div class="book-description">
-						<p class="title"><a class="work-link-big" href="/verk<%= w["work_id"][28..-1] %>"><strong><%= w["title"] %></strong></a></p>
+						<p class="title"><a class="work-link-big" href="/verk<%= w["uri"][28..-1] %>"><strong><%= w["title"] %></strong></a></p>
 						<p class="author"><a class="author-link" href="/søk?forfatter=<%= w["author"] %>"><%= w["author"] %></a></p>
 					</div>
 				</div>
@@ -75,7 +75,7 @@
 					<% end %>
 				</div>
 				<div class="book-description">
-					<p class="title"><a class="work-link-big" href="/verk<%= work["work_id"][28..-1] %>"><strong><%= work["title"] %></strong></a></p>
+					<p class="title"><a class="work-link-big" href="/verk<%= work["uri"][28..-1] %>"><strong><%= work["title"] %></strong></a></p>
 					<p class="author"><a class="author-link" href="/søk?forfatter=<%= work["author"] %>"><%= work["author"] %></a></p>
 				</div>
 			</div>
@@ -110,7 +110,7 @@
 				<% end %>
 			</div>
 			<div class="book-description">
-				<p class="title"><a class="work-link-big" href="/verk<%= work["work_id"][28..-1] %>"><strong><%= work["title"] %></strong></a></p>
+				<p class="title"><a class="work-link-big" href="/verk<%= work["uri"][28..-1] %>"><strong><%= work["title"] %></strong></a></p>
 				<p class="author"><a class="author-link" href="/søk?forfatter=<%= work["author"] %>"><%= work["author"] %></a></p>
 			</div>
 		</div>

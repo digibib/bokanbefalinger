@@ -2,7 +2,7 @@
 	<% if request.referrer =~ /s%C3%B8k?\?/ %>
 		<p><a href="javascript: history.back()">← tilbake til trefflista</a></p>
 	<% end %>
- 	<h2>Anbefaling av: <a class="work-link" href="/verk<%= @review["work_id"][28..-1] %>"><%= @review["title"] %></a></h2>
+ 	<h2>Anbefaling av: <a class="work-link" href="/verk<%= @review["uri"][28..-1] %>"><%= @review["title"] %></a></h2>
 	<div id="review-heading">
 		<div class="book-cover <%= "light-gray" unless @review["cover_url"] %>">
 			<% if @review["cover_url"] %>
@@ -42,7 +42,7 @@
 	<% if session[:user] %>
 		<div class="clearfix"></div>
 		<div class="review-snippet" style="text-align:right;">
-				<p><a href="/verk<%= @review["work_id"][28..-1] %>/ny"><button class="long green" style="margin-right:150px">Skriv ny anbefaling</button></a></p>
+				<p><a href="/verk<%= @review["uri"][28..-1] %>/ny"><button class="long green" style="margin-right:150px">Skriv ny anbefaling</button></a></p>
 		</div>
 	<% end %>
 </div>
