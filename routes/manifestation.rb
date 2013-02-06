@@ -14,7 +14,6 @@ class BokanbefalingerApp < Sinatra::Application
       uri = path
     end
 
-    puts uri
     @manifestation, @error_message = Work.find_by_manifestation("http://data.deichman.no/"+uri)
 
     if @error_message
