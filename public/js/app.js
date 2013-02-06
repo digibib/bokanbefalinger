@@ -92,9 +92,9 @@ $("#isbn-button").on('click', function() {
 
 /* Skriv ny anbefaling */
 
-// validering
 $('#publish').on('click', function(event) {
 	var missing=0;
+	// validering
 	$('.required').each(function(i) {
 		if (this.value == "") {
 			this.className += " missing";
@@ -103,8 +103,41 @@ $('#publish').on('click', function(event) {
 	});
 	if (missing > 0) {
 		event.preventDefault();
+	} else {
+		// perform API/reviews POST request
+		var title = $('#title').val();
+		var teaser = $('#teaser').val();
+		var text = $('#text').val();
+		var isbn = $('#isbn').val();
+		var audiences = [];
+		$('.audiences:checked').each(function(i, e) {
+			audiences.push(e.value);
+		});
+
+		var request = $.ajax({
+		  url: '/review',
+		  type: "POST",
+		  data: { title: title, teaser: teaser, text: text,
+		          isbn: isbn, audience: audiences.join('|') },
+		  dataType: "json"
+		});
+
+		request.done(function(data) {
+			console.log(data);
+		});
+
+		request.fail(function(jqXHR, textStatus, errorThrown) {
+			console.log(jqXHR);
+		});
+
+		event.preventDefault();
 	}
 });
+
+$('#draft').on('click', function(event) {
+	event.preventDefault();
+});
+
 
 $('#review-form').on('focus', '.required', function () {
 if ($(this).hasClass('missing')) {

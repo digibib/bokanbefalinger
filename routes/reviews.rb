@@ -35,6 +35,15 @@ class BokanbefalingerApp < Sinatra::Application
     end
   end
 
+  post '/review' do
+    @error_message, @review = Review.publish(params["title"], params["teaser"],
+                                             params["text"], params["audiences"],
+                                             session[:user], params["isbn"])
+    puts @error_message
+    puts @review
+    @error_message || @review
+  end
+
   get '/anbefaling/*' do
     @uri = create_uri(params[:splat])
 

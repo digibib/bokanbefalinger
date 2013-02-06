@@ -13,16 +13,17 @@
 	</div>
 	<div class="clearfix"></div>
 	<form id="review-form" action="/review" method="POST">
-		<input class="required" type="text" name="title" placeholder="Tittel på anbefalingen"/>
-		<textarea class="required" name="teaser" rows="2" placeholder="Skriv en teaser, maks to setninger"></textarea>
-		<textarea class="required" name="review" rows="20" placeholder="Skriv en omtale"></textarea>
+		<input type="hidden" id="isbn" value="<%= @utgave["isbn"] %>">
+		<input id="title" class="required" type="text" name="title" placeholder="Tittel på anbefalingen"/>
+		<textarea id="teaser" class="required" name="teaser" rows="2" placeholder="Skriv en teaser, maks to setninger"></textarea>
+		<textarea id="text" class="required" name="review" rows="20" placeholder="Skriv en omtale"></textarea>
 
 		<div>
 		<p>Målgruppe(r) for <em>anbefalingen</em>, ikke for boka:</p>
 			<input id="a1" class="audiences" name="audience" type="checkbox" value="barn">
 			<label for="a1" class="checklabel">barn</label>
-			<input id="a2" class="audiences" name="audience" type="checkbox" value="unge">
-			<label for="a2" class="checklabel">unge</label>
+			<input id="a2" class="audiences" name="audience" type="checkbox" value="ungdom">
+			<label for="a2" class="checklabel">ungdom</label>
 			<input id="a3" class="audiences" name="audience" type="checkbox" value="voksen">
 			<label for="a3" class="checklabel">voksne</label>
 		</div>
@@ -35,7 +36,7 @@
 				<button class="medium gray">Forhåndsvisning</button>
 			</div> -->
 			<div style="float:right;margin-right:-25px">
-				<button class="medium gray">Lagre kladd</button>
+				<button id="draft" class="medium gray">Lagre kladd</button>
 				<button id="publish" class="medium red">Publisér</button>
 			</div>
 		</div>
