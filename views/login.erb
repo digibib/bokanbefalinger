@@ -10,6 +10,10 @@
 			<input name="take_me_back" type="hidden" value="<%= request.path %>">
 			<input name="username" type="text" placeholder="Brukernavn" />
 			<input name="password" type="password" placeholder="Passord" />
+		<% if session[:auth_error] %>
+			<p class="feil"><%= session[:auth_error] %></p>
+			<% session[:auth_error] = nil %>
+		<% end %>
 			<button class="button-big" id="login-button" type="submit">Logg inn</button>
 		</form>
 	<% end %>

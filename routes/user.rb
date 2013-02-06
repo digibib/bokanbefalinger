@@ -23,6 +23,7 @@ class BokanbefalingerApp < Sinatra::Application
       else
         puts "not authenticated"
         session[:user] = session[:pass] = nil
+        session[:auth_error] = "Feil brukernavn eller passord"
         redirect params["take_me_back"] if params["take_me_back"]
         redirect '/'
       end
