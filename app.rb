@@ -2,35 +2,11 @@
 require "sinatra"
 require "redis"
 
-require_relative "settings.rb"
+require_relative "settings"
+require_relative "cache"
 
 BASE_URI = Settings::GRAPHS[:base]
 
-class Cache
-  # Assumes Redis is running on http://localhost:6379
-  @@redis = Redis.new
-  # Disable caching here
-  @@caching = true
-
-  def self.get(key)
-    return nil unless @@caching
-    begin
-      cached = @@redis.get key
-    rescue Redis::CannotConnectError
-      puts "DEBUG: Redis not available. Cannot read from cache."
-    end
-    cached
-  end
-
-  def self.set(key, value)
-    return nil unless @@caching
-    begin
-      @@redis.set key, value
-    rescue Redis::CannotConnectError, Redis::Encoding::CompatibilityError
-      puts "DEBUG: Redis not available. Cannot write to cache."
-    end
-  end
-end
 
 class BokanbefalingerApp < Sinatra::Application
   enable :sessions
