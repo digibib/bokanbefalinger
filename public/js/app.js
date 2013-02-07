@@ -92,6 +92,34 @@ $("#isbn-button").on('click', function() {
 
 /* Skriv ny anbefaling */
 
+function publish(published) {
+	// perform API/reviews POST request
+	var title = $('#title').val();
+	var teaser = $('#teaser').val();
+	var text = $('#text').val();
+	var isbn = $('#isbn').val();
+	var audiences = [];
+	$('.audiences:checked').each(function(i, e) {
+		audiences.push(e.value);
+	});
+
+	var request = $.ajax({
+	  url: '/review',
+	  type: "POST",
+	  data: { title: title, teaser: teaser, text: text,
+	          isbn: isbn, audience: audiences.join('|'), published:published },
+	  dataType: "json"
+	});
+
+	request.done(function(data) {
+		console.log(data);
+	});
+
+	request.fail(function(jqXHR, textStatus, errorThrown) {
+		console.log(jqXHR);
+	});
+};
+
 $('#publish').on('click', function(event) {
 	var missing=0;
 	// validering
@@ -104,37 +132,13 @@ $('#publish').on('click', function(event) {
 	if (missing > 0) {
 		event.preventDefault();
 	} else {
-		// perform API/reviews POST request
-		var title = $('#title').val();
-		var teaser = $('#teaser').val();
-		var text = $('#text').val();
-		var isbn = $('#isbn').val();
-		var audiences = [];
-		$('.audiences:checked').each(function(i, e) {
-			audiences.push(e.value);
-		});
-
-		var request = $.ajax({
-		  url: '/review',
-		  type: "POST",
-		  data: { title: title, teaser: teaser, text: text,
-		          isbn: isbn, audience: audiences.join('|') },
-		  dataType: "json"
-		});
-
-		request.done(function(data) {
-			console.log(data);
-		});
-
-		request.fail(function(jqXHR, textStatus, errorThrown) {
-			console.log(jqXHR);
-		});
-
+		publish(true);
 		event.preventDefault();
 	}
 });
 
 $('#draft').on('click', function(event) {
+	publish(false);
 	event.preventDefault();
 });
 

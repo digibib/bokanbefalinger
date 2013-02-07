@@ -38,7 +38,8 @@ class BokanbefalingerApp < Sinatra::Application
   post '/review' do
     @error_message, @review = Review.publish(params["title"], params["teaser"],
                                              params["text"], params["audiences"],
-                                             session[:user], params["isbn"])
+                                             session[:user], params["isbn"],
+                                             session[:api_key], params["published"])
     puts @error_message
     puts @review
     @error_message || @review

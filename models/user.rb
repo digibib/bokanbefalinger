@@ -52,6 +52,7 @@ class User
 
     res = JSON.parse(resp.body)
 
+    # Set user session variables
     session[:source_name] = res["source"]["name"]
     session[:source_homepage] = res["source"]["homepage"] || ""
     session[:api_key] = res["source"]["api_key"]

@@ -212,12 +212,13 @@ class Review
     return review["works"].first, other_reviews.uniq, nil
   end
 
-  def self.publish(title, teaser, text, audiences, reviewer, isbn)
+  def self.publish(title, teaser, text, audiences, reviewer, isbn, api_key, published)
     begin
       resp = @@conn.post do |req|
         req.body = {:title => title, :teaser => teaser, :text => text,
                     :audience => audiences, :reviewer => reviewer,
-                    :api_key => Settings::API_KEY, :isbn => isbn}.to_json
+                    :api_key => api_key, :isbn => isbn,
+                    :published => published}.to_json
       end
     rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
       return [nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
