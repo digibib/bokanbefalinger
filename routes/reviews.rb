@@ -40,9 +40,8 @@ class BokanbefalingerApp < Sinatra::Application
                                              params["text"], params["audiences"],
                                              session[:user], params["isbn"],
                                              session[:api_key], params["published"])
-    puts @error_message
-    puts @review
-    @error_message || @review
+
+    redirect '/minside'
   end
 
   get '/anbefaling/*' do
