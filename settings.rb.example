@@ -4,7 +4,7 @@ module Settings
   USER = "user"
   PASSWORD = "password"
   AUTH_METHOD = "digest"
-  API_KEY = "secret"
+  SECRET_SESSION_KEY = "secret"
   GRAPHS = {:review => "http://data.deichman.no/reviews",
             :book => "http://data.deichman.no/books",
             :api => "http://data.deichman.no/apigraph",

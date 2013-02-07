@@ -16,3 +16,4 @@ QUERY       = RDF::Virtuoso::Query
 require_relative "review"
 require_relative "work"
 require_relative "list"
+require_relative "user"
