@@ -52,8 +52,8 @@
           <a href="/lister"><span class="inner-navbutton">Lister</span></a>
         </li>
         <% if session[:user] %>
-          <li <%= 'class="active"' if request.path_info == '/myreviews' %>>
-            <a href="/"><span class="inner-navbutton">Mine anbefalinger</span></a>
+          <li <%= 'class="active"' if request.path_info == '/minside' %>>
+            <a href="/minside"><span class="inner-navbutton">Mine anbefalinger</span></a>
           </li>
           <li <%= 'class="active"' if request.path_info =~ /\/ny|finn$/ %>>
             <a href="/finn"><span class="inner-navbutton">Skriv anbefaling</span></a>

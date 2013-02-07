@@ -61,6 +61,9 @@ class User
   end
 
   def self.log_out(session)
+    # Clear user cache
+    Cache.del "user:"+session[:user]
+
     # Clear user session variables
 
     session[:user] = nil

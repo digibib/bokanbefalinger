@@ -62,13 +62,34 @@ class BokanbefalingerApp < Sinatra::Application
   get "/anbefalinger" do
     @reviews, @error_message = [nil,nil] #Review.get_latest(10, 0, 'issued', 'desc')
 
-
     if @error_message
       @title ="Feil"
       erb :error
     else
       @title  = "Siste anbefalinger"
       erb :reviews
+    end
+  end
+
+  get "/minside" do
+    redirect "/" unless session[:user]
+    my_reviews, @error_message = Review.get_by_user(session[:user])
+
+    if @error_message
+      @title ="Feil"
+      erb :error
+    else
+      @published, @draft = {}, {}
+      my_reviews["works"].each do |w|
+        if w["reviews"].first["published"] == true
+          @published[w["uri"]] = {"works" => w }
+        else
+          @draft[w["uri"]] = {"works" => w }
+        end
+      end
+
+      @title  = "Mine anbefalinger"
+      erb :my_reviews
     end
   end
 

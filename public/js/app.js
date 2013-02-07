@@ -274,3 +274,13 @@ $('#generate-list').on('click', function() {
 	});
 });
 
+/* Mine anbefalinger */
+$('#show-draft').on('click', function() {
+	$('.published').hide();
+	$('.draft').show();
+});
+
+$('#show-published').on('click', function() {
+	$('.draft').hide();
+	$('.published').show();
+});

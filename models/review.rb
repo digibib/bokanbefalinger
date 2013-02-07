@@ -234,12 +234,42 @@ class Review
     rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
       return [nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
     end
-    puts resp.body
+
     return [nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 201
     return [nil, "Skriving av anbefaling til RDF-storen feilet"] unless resp.body.match(/uri/)
 
     resp.body
   end
 
+  def self.get_by_user(user)
+    cached = Cache.hgetall "user:"+user
+    unless cached.empty?
+      res = cached
+      res.each { |k,v| res[k] = eval(v)}
+      res = {"works" => res.values }
+    else
+      # fetch reviews from api/reviews reviewer=user
+      begin
+        resp = @@conn.get do |req|
+          req.body = {:reviewer => user}.to_json
+        end
+      rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
+        return [nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
+      end
+
+      return [nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
+
+      res = JSON.parse(resp.body)
+
+      # set user cache
+      key = "user:"+user
+      res["works"].each do |w|
+        Cache.hset key, w["reviews"].first["uri"], w
+      end
+    end
+
+    puts res
+    return [res, nil]
+  end
 
 end
