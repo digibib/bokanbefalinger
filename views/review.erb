@@ -46,7 +46,8 @@
 	<% if session[:user] %>
 		<div class="clearfix"></div>
 		<div class="review-snippet" style="text-align:right;">
-				<p><a href="/verk<%= @review["uri"][28..-1] %>/ny"><button class="long green" style="margin-right:150px">Skriv ny anbefaling</button></a></p>
+				<p><a href="/manifestasjon<%= r["book_id"][23..-1] %>/ny"><button class="long green" style="margin-right:150px">Skriv ny anbefaling</button></a></p>
+
 		</div>
 	<% end %>
 </div>

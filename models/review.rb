@@ -161,6 +161,17 @@ class Review
     if cached_review
       puts "reading #{uri} from cache"
       review = JSON.parse(cached_review)
+      # also set cache for manifestation TODO move this out
+      puts "setting cache for manifestation #{review['works'].first['manifestation']}"
+      manifestation = {"work" => [{"author" => review["works"].first["author"],
+                       "author_id" => review["works"].first["author_id"].first,
+                       "cover_url" => review["works"].first["cover_url"],
+                       "isbn" => review["works"].first["isbn"].first,
+                       "manifestation" => review["works"].first["manifestation"],
+                       "title" => review["works"].first["title"],
+                       "uri" => review["works"].first["uri"]}]}
+
+      Cache.set review["works"].first["manifestation"], manifestation.to_json
     else
        puts "API call for uri=#{uri}"
        begin
