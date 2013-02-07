@@ -20,7 +20,7 @@
 					<p class="review-title"><%= w["works"]["title"] %></p>
 					<p class="isbn">ISBN <%= w["works"]["isbn"].first %></p>
 					<p class="my-reviews-teaser"><em><%= r["teaser"] %></em></p>
-					<div class="bottom"><a href="/anbefaling<%= uri[23..-1] %>/rediger"><button class="medium green">Rediger</button></a></div>
+					<div class="bottom"><a href="/anbefaling<%= r['uri'][23..-1] %>/rediger"><button class="medium green">Rediger</button></a></div>
 				</div>
 			</div>
 		<% end %>
