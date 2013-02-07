@@ -276,11 +276,15 @@ $('#generate-list').on('click', function() {
 
 /* Mine anbefalinger */
 $('#show-draft').on('click', function() {
+	$('#show-draft').removeClass("gray").addClass("red");
+	$('#show-published').removeClass("red").addClass("gray");
 	$('.published').hide();
 	$('.draft').show();
 });
 
 $('#show-published').on('click', function() {
+	$('#show-published').removeClass("gray").addClass("red");
+	$('#show-draft').removeClass("red").addClass("gray");
 	$('.draft').hide();
 	$('.published').show();
 });
