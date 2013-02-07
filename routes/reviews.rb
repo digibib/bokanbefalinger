@@ -41,8 +41,18 @@ class BokanbefalingerApp < Sinatra::Application
                                              session[:user], params["isbn"],
                                              session[:api_key], params["published"])
 
-    redirect '/minside'
+    Cache.del "user:"+session[:user]
   end
+
+  post '/update' do
+    @error_message, @review = Review.update(params["title"], params["teaser"],
+                                             params["text"], params["audiences"],
+                                             session[:user], params["uri"],
+                                             session[:api_key], params["published"])
+
+    Cache.del "user:"+session[:user]
+  end
+
 
   get '/anbefaling/*' do
     path = params[:splat].first

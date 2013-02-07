@@ -241,6 +241,24 @@ class Review
     resp.body
   end
 
+  def self.update(title, teaser, text, audiences, reviewer, uri, api_key, published)
+    begin
+      resp = @@conn.put do |req|
+        req.body = {:title => title, :teaser => teaser, :text => text,
+                    :audience => audiences, :reviewer => reviewer,
+                    :api_key => api_key, :uri => uri,
+                    :published => published}.to_json
+      end
+    rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
+      return [nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
+    end
+    puts resp.body
+    return [nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
+    return [nil, "Skriving av anbefaling til RDF-storen feilet"] unless resp.body.match(/uri/)
+
+    resp.body
+  end
+
   def self.get_by_user(user)
     cached = Cache.hgetall "user:"+user
     unless cached.empty?

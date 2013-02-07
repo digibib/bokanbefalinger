@@ -93,31 +93,46 @@ $("#isbn-button").on('click', function() {
 /* Skriv ny anbefaling */
 
 function publish(published) {
-	// perform API/reviews POST request
+	// perform API/reviews POST/PUT request
 	var title = $('#title').val();
 	var teaser = $('#teaser').val();
 	var text = $('#text').val();
-	var isbn = $('#isbn').val();
 	var audiences = [];
 	$('.audiences:checked').each(function(i, e) {
 		audiences.push(e.value);
 	});
-
-	var request = $.ajax({
-	  url: '/review',
-	  type: "POST",
-	  data: { title: title, teaser: teaser, text: text,
+	if ($('#isbn').size >= 1 ) {
+		var isbn = $('#isbn').val();
+		var url = "/review";
+		var data = { title: title, teaser: teaser, text: text,
 	          isbn: isbn, audiences: audiences.join('|'),
-	          published: published },
+	          published: published };
+	} else {
+		var uri = $('#uri').val();
+		var url = "/update";
+		var data = { title: title, teaser: teaser, text: text,
+	          uri: uri, audiences: audiences.join('|'),
+	          published: published };
+	}
+
+	var pub_request = $.ajax({
+	  url: url,
+	  type: "POST",
+	  data: data,
 	  dataType: "json"
 	});
 
-	request.done(function(data) {
-		console.log(data);
+	$('body').css('cursor', 'wait');
+
+	pub_request.done(function(data) {
+		window.location.href = '/minside';
+		$('body').css('cursor', 'default');
 	});
 
-	request.fail(function(jqXHR, textStatus, errorThrown) {
+	pub_request.fail(function(jqXHR, textStatus, errorThrown) {
 		console.log(jqXHR);
+		$('body').css('cursor', 'default');
+		window.location.href = '/minside';
 	});
 };
 
