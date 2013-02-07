@@ -107,7 +107,8 @@ function publish(published) {
 	  url: '/review',
 	  type: "POST",
 	  data: { title: title, teaser: teaser, text: text,
-	          isbn: isbn, audience: audiences.join('|'), published:published },
+	          isbn: isbn, audiences: audiences.join('|'),
+	          published: published },
 	  dataType: "json"
 	});
 
