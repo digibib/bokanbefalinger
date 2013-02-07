@@ -46,13 +46,32 @@ class BokanbefalingerApp < Sinatra::Application
   end
 
   get '/anbefaling/*' do
-    @uri = create_uri(params[:splat])
+    path = params[:splat].first
+    redirect request.path.chop if request.path =~ /\/$/
+    edit = false
 
-    @review, @other_reviews, @error_message = Review.get_reviews_from_uri(@uri)
+    if path =~ /\/rediger$/
+      # edit the review
+      uri = path[0..-9]
+      redirect "/anbefaling/"+uri unless session[:user]
+      edit = true
+    else
+      uri = path
+    end
+
+    uri = "http://data.deichman.no/" + uri
+    @review, @other_reviews, @error_message = Review.get_reviews_from_uri(uri)
 
     if @error_message
       @title ="Feil"
       erb :error
+    elsif edit
+      @title = "Rediger anbefaling"
+      my_reviews, @error_message = Review.get_by_user(session[:user])
+      my_reviews["works"].each do |w|
+        @review = w if w["reviews"].first["uri"] == uri
+      end
+      erb :edit
     else
       @title = @review["reviews"].first["title"]
       erb :review
