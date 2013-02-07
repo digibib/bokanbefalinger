@@ -105,6 +105,8 @@ img.cover {
   height: 200px;
 }
 
+button:active { position:relative; top: 3px; }
+
 button.medium {
   padding: 4px;
   width: 130px;
