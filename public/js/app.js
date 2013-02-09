@@ -92,49 +92,11 @@ $("#isbn-button").on('click', function() {
 
 /* Skriv ny anbefaling */
 
-function publish(published) {
-	// perform API/reviews POST request
-	var title = $('#title').val();
-	var teaser = $('#teaser').val();
-	var text = $('#text').val();
-	var audiences = [];
-	$('.audiences:checked').each(function(i, e) {
-		audiences.push(e.value);
-	});
-	if ($('#isbn').size >= 1 ) {
-		var isbn = $('#isbn').val();
-		var url = "/review";
-		var data = { title: title, teaser: teaser, text: text,
-	          isbn: isbn, audiences: audiences.join('|'),
-	          published: published };
-	} else {
-		var uri = $('#uri').val();
-		var url = "/update";
-		var data = { title: title, teaser: teaser, text: text,
-	          uri: uri, audiences: audiences.join('|'),
-	          published: published };
-	}
 
-	var pub_request = $.ajax({
-	  url: url,
-	  type: "POST",
-	  data: data,
-	  dataType: "json"
-	});
 
-	$('body').css('cursor', 'wait');
-
-	pub_request.done(function(data) {
-		window.location.href = '/minside';
-		$('body').css('cursor', 'default');
-	});
-
-	pub_request.fail(function(jqXHR, textStatus, errorThrown) {
-		console.log(jqXHR);
-		$('body').css('cursor', 'default');
-		window.location.href = '/minside';
-	});
-};
+$('#draft').on('click', function(event) {
+	//event.preventDefault();
+});
 
 $('#publish').on('click', function(event) {
 	var missing=0;
@@ -147,32 +109,26 @@ $('#publish').on('click', function(event) {
 	});
 	if ($('.audiences:checked').length == 0) {
 		$('#audiences-fieldset').addClass("missing");
+		missing += 1;
 	}
 
 	if (missing > 0) {
 		event.preventDefault();
-		return;
 	} else {
-		publish(true);
-		event.preventDefault();
+		$('#published').val("true");
 	}
 });
-
-$('.audiences').on('change', function(e) {
-	$('#audiences-fieldset').removeClass("missing");
-});
-
-$('#draft').on('click', function(event) {
-	publish(false);
-	event.preventDefault();
-});
-
 
 $('#review-form').on('focus', '.required', function () {
 if ($(this).hasClass('missing')) {
   $(this).removeClass('missing');
   }
 });
+
+$('.audiences').on('change', function(e) {
+	$('#audiences-fieldset').removeClass("missing");
+});
+
 
 
 /* liste-generator logikk */

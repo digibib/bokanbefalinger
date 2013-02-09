@@ -238,7 +238,7 @@ class Review
     return [nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 201
     return [nil, "Skriving av anbefaling til RDF-storen feilet"] unless resp.body.match(/uri/)
 
-    resp.body
+    return [resp.body, nil]
   end
 
   def self.update(title, teaser, text, audiences, reviewer, uri, api_key, published)

@@ -36,23 +36,24 @@ class BokanbefalingerApp < Sinatra::Application
   end
 
   post '/review' do
+    audiences = [params["a1"], params["a2"], params["a3"]].compact.join("|")
     @error_message, @review = Review.publish(params["title"], params["teaser"],
-                                             params["text"], params["audiences"],
+                                             params["text"], audiences,
                                              session[:user], params["isbn"],
                                              session[:api_key], params["published"])
-
     Cache.del "user:"+session[:user]
+    redirect '/minside'
   end
 
   post '/update' do
+    audiences = [params["a1"], params["a2"], params["a3"]].compact.join("|")
     @error_message, @review = Review.update(params["title"], params["teaser"],
-                                             params["text"], params["audiences"],
+                                             params["text"], audiences,
                                              session[:user], params["uri"],
                                              session[:api_key], params["published"])
-
     Cache.del "user:"+session[:user]
+    redirect '/minside'
   end
-
 
   get '/anbefaling/*' do
     path = params[:splat].first
