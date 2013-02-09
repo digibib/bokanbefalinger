@@ -1,21 +1,21 @@
 <div class="main-left">
 	<div class="my-reviews-header">
 		<button id="show-draft" class="medium gray">Kladd (<%= @draft.size %>)</button> <button id="show-published" class="medium red">Publisert (<%= @published.size %>) </button>
-		<select class="my-reviews-sorting">
-			<option>Dato stigende</option>
-			<option>Dato synkende</option>
+		<select id="my-reviews-sorting">
+			<option value="asc">Dato stigende</option>
+			<option value="desc">Dato synkende</option>
 		</select>
 	</div>
-	<div class="my-reviews-list">
+	<div id="my-reviews-list">
 		<% @published.merge(@draft).each do |uri,w| %>
-			<div class="my-review <%= w['works']['reviews'].first['published'] ? 'published' : 'draft' %>">
+			<% r = w["works"]["reviews"].first %>
+			<div timestamp="<%= r["modified"] %>" class="my-review <%= w['works']['reviews'].first['published'] ? 'published' : 'draft' %>">
 				<div class="book-cover book-description <%= "light-gray" unless w["works"]["cover_url"] != "" %>">
 					<% if w["works"]["cover_url"] %>
 						<img class="cover" src="<%= w["works"]["cover_url"] %>"/>
 					<% end %>
 				</div>
 				<div class="my-reviews-info">
-					<% r = w["works"]["reviews"].first %>
 					<p class="date"><%= w['works']['reviews'].first['published'] ? 'Sist oppdatert' : 'Lagret som kladd' %> <%= r["modified"][0..9] %></p>
 					<p class="review-title"><%= w["works"]["title"] %></p>
 					<p class="isbn">ISBN <%= w["works"]["isbn"].first %></p>

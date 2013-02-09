@@ -467,7 +467,7 @@ input.number { width: 40px;}
 .my-review { margin-top:1em; height:230px; clear:both; position: relative;}
 .my-reviews-info { float: left; height:200px;}
 .my-reviews-header { margin-top: 1em; height: 45px; width: 85%; border-bottom: 1px dashed #ccc }
-.my-reviews-sorting { float:right; margin-top:10px;}
+#my-reviews-sorting { float:right; margin-top:10px;}
 .my-review p { margin:0.4em;}
 .date { font-size:0.9em; color: #c12121;}
 .review-title { font-size:1.2em; font-weight: bold;}
