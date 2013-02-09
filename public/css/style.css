@@ -131,6 +131,7 @@ button.long {
   text-align: center;
   width: 150px;
   height: 200px;
+  border: 10px solid white;
 }
 
 p.error {

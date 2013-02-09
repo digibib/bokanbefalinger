@@ -9,7 +9,7 @@
 	<div class="my-reviews-list">
 		<% @published.merge(@draft).each do |uri,w| %>
 			<div class="my-review <%= w['works']['reviews'].first['published'] ? 'published' : 'draft' %>">
-				<div class="book-cover book-description <%= "light-gray" unless w["works"]["cover_url"] %>">
+				<div class="book-cover book-description <%= "light-gray" unless w["works"]["cover_url"] != "" %>">
 					<% if w["works"]["cover_url"] %>
 						<img class="cover" src="<%= w["works"]["cover_url"] %>"/>
 					<% end %>
