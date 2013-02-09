@@ -19,13 +19,15 @@
 		<textarea id="text" class="required" name="review" rows="20" placeholder="Skriv en omtale"><%= @review['reviews'].first['text']%></textarea>
 
 		<div>
-		<p>Målgruppe(r) for <em>anbefalingen</em>, ikke for boka:</p>
+		<fieldset id="audiences-fieldset">
+			<p>Målgruppe(r) for <em>anbefalingen</em>, ikke for boka:</p>
 			<input id="a1" class="audiences" name="audience" <%= 'checked="checked"' if @review['reviews'].first['audience'].match /barn/i %> type="checkbox" value="barn">
 			<label for="a1" class="checklabel">barn</label>
 			<input id="a2" class="audiences" name="audience" <%= 'checked="checked"' if @review['reviews'].first['audience'].match /ungdom/i %> type="checkbox" value="ungdom">
 			<label for="a2" class="checklabel">ungdom</label>
 			<input id="a3" class="audiences" name="audience" <%= 'checked="checked"' if @review['reviews'].first['audience'].match /voksen/i %> type="checkbox" value="voksen">
 			<label for="a3" class="checklabel">voksne</label>
+		</fieldset>
 		</div>
 
 		<div class="clearfix"></div>

@@ -93,7 +93,7 @@ $("#isbn-button").on('click', function() {
 /* Skriv ny anbefaling */
 
 function publish(published) {
-	// perform API/reviews POST/PUT request
+	// perform API/reviews POST request
 	var title = $('#title').val();
 	var teaser = $('#teaser').val();
 	var text = $('#text').val();
@@ -145,12 +145,21 @@ $('#publish').on('click', function(event) {
 			missing += 1;
 		}
 	});
+	if ($('.audiences:checked').length == 0) {
+		$('#audiences-fieldset').addClass("missing");
+	}
+
 	if (missing > 0) {
 		event.preventDefault();
+		return;
 	} else {
 		publish(true);
 		event.preventDefault();
 	}
+});
+
+$('.audiences').on('change', function(e) {
+	$('#audiences-fieldset').removeClass("missing");
 });
 
 $('#draft').on('click', function(event) {
