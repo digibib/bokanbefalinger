@@ -15,7 +15,7 @@
 			<option value="s7">Omtalte personer</option>
 			<option value="s8">Sidetall</option>
 			<option value="s9">Utgivelsesår</option>
-			<!-- <option value="s10">Dokumentspråk</option> -->
+			<option value="s10">Dokumentspråk</option>
 		</select>
 	</div>
 </div>
@@ -102,11 +102,11 @@
 	<button class="fjern small">fjern kriterium</button>
 </span>
 <span class="kriterium-inner s10">
-	<select class="language inner-input">
-		<option>Velg dokumentspråk</option>
-		<option>norsk</option>
-		<option>engelsk</option>
-		<option>finsk</option>
+	<select data-placeholder="velg dokumentspråk" class="language inner-input">
+		<option></option>
+		<% @languages.sort_by { |k,v| v }.each do |k,v| %>
+		<option value="<%= k %>"><%= v %></option>
+		<% end %>
 	</select>
 	<button class="fjern small">fjern kriterium</button>
 </span>

@@ -3,8 +3,8 @@
 class List
 
   def self.populate_dropdowns()
-    subjects, persons, genres = Cache.get("subjects"), Cache.get("persons"), Cache.get("genres")
-    return [eval(subjects), eval(persons), eval(genres)] if persons and subjects and genres
+    subjects, persons, genres, languages = Cache.get("subjects"), Cache.get("persons"), Cache.get("genres"), Cache.get("languages")
+    return [eval(subjects), eval(persons), eval(genres), eval(languages)] if persons and subjects and genres and languages
 
     query = QUERY.select(:subject_id, :subject_label, :person_id, :person_label, :genre_id, :genre_label)
 
@@ -21,7 +21,7 @@ class List
                 [:person_id, RDF::FOAF.name, :person_label])
 
     puts query
-    querystring="SELECT DISTINCT ?subject_id ?subject_label ?person_id ?person_label ?genre_id ?genre_label
+    querystring="SELECT DISTINCT ?subject_id ?subject_label ?person_id ?person_label ?genre_id ?genre_label ?lang_id ?lang_label
 FROM <http://data.deichman.no/books>
 WHERE {
 ?work <http://purl.org/spar/fabio/hasManifestation> ?book .
@@ -36,13 +36,17 @@ UNION
 }
 UNION
 { ?book <http://purl.org/dc/terms/subject> ?person_id . ?person_id <http://xmlns.com/foaf/0.1/name> ?person_label . }
+UNION
+{ ?book <http://purl.org/dc/terms/language> ?lang_id .
+ ?lang_id <http://www.w3.org/2000/01/rdf-schema#label> ?lang_label . }
 }"
 
     result = REPO.select(querystring)
     return [] if result.empty?
 
-    persons, subjects, genres = {}, {}, {}
+    persons, subjects, genres, languages = {}, {}, {}, {}
     result.each do |s|
+      languages[s[:lang_id].to_s] = s[:lang_label].to_s
       persons[s[:person_id].to_s] = s[:person_label].to_s
 
       sub_label = s[:subject_label].to_s
@@ -53,12 +57,13 @@ UNION
       gen_label += " (ungdom)" if s[:genre_id].to_s.match(/Juvenile/)
       genres[s[:genre_id].to_s] = gen_label
     end
-    puts "Setting persons, subjects, genres cache"
+    puts "Setting persons, subjects, genres, languages cache"
     Cache.set "subjects", subjects
     Cache.set "persons", persons
     Cache.set "genres", genres
+    Cache.set "languages", languages
 
-    return [subjects, persons, genres]
+    return [subjects, persons, genres, languages]
   end
 
   def self.repopulate_dropdowns(criteria)
@@ -66,7 +71,7 @@ UNION
 
   end
 
-  def self.get(authors, subjects, persons, pages, years, audience, review_audience, genres)
+  def self.get(authors, subjects, persons, pages, years, audience, review_audience, genres, languages)
     # all parameters are arrays
 
     query = QUERY.select(:review)
@@ -76,6 +81,7 @@ UNION
                 [:creator, RDF::FOAF.name, :author, :context => BOOKGRAPH],
                 [:book, RDF::REV.hasReview, :review, :context => BOOKGRAPH])
 
+    query.where([:book, RDF::DC.language, :language, :context => BOOKGRAPH]) unless languages.empty?
     query.where([:book, RDF::DC.subject, :subject, :context => BOOKGRAPH]) unless subjects.empty?
     query.where([:book, RDF::DC.subject, :person, :context => BOOKGRAPH]) unless persons.empty?
     query.where([:book, RDF::BIBO.numPages, :pages, :context => BOOKGRAPH]) unless pages.empty?
@@ -90,6 +96,7 @@ UNION
     query.filter("?audience = <" + audience.join("> || ?audience = <") +">") unless audience.empty?
     query.filter("?review_audience = <" + review_audience.join("> || ?review_audience = <") +">") unless review_audience.empty?
     query.filter("?genre = <" + genres.join("> || ?genre = <") +">") unless genres.empty?
+    query.filter("?language = <" + languages.join("> || ?language = <") +">") unless languages.empty?
 
     unless pages.empty?
       pages_filter = []

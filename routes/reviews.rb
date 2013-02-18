@@ -124,7 +124,7 @@ class BokanbefalingerApp < Sinatra::Application
 
   get "/lister" do
     @title = "Lister"
-    @subjects, @persons, @genres = List.populate_dropdowns
+    @subjects, @persons, @genres, @languages = List.populate_dropdowns
     erb :lists
   end
 
@@ -133,7 +133,8 @@ class BokanbefalingerApp < Sinatra::Application
     reviews = List.get(Array(params["authors"]), Array(params["subjects"]),
                       Array(params["persons"]), JSON.parse(params["pages"]),
                       JSON.parse(params["years"]), Array(params["audience"]),
-                      Array(params["review_audience"]), Array(params["genres"]))
+                      Array(params["review_audience"]), Array(params["genres"]),
+                      Array(params["languages"]))
 
     reviews.to_json
   end
