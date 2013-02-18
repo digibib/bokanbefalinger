@@ -452,6 +452,7 @@ a:hover.work-link { text-decoration: underline }
 #kriterium-container label { font-weight: normal;}
 .kriterium-outer { width: 75%; padding:8px; border: 1px dashed #ccc;
                    background:#f5f5f5; margin-top:10px; float:left;}
+.kriterium-add   { width: 75%; padding:8px; margin-top:10px; float:left;}
 .kriterium-inner { display: none; margin-left: 20px; disiplay: inline-block;}
 input.number { width: 40px;}
 .fjern {  float:right; margin-right:10px;}

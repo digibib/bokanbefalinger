@@ -30,7 +30,7 @@ setInterval(function() {
 // set tittel=forfatter som get parameter hvis ikke
 $("#search-button").on('click', function() {
 	var searchterm = $("#search-input").val();
-	if (/^[0-9-]*$/.test(searchterm)) {
+	if (/^[0-9-xX]*$/.test(searchterm)) {
 		$("#search-input-isbn").val(searchterm);
 		$("#search-input").prop("disabled", true);
 		$("#search-input-copy").prop("disabled", true);
@@ -139,19 +139,40 @@ $('.audiences').on('change', function(e) {
 
 /* liste-generator logikk */
 
+// Ikke vis 'legg til kriterium' før noe kriterium er valgt
+$('.kriterium-add').hide();
+
+$('#add-kriterium').on('click', function() {
+	var $kdiv = $(".kriterium-outer:first").clone();
+	$kdiv.find('.kriterium-inner').remove();
+	if ( $('.kriterium-outer:last').hasClass("chosen") ) {
+		$('#kriterium-container').append($kdiv.removeClass("chosen"));
+	}
+	// Lås tidligere kriterier
+	$('.kriterium-outer:not(:last-child)').find(':input').prop('disabled', true).
+		trigger("liszt:updated");
+	// Skjul legg-til knappen
+	$('.kriterium-add').hide();
+});
+
 $('#kriterium-container').on('change', 'select.kriterium', function() {
 	var k = $(this).find("option:selected").val();
 	var $kdiv = $(this).parents(".kriterium-outer");
 	$kdiv.find('.kriterium-inner').remove();
 	if (k != "s0") {
 		$kdiv.addClass("chosen");
-		if ( $('.kriterium-outer:last').hasClass("chosen") ) {
-			$('#kriterium-container').append($kdiv.clone().removeClass("chosen"));
-		}
 		var $kspan = $('.'+k+':last').clone().appendTo($kdiv).show().
 			find('.inner-input').chosen({no_results_text: "Ingen treff for"});
+
+		// Ikke vis 'fjern' knapp hvis det er bare ett kriterium
+		if ( $('.kriterium-outer').length <= 1 ) {
+			$('.fjern').hide();
+		} else {
+			$('.fjern').show();
+		}
 	} else {
 		$kdiv.removeClass("chosen");
+		$('.kriterium-add').hide();
 		if ($('.kriterium-outer').not('.chosen').length >= 2) {
 			$('.kriterium-outer:last').remove();
 		}
@@ -161,16 +182,41 @@ $('#kriterium-container').on('change', 'select.kriterium', function() {
 $('#kriterium-container').on('change', '.inner-input', function() {
 	var k = $(this).find("option:selected").val();
 	if (k === $(this).find("option:first").val() ) {
-		console.log("inner unchosen");
 		$(this).parents('.kriterium-inner').removeClass('chosen');
+		// Skjul 'legg til kriterium'
+		$('.kriterium-add').hide();
 	} else {
-		console.log("inner chosen");
 		$(this).parents('.kriterium-inner').addClass('chosen');
+		// Vis 'legg til kriterium'
+		$('.kriterium-add').show();
 	}
 });
 
 $('#kriterium-container').on('click', 'button.fjern', function() {
 	$(this).parents('.kriterium-outer').remove();
+	// Ikke vis 'fjern' knapp hvis det er bare ett kriterium
+	if ( $('.kriterium-outer').length <= 1 ) {
+		$('.fjern').hide();
+	} else {
+		$('.fjern').show();
+	}
+	// Lås opp siste kriterium
+	$('.kriterium-outer:last').find(':input').prop('disabled', false).
+		trigger("liszt:updated");
+});
+
+// Skjul 'legg til kriterium' hvis input felt er tomme
+$('#kriterium-container').on('keyup', 'input[type="text"]', function() {
+	var v="";
+	$(this).parents('.kriterium-inner').find('input[type="text"]')
+	  .each(function() {
+	  	v+=$(this).val();
+	  });
+	if ( v != "" ) {
+		$('.kriterium-add').show();
+	} else {
+		$('.kriterium-add').hide();
+	}
 });
 
 $('#generate-list').on('click', function() {
