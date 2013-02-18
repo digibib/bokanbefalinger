@@ -3,7 +3,8 @@
 class List
 
   def self.populate_dropdowns()
-    subjects, persons, genres, languages, authors, formats = Cache.get("subjects"), Cache.get("persons"), Cache.get("genres"), Cache.get("languages"), Cache.get("authors"), Cache.get("formats")
+    subjects, persons, genres = Cache.get("subjects"), Cache.get("persons"), Cache.get("genres")
+    languages, authors, formats = Cache.get("languages"), Cache.get("authors"), Cache.get("formats")
     return [eval(subjects), eval(persons), eval(genres), eval(languages), eval(authors), eval(formats)] if persons and subjects and genres and languages and authors and formats
 
     # query = QUERY.select(:subject_id, :subject_label, :person_id, :person_label, :genre_id, :genre_label)
@@ -51,7 +52,7 @@ UNION
     result = REPO.select(querystring)
     return [] if result.empty?
 
-    persons, subjects, genres, languages, authors,formats = {}, {}, {}, {}, {}, {}
+    persons, subjects, genres, languages, authors, formats = {}, {}, {}, {}, {}, {}
     result.each do |s|
       authors[s[:creator].to_s] = s[:creator_label].to_s
       languages[s[:lang_id].to_s] = s[:lang_label].to_s
@@ -66,11 +67,12 @@ UNION
       gen_label += " (ungdom)" if s[:genre_id].to_s.match(/Juvenile/)
       genres[s[:genre_id].to_s] = gen_label
     end
-    puts "Setting persons, subjects, genres, languages cache"
+    puts "Setting persons, subjects, genres, languages, authors, formats cache"
     Cache.set "subjects", subjects
     Cache.set "persons", persons
     Cache.set "genres", genres
     Cache.set "languages", languages
+    Cache.set "authors", authors
     Cache.set "formats", formats
 
     return [subjects, persons, genres, languages, authors, formats]
