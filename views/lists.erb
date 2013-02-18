@@ -69,7 +69,12 @@
 	<button class="fjern small">fjern kriterium</button>
 </span>
 <span class="kriterium-inner s5">
-	<input class="forfatter" type="text" placeholder="navn på forfatter">
+	<select data-placeholder="velg forfatter" class="forfatter inner-input">
+		<option></option>
+		<% @authors.sort_by { |k,v| v }.each do |k,v| %>
+		<option value="<%= k %>"><%= v %></option>
+		<% end %>
+	</select>
 	<button class="fjern small">fjern kriterium</button>
 </span>
 <span class="kriterium-inner s6">

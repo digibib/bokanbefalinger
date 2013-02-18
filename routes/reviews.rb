@@ -124,7 +124,7 @@ class BokanbefalingerApp < Sinatra::Application
 
   get "/lister" do
     @title = "Lister"
-    @subjects, @persons, @genres, @languages = List.populate_dropdowns
+    @subjects, @persons, @genres, @languages, @authors = List.populate_dropdowns
     erb :lists
   end
 

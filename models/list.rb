@@ -3,29 +3,33 @@
 class List
 
   def self.populate_dropdowns()
-    subjects, persons, genres, languages = Cache.get("subjects"), Cache.get("persons"), Cache.get("genres"), Cache.get("languages")
-    return [eval(subjects), eval(persons), eval(genres), eval(languages)] if persons and subjects and genres and languages
+    subjects, persons, genres, languages, authors = Cache.get("subjects"), Cache.get("persons"), Cache.get("genres"), Cache.get("languages"), Cache.get("authors")
+    return [eval(subjects), eval(persons), eval(genres), eval(languages), eval(authors)] if persons and subjects and genres and languages and authors
 
-    query = QUERY.select(:subject_id, :subject_label, :person_id, :person_label, :genre_id, :genre_label)
+    # query = QUERY.select(:subject_id, :subject_label, :person_id, :person_label, :genre_id, :genre_label)
 
-    query.distinct.from(BOOKGRAPH)
-    query.where([:work, RDF::FABIO.hasManifestation, :book],
-                [:book, RDF::REV.hasReview, :review])
-    query.union([:book, RDF::DBO.literaryGenre, :narrower],
-                [:narrower, RDF::SKOS.broader, :genre_id],
-                [:genre_id, RDF::RDFS.label, :genre_label])
-    query.union([:book, RDF::DC.subject, :subject_narrower],
-                [:subject_id, RDF::SKOS.narrower, :subject_narrower],
-                [:subject_id, RDF::SKOS.prefLabel, :subject_label])
-    query.union([:book, RDF::DC.subject, :person_id],
-                [:person_id, RDF::FOAF.name, :person_label])
+    # query.distinct.from(BOOKGRAPH)
+    # query.where([:work, RDF::FABIO.hasManifestation, :book],
+    #             [:book, RDF::REV.hasReview, :review])
+    # query.union([:book, RDF::DBO.literaryGenre, :narrower],
+    #             [:narrower, RDF::SKOS.broader, :genre_id],
+    #             [:genre_id, RDF::RDFS.label, :genre_label])
+    # query.union([:book, RDF::DC.subject, :subject_narrower],
+    #             [:subject_id, RDF::SKOS.narrower, :subject_narrower],
+    #             [:subject_id, RDF::SKOS.prefLabel, :subject_label])
+    # query.union([:book, RDF::DC.subject, :person_id],
+    #             [:person_id, RDF::FOAF.name, :person_label])
 
-    puts query
-    querystring="SELECT DISTINCT ?subject_id ?subject_label ?person_id ?person_label ?genre_id ?genre_label ?lang_id ?lang_label
+    # puts query
+
+    querystring="SELECT DISTINCT ?subject_id ?subject_label ?person_id ?person_label ?genre_id ?genre_label ?lang_id ?lang_label ?creator ?creator_label
 FROM <http://data.deichman.no/books>
 WHERE {
 ?work <http://purl.org/spar/fabio/hasManifestation> ?book .
 ?book <http://purl.org/stuff/rev#hasReview> ?review .
+{ ?work <http://purl.org/dc/terms/creator> ?creator .
+  ?creator <http://xmlns.com/foaf/0.1/name> ?creator_label . }
+UNION
 { ?book <http://dbpedia.org/ontology/literaryGenre> ?narrower .
   ?narrower <http://www.w3.org/2004/02/skos/core#broader> ?genre_id .
   ?genre_id <http://www.w3.org/2000/01/rdf-schema#label> ?genre_label . }
@@ -44,8 +48,9 @@ UNION
     result = REPO.select(querystring)
     return [] if result.empty?
 
-    persons, subjects, genres, languages = {}, {}, {}, {}
+    persons, subjects, genres, languages, authors = {}, {}, {}, {}, {}
     result.each do |s|
+      authors[s[:creator].to_s] = s[:creator_label].to_s
       languages[s[:lang_id].to_s] = s[:lang_label].to_s
       persons[s[:person_id].to_s] = s[:person_label].to_s
 
@@ -63,7 +68,7 @@ UNION
     Cache.set "genres", genres
     Cache.set "languages", languages
 
-    return [subjects, persons, genres, languages]
+    return [subjects, persons, genres, languages, authors]
   end
 
   def self.repopulate_dropdowns(criteria)
@@ -92,7 +97,7 @@ UNION
 
     query.filter("?subject = <" + subjects.join("> || ?subject = <") +">") unless subjects.empty?
     query.filter("?person = <" + persons.join("> || ?person = <") +">") unless persons.empty?
-    query.filter("(regex(?author, \"#{authors.join("|")}\", \"i\"))") unless authors.empty?
+    query.filter("?creator = <" + authors.join("> || ?creator = <") +">") unless authors.empty?
     query.filter("?audience = <" + audience.join("> || ?audience = <") +">") unless audience.empty?
     query.filter("?review_audience = <" + review_audience.join("> || ?review_audience = <") +">") unless review_audience.empty?
     query.filter("?genre = <" + genres.join("> || ?genre = <") +">") unless genres.empty?
