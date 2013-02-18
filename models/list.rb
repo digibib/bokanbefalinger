@@ -10,17 +10,35 @@ class List
 
     query.distinct.from(BOOKGRAPH)
     query.where([:work, RDF::FABIO.hasManifestation, :book],
-                [:book, RDF::REV.hasReview, :review],
-                [:book, RDF::DC.subject, :subject_id],
-                [:book, RDF::DBO.literaryGenre, :genre_id],
-                [:genre_id, RDF::RDFS.label, :genre_label],
-                [:subject_id, RDF::SKOS.prefLabel, :subject_label ],
-                [:book, RDF::DC.subject, :person_id],
+                [:book, RDF::REV.hasReview, :review])
+    query.union([:book, RDF::DBO.literaryGenre, :narrower],
+                [:narrower, RDF::SKOS.broader, :genre_id],
+                [:genre_id, RDF::RDFS.label, :genre_label])
+    query.union([:book, RDF::DC.subject, :subject_narrower],
+                [:subject_id, RDF::SKOS.narrower, :subject_narrower],
+                [:subject_id, RDF::SKOS.prefLabel, :subject_label])
+    query.union([:book, RDF::DC.subject, :person_id],
                 [:person_id, RDF::FOAF.name, :person_label])
 
     puts query
+    querystring="SELECT DISTINCT ?subject_id ?subject_label ?person_id ?person_label ?genre_id ?genre_label
+FROM <http://data.deichman.no/books>
+WHERE {
+?work <http://purl.org/spar/fabio/hasManifestation> ?book .
+?book <http://purl.org/stuff/rev#hasReview> ?review .
+{ ?book <http://dbpedia.org/ontology/literaryGenre> ?narrower .
+  ?narrower <http://www.w3.org/2004/02/skos/core#broader> ?genre_id .
+  ?genre_id <http://www.w3.org/2000/01/rdf-schema#label> ?genre_label . }
+UNION
+{ ?book <http://purl.org/dc/terms/subject> ?subject_narrower .
+  ?subject_id <http://www.w3.org/2004/02/skos/core#narrower> ?subject_narrower .
+  ?subject_id <http://www.w3.org/2004/02/skos/core#prefLabel> ?subject_label .
+}
+UNION
+{ ?book <http://purl.org/dc/terms/subject> ?person_id . ?person_id <http://xmlns.com/foaf/0.1/name> ?person_label . }
+}"
 
-    result = REPO.select(query)
+    result = REPO.select(querystring)
     return [] if result.empty?
 
     persons, subjects, genres = {}, {}, {}
