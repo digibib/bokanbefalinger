@@ -94,13 +94,19 @@ UNION
                 [:book, RDF::REV.hasReview, :review, :context => BOOKGRAPH])
 
     query.where([:book, RDF::DC.language, :language, :context => BOOKGRAPH]) unless languages.empty?
-    query.where([:book, RDF::DC.subject, :subject, :context => BOOKGRAPH]) unless subjects.empty?
+    unless subjects.empty?
+      query.where([:book, RDF::DC.subject, :subject_narrower, :context => BOOKGRAPH])
+      query.where([:subject, RDF::SKOS.narrower, :subject_narrower, :context => BOOKGRAPH])
+    end
     query.where([:book, RDF::DC.subject, :person, :context => BOOKGRAPH]) unless persons.empty?
     query.where([:book, RDF::BIBO.numPages, :pages, :context => BOOKGRAPH]) unless pages.empty?
     query.where([:book, RDF::DC.issued, :year, :context => BOOKGRAPH]) unless years.empty?
     query.where([:book, RDF::DC.audience, :audience, :context => BOOKGRAPH]) unless audience.empty?
     query.where([:review, RDF::DC.audience, :review_audience, :context => REVIEWGRAPH]) unless review_audience.empty?
-    query.where([:book, RDF::DBO.literaryGenre, :genre, :context => BOOKGRAPH]) unless genres.empty?
+    unless genres.empty?
+      query.where([:book, RDF::DBO.literaryGenre, :narrower, :context => BOOKGRAPH])
+      query.where([:narrower, RDF::SKOS.broader, :genre, :context => BOOKGRAPH])
+    end
     query.where([:book, RDF::DEICHMAN.literaryFormat, :format, :context => BOOKGRAPH]) unless formats.empty?
 
     query.filter("?subject = <" + subjects.join("> || ?subject = <") +">") unless subjects.empty?
@@ -111,7 +117,6 @@ UNION
     query.filter("?genre = <" + genres.join("> || ?genre = <") +">") unless genres.empty?
     query.filter("?language = <" + languages.join("> || ?language = <") +">") unless languages.empty?
     query.filter("?format = <" + formats.join("> || ?format = <") +">") unless formats.empty?
-
 
     unless pages.empty?
       pages_filter = []
