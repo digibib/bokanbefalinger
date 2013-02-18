@@ -7,7 +7,7 @@
 			<option value="s0">Velg kriterium</option>
 			<option value="s1">Sjanger</option>
 			<option value="s2">Emne</option>
-			<!-- <option value="s3">Litterær form</option> -->
+			<option value="s3">Litterær form</option>
 			<option value="s4">Målgruppe (boka)</option>
 			<option value="s11">Målgruppe (anbefalingen)</option>
 			<option value="s5">Forfatter</option>
@@ -48,10 +48,11 @@
 	<button class="fjern small">fjern kriterium</button>
 </span>
 <span class="kriterium-inner s3">
-	<select class="litform inner-input">
-		<option>Velg literær form</option>
-		<option>litform 1</option>
-		<option>litform 2</option>
+	<select data-placeholder="velg literær form" class="litform inner-input">
+		<option></option>
+		<% @formats.sort_by { |k,v| v }.each do |k,v| %>
+		<option value="<%= k %>"><%= v %></option>
+		<% end %>
 	</select>
 	<button class="fjern small">fjern kriterium</button>
 </span>
