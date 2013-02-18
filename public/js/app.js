@@ -144,7 +144,8 @@ $('.kriterium-add').hide();
 
 $('#add-kriterium').on('click', function() {
 	var $kdiv = $(".kriterium-outer:first").clone();
-	$kdiv.find('.kriterium-inner').remove();
+	$kdiv.find('.kriterium-inner').remove().end().
+		find(':input').prop('disabled', false);
 	if ( $('.kriterium-outer:last').hasClass("chosen") ) {
 		$('#kriterium-container').append($kdiv.removeClass("chosen"));
 	}
