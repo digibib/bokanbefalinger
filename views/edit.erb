@@ -15,6 +15,7 @@
 	<form id="review-form" action="/update" method="POST">
 		<input type="hidden" name="uri" id="uri" value="<%= @review["reviews"].first["uri"] %>">
 		<input type="hidden" id="published" name="published" value="false" />
+		<input type="hidden" id="delete" name="delete" value="false" />
 		<input id="title" class="required" type="text" name="title" placeholder="Tittel på anbefalingen" value="<%= @review['reviews'].first['title']%>"/>
 		<textarea id="teaser" class="required" name="teaser" rows="2" placeholder="Skriv en teaser, maks to setninger"><%= @review['reviews'].first['teaser']%></textarea>
 		<textarea id="text" class="required" name="review" rows="20" placeholder="Skriv en omtale"><%= @review['reviews'].first['text']%></textarea>
@@ -34,10 +35,10 @@
 		<div class="clearfix"></div>
 
 		<div style="margin-top:20px;">
-<!-- 			<div style="float:left")
-				<button class="medium gray">Slett</button>
-				<button class="medium gray">Forhåndsvisning</button>
-			</div> -->
+			<div style="float:left">
+				<button id="delete" class="medium gray">Slett</button>
+<!-- 				<button class="medium gray">Forhåndsvisning</button> -->
+			</div>
 			<div style="float:right;margin-right:-25px">
 				<% if @review["reviews"].first["published"] == false %>
 					<button id="draft" class="medium gray">Lagre kladd</button>

@@ -98,6 +98,9 @@ $("#isbn-button").on('click', function() {
 
 /* Skriv ny anbefaling */
 
+$('#delete').on('click', function(event) {
+	$('#delete').val("true");
+});
 
 
 $('#draft').on('click', function(event) {

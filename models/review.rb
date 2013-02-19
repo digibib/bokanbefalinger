@@ -252,11 +252,26 @@ class Review
     rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
       return [nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
     end
-    puts resp.body
+
     return [nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
     return [nil, "Skriving av anbefaling til RDF-storen feilet"] unless resp.body.match(/uri/)
 
-    resp.body
+    return [resp.body, nil]
+  end
+
+  def self.delete(uri)
+    begin
+      resp = @@conn.delete do |req|
+        req.body = {:api_key => api_key, :uri => uri}.to_json
+      end
+    rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
+      return [nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
+    end
+
+    return [nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
+    return [nil, "Skriving av anbefaling til RDF-storen feilet"] unless resp.body.match(/uri/)
+
+    return [resp.body, nil]
   end
 
   def self.get_by_user(user)
@@ -282,7 +297,13 @@ class Review
       # set user cache
       key = "user:"+user
       res["works"].each do |w|
-        Cache.hset key, w["reviews"].first["uri"], w
+        w["reviews"].each do |r|
+          # Set one for each review of same book
+          wcp = w
+          wcp["reviews"] = [r]
+          puts "\n\n\#{r['uri']}: #{wcp} \n\n\n"
+          Cache.hset key, r["uri"], wcp
+        end
       end
     end
 

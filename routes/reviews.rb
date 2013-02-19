@@ -46,11 +46,18 @@ class BokanbefalingerApp < Sinatra::Application
   end
 
   post '/update' do
-    audiences = [params["a1"], params["a2"], params["a3"]].compact.join("|")
-    @error_message, @review = Review.update(params["title"], params["teaser"],
-                                             params["text"], audiences,
-                                             session[:user], params["uri"],
-                                             session[:api_key], params["published"])
+    puts params
+    if params[:delete] == true
+      # DELETE
+      @error_message, @response = Reveiew.delete params["uri"]
+    else
+      # PUT
+      audiences = [params["a1"], params["a2"], params["a3"]].compact.join("|")
+      @error_message, @review = Review.update(params["title"], params["teaser"],
+                                               params["text"], audiences,
+                                               session[:user], params["uri"],
+                                               session[:api_key], params["published"])
+    end
     Cache.del "user:"+session[:user]
     redirect '/minside'
   end
