@@ -18,7 +18,7 @@
 		<input type="hidden" id="delete" name="delete" value="false" />
 		<input id="title" class="required" type="text" name="title" placeholder="Tittel på anbefalingen" value="<%= @review['reviews'].first['title']%>"/>
 		<textarea id="teaser" class="required" name="teaser" rows="2" placeholder="Skriv en teaser, maks to setninger"><%= @review['reviews'].first['teaser']%></textarea>
-		<textarea id="text" class="required" name="review" rows="20" placeholder="Skriv en omtale"><%= @review['reviews'].first['text']%></textarea>
+		<textarea id="text" class="required" name="text" rows="20" placeholder="Skriv en omtale"><%= @review['reviews'].first['text']%></textarea>
 
 		<div>
 		<fieldset id="audiences-fieldset">
