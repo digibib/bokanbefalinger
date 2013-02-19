@@ -11,7 +11,7 @@
 			<option value="s4">Målgruppe (boka)</option>
 			<option value="s11">Målgruppe (anbefalingen)</option>
 			<option value="s5">Forfatter</option>
-			<!-- <option value="s6">Forfatters nasjonalitet</option> -->
+			<option value="s6">Forfatters nasjonalitet</option>
 			<option value="s7">Omtalte personer</option>
 			<option value="s8">Sidetall</option>
 			<option value="s9">Utgivelsesår</option>
@@ -79,11 +79,11 @@
 	<button class="fjern small">fjern kriterium</button>
 </span>
 <span class="kriterium-inner s6">
-	<select class="nasjonalitet inner-input">
-		<option>Velg forfatters nasjonalitet</option>
-		<option>norsk</option>
-		<option>svensk</option>
-		<option>dansk</option>
+	<select data-placeholder="velg forfatters nasjonalitet" class="nasjonalitet inner-input">
+		<option></option>
+		<% @nationalities.sort_by { |k,v| v }.each do |k,v| %>
+		<option value="<%= k %>"><%= v %></option>
+		<% end %>
 	</select>
 	<button class="fjern small">fjern kriterium</button>
 </span>

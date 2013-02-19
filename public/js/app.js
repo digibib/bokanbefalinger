@@ -302,13 +302,20 @@ $('#generate-list').on('click', function() {
 		}
 	});
 
+	var nationalities = [];
+	$('.inner-input.nasjonalitet option:selected').each(function(i, e) {
+		if (e.value != "" ) {
+			nationalities.push(e.value);
+		}
+	});
 	var request = $.ajax({
 	  url: '/lister',
 	  type: "POST",
 	  data: { authors: authors, persons: persons, subjects: subjects,
 	          pages: JSON.stringify(pages), years: JSON.stringify(years),
 	          audience: audience, review_audience: review_audience,
-	          genres: genres, languages: languages, formats: formats},
+	          genres: genres, languages: languages, formats: formats,
+	          nationalities: nationalities},
 	  dataType: "json"
 	});
 

@@ -4,8 +4,8 @@ class List
 
   def self.populate_dropdowns()
     subjects, persons, genres = Cache.get("subjects"), Cache.get("persons"), Cache.get("genres")
-    languages, authors, formats = Cache.get("languages"), Cache.get("authors"), Cache.get("formats")
-    return [eval(subjects), eval(persons), eval(genres), eval(languages), eval(authors), eval(formats)] if persons and subjects and genres and languages and authors and formats
+    languages, authors, formats, nationalities = Cache.get("languages"), Cache.get("authors"), Cache.get("formats"), Cache.get("nationalities")
+    return [eval(subjects), eval(persons), eval(genres), eval(languages), eval(authors), eval(formats), eval(nationalities)] if persons and subjects and genres and languages and authors and formats and nationalities
 
     # query = QUERY.select(:subject_id, :subject_label, :person_id, :person_label, :genre_id, :genre_label)
 
@@ -23,13 +23,15 @@ class List
 
     # puts query
 
-    querystring="SELECT DISTINCT ?subject_id ?subject_label ?person_id ?person_label ?genre_id ?genre_label ?lang_id ?lang_label ?creator ?creator_label ?format ?format_label
+    querystring="SELECT DISTINCT ?subject_id ?subject_label ?person_id ?person_label ?genre_id ?genre_label ?lang_id ?lang_label ?creator ?creator_label ?format ?format_label ?nationality ?nationality_label
 FROM <http://data.deichman.no/books>
 WHERE {
 ?work <http://purl.org/spar/fabio/hasManifestation> ?book .
 ?book <http://purl.org/stuff/rev#hasReview> ?review .
 { ?work <http://purl.org/dc/terms/creator> ?creator .
-  ?creator <http://xmlns.com/foaf/0.1/name> ?creator_label . }
+  ?creator <http://xmlns.com/foaf/0.1/name> ?creator_label .
+  ?creator <http://www.foafrealm.org/xfoaf/0.1/nationality> ?nationality .
+  ?nationality <http://www.w3.org/2000/01/rdf-schema#label> ?nationality_label . }
 UNION
 { ?book <http://data.deichman.no/literaryFormat> ?format .
   ?format <http://www.w3.org/2000/01/rdf-schema#label> ?format_label . }
@@ -52,12 +54,13 @@ UNION
     result = REPO.select(querystring)
     return [] if result.empty?
 
-    persons, subjects, genres, languages, authors, formats = {}, {}, {}, {}, {}, {}
+    persons, subjects, genres, languages, authors, formats, nationalities = {}, {}, {}, {}, {}, {}, {}
     result.each do |s|
       authors[s[:creator].to_s] = s[:creator_label].to_s
       languages[s[:lang_id].to_s] = s[:lang_label].to_s
       persons[s[:person_id].to_s] = s[:person_label].to_s
       formats[s[:format].to_s] = s[:format_label].to_s
+      nationalities[s[:nationality].to_s] = s[:nationality_label].to_s
 
       sub_label = s[:subject_label].to_s
       sub_label += " (ungdom)" if s[:subject_id].to_s.match(/Juvenile/)
@@ -74,8 +77,9 @@ UNION
     Cache.set "languages", languages
     Cache.set "authors", authors
     Cache.set "formats", formats
+    Cache.set "nationalities", nationalities
 
-    return [subjects, persons, genres, languages, authors, formats]
+    return [subjects, persons, genres, languages, authors, formats, nationalities]
   end
 
   def self.repopulate_dropdowns(criteria)
@@ -83,7 +87,7 @@ UNION
 
   end
 
-  def self.get(authors, subjects, persons, pages, years, audience, review_audience, genres, languages, formats)
+  def self.get(authors, subjects, persons, pages, years, audience, review_audience, genres, languages, formats, nationalities)
     # all parameters are arrays
 
     query = QUERY.select(:review)
@@ -108,6 +112,7 @@ UNION
       query.where([:narrower, RDF::SKOS.broader, :genre, :context => BOOKGRAPH])
     end
     query.where([:book, RDF::DEICHMAN.literaryFormat, :format, :context => BOOKGRAPH]) unless formats.empty?
+    query.where([:creator, RDF::XFOAF.nationality, :nationality, :context => BOOKGRAPH]) unless nationalities.empty?
 
     query.filter("?subject = <" + subjects.join("> || ?subject = <") +">") unless subjects.empty?
     query.filter("?person = <" + persons.join("> || ?person = <") +">") unless persons.empty?
@@ -117,6 +122,7 @@ UNION
     query.filter("?genre = <" + genres.join("> || ?genre = <") +">") unless genres.empty?
     query.filter("?language = <" + languages.join("> || ?language = <") +">") unless languages.empty?
     query.filter("?format = <" + formats.join("> || ?format = <") +">") unless formats.empty?
+    query.filter("?nationality = <" + nationalities.join("> || ?nationality = <") +">") unless nationalities.empty?
 
     unless pages.empty?
       pages_filter = []
