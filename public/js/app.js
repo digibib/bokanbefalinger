@@ -361,6 +361,7 @@ function validateEmail($email)
   }
 
 $('#lagre-innstillinger').on('click', function(event) {
+	// valider epostadresse
 	var email = $('#email').val();
 	if (email) {
 		if (!validateEmail(email)) {
@@ -368,6 +369,15 @@ $('#lagre-innstillinger').on('click', function(event) {
 		} else {
 			$('.email-validation').hide();
 		}
+	}
+
+	// kontroller at passordene er like
+	var passord1 = $('#passord1').val();
+	var passord2 = $('#passord2').val();
+	if (passord1 != passord2) {
+		$('.password-validation').html("Passordene er ikke like").show();
+	} else {
+		$('.password-validation').hide();
 	}
 	event.preventDefault();
 })
