@@ -32,6 +32,7 @@ class Cache
     rescue Redis::CannotConnectError, Redis::Encoding::CompatibilityError
       puts "DEBUG: Redis not available. Cannot write to cache."
     end
+    puts "Setting cache for: #{key}"
   end
 
   def self.hget(key, field)
@@ -41,6 +42,7 @@ class Cache
     rescue Redis::CannotConnectError
       puts "DEBUG: Redis not available. Cannot read from cache."
     end
+    puts "Reading from cache: #{key}"
     cached
   end
 

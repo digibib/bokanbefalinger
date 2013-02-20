@@ -299,10 +299,10 @@ class Review
       key = "user:"+user
       res["works"].each do |w|
         Cache.hset key, w["reviews"].first["uri"], w
+        Cache.set w["reviews"].first["uri"], {"works" => [w]}.to_json
       end
     end
 
-    puts res
     return [res, nil]
   end
 
