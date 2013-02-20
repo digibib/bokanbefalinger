@@ -363,14 +363,13 @@ function validateEmail($email)
 $('#lagre-innstillinger').on('click', function(event) {
 	// valider epostadresse
 	var validationFail = false;
+	$('span.error').hide();
 
 	var email = $('#email').val();
 	if (email) {
 		if (!validateEmail(email)) {
-			$('.email-validation').show();
+			$('.email-validation').html("Ugyldig epostadresse").show();
 			validationFail = true;
-		} else {
-			$('.email-validation').hide();
 		}
 	}
 
@@ -380,9 +379,12 @@ $('#lagre-innstillinger').on('click', function(event) {
 	if (passord1 != passord2) {
 		$('.password-validation').html("Passordene er ikke like").show();
 		validationFail = true;
+	}
 
-	} else {
-		$('.password-validation').hide();
+	// Ikke noe å lagre?
+	if ( !validationFail && !email && !passord1 && !passord2 ) {
+		$('span.error').html("Ingen endringer").show();
+		validationFail = true;
 	}
 
 	if ( validationFail ) {
