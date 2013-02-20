@@ -36,4 +36,10 @@ class BokanbefalingerApp < Sinatra::Application
     redirect params["take_me_back"] if params["take_me_back"]
     redirect '/'
   end
+
+  get "/innstillinger" do
+    redirect '/' unless session[:user]
+    @title = "Innstillinger"
+    erb :innstillinger
+  end
 end

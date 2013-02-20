@@ -476,3 +476,10 @@ input.number { width: 40px;}
 .my-reviews-teaser { font-size:0.9em;}
 .bottom { position:absolute; bottom: 30px; }
 .draft { display:none;}
+
+/* innstillinger */
+
+#innstillinger-fieldset { width: 90%; border: 1px dashed #ccc; background-color:#f5f5f5;}
+#innstillinger-fieldset label { line-height:2em; margin-right:1em;
+                                display:inline-block; width:200px; text-align:right;}
+#innstillinger-fieldset button { margin-top:1em}
