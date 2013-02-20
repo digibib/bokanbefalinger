@@ -362,10 +362,13 @@ function validateEmail($email)
 
 $('#lagre-innstillinger').on('click', function(event) {
 	// valider epostadresse
+	var validationFail = false;
+
 	var email = $('#email').val();
 	if (email) {
 		if (!validateEmail(email)) {
 			$('.email-validation').show();
+			validationFail = true;
 		} else {
 			$('.email-validation').hide();
 		}
@@ -376,8 +379,13 @@ $('#lagre-innstillinger').on('click', function(event) {
 	var passord2 = $('#passord2').val();
 	if (passord1 != passord2) {
 		$('.password-validation').html("Passordene er ikke like").show();
+		validationFail = true;
+
 	} else {
 		$('.password-validation').hide();
 	}
-	event.preventDefault();
+
+	if ( validationFail ) {
+		event.preventDefault();
+	}
 })

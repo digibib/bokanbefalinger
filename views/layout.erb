@@ -63,6 +63,16 @@
           </li>
         <% end %>
       </ul>
+      <div id="messages">
+        <% session[:flash_info].each do |info| %>
+          <p class="info"><%= info %></p>
+        <% end %>
+        <% session[:flash_error].each do |error| %>
+          <p class="error"><%= error %></p>
+        <% end %>
+        <% session[:flash_error] = [] %>
+        <% session[:flash_info] = [] %>
+      </div>
 
       <%= yield %>
     </div>

@@ -1,5 +1,5 @@
 <h2>Brukerinnstillinger</h2>
-<form>
+<form action="/innstillinger" method="POST">
 	<fieldset id="innstillinger-fieldset">
 		<label for="username">Brukernavn:</label>
 		<input name="username" type="text" disabled="true" value="<%= session[:user] %>">

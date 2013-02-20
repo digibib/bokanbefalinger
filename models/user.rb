@@ -56,6 +56,8 @@ class User
     session[:source_name] = res["source"]["name"]
     session[:source_homepage] = res["source"]["homepage"] || ""
     session[:api_key] = res["source"]["api_key"]
+    session[:flash_info] = []
+    session[:flash_error] = []
 
     return [nil, true]
   end
@@ -66,11 +68,31 @@ class User
 
     # Clear user session variables
 
-    session[:user] = nil
-    session[:source_uri] = nil
-    session[:source_name] = nil
-    session[:soure_homepage] = nil
-    session[:api_key] = nil
+    session.clear
+  end
+
+  def self.save(session, email, password)
+
+    body = {:api_key => session[:api_key],
+            :name => session[:user]}
+    body[:email] = email unless email.empty?
+    body[:password] = password unless password.empty?
+
+    begin
+      resp = @@user_conn.put do |req|
+        req.body = body.to_json
+      end
+    rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
+      return "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"
+    end
+
+    puts resp.body
+
+    if resp.status == 200
+      return nil
+    else
+      return JSON.parse(resp.body)
+    end
   end
 
 end

@@ -42,4 +42,15 @@ class BokanbefalingerApp < Sinatra::Application
     @title = "Innstillinger"
     erb :innstillinger
   end
+
+  post "/innstillinger" do
+    @error_message = User.save(session, params["email"], params["password1"])
+
+    if @error_message
+      session[:flash_error].push @error_message
+    else
+      session[:flash_info].push "Innstillinger lagret."
+    end
+    redirect "/innstillinger"
+  end
 end
