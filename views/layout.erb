@@ -64,10 +64,10 @@
         <% end %>
       </ul>
       <div id="messages">
-        <% session[:flash_info].each do |info| %>
+        <% Array(session[:flash_info]).each do |info| %>
           <p class="info"><%= info %></p>
         <% end %>
-        <% session[:flash_error].each do |error| %>
+        <% Array(session[:flash_error]).each do |error| %>
           <p class="error"><%= error %></p>
         <% end %>
         <% session[:flash_error] = [] %>
