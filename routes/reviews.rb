@@ -49,7 +49,7 @@ class BokanbefalingerApp < Sinatra::Application
     puts params
     if params[:delete] == "delete"
       # DELETE
-      @error_message, @response = Review.delete params["uri"], session[:api_key]
+      @error_message, @review = Review.delete params["uri"], session[:api_key]
       Cache.hdel "user:"+session[:user], params["uri"]
     else
       # PUT
