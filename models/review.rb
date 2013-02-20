@@ -259,7 +259,7 @@ class Review
     return [resp.body, nil]
   end
 
-  def self.delete(uri)
+  def self.delete(uri, api_key)
     begin
       resp = @@conn.delete do |req|
         req.body = {:api_key => api_key, :uri => uri}.to_json
@@ -271,6 +271,7 @@ class Review
     return [nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
     return [nil, "Skriving av anbefaling til RDF-storen feilet"] unless resp.body.match(/uri/)
 
+    puts "STATUS FROM DELETE:\n\n#{resp.body}\n\n"
     return [resp.body, nil]
   end
 
@@ -284,7 +285,7 @@ class Review
       # fetch reviews from api/reviews reviewer=user
       begin
         resp = @@conn.get do |req|
-          req.body = {:reviewer => user}.to_json
+          req.body = {:reviewer => user, :cluster => false}.to_json
         end
       rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
         return [nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
@@ -297,13 +298,7 @@ class Review
       # set user cache
       key = "user:"+user
       res["works"].each do |w|
-        w["reviews"].each do |r|
-          # Set one for each review of same book
-          wcp = w
-          wcp["reviews"] = [r]
-          puts "\n\n\#{r['uri']}: #{wcp} \n\n\n"
-          Cache.hset key, r["uri"], wcp
-        end
+        Cache.hset key, w["reviews"].first["uri"], w
       end
     end
 

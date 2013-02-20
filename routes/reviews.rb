@@ -47,9 +47,10 @@ class BokanbefalingerApp < Sinatra::Application
 
   post '/update' do
     puts params
-    if params[:delete] == true
+    if params[:delete] == "delete"
       # DELETE
-      @error_message, @response = Reveiew.delete params["uri"]
+      @error_message, @response = Review.delete params["uri"], session[:api_key]
+      Cache.hdel "user:"+session[:user], params["uri"]
     else
       # PUT
       audiences = [params["a1"], params["a2"], params["a3"]].compact.join("|")
@@ -57,8 +58,8 @@ class BokanbefalingerApp < Sinatra::Application
                                                params["text"], audiences,
                                                session[:user], params["uri"],
                                                session[:api_key], params["published"])
+      Cache.del "user:"+session[:user]
     end
-    Cache.del "user:"+session[:user]
     redirect '/minside'
   end
 
@@ -118,9 +119,9 @@ class BokanbefalingerApp < Sinatra::Application
       @published, @draft = {}, {}
       my_reviews["works"].each do |w|
         if w["reviews"].first["published"] == true
-          @published[w["uri"]] = {"works" => w }
+          @published[w["reviews"].first["uri"]] = {"works" => w }
         else
-          @draft[w["uri"]] = {"works" => w }
+          @draft[w["reviews"].first["uri"]] = {"works" => w }
         end
       end
 

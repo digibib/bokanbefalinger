@@ -53,6 +53,15 @@ class Cache
     end
   end
 
+  def self.hdel(key, field)
+    return nil unless @@caching
+    begin
+      @@redis.hdel key, field
+    rescue Redis::CannotConnectError, Redis::Encoding::CompatibilityError
+      puts "DEBUG: Redis not available. Cannot write to cache."
+    end
+  end
+
   def self.hgetall(key)
     return nil unless @@caching
     begin
