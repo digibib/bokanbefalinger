@@ -38,6 +38,7 @@ class User
 
     res = JSON.parse(resp.body)
     session[:source_uri] = res["user"]["accountServiceHomepage"]
+    session[:email] = res["user"]["email"]
 
     # 3. Get source api_key: api/sources source=x
 
@@ -86,12 +87,13 @@ class User
       return "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"
     end
 
-    puts resp.body
+    res = JSON.parse(resp.body)
 
     if resp.status == 200
+      session[:email] = res["reviewer"]["email"]
       return nil
     else
-      return JSON.parse(resp.body)
+      return res
     end
   end
 
