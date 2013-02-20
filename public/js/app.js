@@ -350,3 +350,24 @@ $('#show-published').on('click', function() {
 $('#my-reviews-sorting').on('change', function() {
 	$("#my-reviews-list > div:visible").tsort('',{attr:'timestamp', order:$('#my-reviews-sorting option:selected').val()});
 });
+
+
+// Brukerinnstillinger - validering
+
+function validateEmail($email)
+  {
+  	var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+  	return emailReg.test( $email );
+  }
+
+$('#lagre-innstillinger').on('click', function(event) {
+	var email = $('#email').val();
+	if (email) {
+		if (!validateEmail(email)) {
+			$('.email-validation').show();
+		} else {
+			$('.email-validation').hide();
+		}
+	}
+	event.preventDefault();
+})

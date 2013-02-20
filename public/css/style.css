@@ -483,3 +483,4 @@ input.number { width: 40px;}
 #innstillinger-fieldset label { line-height:2em; margin-right:1em;
                                 display:inline-block; width:160px; text-align:right;}
 #innstillinger-fieldset button { margin-top:1em}
+span.error { background-color: #F9D654; display:none; padding:0.2em;}
