@@ -5,7 +5,6 @@ class BokanbefalingerApp < Sinatra::Application
   post "/login" do
     unless request.params["username"].empty?||request.params["password"].empty?
 
-      puts "Authenticate user via API"
       error, authenticated = User.log_in(params["username"], params["password"], session)
 
       if error
@@ -14,10 +13,10 @@ class BokanbefalingerApp < Sinatra::Application
         redirect params["take_me_back"] if params["take_me_back"]
         redirect '/'
       elsif authenticated
-        puts "authenticated"
+        puts "User authenticated"
         redirect params["take_me_back"]
       else
-        puts "not authenticated"
+        puts "User not authenticated"
         session[:user] = nil
         session[:auth_error] = "Feil brukernavn eller passord"
         redirect params["take_me_back"] if params["take_me_back"]
