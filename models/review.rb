@@ -32,7 +32,7 @@ class Review
       # http get datatest.deichman.no/api/reviews author=searchterms
       begin
         resp = @@conn.get do |req|
-          req.body = {:author => searchterms}.to_json
+          req.body = {:author => searchterms, :cluster => true}.to_json
         end
       rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
         return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil, nil]
@@ -92,7 +92,7 @@ class Review
     else
       # http get datatest.deichman.no/api/reviews title=searchterms
       resp = @@conn.get do |req|
-        req.body = {:title => searchterms}.to_json
+        req.body = {:title => searchterms, :cluster => true}.to_json
       end
 
       return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
