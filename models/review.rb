@@ -123,7 +123,7 @@ class Review
         end
       end
     end
-    [result, num_titles, nil]
+    [nil, result, num_titles]
   end
 
   def self.search_by_isbn(isbn)
