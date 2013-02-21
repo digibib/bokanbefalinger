@@ -223,6 +223,15 @@ $('#kriterium-container').on('keyup', 'input.number', function() {
 	}
 });
 
+// Reset alle kriterier
+$('#reset-krierier').on('click', function() {
+	$('.kriterium-outer :not(:first)').remove();
+	$('.kriterium-outer:first').find('.kriterium-inner').remove();
+	$('.kriterium-outer:first').find('option:first').prop('selected', true).end()
+		.find(':input').prop('disabled', false);
+	$('.kriterium-add').hide();
+});
+
 $('#generate-list').on('click', function() {
 	var subjects = [];
 	$('.inner-input.emne option:selected').each(function(i, e) {
