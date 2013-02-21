@@ -253,8 +253,8 @@ class Review
     return [resp.body, nil]
   end
 
-  def self.get_by_user(user)
-    cached = Cache.hgetall "user:"+user
+  def self.get_by_user(user, user_uri)
+    cached = Cache.hgetall user_uri
     unless cached.empty?
       res = cached
       res.each { |k,v| res[k] = eval(v)}
@@ -263,7 +263,8 @@ class Review
       # fetch reviews from api/reviews reviewer=user
       begin
         resp = @@conn.get do |req|
-          req.body = {:reviewer => user, :cluster => false}.to_json
+          req.body = {:reviewer => user , :cluster => false}.to_json
+          puts "API REQUEST to #{req.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
         end
       rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
         return [nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
@@ -272,11 +273,11 @@ class Review
       return [nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
 
       res = JSON.parse(resp.body)
+      puts "API RESPONSE:\n#{res}\n\n" if ENV['RACK_ENV'] == 'development'
 
       # set user cache
-      key = "user:"+user
       res["works"].each do |w|
-        Cache.hset key, w["reviews"].first["uri"], w
+        Cache.hset user_uri, w["reviews"].first["uri"], w
         Cache.set w["reviews"].first["uri"], {"works" => [w]}.to_json
       end
     end

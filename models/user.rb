@@ -41,6 +41,7 @@ class User
 
     session[:source_uri] = res["user"]["accountServiceHomepage"]
     session[:email] = res["user"]["email"]
+    session[:user_uri] = res["user"]["uri"]
 
     # 3. Get source api_key: api/sources source=x
     begin

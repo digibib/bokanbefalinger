@@ -110,7 +110,7 @@ class BokanbefalingerApp < Sinatra::Application
 
   get "/minside" do
     redirect "/" unless session[:user]
-    my_reviews, @error_message = Review.get_by_user(session[:user])
+    my_reviews, @error_message = Review.get_by_user(session[:user], session[:user_uri])
 
     if @error_message
       @title ="Feil"
