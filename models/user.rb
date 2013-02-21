@@ -4,20 +4,18 @@ require "faraday"
 
 class User
 
-  @@auth_conn = Faraday.new(:url => "http://datatest.deichman.no/api/users/authenticate")
-  @@user_conn = Faraday.new(:url => "http://datatest.deichman.no/api/users")
-  @@source_conn = Faraday.new(:url => "http://datatest.deichman.no/api/sources")
+  @@conn = Faraday.new(:url => "http://datatest.deichman.no")
 
   def self.log_in(username, password, session)
-    # Returns authorized true or false
+    # Returns error + authorized true or false
     # Sets user session variables
 
     # 1. Check username+password: api/users/authenticate
-
     begin
-      resp = @@auth_conn.post do |req|
+      resp = @@conn.post do |req|
+        req.url '/api/users/authenticate'
         req.body = {:username => username, :password => password}.to_json
-        puts "API REQUEST to #{@@auth_conn.url_prefix.path}:\n#{req.body}\n" if ENV['RACK_ENV'] == 'development'
+        puts "API REQUEST to #{req.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
       end
     rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
       return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil]
@@ -28,11 +26,11 @@ class User
     session[:user] = username
 
     # 2. Get source via username: api/users name=x
-
     begin
-      resp = @@user_conn.get do |req|
+      resp = @@conn.get do |req|
+        req.url '/api/users'
         req.body = {:name => username}.to_json
-        puts "API REQUEST to #{@@user_conn.url_prefix.path}:\n#{req.body}\n" if ENV['RACK_ENV'] == 'development'
+        puts "API REQUEST to #{req.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
       end
     rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
       return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil]
@@ -45,12 +43,12 @@ class User
     session[:email] = res["user"]["email"]
 
     # 3. Get source api_key: api/sources source=x
-
     begin
-      resp = @@source_conn.get do |req|
+      resp = @@conn.get do |req|
+        req.url '/api/sources'
         req.headers[:secret_session_key] = Settings::SECRET_SESSION_KEY
         req.body = {:uri => session[:source_uri]}.to_json
-        puts "API REQUEST to #{@@source_conn.url_prefix.path}:\n#{req.body}\n" if ENV['RACK_ENV'] == 'development'
+        puts "API REQUEST to #{req.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
       end
     rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
       return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil]
@@ -79,22 +77,25 @@ class User
 
   def self.save(session, email, password)
     # Update user settings
+    # Returns nil if success, error response if not
+
     body = {:api_key => session[:api_key],
             :name => session[:user]}
     body[:email] = email unless email.empty?
     body[:password] = password unless password.empty?
 
     begin
-      resp = @@user_conn.put do |req|
+      resp = @@conn.put do |req|
+        req.url '/api/users'
         req.body = body.to_json
-        puts "API REQUEST to #{@@user_conn.url_prefix.path}:\n#{req.body}\n" if ENV['RACK_ENV'] == 'development'
+        puts "API REQUEST to #{req.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
       end
     rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
       return "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"
     end
 
     res = JSON.parse(resp.body)
-    puts "API RESPONSE:\n#{res}\n" if ENV['RACK_ENV'] == 'development'
+    puts "API RESPONSE:\n#{res}\n\n" if ENV['RACK_ENV'] == 'development'
 
     if resp.status == 200
       session[:email] = res["reviewer"]["email"]
