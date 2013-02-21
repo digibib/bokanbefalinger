@@ -78,7 +78,7 @@ class Cache
     rescue Redis::CannotConnectError
       puts "DEBUG: Redis not available. Cannot read from cache."
     end
-    puts "Not in cache: #{key}" unless cached
+    puts "Not in cache: #{key}" if cached.empty?
     cached
   end
 
