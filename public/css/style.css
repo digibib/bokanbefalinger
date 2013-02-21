@@ -295,6 +295,8 @@ span.inner-navbutton {
   letter-spacing: 0.03em;
 }
 
+span.small-link { font-size:0.9em; display:block; margin:0.5em;}
+
 #login-box input {
  width: 140px;
  margin: 4px;

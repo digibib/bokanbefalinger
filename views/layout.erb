@@ -58,9 +58,6 @@
           <li <%= 'class="active"' if request.path_info =~ /\/ny|finn$/ %>>
             <a href="/finn"><span class="inner-navbutton">Skriv anbefaling</span></a>
           </li>
-          <li style="border:none" <%= 'class="active"' if request.path_info =~ /innstillinger/ %>>
-            <a href="/innstillinger"><span class="inner-navbutton">Innstillinger</span></a>
-          </li>
         <% end %>
       </ul>
       <div id="messages">
