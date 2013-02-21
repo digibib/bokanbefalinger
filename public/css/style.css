@@ -137,15 +137,17 @@ button.long {
 p.error {
   background: #F9D654;
   padding: 15px;
-  width: 90%;
+  margin:5px 0;
+  width: 970px;
   clear: both;
   color: #222;
 }
 
 p.info {
-  background: #e0f5e0;
+  background: #ccc;
   padding: 15px;
-  width: 90%;
+  margin: 5px 0;
+  width: 970px;
   clear: both;
   color: #222;
 }

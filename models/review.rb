@@ -225,13 +225,13 @@ class Review
       return [nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
     end
 
-    puts "API RESPONSE:\n#{JSON.parse(resp.body)}\n\n" if ENV['RACK_ENV'] == 'development'
+    return ["Får ikke kontakt med ekstern ressurs (#{Settings::API}).", nil] if resp.status != 201
+    return ["Skriving av anbefaling til RDF-storen feilet", nil] unless resp.body.match(/uri/)
 
+    res = JSON.parse(resp.body)
+    puts "API RESPONSE:\n#{res}\n\n" if ENV['RACK_ENV'] == 'development'
 
-    return [nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 201
-    return [nil, "Skriving av anbefaling til RDF-storen feilet"] unless resp.body.match(/uri/)
-
-    return [resp.body, nil]
+    return [nil, res]
   end
 
   def self.update(title, teaser, text, audiences, reviewer, uri, api_key, published)
@@ -244,15 +244,16 @@ class Review
         puts "API REQUEST to #{@@conn.url_prefix.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
       end
     rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
-      return [nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
+      return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil]
     end
 
-    puts "API RESPONSE:\n#{JSON.parse(resp.body)}\n\n" if ENV['RACK_ENV'] == 'development'
 
-    return [nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
-    return [nil, "Skriving av anbefaling til RDF-storen feilet"] unless resp.body.match(/uri/)
+    return ["Får ikke kontakt med ekstern ressurs (#{Settings::API}).", nil] if resp.status != 200
+    return ["Skriving av anbefaling til RDF-storen feilet", nil] unless resp.body.match(/uri/)
+    res = JSON.parse(resp.body)
+    puts "API RESPONSE:\n#{res}\n\n" if ENV['RACK_ENV'] == 'development'
 
-    return [resp.body, nil]
+    return [nil, res]
   end
 
   def self.delete(uri, api_key)
@@ -262,15 +263,15 @@ class Review
         puts "API REQUEST to #{@@conn.url_prefix.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
       end
     rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
-      return [nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
+      return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil]
     end
 
     puts "API RESPONSE:\n#{JSON.parse(resp.body)}\n\n" if ENV['RACK_ENV'] == 'development'
 
-    return [nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
-    return [nil, "Skriving av anbefaling til RDF-storen feilet"] unless resp.body.match(/uri/)
+    return ["Får ikke kontakt med ekstern ressurs (#{Settings::API}).", nil] if resp.status != 200
+    return ["Skriving av anbefaling til RDF-storen feilet", nil] unless resp.body.match(/uri/)
 
-    return [resp.body, nil]
+    return [nil, resp.body]
   end
 
   def self.get_by_user(user, user_uri)

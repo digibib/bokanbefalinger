@@ -41,25 +41,33 @@ class BokanbefalingerApp < Sinatra::Application
                                              params["text"], audiences,
                                              session[:user], params["isbn"],
                                              session[:api_key], params["published"])
-    Cache.del session[:user_uri]
+    if @error_message
+      session[:flash_error].push @error_message
+    else
+      session[:flash_info].push "Anbefaling opprettet."
+      Cache.del session[:user_uri]
+    end
     redirect '/minside'
   end
 
   post '/update' do
-    puts params
     if params[:delete] == "delete"
-      # DELETE
+      # DELETE review
       @error_message, @review = Review.delete params["uri"], session[:api_key]
-      Cache.hdel "user:"+session[:user], params["uri"]
+      Cache.hdel session[:user_uri], params["uri"]
+      session[:flash_info].push "Anbefaling slettet." unless @error_message
     else
-      # PUT
+      # PUT review
       audiences = [params["a1"], params["a2"], params["a3"]].compact.join("|")
       @error_message, @review = Review.update(params["title"], params["teaser"],
                                                params["text"], audiences,
                                                session[:user], params["uri"],
                                                session[:api_key], params["published"])
       Cache.del session[:user_uri]
+      session[:flash_info].push "Anbefaling lagret." unless @error_message
     end
+
+    session[:flash_error].push @error_message if @error_message
     redirect '/minside'
   end
 
