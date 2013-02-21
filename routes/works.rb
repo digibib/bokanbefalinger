@@ -18,7 +18,7 @@ class BokanbefalingerApp < Sinatra::Application
     end
 
     work_id = "http://data.deichman.no/work/"+work
-    @work, @error_message = Work.get(work_id)
+    @error_message, @work = Work.get(work_id)
 
     if @error_message
       @title ="Feil"

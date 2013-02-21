@@ -11,17 +11,17 @@ class BokanbefalingerApp < Sinatra::Application
 
     if request.params["forfatter"] and not request.params["forfatter"].strip.empty?
       @searchterms = request.params["forfatter"]
-      @sorted, @num_authors, @error_message = Review.search_by_author(@searchterms) unless @searchterms.nil?
+      @error_message, @sorted, @num_authors = Review.search_by_author(@searchterms) unless @searchterms.nil?
     end
 
     if request.params["tittel"] and not request.params["tittel"].strip.empty?
       @searchterms = request.params["tittel"]
-      @titles, @num_titles, @error_message = Review.search_by_title(@searchterms)
+      @error_message, @titles, @num_titles = Review.search_by_title(@searchterms)
     end
 
     if request.params["isbn"] and not request.params["isbn"].strip.empty?
       @searchterms = request.params["isbn"]
-      @isbn, @num_isbn, @error_message = Review.search_by_isbn(@searchterms)
+      @error_message, @isbn, @num_isbn = Review.search_by_isbn(@searchterms)
     end
 
     @error_message = "Mangler søkestreng" unless @searchterms
@@ -78,14 +78,14 @@ class BokanbefalingerApp < Sinatra::Application
     end
 
     uri = "http://data.deichman.no/" + uri
-    @review, @other_reviews, @error_message = Review.get_reviews_from_uri(uri)
+    @error_message, @review, @other_reviews = Review.get_reviews_from_uri(uri)
 
     if @error_message
       @title ="Feil"
       erb :error
     elsif edit
       @title = "Rediger anbefaling"
-      my_reviews, @error_message = Review.get_by_user(session[:user], session[:user_uri])
+      @error_message, my_reviews = Review.get_by_user(session[:user], session[:user_uri])
       my_reviews["works"].each do |w|
         @review = w if w["reviews"].first["uri"] == uri
       end
@@ -97,7 +97,7 @@ class BokanbefalingerApp < Sinatra::Application
   end
 
   get "/anbefalinger" do
-    @reviews, @error_message = [nil,nil] #Review.get_latest(10, 0, 'issued', 'desc')
+    @error_message, @reviews = [nil,nil] #Review.get_latest(10, 0, 'issued', 'desc')
 
     if @error_message
       @title ="Feil"
@@ -110,7 +110,7 @@ class BokanbefalingerApp < Sinatra::Application
 
   get "/minside" do
     redirect "/" unless session[:user]
-    my_reviews, @error_message = Review.get_by_user(session[:user], session[:user_uri])
+    @error_message, my_reviews = Review.get_by_user(session[:user], session[:user_uri])
 
     if @error_message
       @title ="Feil"

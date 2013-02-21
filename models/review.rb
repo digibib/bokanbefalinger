@@ -14,12 +14,12 @@ class Review
                     :order_by => order_by, :order => order}.to_json
       end
     rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
-      return [nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
+      return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil]
     end
 
-    return [nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
+    return ["Får ikke kontakt med ekstern ressurs (#{Settings::API}).", nil] if resp.status != 200
 
-    return JSON.parse(resp.body), nil
+    return nil, JSON.parse(resp.body)
   end
 
   def self.search_by_author(searchterms)
@@ -35,10 +35,10 @@ class Review
           req.body = {:author => searchterms}.to_json
         end
       rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
-        return [nil, nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
+        return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil, nil]
       end
 
-      return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
+      return ["Får ikke kontakt med ekstern ressurs (#{Settings::API}).", nil, nil] if resp.status != 200
 
       unless resp.body.match(/works/)
         #set cache to "empty"
@@ -80,7 +80,7 @@ class Review
       num_authors = authors.uniq.size
     end
 
-    [sorted, num_authors, nil]
+    [nil, sorted, num_authors]
   end
 
   def self.search_by_title(searchterms)
@@ -166,11 +166,11 @@ class Review
            puts "API REQUEST to #{@@conn.url_prefix.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
          end
        rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
-          return [nil, nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
+          return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil, nil]
        end
 
-       return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
-       return [nil, nil, "Finner ingen anbefaling med denne ID-en (#{uri})."] if resp.body.match(/no reviews found/)
+       return ["Får ikke kontakt med ekstern ressurs (#{Settings::API}).",nil, nil] if resp.status != 200
+       return [ "Finner ingen anbefaling med denne ID-en (#{uri}).", nil, nil] if resp.body.match(/no reviews found/)
 
        review = JSON.parse(resp.body)
        puts "API RESPONSE:\n#{review}\n\n" if ENV['RACK_ENV'] == 'development'
@@ -191,11 +191,11 @@ class Review
            puts "API REQUEST to #{@@conn.url_prefix.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
         end
       rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
-        return [nil, nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
+        return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil, nil]
       end
 
-      return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
-      return [nil, nil, "Finner ingen verk med denne ID-en (#{uri})."] unless resp.body.match(/works/)
+      return ["Får ikke kontakt med ekstern ressurs (#{Settings::API}).", nil, nil] if resp.status != 200
+      return ["Finner ingen verk med denne ID-en (#{uri}).", nil, nil] unless resp.body.match(/works/)
 
       work = JSON.parse(resp.body)
       puts "API RESPONSE:\n#{work}\n\n" if ENV['RACK_ENV'] == 'development'
@@ -209,7 +209,7 @@ class Review
       other_reviews << r unless r["uri"] == uri
     end
 
-    return review["works"].first, other_reviews.uniq, nil
+    return nil, review["works"].first, other_reviews.uniq
   end
 
   def self.publish(title, teaser, text, audiences, reviewer, isbn, api_key, published)
@@ -287,10 +287,10 @@ class Review
           puts "API REQUEST to #{@@conn.url_prefix.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
         end
       rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
-        return [nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
+        return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil]
       end
 
-      return [nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
+      return ["Får ikke kontakt med ekstern ressurs (#{Settings::API}).", nil] if resp.status != 200
 
       res = JSON.parse(resp.body)
       puts "API RESPONSE:\n#{res}\n\n" if ENV['RACK_ENV'] == 'development'
@@ -302,7 +302,7 @@ class Review
       end
     end
 
-    return [res, nil]
+    return [nil, res]
   end
 
 end
