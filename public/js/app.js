@@ -210,7 +210,7 @@ $('#kriterium-container').on('click', 'button.fjern', function() {
 });
 
 // Skjul 'legg til kriterium' hvis input felt er tomme
-$('#kriterium-container').on('keyup', 'input[type="text"]', function() {
+$('#kriterium-container').on('keyup', 'input.number', function() {
 	var v="";
 	$(this).parents('.kriterium-inner').find('input[type="text"]')
 	  .each(function() {
