@@ -129,11 +129,14 @@ class Review
   def self.search_by_isbn(isbn)
     resp = @@conn.get do |req|
       req.body = {:isbn => isbn}.to_json
+      puts "API REQUEST to #{@@conn.url_prefix.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
     end
 
     return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
 
     result = JSON.parse(resp.body)
+    puts "API RESPONSE:\n#{result}\n\n" if ENV['RACK_ENV'] == 'development'
+
     num_isbn = 1 if result["works"]
 
     return [result, num_isbn || 0, nil]
@@ -160,6 +163,7 @@ class Review
        begin
          resp = @@conn.get do |req|
            req.body = {:uri => uri}.to_json
+           puts "API REQUEST to #{@@conn.url_prefix.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
          end
        rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
           return [nil, nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
@@ -169,6 +173,8 @@ class Review
        return [nil, nil, "Finner ingen anbefaling med denne ID-en (#{uri})."] if resp.body.match(/no reviews found/)
 
        review = JSON.parse(resp.body)
+       puts "API RESPONSE:\n#{review}\n\n" if ENV['RACK_ENV'] == 'development'
+
        Cache.set uri, review.to_json
     end
 
@@ -182,6 +188,7 @@ class Review
       begin
         resp = @@conn.get do |req|
           req.body = {:work => work_uri}.to_json
+           puts "API REQUEST to #{@@conn.url_prefix.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
         end
       rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
         return [nil, nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
@@ -189,7 +196,10 @@ class Review
 
       return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
       return [nil, nil, "Finner ingen verk med denne ID-en (#{uri})."] unless resp.body.match(/works/)
+
       work = JSON.parse(resp.body)
+      puts "API RESPONSE:\n#{work}\n\n" if ENV['RACK_ENV'] == 'development'
+
       Cache.set uri, resp.body
     end
 
@@ -209,10 +219,14 @@ class Review
                     :audience => audiences, :reviewer => reviewer,
                     :api_key => api_key, :isbn => isbn,
                     :published => published}.to_json
+         puts "API REQUEST to #{@@conn.url_prefix.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
       end
     rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
       return [nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
     end
+
+    puts "API RESPONSE:\n#{JSON.parse(resp.body)}\n\n" if ENV['RACK_ENV'] == 'development'
+
 
     return [nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 201
     return [nil, "Skriving av anbefaling til RDF-storen feilet"] unless resp.body.match(/uri/)
@@ -227,10 +241,13 @@ class Review
                     :audience => audiences, :reviewer => reviewer,
                     :api_key => api_key, :uri => uri,
                     :published => published}.to_json
+        puts "API REQUEST to #{@@conn.url_prefix.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
       end
     rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
       return [nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
     end
+
+    puts "API RESPONSE:\n#{JSON.parse(resp.body)}\n\n" if ENV['RACK_ENV'] == 'development'
 
     return [nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
     return [nil, "Skriving av anbefaling til RDF-storen feilet"] unless resp.body.match(/uri/)
@@ -242,10 +259,13 @@ class Review
     begin
       resp = @@conn.delete do |req|
         req.body = {:api_key => api_key, :uri => uri}.to_json
+        puts "API REQUEST to #{@@conn.url_prefix.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
       end
     rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
       return [nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
     end
+
+    puts "API RESPONSE:\n#{JSON.parse(resp.body)}\n\n" if ENV['RACK_ENV'] == 'development'
 
     return [nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
     return [nil, "Skriving av anbefaling til RDF-storen feilet"] unless resp.body.match(/uri/)
@@ -264,7 +284,7 @@ class Review
       begin
         resp = @@conn.get do |req|
           req.body = {:reviewer => user , :cluster => false}.to_json
-          puts "API REQUEST to #{req.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
+          puts "API REQUEST to #{@@conn.url_prefix.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
         end
       rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
         return [nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
