@@ -70,7 +70,7 @@ UNION
       gen_label += " (ungdom)" if s[:genre_id].to_s.match(/Juvenile/)
       genres[s[:genre_id].to_s] = gen_label
     end
-    puts "Setting persons, subjects, genres, languages, authors, formats cache"
+
     Cache.set "subjects", subjects
     Cache.set "persons", persons
     Cache.set "genres", genres
@@ -82,8 +82,40 @@ UNION
     return [subjects, persons, genres, languages, authors, formats, nationalities]
   end
 
-  def self.repopulate_dropdowns(criteria)
+  def self.repopulate_dropdown(dropdown, criteria)
+    # dropdown: s1 - s11
     # criteria {:authors => ["fred", "hans"], :persons => [uri1, uri2] etc..}
+    # return Array of uris (= option values in dropdown)
+
+    case dropdown
+    when "s1"
+      select = :genre
+    when "s2"
+      select = :subject
+    when "s3"
+      select = :format
+    when "s4"
+      select = :audience
+    when "s5"
+      select = :author
+    when "s6"
+      select = :nationality
+    when "s7"
+      select = :person
+    when "s10"
+      select = :language
+    when "s11"
+      select = :review_audience
+    else
+      return nil
+    end
+
+    # query = QUERY.select(select)
+    # query.distinct
+    # query.where([:work, RDF::FABIO.hasManifestation, :book, :context => BOOKGRAPH],
+    #             [:work, RDF::DC.creator, :creator, :context => BOOKGRAPH],
+    #             [:creator, RDF::FOAF.name, :author, :context => BOOKGRAPH],
+    #             [:book, RDF::REV.hasReview, :review, :context => BOOKGRAPH])
 
   end
 

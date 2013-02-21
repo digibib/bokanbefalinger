@@ -469,6 +469,8 @@ a:hover.work-link { text-decoration: underline }
 input.number { width: 40px;}
 .fjern {  float:right; margin-right:10px;}
 
+#list-results { margin-top: 40px;}
+
 .inner-input { width: 250px ;}
 
 /* alle anbefalinger */

@@ -232,7 +232,7 @@ $('#reset-krierier').on('click', function() {
 	$('.kriterium-add').hide();
 });
 
-$('#generate-list').on('click', function() {
+function collectCriteria() {
 	var subjects = [];
 	$('.inner-input.emne option:selected').each(function(i, e) {
 		if (e.value != "" ) {
@@ -317,14 +317,21 @@ $('#generate-list').on('click', function() {
 			nationalities.push(e.value);
 		}
 	});
-	var request = $.ajax({
-	  url: '/lister',
-	  type: "POST",
-	  data: { authors: authors, persons: persons, subjects: subjects,
+
+	return { authors: authors, persons: persons, subjects: subjects,
 	          pages: JSON.stringify(pages), years: JSON.stringify(years),
 	          audience: audience, review_audience: review_audience,
 	          genres: genres, languages: languages, formats: formats,
-	          nationalities: nationalities},
+	          nationalities: nationalities}
+}
+
+$('#generate-list').on('click', function() {
+	data = collectCriteria();
+
+	var request = $.ajax({
+	  url: '/lister',
+	  type: "POST",
+	  data: data,
 	  dataType: "json"
 	});
 

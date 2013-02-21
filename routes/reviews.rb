@@ -156,6 +156,17 @@ class BokanbefalingerApp < Sinatra::Application
     reviews.to_json
   end
 
+  post "/dropdown" do
+    puts params
+    uris = List.repopulate_dropdown(Array(params["authors"]), Array(params["subjects"]),
+                      Array(params["persons"]), JSON.parse(params["pages"]),
+                      JSON.parse(params["years"]), Array(params["audience"]),
+                      Array(params["review_audience"]), Array(params["genres"]),
+                      Array(params["languages"]), Array(params["formats"]),
+                      Array(params["nationalities"]))
+    uris.to_json
+  end
+
   get "/finn" do
     #redirect "/" unless session[:user]
 
