@@ -141,7 +141,19 @@ p.error {
   width: 970px;
   clear: both;
   color: #222;
+  font-weight: bold;
 }
+
+p.error-small {
+  background: #F9D654;
+  padding: 15px;
+  margin:10px 0;
+  width: 667px;
+  clear: both;
+  color: #222;
+  font-weight: bold;
+}
+
 
 p.info {
   background: #eee;
@@ -150,6 +162,7 @@ p.info {
   width: 970px;
   clear: both;
   color: #222;
+  font-weight: bold;
 }
 
 label { font-weight: bold;}
