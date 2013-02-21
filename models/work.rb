@@ -24,6 +24,8 @@ class Work
       return ["Får ikke kontakt med ekstern ressurs (#{Settings::API}).", nil] if resp.status != 200
       return ["Finner ingen verk med denne ID-en (#{work_id}).", nil] unless resp.body.match(/works/)
       work = JSON.parse(resp.body)
+      puts "API RESPONSE:\n#{work}\n\n" if ENV['RACK_ENV'] == 'development'
+
       Cache.set work_id, resp.body
     end
 
@@ -48,6 +50,8 @@ class Work
     return ["Finner ingen verk med denne ID-en (#{work_id}).", nil] unless resp.body.match(/work/)
 
     res = JSON.parse(resp.body)
+    puts "API RESPONSE:\n#{res}\n\n" if ENV['RACK_ENV'] == 'development'
+
     Cache.set res["work"].first["manifestation"], resp.body
     resp.body
   end
