@@ -1,6 +1,5 @@
 # encoding: utf-8
 class BokanbefalingerApp < Sinatra::Application
-  @@conn = Faraday.new(:url => "http://datatest.deichman.no/api/users/authenticate")
 
   post "/login" do
     unless request.params["username"].empty?||request.params["password"].empty?
