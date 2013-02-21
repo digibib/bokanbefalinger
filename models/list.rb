@@ -45,7 +45,9 @@ UNION
   ?subject_id <http://www.w3.org/2004/02/skos/core#prefLabel> ?subject_label .
 }
 UNION
-{ ?book <http://purl.org/dc/terms/subject> ?person_id . ?person_id <http://xmlns.com/foaf/0.1/name> ?person_label .
+{ ?book <http://purl.org/dc/terms/subject> ?person_id .
+  ?person_id a <http://xmlns.com/foaf/0.1/Person> .
+  ?person_id <http://xmlns.com/foaf/0.1/name> ?person_label .
   OPTIONAL { ?person_id <http://data.deichman.no/lifespan> ?lifespan .} }
 UNION
 { ?book <http://purl.org/dc/terms/language> ?lang_id .
