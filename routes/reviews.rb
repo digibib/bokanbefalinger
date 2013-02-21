@@ -41,7 +41,7 @@ class BokanbefalingerApp < Sinatra::Application
                                              params["text"], audiences,
                                              session[:user], params["isbn"],
                                              session[:api_key], params["published"])
-    Cache.del "user:"+session[:user]
+    Cache.del session[:user_uri]
     redirect '/minside'
   end
 
@@ -58,7 +58,7 @@ class BokanbefalingerApp < Sinatra::Application
                                                params["text"], audiences,
                                                session[:user], params["uri"],
                                                session[:api_key], params["published"])
-      Cache.del "user:"+session[:user]
+      Cache.del session[:user_uri]
     end
     redirect '/minside'
   end
