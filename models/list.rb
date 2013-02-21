@@ -23,7 +23,7 @@ class List
 
     # puts query
 
-    querystring="SELECT DISTINCT ?subject_id ?subject_label ?person_id ?person_label ?genre_id ?genre_label ?lang_id ?lang_label ?creator ?creator_label ?format ?format_label ?nationality ?nationality_label
+    querystring="SELECT DISTINCT ?subject_id ?subject_label ?person_id (CONCAT(?person_label, ' ', ?lifespan) AS ?person_label) ?genre_id ?genre_label ?lang_id ?lang_label ?creator ?creator_label ?format ?format_label ?nationality ?nationality_label
 FROM <http://data.deichman.no/books>
 WHERE {
 ?work <http://purl.org/spar/fabio/hasManifestation> ?book .
@@ -45,7 +45,8 @@ UNION
   ?subject_id <http://www.w3.org/2004/02/skos/core#prefLabel> ?subject_label .
 }
 UNION
-{ ?book <http://purl.org/dc/terms/subject> ?person_id . ?person_id <http://xmlns.com/foaf/0.1/name> ?person_label . }
+{ ?book <http://purl.org/dc/terms/subject> ?person_id . ?person_id <http://xmlns.com/foaf/0.1/name> ?person_label .
+  OPTIONAL { ?person_id <http://data.deichman.no/lifespan> ?lifespan .} }
 UNION
 { ?book <http://purl.org/dc/terms/language> ?lang_id .
  ?lang_id <http://www.w3.org/2000/01/rdf-schema#label> ?lang_label . }
