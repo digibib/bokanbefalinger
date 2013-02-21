@@ -7,7 +7,7 @@ class Review
   @@conn = Faraday.new(:url => Settings::API)
 
   def self.get_latest(limit, offset, order_by, order)
-    puts "Fetching all reviews from API"
+
     begin
       resp = @@conn.get do |req|
         req.body = {:limit => limit, :offset => offset,
@@ -27,11 +27,9 @@ class Review
     result = {}
 
     if cached_author
-      puts "reading author_#{searchterms} from cache"
       result = JSON.parse(cached_author)
     else
       # http get datatest.deichman.no/api/reviews author=searchterms
-      puts "API call for author=#{searchterms}"
       begin
         resp = @@conn.get do |req|
           req.body = {:author => searchterms}.to_json
@@ -45,11 +43,9 @@ class Review
       unless resp.body.match(/works/)
         #set cache to "empty"
         Cache.set "author_"+searchterms, {:works => []}.to_json
-        puts "cache set to [] for #{"author_"+searchterms}"
       else
         result = JSON.parse(resp.body)
         Cache.set "author_"+searchterms, resp.body
-        puts "cache set for #{"author_"+searchterms}"
       end
     end
 
@@ -61,14 +57,12 @@ class Review
       result["works"].each do |work|
         # cache by work_id
         Cache.set(work["uri"], {:works => [work]}.to_json) unless cached_author
-        puts "cache set for #{work["uri"]}" unless cached_author
 
         #cache by review_id
         work["reviews"].each do |r|
           temp = work.clone
           temp["reviews"] = [r]
           Cache.set(r["uri"], {:works => [temp]}.to_json) unless cached_author
-          puts "cache set for #{r["uri"]}" unless cached_author
         end
         sorted[work["author"]] << work
         authors << work["author"]
@@ -79,7 +73,6 @@ class Review
         cached_single_author = Cache.get(k)
         if cached_single_author.nil?
           # set cache
-          puts "Setting cache for author #{k}"
           Cache.set(k, {:works => v}.to_json)
         end
       end
@@ -95,11 +88,9 @@ class Review
     result = {}
 
     if cached_title
-      puts "reading title_#{searchterms} from cache"
       result = JSON.parse(cached_title)
     else
       # http get datatest.deichman.no/api/reviews title=searchterms
-      puts "API call for title=#{searchterms}"
       resp = @@conn.get do |req|
         req.body = {:title => searchterms}.to_json
       end
@@ -109,11 +100,9 @@ class Review
       unless resp.body.match(/works/)
         #set cache to "empty"
         Cache.set "title_"+searchterms, {:works => []}.to_json
-        puts "cache set to [] for #{"title_"+searchterms}"
       else
         result = JSON.parse(resp.body)
         Cache.set "title_"+ searchterms, result.to_json
-        puts "cache set for #{"title_"+searchterms}"
       end
     end
 
@@ -126,13 +115,11 @@ class Review
       # cache by work_id
       result["works"].each do |work|
         Cache.set(work["uri"], {:works => [work]}.to_json) unless cached_title
-        puts "cache set for #{work["uri"]}" unless cached_title
         # cache by review_id
         work["reviews"].each do |r|
           temp = work.clone
           temp["reviews"] = [r]
           Cache.set(r["uri"], {:works => [temp]}.to_json) unless cached_title
-          puts "cache set for #{r["uri"]}" unless cached_title
         end
       end
     end
@@ -140,7 +127,6 @@ class Review
   end
 
   def self.search_by_isbn(isbn)
-    puts "API call for isbn=#{isbn}"
     resp = @@conn.get do |req|
       req.body = {:isbn => isbn}.to_json
     end
@@ -159,10 +145,8 @@ class Review
     cached_review = Cache.get(uri)
 
     if cached_review
-      puts "reading #{uri} from cache"
       review = JSON.parse(cached_review)
       # also set cache for manifestation TODO move this out
-      puts "setting cache for manifestation #{review['works'].first['manifestation']}"
       manifestation = {"work" => [{"author" => review["works"].first["author"],
                        "author_id" => review["works"].first["author_id"].first,
                        "cover_url" => review["works"].first["cover_url"],
@@ -173,7 +157,6 @@ class Review
 
       Cache.set review["works"].first["manifestation"], manifestation.to_json
     else
-       puts "API call for uri=#{uri}"
        begin
          resp = @@conn.get do |req|
            req.body = {:uri => uri}.to_json
@@ -187,7 +170,6 @@ class Review
 
        review = JSON.parse(resp.body)
        Cache.set uri, review.to_json
-       puts "cache set for #{uri}"
     end
 
     # 2. Fetch other reviews if any by work_id
@@ -195,10 +177,8 @@ class Review
     cached_work = Cache.get(uri)
 
     if cached_work
-      puts "reading #{work_uri} from cache"
       work = JSON.parse(cached_work)
     else
-      puts "API call for work=#{uri}"
       begin
         resp = @@conn.get do |req|
           req.body = {:work => work_uri}.to_json
@@ -211,7 +191,6 @@ class Review
       return [nil, nil, "Finner ingen verk med denne ID-en (#{uri})."] unless resp.body.match(/works/)
       work = JSON.parse(resp.body)
       Cache.set uri, resp.body
-      puts "cache set for #{work_uri}"
     end
 
     # 3. Check if there are other reviews other than uri
@@ -271,7 +250,6 @@ class Review
     return [nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
     return [nil, "Skriving av anbefaling til RDF-storen feilet"] unless resp.body.match(/uri/)
 
-    puts "STATUS FROM DELETE:\n\n#{resp.body}\n\n"
     return [resp.body, nil]
   end
 
