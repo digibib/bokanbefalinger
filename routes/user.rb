@@ -8,7 +8,7 @@ class BokanbefalingerApp < Sinatra::Application
 
       if error
         session[:user] = nil
-        session[:auth_error] = error
+        session[:flash_error].push error
         redirect params["take_me_back"] if params["take_me_back"]
         redirect '/'
       elsif authenticated
@@ -17,13 +17,14 @@ class BokanbefalingerApp < Sinatra::Application
       else
         puts "User not authenticated"
         session[:user] = nil
-        session[:auth_error] = "Feil brukernavn eller passord"
+        session[:flash_error].push "Feil brukernavn eller passord"
         redirect params["take_me_back"] if params["take_me_back"]
         redirect '/'
       end
     end
 
     # If username or password missing input:
+    session[:flash_error].push "Skriv inn brukernavn OG passord"
     redirect params["take_me_back"] if params["take_me_back"]
     redirect "/"
   end
