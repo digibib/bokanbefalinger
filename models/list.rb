@@ -110,7 +110,7 @@ UNION
     when "s10"
       pattern = [:book, RDF::DC.language, :uri]
     when "s11"
-      pattern = [:review, RDF::DC.audience, :uri]
+      pattern = [:review, RDF::DC.audience, :uri, :context => REVIEWGRAPH]
     else
       return []
     end
