@@ -165,17 +165,59 @@ $('#kriterium-container').on('change', 'select.kriterium', function() {
 	$kdiv.find('.kriterium-inner').remove();
 	if (k != "s0") {
 		$kdiv.addClass("chosen");
-		if ( $('#kriterium-container .kriterium-inner').length == 0 || k == "s8" || k == "s9") {
-			// Add inner select if first criteria, or non-dropdown criteria
-			console.log("First criteria or non-dropdown criteria");
+		if ( $('#kriterium-container .kriterium-inner').length == 0 || k == "s8" || k == "s9" || $("."+k+".chosen").length >= 1 ) {
+			// Add inner select if first criteria, same criteria, or non-dropdown criteria
+			console.log("First criteria, same criteria or non-dropdown criteria");
 			$('img.loading').remove();
-			var $kspan = $('.'+k+':last').clone().appendTo($kdiv).show().
-				find('.inner-input').chosen({no_results_text: "Ingen treff for"});
+			var $kspan = $('.'+k+':last').clone().appendTo($kdiv).show()
+
+			if ( $("."+k+".chosen").length >= 1) {
+				// remove all uris not in first selected criteria
+				console.log("remove some");
+				var data = $('.'+k+":first").find('option').map(function() {
+					return $(this).val();
+				}).get();
+				$kdiv.find('.kriterium-inner option').each(function() {
+					if ( $(this).val() != "" && $.inArray($(this).val(), data) == -1) {
+						$(this).remove();
+					}
+				});
+			}
+			$kdiv.find('.inner-input').chosen({no_results_text: "Ingen treff for"});
 
 		} else {
 			// perform POST /dropdown and repopulate input options to avoid non-matching uris
 			console.log("repopulate dropdown");
 			$kdiv.append("<img class='loading' src='img/loading.gif'>");
+			// disable submit when loading:
+			$('#generate-list').prop("disabled", true);
+
+			data = collectCriteria();
+			data.dropdown = k;
+
+			var request = $.ajax({
+			  url: '/dropdown',
+			  type: "POST",
+			  data: data,
+			  dataType: "json"
+			});
+
+			request.done(function(data) {
+				// enable submit
+				$('#generate-list').prop("disabled", false);
+
+				$('img.loading').remove();
+				console.log(data);
+
+				var $kspan = $('.'+k+':last').clone()
+				$kspan.find('option').each(function() {
+					if ( $(this).val() != "" && $.inArray($(this).val(), data) == -1) {
+						$(this).remove();
+					}
+				});
+
+				$kspan.appendTo($kdiv).show().find('.inner-input').chosen({no_results_text: "Ingen treff for"});
+			});
 		}
 
 		// Ikke vis 'fjern' knapp hvis det er bare ett kriterium

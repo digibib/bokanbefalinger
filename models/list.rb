@@ -85,69 +85,126 @@ UNION
     return [subjects, persons, genres, languages, authors, formats, nationalities]
   end
 
-  def self.repopulate_dropdown(dropdown, criteria)
-    # dropdown: s1 - s11
-    # criteria {:authors => ["fred", "hans"], :persons => [uri1, uri2] etc..}
+  def self.repopulate_dropdown(dropdown, authors, subjects, persons, pages, years, audience, review_audience, genres, languages, formats, nationalities)
+    # dropdown: string s1 - s11, rest is arrays like in List.get
     # return Array of uris (= option values in dropdown)
 
     case dropdown
     when "s1"
-      select = :genre
+      patterns = [[:book, RDF::DBO.literaryGenre, :genre_narrower],
+                  [:genre_narrower, RDF::SKOS.broader, :uri]]
     when "s2"
-      select = :subject
+      patterns = [[:book, RDF::DC.subject, :subject_narrower],
+                  [:uri, RDF::SKOS.narrower, :subject_narrower]]
     when "s3"
-      select = :format
+      pattern = [:book, RDF::DEICHMAN.literaryFormat, :uri]
     when "s4"
-      select = :audience
+      pattern = [:book, RDF::DC.audience, :uri]
     when "s5"
-      select = :author
+      pattern = [:work, RDF::DC.creator, :uri]
     when "s6"
-      select = :nationality
+      pattern = [:creator, RDF::XFOAF.nationality, :uri]
     when "s7"
-      select = :person
+      patterns = [[:book, RDF::DC.subject, :uri],
+                  [:uri, RDF.type, RDF::FOAF.Person]]
     when "s10"
-      select = :language
+      pattern = [:book, RDF::DC.language, :uri]
     when "s11"
-      select = :review_audience
+      pattern = [:review, RDF::DC.audience, :uri]
     else
-      return nil
+      return []
     end
 
-    # query = QUERY.select(select)
-    # query.distinct
-    # query.where([:work, RDF::FABIO.hasManifestation, :book, :context => BOOKGRAPH],
-    #             [:work, RDF::DC.creator, :creator, :context => BOOKGRAPH],
-    #             [:creator, RDF::FOAF.name, :author, :context => BOOKGRAPH],
-    #             [:book, RDF::REV.hasReview, :review, :context => BOOKGRAPH])
+    query = QUERY.select(:uri)
+    query.distinct
+    query.from(BOOKGRAPH)
+    query.from_named(REVIEWGRAPH)
+    query.where(pattern) if pattern
+    query.where(*patterns) if patterns
+    query.where([:work, RDF::FABIO.hasManifestation, :book],
+                [:work, RDF::DC.creator, :creator],
+                [:creator, RDF::FOAF.name, :author],
+                [:book, RDF::REV.hasReview, :review])
 
+    query.where([:book, RDF::DC.language, :language]) unless languages.empty?
+    unless subjects.empty?
+      query.where([:book, RDF::DC.subject, :subject_narrower])
+      query.where([:subject, RDF::SKOS.narrower, :subject_narrower])
+    end
+    query.where([:book, RDF::DC.subject, :person]) unless persons.empty?
+    query.where([:book, RDF::BIBO.numPages, :pages]) unless pages.empty?
+    query.where([:book, RDF::DC.issued, :year]) unless years.empty?
+    query.where([:book, RDF::DC.audience, :audience]) unless audience.empty?
+    query.where([:review, RDF::DC.audience, :review_audience, :context => REVIEWGRAPH]) unless review_audience.empty?
+    unless genres.empty?
+      query.where([:book, RDF::DBO.literaryGenre, :narrower])
+      query.where([:narrower, RDF::SKOS.broader, :genre])
+    end
+    query.where([:book, RDF::DEICHMAN.literaryFormat, :format]) unless formats.empty?
+    query.where([:creator, RDF::XFOAF.nationality, :nationality]) unless nationalities.empty?
+
+    query.filter("?subject = <" + subjects.join("> || ?subject = <") +">") unless subjects.empty?
+    query.filter("?person = <" + persons.join("> || ?person = <") +">") unless persons.empty?
+    query.filter("?creator = <" + authors.join("> || ?creator = <") +">") unless authors.empty?
+    query.filter("?audience = <" + audience.join("> || ?audience = <") +">") unless audience.empty?
+    query.filter("?review_audience = <" + review_audience.join("> || ?review_audience = <") +">") unless review_audience.empty?
+    query.filter("?genre = <" + genres.join("> || ?genre = <") +">") unless genres.empty?
+    query.filter("?language = <" + languages.join("> || ?language = <") +">") unless languages.empty?
+    query.filter("?format = <" + formats.join("> || ?format = <") +">") unless formats.empty?
+    query.filter("?nationality = <" + nationalities.join("> || ?nationality = <") +">") unless nationalities.empty?
+
+    unless pages.empty?
+      pages_filter = []
+      pages.each do |from_to|
+        pages_filter.push("(xsd:integer(?pages) > #{from_to[0]} && xsd:integer(?pages) < #{from_to[1]})")
+      end
+      query.filter(pages_filter.join(" || "))
+    end
+
+    unless years.empty?
+      years_filter = []
+      years.each do |from_to|
+        years_filter.push("(xsd:integer(?year) > #{from_to[0]} && xsd:integer(?year) < #{from_to[1]})")
+      end
+      query.filter(years_filter.join(" || "))
+    end
+
+    puts "REPOPULATE DROPDOWN:\n", query.to_s.gsub(/}/, "}\n")
+
+    result = REPO.select(query)
+    return [] if result.empty?
+
+    Array(result.bindings[:uri]).uniq.collect { |b| b.to_s }
   end
 
   def self.get(authors, subjects, persons, pages, years, audience, review_audience, genres, languages, formats, nationalities)
     # all parameters are arrays
 
     query = QUERY.select(:review)
+    query.from(BOOKGRAPH)
+    query.from_named(REVIEWGRAPH)
     query.distinct
-    query.where([:work, RDF::FABIO.hasManifestation, :book, :context => BOOKGRAPH],
-                [:work, RDF::DC.creator, :creator, :context => BOOKGRAPH],
-                [:creator, RDF::FOAF.name, :author, :context => BOOKGRAPH],
-                [:book, RDF::REV.hasReview, :review, :context => BOOKGRAPH])
+    query.where([:work, RDF::FABIO.hasManifestation, :book],
+                [:work, RDF::DC.creator, :creator],
+                [:creator, RDF::FOAF.name, :author],
+                [:book, RDF::REV.hasReview, :review])
 
-    query.where([:book, RDF::DC.language, :language, :context => BOOKGRAPH]) unless languages.empty?
+    query.where([:book, RDF::DC.language, :language]) unless languages.empty?
     unless subjects.empty?
-      query.where([:book, RDF::DC.subject, :subject_narrower, :context => BOOKGRAPH])
-      query.where([:subject, RDF::SKOS.narrower, :subject_narrower, :context => BOOKGRAPH])
+      query.where([:book, RDF::DC.subject, :subject_narrower])
+      query.where([:subject, RDF::SKOS.narrower, :subject_narrower])
     end
-    query.where([:book, RDF::DC.subject, :person, :context => BOOKGRAPH]) unless persons.empty?
-    query.where([:book, RDF::BIBO.numPages, :pages, :context => BOOKGRAPH]) unless pages.empty?
-    query.where([:book, RDF::DC.issued, :year, :context => BOOKGRAPH]) unless years.empty?
-    query.where([:book, RDF::DC.audience, :audience, :context => BOOKGRAPH]) unless audience.empty?
+    query.where([:book, RDF::DC.subject, :person]) unless persons.empty?
+    query.where([:book, RDF::BIBO.numPages, :pages]) unless pages.empty?
+    query.where([:book, RDF::DC.issued, :year]) unless years.empty?
+    query.where([:book, RDF::DC.audience, :audience]) unless audience.empty?
     query.where([:review, RDF::DC.audience, :review_audience, :context => REVIEWGRAPH]) unless review_audience.empty?
     unless genres.empty?
-      query.where([:book, RDF::DBO.literaryGenre, :narrower, :context => BOOKGRAPH])
-      query.where([:narrower, RDF::SKOS.broader, :genre, :context => BOOKGRAPH])
+      query.where([:book, RDF::DBO.literaryGenre, :narrower])
+      query.where([:narrower, RDF::SKOS.broader, :genre])
     end
-    query.where([:book, RDF::DEICHMAN.literaryFormat, :format, :context => BOOKGRAPH]) unless formats.empty?
-    query.where([:creator, RDF::XFOAF.nationality, :nationality, :context => BOOKGRAPH]) unless nationalities.empty?
+    query.where([:book, RDF::DEICHMAN.literaryFormat, :format]) unless formats.empty?
+    query.where([:creator, RDF::XFOAF.nationality, :nationality]) unless nationalities.empty?
 
     query.filter("?subject = <" + subjects.join("> || ?subject = <") +">") unless subjects.empty?
     query.filter("?person = <" + persons.join("> || ?person = <") +">") unless persons.empty?
