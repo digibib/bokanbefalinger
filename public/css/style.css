@@ -100,6 +100,8 @@ h1, h2, h3 { color :#333; line-height: 1.1em;}
 
 .feil { font-size: 0.9em !important; font-weight: bold; margin:0 !important;}
 
+img.loading { margin: 0 1.5em;}
+
 img.cover {
   max-width: 150px;
   height: 200px;

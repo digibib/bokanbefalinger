@@ -165,8 +165,18 @@ $('#kriterium-container').on('change', 'select.kriterium', function() {
 	$kdiv.find('.kriterium-inner').remove();
 	if (k != "s0") {
 		$kdiv.addClass("chosen");
-		var $kspan = $('.'+k+':last').clone().appendTo($kdiv).show().
-			find('.inner-input').chosen({no_results_text: "Ingen treff for"});
+		if ( $('#kriterium-container .kriterium-inner').length == 0 || k == "s8" || k == "s9") {
+			// Add inner select if first criteria, or non-dropdown criteria
+			console.log("First criteria or non-dropdown criteria");
+			$('img.loading').remove();
+			var $kspan = $('.'+k+':last').clone().appendTo($kdiv).show().
+				find('.inner-input').chosen({no_results_text: "Ingen treff for"});
+
+		} else {
+			// perform POST /dropdown and repopulate input options to avoid non-matching uris
+			console.log("repopulate dropdown");
+			$kdiv.append("<img class='loading' src='img/loading.gif'>");
+		}
 
 		// Ikke vis 'fjern' knapp hvis det er bare ett kriterium
 		if ( $('.kriterium-outer').length <= 1 ) {
