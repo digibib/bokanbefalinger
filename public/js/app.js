@@ -183,6 +183,7 @@ $('#kriterium-container').on('change', 'select.kriterium', function() {
 					}
 				});
 			}
+
 			$kdiv.find('.inner-input').chosen({no_results_text: "Ingen treff for"});
 
 		} else {
@@ -216,7 +217,12 @@ $('#kriterium-container').on('change', 'select.kriterium', function() {
 					}
 				});
 
-				$kspan.appendTo($kdiv).show().find('.inner-input').chosen({no_results_text: "Ingen treff for"});
+				$kspan.appendTo($kdiv).show()
+				if ( $kdiv.find('.kriterium-inner option:last').val() == "") {
+					$kdiv.find('.kriterium-inner').html("Ingen treff.");
+				} else {
+					$kdiv.find('.inner-input').chosen({no_results_text: "Ingen treff for"});
+				}
 			});
 		}
 
