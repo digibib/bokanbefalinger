@@ -411,6 +411,7 @@ $('#show-draft').on('click', function() {
 	$('#show-published').removeClass("red").addClass("gray");
 	$('.published').hide();
 	$('.draft').show();
+	$("#my-reviews-list > div:visible").tsort('',{attr:'timestamp', order:$('#my-reviews-sorting option:selected').val()});
 });
 
 $('#show-published').on('click', function() {
@@ -418,6 +419,7 @@ $('#show-published').on('click', function() {
 	$('#show-draft').removeClass("red").addClass("gray");
 	$('.draft').hide();
 	$('.published').show();
+	$("#my-reviews-list > div:visible").tsort('',{attr:'timestamp', order:$('#my-reviews-sorting option:selected').val()});
 });
 
 // sortering:

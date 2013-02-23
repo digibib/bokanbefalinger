@@ -2,8 +2,8 @@
 	<div class="my-reviews-header">
 		<button id="show-draft" class="medium gray">Kladd (<%= @draft.size %>)</button> <button id="show-published" class="medium red">Publisert (<%= @published.size %>) </button>
 		<select id="my-reviews-sorting">
-			<option value="asc">Dato stigende</option>
 			<option value="desc">Dato synkende</option>
+			<option value="asc">Dato stigende</option>
 		</select>
 	</div>
 	<div id="my-reviews-list">
@@ -30,3 +30,7 @@
 <div class="main-right">
 	<%= erb :login %>
 </div>
+
+<script>
+$("#my-reviews-list > div:visible").tsort('',{attr:'timestamp', order:"desc"});
+</script>
