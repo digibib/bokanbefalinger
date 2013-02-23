@@ -23,7 +23,7 @@
 	<div class="review-text">
 		<% text = r["text"] %>
 		<% if compare_clean(text).start_with? teaser %>
-			<%= text[0...3]+text[teaser.length+4...text.size] %>
+			<%= text.gsub(/#{teaser}/, "") %>
 		<% else %>
 			<%= text %>
 		<% end %>
