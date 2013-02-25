@@ -78,7 +78,7 @@ $("#isbn-button").on('click', function() {
 			$('.book-cover').removeClass("gray");
 			$('#isbn-cover').html("<img class='cover' src='"+data.work[0].cover_url+"'>");
 		} else {
-			$('.book-cover').addClass("gray");
+			$('.book-cover').addClass("light-gray");
 			$('#isbn-cover').html("");
 		}
 		$('#anmeld').attr('href', '/manifestasjon'+data.work[0].manifestation.substr(23)+'/ny');
