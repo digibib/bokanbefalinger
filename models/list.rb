@@ -169,7 +169,7 @@ UNION
       query.filter(years_filter.join(" || "))
     end
 
-    puts "REPOPULATE DROPDOWN:\n", query.to_s.gsub(/}/, "}\n")
+    puts "REPOPULATE DROPDOWN:\n", query.to_s.gsub(/(SELECT|FROM|WHERE|FILTER|{)/,"\n"+'\1').gsub(/(\s\.\s(?!}))/, '\1'+"\n")
 
     result = REPO.select(query)
     return [] if result.empty?
@@ -233,7 +233,7 @@ UNION
     end
 
 
-    puts "Fra LISTE-generator:\n", query.to_s.gsub(/}/, "}\n")
+    puts "Fra LISTE-generator:\n", query.to_s.gsub(/(SELECT|FROM|WHERE|FILTER|{)/,"\n"+'\1').gsub(/(\s\.|})/, '\1'+"\n")
 
     result = REPO.select(query)
     return [] if result.empty?
