@@ -4,7 +4,7 @@
 	<% end %>
  	<h2>Anbefaling av: <a class="work-link" href="/verk<%= @review["uri"][28..-1] %>"><%= @review["title"] %></a></h2>
 	<div id="review-heading">
-		<div class="book-cover <%= "light-gray" unless @review["cover_url"] %>">
+		<div class="book-cover <%= "light-gray" if @review["cover_url"].empty? %>">
 			<% if @review["cover_url"] %>
 				<img class="cover" src="<%= @review["cover_url"] %>"/>
 			<% end %>

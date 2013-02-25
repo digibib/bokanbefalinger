@@ -29,7 +29,7 @@
 
 			<% work.each do |w| %>
 				<div class="search-work">
-					<div class="book-cover book-description <%= "light-gray" unless w["cover_url"] %>">
+					<div class="book-cover book-description <%= "light-gray" if w["cover_url"].empty? %>">
 						<% if w["cover_url"] %>
 							<img class="cover" src="<%= w["cover_url"] %>"/>
 						<% end %>
@@ -69,7 +69,7 @@
 			<h3 class="author"><%= i+1 %>. <%= work["title"] %></h3>
 			<div class="top-link"><a href="#top">til toppen ↑</a></div>
 			<div class="search-work">
-				<div class="book-cover book-description <%= "light-gray" unless work["cover_url"] %>">
+				<div class="book-cover book-description <%= "light-gray" if work["cover_url"].empty? %>">
 					<% if work["cover_url"] %>
 						<img class="cover" src="<%= work["cover_url"] %>"/>
 					<% end %>
@@ -104,7 +104,7 @@
 		<div class="clearfix"></div>
 		<h3 class="author"><%= work["title"] %></h3>
 		<div class="search-work">
-			<div class="book-cover book-description <%= "light-gray" unless work["cover_url"] %>">
+			<div class="book-cover book-description <%= "light-gray" if work["cover_url"].empty? %>">
 				<% if work["cover_url"] %>
 					<img class="cover" src="<%= work["cover_url"] %>"/>
 				<% end %>
