@@ -37,6 +37,15 @@ class BokanbefalingerApp < Sinatra::Application
        br = /<br\/>/
        s.gsub(" ", " ").gsub(br, " ").gsub(re, '')
     end
+
+    def text2markup(s)
+      puts s.inspect
+      s.gsub(/\r/,'').gsub(/\n\n/, "\n&nbsp;\n").gsub(/^\s*(.*?)\s*$/xm, '<p>\1</p>').gsub("\n","")
+    end
+
+    def markup2text(s)
+      s.gsub(/<p><br><\/p>/, "\n\n").gsub(/<p>/,'').gsub(/(<\/p>|<br>)/, "\n")
+    end
   end
 
 end
