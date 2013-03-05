@@ -6,7 +6,7 @@ gem "hiredis"
 gem "em-synchrony"
 gem "faraday"
 gem "rdf"
-gem "rdf-virtuoso", :git => "https://github.com/boutros/rdf-virtuoso"
+gem "rdf-virtuoso"
 
 group :development do
   gem "sinatra-reloader"
