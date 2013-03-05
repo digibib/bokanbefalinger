@@ -293,10 +293,11 @@ class Review
 
       return ["Får ikke kontakt med ekstern ressurs (#{Settings::API}).", nil] if resp.status != 200
 
+      return [nil, {"works" => []}] if resp.body.match(/error/)
       res = JSON.parse(resp.body)
       puts "API RESPONSE:\n#{res}\n\n" if ENV['RACK_ENV'] == 'development'
-
       # set user cache
+
       res["works"].each do |w|
         Cache.hset user_uri, w["reviews"].first["uri"], w
         Cache.set w["reviews"].first["uri"], {"works" => [w]}.to_json
