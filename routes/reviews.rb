@@ -60,7 +60,7 @@ class BokanbefalingerApp < Sinatra::Application
       # PUT review
       audiences = [params["a1"], params["a2"], params["a3"]].compact.join("|")
       @error_message, @review = Review.update(params["title"], params["teaser"],
-                                               params["text"], audiences,
+                                               text2markup(params["text"]), audiences,
                                                session[:user], params["uri"],
                                                session[:api_key], params["published"])
       Cache.del session[:user_uri]
