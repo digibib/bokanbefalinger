@@ -13,6 +13,14 @@ BOOKGRAPH   = RDF::URI(Settings::GRAPHS[:book])
 APIGRAPH    = RDF::URI(Settings::GRAPHS[:api])
 QUERY       = RDF::Virtuoso::Query
 
+module RDF::Virtuoso
+  class Query
+    def pp
+      self.to_s.gsub(/(SELECT|FROM|WHERE|GRAPH|FILTER)/,"\n"+'\1').gsub(/(\s\.\s|WHERE\s{\s|})(?!})/, '\1'+"\n")
+    end
+  end
+end
+
 require_relative "review"
 require_relative "work"
 require_relative "list"
