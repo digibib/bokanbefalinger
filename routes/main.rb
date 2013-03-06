@@ -14,4 +14,9 @@ class BokanbefalingerApp < Sinatra::Application
     @title = "Om bokanbefalinger.deichman.no"
     erb :om
   end
+
+  get "/api" do
+    @title = "Om API-et"
+    erb :api
+  end
 end
