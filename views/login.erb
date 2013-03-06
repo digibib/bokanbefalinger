@@ -1,6 +1,6 @@
 <div id="login-box" class="right-bar">
 	<% if session[:user] %>
-		<p><strong>Hei, <%= session[:user] %>!</strong></p>
+		<p><strong>Hei <%= session[:user] %>!</strong></p>
 		<a href="/logout?take_me_back=<%= request.path_info %>"><button class="button-big" id="logout-button" type="submit">Logg ut</button></a><br/>
 		<span class="small-link"><a href="/innstillinger">Endre brukerinnstillinger</a></span>
 	<% else %>
