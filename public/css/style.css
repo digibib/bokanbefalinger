@@ -231,8 +231,9 @@ header {
 #search-input {
   margin-left:10px;
   height:20px;
-  padding:2px;
-  font-size: 0.9em;
+  padding:3px;
+  width: 260px;
+  font-size: 1em;
 }
 
 #search-button {
