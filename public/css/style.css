@@ -348,7 +348,8 @@ span.small-link { font-size:0.9em; display:block; margin:0.5em;}
 
 /* skrivetips bar */
 
-#tips-box img { margin-left:-10px;}
+#skrivetips { font-family: 'Sacramento', cursive; font-size:42px; display: block;
+              line-height: 1.2em; color: #c12121; margin-top:20px; text-align: center;}
 
 #tips-box p {
   font-size: 1.0em;
