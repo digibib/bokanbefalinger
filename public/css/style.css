@@ -74,7 +74,8 @@ h1, h2, h3 { color :#333; line-height: 1.1em;}
 }
 
 .main-left {
-  width: 740px;
+  width: 720px;
+  padding-right:20px;
   float: left;
 }
 
@@ -412,7 +413,7 @@ h3.author {
 .top-link { position: relative;}
 .top-link a {
   position: absolute;
-  left: 900px; top: -50px;
+  left: 640px; top: -50px;
   text-decoration: none;
   font-size: small;}
 

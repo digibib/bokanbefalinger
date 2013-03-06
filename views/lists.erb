@@ -1,128 +1,133 @@
-<p><br/></p>
-<h2>Ufeilbarlig full-duplex listegenerator&#8482;</h2>
+<div class="main-left">
+	<p><br/></p>
+	<h2>Ufeilbarlig full-duplex listegenerator&#8482;</h2>
 
-<div id="kriterium-container">
-	<div class="kriterium-outer">
-		<select class="kriterium">
-			<option value="s0">Velg kriterium</option>
-			<option value="s1">Sjanger</option>
-			<option value="s2">Emne</option>
-			<option value="s3">Litterær form</option>
-			<option value="s4">Målgruppe (boka)</option>
-			<option value="s11">Målgruppe (anbefalingen)</option>
-			<option value="s5">Forfatter</option>
-			<option value="s6">Forfatters nasjonalitet</option>
-			<option value="s7">Omtalt person</option>
-			<option value="s8">Sidetall</option>
-			<option value="s9">Utgivelsesår</option>
-			<option value="s10">Dokumentspråk</option>
-		</select>
+	<div id="kriterium-container">
+		<div class="kriterium-outer">
+			<select class="kriterium">
+				<option value="s0">Velg kriterium</option>
+				<option value="s1">Sjanger</option>
+				<option value="s2">Emne</option>
+				<option value="s3">Litterær form</option>
+				<option value="s4">Målgruppe (boka)</option>
+				<option value="s11">Målgruppe (anbefalingen)</option>
+				<option value="s5">Forfatter</option>
+				<option value="s6">Forfatters nasjonalitet</option>
+				<option value="s7">Omtalt person</option>
+				<option value="s8">Sidetall</option>
+				<option value="s9">Utgivelsesår</option>
+				<option value="s10">Dokumentspråk</option>
+			</select>
+		</div>
 	</div>
-</div>
-<div class="kriterium-add">
-	<button id="add-kriterium">Legg til kriterium</button>
-</div>
+	<div class="kriterium-add">
+		<button id="add-kriterium">Legg til kriterium</button>
+	</div>
 
-<div class="clearfix"></div>
-<button id="reset-krierier" class="medium gray">Begynn på nytt</button>
-<button id="generate-list" style="margin-top:30px" class="long green">Gi meg lista!</button>
-<div class="clearfix"></div>
-<div id ="list-results"></div>
+	<div class="clearfix"></div>
+	<button id="reset-krierier" class="medium gray">Begynn på nytt</button>
+	<button id="generate-list" style="margin-top:30px" class="long green">Gi meg lista!</button>
+	<div class="clearfix"></div>
+	<div id ="list-results"></div>
 
-<div class="clearfix"></div>
-<span class="kriterium-inner s1">
-	<select data-placeholder="velg sjanger" class="genre inner-input">
-		<option></option>
-		<% @genres.sort_by { |k,v| v }.each do |k,v| %>
-		<option value="<%= k %>"><%= v %></option>
-		<% end %>
-	</select>
-	<button class="fjern small">fjern kriterium</button>
-</span>
-<span class="kriterium-inner s2">
-	<select data-placeholder="velg emne" class="emne inner-input">
-		<option></option>
-		<% @subjects.sort_by { |k,v| v }.each do |k,v| %>
-		<option value="<%= k %>"><%= v %></option>
-		<% end %>
-	</select>
-	<button class="fjern small">fjern kriterium</button>
-</span>
-<span class="kriterium-inner s3">
-	<select data-placeholder="velg literær form" class="litform inner-input">
-		<option></option>
-		<% @formats.sort_by { |k,v| v }.each do |k,v| %>
-		<option value="<%= k %>"><%= v %></option>
-		<% end %>
-	</select>
-	<button class="fjern small">fjern kriterium</button>
-</span>
-<span class="kriterium-inner s4">
-	<select data-placeholder="velg målgruppe (for boka)" class="audience inner-input">
-		<option></option>
-		<option value="http://data.deichman.no/audience/adult">voksne</option>
-		<option value="http://data.deichman.no/audience/juvenile">ungdom</option>
-		<option value="http://data.deichman.no/audience/ages_0-5">0-5 år</option>
-		<option value="http://data.deichman.no/audience/ages_6-7">6-7 år</option>
-		<option value="http://data.deichman.no/audience/ages_8-9">8-9 år</option>
-		<option value="http://data.deichman.no/audience/ages_10-11">10-11 år</option>
-		<option value="http://data.deichman.no/audience/ages_12-15">12-15 år</option>
-	</select>
-	<button class="fjern small">fjern kriterium</button>
-</span>
-<span class="kriterium-inner s5">
-	<select data-placeholder="velg forfatter" class="forfatter inner-input">
-		<option></option>
-		<% @authors.sort_by { |k,v| v }.each do |k,v| %>
-		<option value="<%= k %>"><%= v %></option>
-		<% end %>
-	</select>
-	<button class="fjern small">fjern kriterium</button>
-</span>
-<span class="kriterium-inner s6">
-	<select data-placeholder="velg forfatters nasjonalitet" class="nasjonalitet inner-input">
-		<option></option>
-		<% @nationalities.sort_by { |k,v| v }.each do |k,v| %>
-		<option value="<%= k %>"><%= v %></option>
-		<% end %>
-	</select>
-	<button class="fjern small">fjern kriterium</button>
-</span>
-<span class="kriterium-inner s7">
-	<select data-placeholder="velg omtalt person" class="person inner-input">
-		<option></option>
-		<% @persons.sort_by { |k,v| v }.each do |k,v| %>
-		<option value="<%= k %>"><%= v %></option>
-		<% end %>
-	</select>
-	<button class="fjern small">fjern kriterium</button>
-</span>
-<span class="kriterium-inner s8">
-	<label>flere enn <input class="pages-from number" type="text" maxlength="4"></label>
-	<label>færre enn <input class="pages-to number" type="text" maxlength="4"></label>
-	sider
-	<button class="fjern small">fjern kriterium</button>
-</span>
-<span class="kriterium-inner s9">
-	<label>fra <input class="years-from number" type="text" maxlength="4"></label>
-	<label>til <input class="years-to number" type="text" maxlength="4"></label>
-	<button class="fjern small">fjern kriterium</button>
-</span>
-<span class="kriterium-inner s10">
-	<select data-placeholder="velg dokumentspråk" class="language inner-input">
-		<option></option>
-		<% @languages.sort_by { |k,v| v }.each do |k,v| %>
-		<option value="<%= k %>"><%= v %></option>
-		<% end %>
-	</select>
-	<button class="fjern small">fjern kriterium</button>
-</span>
-<span class="kriterium-inner s11">
-	<select data-placeholder="velg målgruppe (for anbefalingen)" class="review-audience inner-input">
-		<option></option>
-		<option value="http://data.deichman.no/audience/children">barn</option>
-		<option value="http://data.deichman.no/audience/youth">ungdom</option>
-		<option value="http://data.deichman.no/audience/adult">voksne</option>
-	</select>
-	<button class="fjern small">fjern kriterium</button>
-</span>
+	<div class="clearfix"></div>
+	<span class="kriterium-inner s1">
+		<select data-placeholder="velg sjanger" class="genre inner-input">
+			<option></option>
+			<% @genres.sort_by { |k,v| v }.each do |k,v| %>
+			<option value="<%= k %>"><%= v %></option>
+			<% end %>
+		</select>
+		<button class="fjern small">fjern kriterium</button>
+	</span>
+	<span class="kriterium-inner s2">
+		<select data-placeholder="velg emne" class="emne inner-input">
+			<option></option>
+			<% @subjects.sort_by { |k,v| v }.each do |k,v| %>
+			<option value="<%= k %>"><%= v %></option>
+			<% end %>
+		</select>
+		<button class="fjern small">fjern kriterium</button>
+	</span>
+	<span class="kriterium-inner s3">
+		<select data-placeholder="velg literær form" class="litform inner-input">
+			<option></option>
+			<% @formats.sort_by { |k,v| v }.each do |k,v| %>
+			<option value="<%= k %>"><%= v %></option>
+			<% end %>
+		</select>
+		<button class="fjern small">fjern kriterium</button>
+	</span>
+	<span class="kriterium-inner s4">
+		<select data-placeholder="velg målgruppe (for boka)" class="audience inner-input">
+			<option></option>
+			<option value="http://data.deichman.no/audience/adult">voksne</option>
+			<option value="http://data.deichman.no/audience/juvenile">ungdom</option>
+			<option value="http://data.deichman.no/audience/ages_0-5">0-5 år</option>
+			<option value="http://data.deichman.no/audience/ages_6-7">6-7 år</option>
+			<option value="http://data.deichman.no/audience/ages_8-9">8-9 år</option>
+			<option value="http://data.deichman.no/audience/ages_10-11">10-11 år</option>
+			<option value="http://data.deichman.no/audience/ages_12-15">12-15 år</option>
+		</select>
+		<button class="fjern small">fjern kriterium</button>
+	</span>
+	<span class="kriterium-inner s5">
+		<select data-placeholder="velg forfatter" class="forfatter inner-input">
+			<option></option>
+			<% @authors.sort_by { |k,v| v }.each do |k,v| %>
+			<option value="<%= k %>"><%= v %></option>
+			<% end %>
+		</select>
+		<button class="fjern small">fjern kriterium</button>
+	</span>
+	<span class="kriterium-inner s6">
+		<select data-placeholder="velg forfatters nasjonalitet" class="nasjonalitet inner-input">
+			<option></option>
+			<% @nationalities.sort_by { |k,v| v }.each do |k,v| %>
+			<option value="<%= k %>"><%= v %></option>
+			<% end %>
+		</select>
+		<button class="fjern small">fjern kriterium</button>
+	</span>
+	<span class="kriterium-inner s7">
+		<select data-placeholder="velg omtalt person" class="person inner-input">
+			<option></option>
+			<% @persons.sort_by { |k,v| v }.each do |k,v| %>
+			<option value="<%= k %>"><%= v %></option>
+			<% end %>
+		</select>
+		<button class="fjern small">fjern kriterium</button>
+	</span>
+	<span class="kriterium-inner s8">
+		<label>flere enn <input class="pages-from number" type="text" maxlength="4"></label>
+		<label>færre enn <input class="pages-to number" type="text" maxlength="4"></label>
+		sider
+		<button class="fjern small">fjern kriterium</button>
+	</span>
+	<span class="kriterium-inner s9">
+		<label>fra <input class="years-from number" type="text" maxlength="4"></label>
+		<label>til <input class="years-to number" type="text" maxlength="4"></label>
+		<button class="fjern small">fjern kriterium</button>
+	</span>
+	<span class="kriterium-inner s10">
+		<select data-placeholder="velg dokumentspråk" class="language inner-input">
+			<option></option>
+			<% @languages.sort_by { |k,v| v }.each do |k,v| %>
+			<option value="<%= k %>"><%= v %></option>
+			<% end %>
+		</select>
+		<button class="fjern small">fjern kriterium</button>
+	</span>
+	<span class="kriterium-inner s11">
+		<select data-placeholder="velg målgruppe (for anbefalingen)" class="review-audience inner-input">
+			<option></option>
+			<option value="http://data.deichman.no/audience/children">barn</option>
+			<option value="http://data.deichman.no/audience/youth">ungdom</option>
+			<option value="http://data.deichman.no/audience/adult">voksne</option>
+		</select>
+		<button class="fjern small">fjern kriterium</button>
+	</span>
+</div>
+<div class="main-right">
+	<%= erb :login %>
+</div>

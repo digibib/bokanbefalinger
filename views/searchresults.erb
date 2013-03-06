@@ -1,45 +1,86 @@
-<input id="searchterms" type="hidden" value="<%= @searchterms %>"/>
-<h2>Søk etter <%= 'ISBN-nummer' if @searchterms.match /^[0-9-]*$/ %> "<%= @searchterms %>" ga
-	<% if [@num_authors, @num_titles, @num_isbn] == [0,0,0] %> ingen treff<% end %><%= 'treff:' if @num_isbn > 0 %></h2>
-<% if @num_authors > 0 %>
-<h3><%= @num_authors %> treff i forfattere</h3>
-	<% @sorted.each_with_index do |(author, work), i| %>
-		<ul class="search-list">
-			<li><a href="#forfatter_<%= i+1 %>"><%= author %></a></li>
-		</ul>
-	<% end %>
-<% end %>
-<div class="clearfix"></div>
-<% if @num_titles > 0 %>
-<h3><%= @num_titles %> treff i titler</h3>
-	<% @titles["works"].each_with_index do |work, i| %>
-		<ul class="search-list">
-			<li><a href="#tittel_<%= i+1 %>"><%= work["title"] %></a></li>
-		</ul>
-	<% end %>
-<% end %>
-<div class="clearfix"></div>
-<% if @num_authors > 0 %>
-	<div class="search-author">
-		<h2>Forfattere</h2>
+<div class="main-left">
+	<input id="searchterms" type="hidden" value="<%= @searchterms %>"/>
+	<h2>Søk etter <%= 'ISBN-nummer' if @searchterms.match /^[0-9-]*$/ %> "<%= @searchterms %>" ga
+		<% if [@num_authors, @num_titles, @num_isbn] == [0,0,0] %> ingen treff<% end %><%= 'treff:' if @num_isbn > 0 %></h2>
+	<% if @num_authors > 0 %>
+	<h3><%= @num_authors %> treff i forfattere</h3>
 		<% @sorted.each_with_index do |(author, work), i| %>
-			<div id="forfatter_<%= i+1 %>" class="clearfix"></div>
-			<h3 class="author"><%= i+1 %>. <%= author %></h3>
-			<div class="top-link"><a href="#top">til toppen ↑</a></div>
+			<ul class="search-list">
+				<li><a href="#forfatter_<%= i+1 %>"><%= author %></a></li>
+			</ul>
+		<% end %>
+	<% end %>
+	<div class="clearfix"></div>
+	<% if @num_titles > 0 %>
+	<h3><%= @num_titles %> treff i titler</h3>
+		<% @titles["works"].each_with_index do |work, i| %>
+			<ul class="search-list">
+				<li><a href="#tittel_<%= i+1 %>"><%= work["title"] %></a></li>
+			</ul>
+		<% end %>
+	<% end %>
+	<div class="clearfix"></div>
+	<% if @num_authors > 0 %>
+		<div class="search-author">
+			<h2>Forfattere</h2>
+			<% @sorted.each_with_index do |(author, work), i| %>
+				<div id="forfatter_<%= i+1 %>" class="clearfix"></div>
+				<h3 class="author"><%= i+1 %>. <%= author %></h3>
+				<div class="top-link"><a href="#top">til toppen ↑</a></div>
 
-			<% work.each do |w| %>
+				<% work.each do |w| %>
+					<div class="search-work">
+						<div class="book-cover book-description <%= "light-gray" if w["cover_url"].empty? %>">
+							<% if w["cover_url"] %>
+								<img class="cover" src="<%= w["cover_url"] %>"/>
+							<% end %>
+						</div>
+						<div class="book-description">
+							<p class="title"><a class="work-link-big" href="/verk<%= w["uri"][28..-1] %>"><strong><%= w["title"] %></strong></a></p>
+							<p class="author"><a class="author-link" href="/søk?forfatter=<%= w["author"] %>"><%= w["author"] %></a></p>
+						</div>
+					</div>
+					<% w["reviews"].uniq.each do |r| %>
+						<div class="clearfix"></div>
+						<div class="review-snippet">
+							<div class="review-date">
+								<%= r["modified"][8,2]+'.'+r["modified"][5,2]+'.'+r["modified"][0,4] %>
+							</div>
+							<div class="review-teaser">
+								<strong><a class="work-link" href="/anbefaling/<%= r["uri"][24,200] %>"><%= r["title"] %></strong></a><br/>
+								<p>
+									<%= r["teaser"] %>
+									<a href="/anbefaling/<%= r["uri"][24,200] %>">...les mer</a>
+								</p>
+							</div>
+						</div>
+					<% end %>
+				<% end %>
+			<% end %>
+		</div>
+	<% end %>
+
+	<div class="clearfix"></div>
+
+	<% if @num_titles > 0 %>
+		<div class="search-title">
+			<h2>Titler</h2>
+			<% @titles["works"].each_with_index do |work, i| %>
+				<div id="tittel_<%= i+1 %>" class="clearfix"></div>
+				<h3 class="author"><%= i+1 %>. <%= work["title"] %></h3>
+				<div class="top-link"><a href="#top">til toppen ↑</a></div>
 				<div class="search-work">
-					<div class="book-cover book-description <%= "light-gray" if w["cover_url"].empty? %>">
-						<% if w["cover_url"] %>
-							<img class="cover" src="<%= w["cover_url"] %>"/>
+					<div class="book-cover book-description <%= "light-gray" if work["cover_url"].empty? %>">
+						<% if work["cover_url"] %>
+							<img class="cover" src="<%= work["cover_url"] %>"/>
 						<% end %>
 					</div>
 					<div class="book-description">
-						<p class="title"><a class="work-link-big" href="/verk<%= w["uri"][28..-1] %>"><strong><%= w["title"] %></strong></a></p>
-						<p class="author"><a class="author-link" href="/søk?forfatter=<%= w["author"] %>"><%= w["author"] %></a></p>
+						<p class="title"><a class="work-link-big" href="/verk<%= work["uri"][28..-1] %>"><strong><%= work["title"] %></strong></a></p>
+						<p class="author"><a class="author-link" href="/søk?forfatter=<%= work["author"] %>"><%= work["author"] %></a></p>
 					</div>
 				</div>
-				<% w["reviews"].uniq.each do |r| %>
+				<% work["reviews"].uniq.each do |r| %>
 					<div class="clearfix"></div>
 					<div class="review-snippet">
 						<div class="review-date">
@@ -55,19 +96,14 @@
 					</div>
 				<% end %>
 			<% end %>
-		<% end %>
-	</div>
-<% end %>
+		</div>
+	<% end %>
 
-<div class="clearfix"></div>
-
-<% if @num_titles > 0 %>
-	<div class="search-title">
-		<h2>Titler</h2>
-		<% @titles["works"].each_with_index do |work, i| %>
-			<div id="tittel_<%= i+1 %>" class="clearfix"></div>
-			<h3 class="author"><%= i+1 %>. <%= work["title"] %></h3>
-			<div class="top-link"><a href="#top">til toppen ↑</a></div>
+	<% if @num_isbn > 0 %>
+		<div class="search-isbn">
+			<% work = @isbn["works"].first %>
+			<div class="clearfix"></div>
+			<h3 class="author"><%= work["title"] %></h3>
 			<div class="search-work">
 				<div class="book-cover book-description <%= "light-gray" if work["cover_url"].empty? %>">
 					<% if work["cover_url"] %>
@@ -79,7 +115,7 @@
 					<p class="author"><a class="author-link" href="/søk?forfatter=<%= work["author"] %>"><%= work["author"] %></a></p>
 				</div>
 			</div>
-			<% work["reviews"].uniq.each do |r| %>
+			<% work["reviews"].each do |r| %>
 				<div class="clearfix"></div>
 				<div class="review-snippet">
 					<div class="review-date">
@@ -94,43 +130,12 @@
 					</div>
 				</div>
 			<% end %>
-		<% end %>
-	</div>
-<% end %>
-
-<% if @num_isbn > 0 %>
-	<div class="search-isbn">
-		<% work = @isbn["works"].first %>
-		<div class="clearfix"></div>
-		<h3 class="author"><%= work["title"] %></h3>
-		<div class="search-work">
-			<div class="book-cover book-description <%= "light-gray" if work["cover_url"].empty? %>">
-				<% if work["cover_url"] %>
-					<img class="cover" src="<%= work["cover_url"] %>"/>
-				<% end %>
-			</div>
-			<div class="book-description">
-				<p class="title"><a class="work-link-big" href="/verk<%= work["uri"][28..-1] %>"><strong><%= work["title"] %></strong></a></p>
-				<p class="author"><a class="author-link" href="/søk?forfatter=<%= work["author"] %>"><%= work["author"] %></a></p>
-			</div>
 		</div>
-		<% work["reviews"].each do |r| %>
-			<div class="clearfix"></div>
-			<div class="review-snippet">
-				<div class="review-date">
-					<%= r["modified"][8,2]+'.'+r["modified"][5,2]+'.'+r["modified"][0,4] %>
-				</div>
-				<div class="review-teaser">
-					<strong><a class="work-link" href="/anbefaling/<%= r["uri"][24,200] %>"><%= r["title"] %></strong></a><br/>
-					<p>
-						<%= r["teaser"] %>
-						<a href="/anbefaling/<%= r["uri"][24,200] %>">...les mer</a>
-					</p>
-				</div>
-			</div>
-		<% end %>
-	</div>
-<% end %>
+	<% end %>
 
-<div class="clearfix"></div>
-<div style="margin-top:200px"></div>
+	<div class="clearfix"></div>
+	<div style="margin-top:200px"></div>
+</div>
+<div class="main-right">
+	<%= erb :login %>
+</div>
