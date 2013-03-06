@@ -217,10 +217,14 @@ header {
 }
 
 #logo {
+  font-family: 'Sacramento', cursive;
+  font-size:35px;
+  color: #fff;
+  display: inline-block;
   float:left;
   width: 212px;
   height: 40px;
-  margin-top: 12px;
+  margin-top: 20px;
 }
 
 #search-form {
@@ -338,7 +342,8 @@ span.small-link { font-size:0.9em; display:block; margin:0.5em;}
  padding: 2px;
 }
 
-#logg-inn-her { margin-left: -10px; }
+#logg-inn-her { font-family: 'Sacramento', cursive; font-size:32px;
+                line-height: 1.2em; color: #c12121; margin-left: -10px; }
 #logg-inn-pil { position: absolute; left:5px;}
 
 /* skrivetips bar */

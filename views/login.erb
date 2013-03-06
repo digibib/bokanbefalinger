@@ -4,7 +4,7 @@
 		<a href="/logout?take_me_back=<%= request.path_info %>"><button class="button-big" id="logout-button" type="submit">Logg ut</button></a><br/>
 		<span class="small-link"><a href="/innstillinger">Endre brukerinnstillinger</a></span>
 	<% else %>
-		<img id="logg-inn-her" src="/img/logg_inn.png" alt="Logg deg inn her for å skrive en abefaling!" /><br>
+		<span id="logg-inn-her">Logg deg inn her for å skrive en abefaling!</span><br>
 		<img id="logg-inn-pil" src="/img/logg_inn_pil.png" alt="pil" />
 		<p>Mine anbefalinger</p>
 		<form id="login-form" action="/login" method="POST">
