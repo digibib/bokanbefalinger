@@ -95,7 +95,7 @@ class Review
         req.body = {:title => searchterms, :cluster => true}.to_json
       end
 
-      return [nil, nil, "Får ikke kontakt med ekstern ressurs (#{Settings::API})."] if resp.status != 200
+      return ["Får ikke kontakt med ekstern ressurs (#{Settings::API}).", nil, nil] if resp.status != 200
 
       unless resp.body.match(/works/)
         #set cache to "empty"
