@@ -125,12 +125,13 @@ button.medium {
 
 button.long {
   padding: 4px;
-  width: 200px;
+  min-width: 150px;
   color: #fff;
   border-radius: 3px;
   border:0;
-  line-height:1.4em;
+  line-height:1.2em;
   margin-right:0.5em;
+  font-size:15px;
 }
 
 .book-cover {
@@ -496,7 +497,10 @@ select.kriterium { vertical-align:top;}
 .fjern {  float:right; margin-right:10px;}
 
 #list-results { margin-top: 40px;}
-
+#list-rsslink { margin-top: 40px; display: none;}
+#rss-link { margin-left:6px; width:68%; font-size: 13px; padding: 2px; height:18px;}
+#rss-copy { margin-left: 1em;}
+.rss-info { color: #c12121; text-decoration: underline;}
 .inner-input { width: 250px ;}
 
 /* alle anbefalinger */
@@ -524,3 +528,136 @@ select.kriterium { vertical-align:top;}
                                 display:inline-block; width:160px; text-align:right;}
 #innstillinger-fieldset button { margin-top:1em}
 span.error { background-color: #F9D654; display:none; padding:0.2em;}
+
+/**
+ * HINT- A CSS tooltip library
+ */
+
+.hint { position: relative; display: inline-block; }
+
+.hint:before, .hint:after {
+      position: absolute;
+      opacity: 0;
+      z-index: 1000000;
+      -webkit-transition: 0.3s ease;
+      -moz-transition: 0.3s ease;
+  pointer-events: none;
+}
+
+
+.hint:hover:before, .hint:hover:after {
+  opacity: 1;
+}
+
+.hint:before {
+  content: '';
+  position: absolute;
+  background: transparent;
+  border: 6px solid transparent;
+  position: absolute;
+}
+
+.hint:after {
+  content: attr(data-hint);
+  width: 200px;
+  height: 200px;
+  background: rgba(225, 225, 225, 0.8);
+      color: #444;
+      padding: 8px 10px;
+      font-size: 12px;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+
+/* top */
+
+.hint--top:before {
+  bottom: 100%;
+  left: 50%;
+  margin: 0 0 -18px 0;
+  border-top-color: rgba(225, 225, 225, 0.8);
+}
+
+.hint--top:after {
+  bottom: 100%;
+  left: 50%;
+  margin: 0 0 -6px -10px;
+}
+
+.hint--top:hover:before {
+  margin-bottom: -10px;
+}
+
+.hint--top:hover:after {
+  margin-bottom: 2px;
+}
+
+/* default: bottom */
+
+.hint--bottom:before {
+  top: 100%;
+  left: 50%;
+  margin: -14px 0 0 0;
+  border-bottom-color: rgba(225, 225, 225, 0.8);
+}
+
+.hint--bottom:after {
+  top: 100%;
+  left: 50%;
+  margin: -2px 0 0 -10px;
+}
+
+.hint--bottom:hover:before {
+  margin-top: -6px;
+}
+
+.hint--bottom:hover:after {
+  margin-top: 6px;
+}
+
+/* right */
+
+.hint--right:before {
+  left: 100%;
+  bottom: 50%;
+  margin: 0 0 -4px -8px;
+  border-right-color: rgba(0,0,0,0.8);
+}
+
+.hint--right:after {
+  left: 100%;
+  bottom: 50%;
+  margin: 0 0 -13px 4px;
+}
+
+.hint--right:hover:before {
+  margin: 0 0 -4px -0;
+}
+
+.hint--right:hover:after {
+  margin: 0 0 -13px 12px;
+}
+
+/* left */
+
+.hint--left:before {
+  right: 100%;
+  bottom: 50%;
+  margin: 0 -8px -4px 0;
+  border-left-color: rgba(0,0,0,0.8);
+}
+
+.hint--left:after {
+  right: 100%;
+  bottom: 50%;
+  margin: 0 4px -13px 0;
+}
+
+.hint--left:hover:before {
+  margin: 0 0 -4px 0;
+}
+
+.hint--left:hover:after {
+  margin: 0 12px -13px 0;
+}
+

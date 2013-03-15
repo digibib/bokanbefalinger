@@ -290,6 +290,13 @@ $('#reset-krierier').on('click', function() {
 	$('.kriterium-outer:first').find('option:first').prop('selected', true).end()
 		.find(':input').prop('disabled', false);
 	$('.kriterium-add').hide();
+	$('#list-rsslink').hide();
+	$('#list-results').html("");
+});
+
+// Kopier RSS-lenke
+$('#rss-copy').on('click', function() {
+	window.prompt("Trykk Ctrl+C, så Enter for å kopiere", $('#rss-link').val());
 });
 
 function collectCriteria() {
@@ -395,13 +402,20 @@ $('#generate-list').on('click', function() {
 	  dataType: "json"
 	});
 
+	$('#list-rsslink').hide();
 	$('#list-results').html("Et øyeblikk...");
 
     function printReviews(element, index, array) {
     	$('#list-results').append('<p>'+element+'</p>');
     }
 	request.done(function(data) {
-		$('#list-results').html("<h2>"+ data.length +" treff</h2>");
+		$('#list-rsslink').show();
+		var l = data.length;
+		if (l > 10) {
+			$('#list-results').html("<h2>"+ data.length +" treff, viser de første 10:</h2>");
+		} else {
+			$('#list-results').html("<h2>"+ data.length +" treff:</h2>");
+		}
 		data.forEach(printReviews);
 	});
 });
