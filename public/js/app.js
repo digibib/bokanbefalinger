@@ -403,7 +403,7 @@ $('#generate-list').on('click', function() {
 	});
 
 	$('#list-rsslink').hide();
-	$('#list-results').html("Et øyeblikk...");
+	$('#list-results').html("<img class='loading' src='img/loading.gif'>");
 
     function printReviews(element, index, array) {
     	$('#list-results').append('<p>'+element+'</p>');
