@@ -133,7 +133,7 @@ UNION
     end
     query.where([:book, RDF::DC.subject, :person]) unless persons.empty?
     query.where([:book, RDF::BIBO.numPages, :pages]) unless pages.empty?
-    query.where([:book, RDF::DC.issued, :year]) unless years.empty?
+    query.where([:work, RDF::DEICHMAN.assumedFirstEdition, :year]) unless years.empty?
     query.where([:book, RDF::DC.audience, :audience]) unless audience.empty?
     query.where([:review, RDF::DC.audience, :review_audience, :context => REVIEWGRAPH]) unless review_audience.empty?
     unless genres.empty?
@@ -196,7 +196,7 @@ UNION
     end
     query.where([:book, RDF::DC.subject, :person]) unless persons.empty?
     query.where([:book, RDF::BIBO.numPages, :pages]) unless pages.empty?
-    query.where([:book, RDF::DC.issued, :year]) unless years.empty?
+    query.where([:work, RDF::DEICHMAN.assumedFirstEdition, :year]) unless years.empty?
     query.where([:book, RDF::DC.audience, :audience]) unless audience.empty?
     query.where([:review, RDF::DC.audience, :review_audience, :context => REVIEWGRAPH]) unless review_audience.empty?
     unless genres.empty?
