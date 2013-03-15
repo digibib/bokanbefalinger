@@ -561,7 +561,7 @@ span.error { background-color: #F9D654; display:none; padding:0.2em;}
   content: attr(data-hint);
   width: 200px;
   height: 200px;
-  background: rgba(225, 225, 225, 0.8);
+  background: rgba(225, 225, 225, 0.9);
       color: #444;
       padding: 8px 10px;
       font-size: 12px;
@@ -575,7 +575,7 @@ span.error { background-color: #F9D654; display:none; padding:0.2em;}
   bottom: 100%;
   left: 50%;
   margin: 0 0 -18px 0;
-  border-top-color: rgba(225, 225, 225, 0.8);
+  border-top-color: rgba(225, 225, 225, 0.9);
 }
 
 .hint--top:after {
@@ -598,7 +598,7 @@ span.error { background-color: #F9D654; display:none; padding:0.2em;}
   top: 100%;
   left: 50%;
   margin: -14px 0 0 0;
-  border-bottom-color: rgba(225, 225, 225, 0.8);
+  border-bottom-color: rgba(225, 225, 225, 0.9);
 }
 
 .hint--bottom:after {
@@ -621,7 +621,7 @@ span.error { background-color: #F9D654; display:none; padding:0.2em;}
   left: 100%;
   bottom: 50%;
   margin: 0 0 -4px -8px;
-  border-right-color: rgba(0,0,0,0.8);
+  border-right-color: rgba(0,0,0,0.9);
 }
 
 .hint--right:after {
@@ -644,7 +644,7 @@ span.error { background-color: #F9D654; display:none; padding:0.2em;}
   right: 100%;
   bottom: 50%;
   margin: 0 -8px -4px 0;
-  border-left-color: rgba(0,0,0,0.8);
+  border-left-color: rgba(0,0,0,0.9);
 }
 
 .hint--left:after {
