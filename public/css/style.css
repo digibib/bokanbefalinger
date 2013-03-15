@@ -101,6 +101,9 @@ h1, h2, h3 { color :#333; line-height: 1.1em;}
 
 .feil { font-size: 0.9em !important; font-weight: bold; margin:0 !important;}
 
+.lokkeskrift { font-family: 'Sacramento', cursive; font-size:50px;
+                line-height: 1.2em; color: #c12121; }
+
 img.loading { margin: 0 1.5em;}
 
 img.cover {
@@ -484,11 +487,12 @@ a:hover.work-link { text-decoration: underline }
 
 /* listegenertor */
 #kriterium-container label { font-weight: normal;}
-.kriterium-outer { width: 85%; padding:8px; border: 1px dashed #ccc;
-                   background:#f5f5f5; margin-top:10px; float:left;}
+.kriterium-outer { width: 85%; padding:8px;
+                   background:#fff; margin-top:10px; float:left; }
 .kriterium-add   { width: 85%; padding:8px; margin-top:10px; float:left;}
-.kriterium-inner { display: none; margin-left: 20px; disiplay: inline-block;}
+.kriterium-inner { display: none; margin-left: 20px; disiplay: inline-block; font-size: 13px;}
 input.number { width: 40px;}
+select.kriterium { vertical-align:top;}
 .fjern {  float:right; margin-right:10px;}
 
 #list-results { margin-top: 40px;}
