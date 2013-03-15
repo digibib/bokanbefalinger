@@ -154,7 +154,7 @@ $('#add-kriterium').on('click', function() {
 	}
 	// Lås tidligere kriterier
 	$('.kriterium-outer:not(:last-child)').find(':input').prop('disabled', true).
-		trigger("liszt:updated");
+		trigger("liszt:updated").find('.fjern').hide();
 	// Skjul legg-til knappen
 	$('.kriterium-add').hide();
 });
@@ -231,6 +231,7 @@ $('#kriterium-container').on('change', 'select.kriterium', function() {
 			$('.fjern').hide();
 		} else {
 			$('.fjern').show();
+			$('#kriterium-container').find('.fjern:first').hide();
 		}
 	} else {
 		$kdiv.removeClass("chosen");
@@ -261,6 +262,7 @@ $('#kriterium-container').on('click', 'button.fjern', function() {
 		$('.fjern').hide();
 	} else {
 		$('.fjern').show();
+		$('#kriterium-container').find('.fjern:first').hide();
 	}
 	// Lås opp siste kriterium
 	$('.kriterium-outer:last').find(':input').prop('disabled', false).
