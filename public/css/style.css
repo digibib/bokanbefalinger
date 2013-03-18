@@ -528,7 +528,8 @@ select.kriterium { vertical-align:top;}
 .review-title { font-size:1.2em; font-weight: bold;}
 .isbn { font-size:0.9em;}
 .my-reviews-teaser { font-size:0.9em;}
-.bottom { position:absolute; bottom: 30px; }
+.my-reviews-audiences { font-size:0.9em;}
+.bottom { position:absolute; bottom: 20px; }
 .draft { display:none;}
 
 /* innstillinger */
