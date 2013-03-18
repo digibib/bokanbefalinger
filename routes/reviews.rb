@@ -138,10 +138,14 @@ class BokanbefalingerApp < Sinatra::Application
     end
   end
 
-  get "/lister" do
+  get "/se-lister" do
+    erb :see_lists
+  end
+
+  get "/lag-lister" do
     @title = "Lister"
     @subjects, @persons, @genres, @languages, @authors, @formats, @nationalities = List.populate_dropdowns
-    erb :lists
+    erb :make_lists
   end
 
   post "/lister" do

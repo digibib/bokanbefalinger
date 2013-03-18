@@ -484,3 +484,16 @@ $('#lagre-innstillinger').on('click', function(event) {
 		event.preventDefault();
 	}
 })
+
+// Se lister
+$('.anbefalingsliste').on('click', '.triangle.close', function() {
+	$(this).removeClass("close").addClass("open");
+	$(this).next().next().slideUp();
+});
+
+$('.anbefalingsliste').on('click', '.triangle.open', function() {
+	$('.liste-innhold').slideUp();
+	$('.close').removeClass("close").addClass("open");
+	$(this).removeClass("open").addClass("close");
+	$(this).next().next().slideDown();
+});
