@@ -322,7 +322,7 @@ span.inner-navbutton {
   letter-spacing: 0.03em;
 }
 
-span.small-link { font-size:0.9em; display:block; margin:0.5em;}
+span.small-link { font-size:0.9em; display:block; padding: 0 24px; margin:0.5em; text-align:left;}
 
 #login-box input {
  width: 140px;
@@ -332,7 +332,7 @@ span.small-link { font-size:0.9em; display:block; margin:0.5em;}
 .button-big {
   margin:10px;
   padding: 10px;
-  width: 145px;
+  min-width: 145px;
   color: #fff;
   font-size: 1.3em;
   background: #c21211;
