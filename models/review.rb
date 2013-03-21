@@ -13,7 +13,7 @@ class Review
         req.body = {:limit => limit, :offset => offset,
                     :order_by => order_by, :order => order}.to_json
       end
-    rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
+    rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
       return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil]
     end
 
@@ -34,7 +34,7 @@ class Review
         resp = @@conn.get do |req|
           req.body = {:author => searchterms, :cluster => true}.to_json
         end
-      rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
+      rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
         return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil, nil]
       end
 
@@ -90,9 +90,13 @@ class Review
     if cached_title
       result = JSON.parse(cached_title)
     else
-      # http get datatest.deichman.no/api/reviews title=searchterms
-      resp = @@conn.get do |req|
-        req.body = {:title => searchterms, :cluster => true}.to_json
+        # http get datatest.deichman.no/api/reviews title=searchterms
+      begin
+        resp = @@conn.get do |req|
+          req.body = {:title => searchterms, :cluster => true}.to_json
+        end
+      rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
+        return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil, nil]
       end
 
       return ["Får ikke kontakt med ekstern ressurs (#{Settings::API}).", nil, nil] if resp.status != 200
@@ -165,7 +169,7 @@ class Review
            req.body = {:uri => uri}.to_json
            puts "API REQUEST to #{@@conn.url_prefix.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
          end
-       rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
+       rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
           return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil, nil]
        end
 
@@ -190,7 +194,7 @@ class Review
           req.body = {:work => work_uri}.to_json
            puts "API REQUEST to #{@@conn.url_prefix.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
         end
-      rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
+      rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
         return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil, nil]
       end
 
@@ -221,7 +225,7 @@ class Review
                     :published => published}.to_json
          puts "API REQUEST to #{@@conn.url_prefix.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
       end
-    rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
+    rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
       return [nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
     end
 
@@ -243,7 +247,7 @@ class Review
                     :published => published}.to_json
         puts "API REQUEST to #{@@conn.url_prefix.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
       end
-    rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
+    rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
       return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil]
     end
 
@@ -262,7 +266,7 @@ class Review
         req.body = {:api_key => api_key, :uri => uri}.to_json
         puts "API REQUEST to #{@@conn.url_prefix.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
       end
-    rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
+    rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
       return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil]
     end
 
@@ -287,7 +291,7 @@ class Review
           req.body = {:reviewer => user , :cluster => false}.to_json
           puts "API REQUEST to #{@@conn.url_prefix.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
         end
-      rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
+      rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
         return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil]
       end
 
