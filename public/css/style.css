@@ -102,7 +102,7 @@ h1, h2, h3 { color :#333; line-height: 1.1em;}
 .feil { font-size: 0.9em !important; font-weight: bold; margin:0 !important;}
 
 .lokkeskrift { font-family: 'Sacramento', cursive; font-size:50px;
-                line-height: 1.2em; color: #c12121; }
+                line-height: 1.2em; color: #c12121; margin:20px 0;}
 
 img.loading { margin: 0 1.5em;}
 
