@@ -520,7 +520,7 @@ select.kriterium { vertical-align:top;}
 .liste-img { float: left; width: 100px; height: 150px; display: inline-block; overflow: hidden;}
 .liste-img img { width: 100px; }
 .liste-info { float: left; width: 550px; font-size: 14px; display: inline-block;
-              padding-left:1em;}
+              padding-left:2em;}
 .liste-title { color: #c12121; font-weight: bold; font-size:16px; margin:0;}
 .liste-title a { text-decoration: none;}
 .liste-title a:hover { text-decoration: underline;}
