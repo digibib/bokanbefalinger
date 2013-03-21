@@ -9,7 +9,7 @@
 				<img src="<%= work['cover_url'] %>">
 			</div>
 			<div class="liste-info">
-				<p class="liste-title"><%= work["title"] %></p>
+				<p class="liste-title"><a href="/anbefaling/<%= r["uri"][24,200] %>"><%= work["title"] %></a></p>
 				<p class="liste-author">av <%= work["author"] %></p>
 				<p class="liste-under">anbefalt av <span class="liste-reviewer"><%= r["reviewer"] %></span> <span class="liste-date"><%= dateformat(r["issued"]) %></span> </p>
 				<p class="liste-teaser"><%= r["teaser"] %></p>
