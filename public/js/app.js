@@ -497,3 +497,7 @@ $('.anbefalingsliste').on('click', '.triangle.open', function() {
 	$(this).removeClass("open").addClass("close");
 	$(this).next().next().slideDown();
 });
+
+$('.liste-tittel').on('click', function() {
+	$(this).next().click();
+});

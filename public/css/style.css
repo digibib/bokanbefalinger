@@ -507,7 +507,7 @@ select.kriterium { vertical-align:top;}
 .anbefalingsliste { background:#eee; font-size: 14px; width:90%; padding: 1%; margin-bottom:1em;}
 .anbefalingsliste li { margin: 0.5em;}
 .rss-link { margin-left:6px; width:90%; font-size: 13px; padding: 2px; height:18px;}
-.liste-tittel { font-size: 1.5em; display:inline-block; float:left;}
+.liste-tittel { font-size: 1.5em; display:inline-block; float:left; cursor: pointer;}
 .liste-innhold { clear: both;}
 .triangle { font-size:1.5em; display:inline-block; float:right; cursor: pointer;}
 .close:after {content: '▲'; }
