@@ -105,7 +105,12 @@ class BokanbefalingerApp < Sinatra::Application
   end
 
   get "/anbefalinger" do
-    @error_message, @reviews = Review.get_latest(25, 0, 'issued', 'desc')
+    if request.params["side"]
+      @page = request.params["side"].to_i
+    else
+      @page = 1
+    end
+    @error_message, @reviews = Review.get_latest(25, (@page*25)-25, 'issued', 'desc')
 
     if @error_message
       @title ="Feil"

@@ -527,6 +527,7 @@ select.kriterium { vertical-align:top;}
 .liste-reviewer { color: #c12121; }
 .liste-date { color: #999 ;}
 .liste-teaser { font-size: 13px;}
+.liste-end { font-size: 14px; margin:20px 0; border-top:1px solid #ddd;}
 
 
 /* mine anbefalinger */

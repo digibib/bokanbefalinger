@@ -15,8 +15,17 @@
 				<p class="liste-teaser"><%= r["teaser"] %></p>
 			</div>
 		</div>
-
 	<% end %>
+	<div class="clearfix"></div>
+	<div class="liste-end">
+		<div style="float:left; width:600px"<p>For å se flere anbefalinger kan du søke etter forfatter, tittel eller ISBN-nummer i søkefeltet øverst til høyre. Du kan også prøve å <a href="/lag-lister">lage en liste</a> med anbefalinger</div>
+		<div style="float:right; width: 100px">
+			<% if @page < 4 %>
+				<a href="/anbefalinger?side=<%= @page+1 %>">Neste</a>
+			<% end %>
+		</div>
+	</div>
+
 </div>
 <div class="main-right">
 	<%= erb :login %>
