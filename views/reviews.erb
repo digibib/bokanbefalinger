@@ -1,5 +1,22 @@
 <div class="main-left">
 	<p class="lokkeskrift">De nyeste anbefalingene i basen</p>
+
+	<% @reviews["works"].each do |work| %>
+		<% r = work["reviews"].first %>
+		<div class="clearfix"></div>
+		<div class="listevisning">
+			<div class="liste-img <%= "light-gray" if work['cover_url'].empty? %>">
+				<img src="<%= work['cover_url'] %>">
+			</div>
+			<div class="liste-info">
+				<p class="liste-title"><%= work["title"] %></p>
+				<p class="liste-author">av <%= work["author"] %></p>
+				<p class="liste-under">anbefalt av <span class="liste-reviewer"><%= r["reviewer"] %></span> <span class="liste-date"><%= dateformat(r["issued"]) %></span> </p>
+				<p class="liste-teaser"><%= r["teaser"] %></p>
+			</div>
+		</div>
+
+	<% end %>
 </div>
 <div class="main-right">
 	<%= erb :login %>
