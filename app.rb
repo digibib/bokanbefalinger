@@ -1,6 +1,7 @@
 # encoding: utf-8
 require "sinatra"
 require "redis"
+require "time"
 
 require_relative "settings"
 require_relative "cache"
@@ -45,6 +46,10 @@ class BokanbefalingerApp < Sinatra::Application
 
     def markup2text(s)
       s.gsub(/<p><br><\/p>/, "\n\n").gsub(/<p>/,'').gsub(/(<\/p>|<br>)/, "\n")
+    end
+
+    def dateformat(s)
+      Date.strptime(s).strftime("%d.%m.%Y")
     end
   end
 
