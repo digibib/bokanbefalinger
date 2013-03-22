@@ -1,7 +1,13 @@
 <div class="main-left">
 	<h2>Søk opp boka du vil anmelde</h2>
 	<div class="isbn-form">
-		<label>ISBN<input type="text" name="isbn" id="isbn"></label>
+		<label>ISBN
+		<% if request.params["isbn"] %>
+			<input type="text" name="isbn" id="isbn" disabled="disabled" value="<%= request.params['isbn'] %>">
+		<% else %>
+			<input type="text" name="isbn" id="isbn">
+		<% end %>
+		</label>
 		<button class="medium red" id="isbn-button">Søk</button>
 		<span class="loading-message">Vent litt, søker<span id="loading"></span><span>
 	</div>
@@ -25,3 +31,12 @@
 <div class="main-right">
 	<%= erb :login %>
 </div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	if ( $("#isbn").val() != "" ) {
+		console.log($("#isbn").val());
+		$("#isbn-button").trigger('click');
+	}
+});
+</script>

@@ -1,4 +1,9 @@
 <div class="main-left">
+	<div class="isbn-form-new">
+		<label>ISBN<input type="text" name="isbn" id="isbn"></label>
+		<button class="medium red" id="isbn-button-new">Nytt søk</button>
+		<span class="loading-message">Vent litt, søker<span id="loading"></span><span>
+	</div>
 	<h2>Skriv ny anbefaling av:</h2>
 	<div id="review-heading">
 		<div class="book-cover <%= "light-gray" unless @utgave["cover_url"] %>">

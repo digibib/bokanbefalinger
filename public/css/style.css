@@ -392,7 +392,10 @@ span.small-link { font-size:0.9em; display:block; padding: 0 24px; margin:0.5em;
 .missing { border:2px solid #E87600 !important;}
 
 /* isbn search */
-.isbn-form { background-color:#eee; padding:15px; width:90%;}
+.isbn-form { background-color:#eee; padding:15px; width:90%; border: 2px solid #ccc;}
+.isbn-form-new { background-color:#eee; padding:15px; width:87%;
+                  text-align: right; border: 2px solid #ccc; margin-top: 20px;}
+
 #isbn { margin:10px}
 #isbn-notfound { display: none;}
 #isbn-results { margin-top:20px; padding: 15px; border: 1px dashed #ccc;

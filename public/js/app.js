@@ -142,7 +142,23 @@ $('.audiences').on('change', function(e) {
 	$('#audiences-fieldset').removeClass("missing");
 });
 
+// nytt søk = søk
+$('#isbn').on('keypress', function(evt) {
+	if (evt.which == 13) {
+		$("#isbn-button-new").trigger('click');
+	}
+});
 
+// Søk etter bok via ISBN
+$("#isbn-button-new").on('click', function() {
+	var isbn_input = $('#isbn').val();
+
+	if (isbn_input == "") {
+	 return;
+	}
+
+	window.location.replace("/finn?isbn="+isbn_input);
+});
 
 /* liste-generator logikk */
 
