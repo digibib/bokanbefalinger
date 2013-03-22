@@ -96,10 +96,14 @@ $("#isbn-button").on('click', function() {
 });
 
 
-/* Skriv ny anbefaling */
+/* Skriv ny/rediger anbefaling */
 
 $('#delete-button').on('click', function(event) {
-	$('#delete').val("delete");
+	if (confirm("Er du sikker?")) {
+		$('#delete').val("delete");
+	} else {
+		event.preventDefault();
+	}
 });
 
 
