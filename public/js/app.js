@@ -501,3 +501,7 @@ $('.anbefalingsliste').on('click', '.triangle.open', function() {
 $('.liste-tittel').on('click', function() {
 	$(this).next().click();
 });
+
+$('.rss-copy').on('click', function() {
+	window.prompt("Trykk Ctrl+C, så Enter for å kopiere", $(this).prev().val());
+});
