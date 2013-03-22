@@ -1,6 +1,20 @@
 <div class="main-left">
 	<p class="lokkeskrift">De nyeste anbefalingene i basen</p>
-
+	<div class="liste-pagination tops">
+		<% if @page > 1 %>
+			<a href="/anbefalinger?side=<%= @page-1 %>">Forrige</a>
+		<% end %>
+		<% (1..4).each do|i| %>
+			<% if @page == i %>
+				<strong><%= i %></strong>
+			<% else %>
+				<a href="/anbefalinger?side=<%= i %>"><%= i %></a>
+			<% end %>
+		<% end %>
+		<% if @page < 4 %>
+			<a href="/anbefalinger?side=<%= @page+1 %>">Neste</a>
+		<% end %>
+	</div>
 	<% @reviews["works"].each do |work| %>
 		<% r = work["reviews"].first %>
 		<div class="clearfix"></div>
@@ -17,13 +31,21 @@
 		</div>
 	<% end %>
 	<div class="clearfix"></div>
-	<div class="liste-end">
-		<div style="float:left; width:600px"<p>For å se flere anbefalinger kan du søke etter forfatter, tittel eller ISBN-nummer i søkefeltet øverst til høyre. Du kan også prøve å <a href="/lag-lister">lage en liste</a> med anbefalinger</div>
-		<div style="float:right; width: 100px">
-			<% if @page < 4 %>
-				<a href="/anbefalinger?side=<%= @page+1 %>">Neste</a>
+		<p>For å se flere anbefalinger kan du søke etter forfatter, tittel eller ISBN-nummer i søkefeltet øverst til høyre. Du kan også prøve å <a href="/lag-lister">lage en liste</a> med anbefalinger</p>
+	<div class="liste-pagination bottoms">
+		<% if @page > 1 %>
+			<a href="/anbefalinger?side=<%= @page-1 %>">Forrige</a>
+		<% end %>
+		<% (1..4).each do|i| %>
+			<% if @page == i %>
+				<strong><%= i %></strong>
+			<% else %>
+				<a href="/anbefalinger?side=<%= i %>"><%= i %></a>
 			<% end %>
-		</div>
+		<% end %>
+		<% if @page < 4 %>
+			<a href="/anbefalinger?side=<%= @page+1 %>">Neste</a>
+		<% end %>
 	</div>
 
 </div>
