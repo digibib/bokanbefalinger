@@ -106,6 +106,8 @@ h1, h2, h3 { color :#333; line-height: 1.1em;}
 
 img.loading { margin: 0 1.5em;}
 
+img.rss { width: 22px; height: 22px; margin: auto; margin-bottom:-6px;}
+
 img.cover {
   max-width: 150px;
   height: 200px;
@@ -497,10 +499,9 @@ select.kriterium { vertical-align:top;}
 .fjern {  float:right; margin-right:10px;}
 
 #list-results { margin-top: 40px;}
-#list-rsslink { margin-top: 40px; display: none;}
+#list-rsslink { margin-top: 40px; display: none; height: 24px; vertical-align: bottom;}
 #rss-link { margin-left:6px; width:68%; font-size: 13px; padding: 2px; height:18px;}
 #rss-copy { margin-left: 1em;}
-.rss-info { color: #c12121; text-decoration: underline;}
 .inner-input { width: 250px ;}
 
 /* se lister */
@@ -559,7 +560,7 @@ span.error { background-color: #F9D654; display:none; padding:0.2em;}
  * HINT- A CSS tooltip library
  */
 
-.hint { position: relative; display: inline-block; }
+.hint { position: relative; display: inline-block;}
 
 .hint:before, .hint:after {
       position: absolute;
