@@ -16,6 +16,10 @@
 			<p><strong><%= @utgave["author"] %></strong></p>
 		</div>
 	</div>
+	<div class="reviewform-other">
+		<%= @utgave["title"] %> har<br>
+		<span class="red-text">x andre anbefalinger</span>
+	</div>
 	<div class="clearfix"></div>
 	<form id="review-form" action="/review" method="POST">
 		<input type="hidden" id="isbn" name="isbn" value="<%= @utgave["isbn"] %>" />

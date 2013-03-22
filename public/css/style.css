@@ -95,6 +95,8 @@ h1, h2, h3 { color :#333; line-height: 1.1em;}
 
 .red { background: #c12121;}
 
+.red-text { color: #c12121;}
+
 .green { background: #71C120;}
 
 .loading-message { display: none;}
@@ -391,9 +393,12 @@ span.small-link { font-size:0.9em; display:block; padding: 0 24px; margin:0.5em;
 .checklabel { width:100px; line-height:15px; display:inline-block; height:15px;}
 .missing { border:2px solid #E87600 !important;}
 
+.reviewform-other { width: 200px; display: block; float:right; border: 1px solid red;
+                 background: #eee; padding: 1em; margin-right: 100px; margin-top: 130px;}
+
 /* isbn search */
 .isbn-form { background-color:#eee; padding:15px; width:90%; border: 2px solid #ccc;}
-.isbn-form-new { background-color:#eee; padding:15px; width:87%;
+.isbn-form-new { background-color:#eee; padding:15px; width:82%;
                   text-align: right; border: 2px solid #ccc; margin-top: 20px;}
 
 #isbn { margin:10px}
