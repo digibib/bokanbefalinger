@@ -378,14 +378,19 @@ span.small-link { font-size:0.9em; display:block; padding: 0 24px; margin:0.5em;
 }
 
 #review-form select { padding: 4px;}
+#review-form label { font-weight: normal !important }
 
 #review-heading { width: 100%; }
 #review-heading div { float:left;}
 #review-heading p { margin-left:30px;}
 
-.audiences { float:left; width:15px !important; height:15px; display:inline;}
-.checklabel { margin-left:15px; float:left; width:80px; line-height:15px; display:inline-block;}
+.redstar { color: #c12121; font-size: 20px;}
+
+#audiences-fieldset { display:inline-block; right: right; vertical-align: top;}
+.audiences { float:left; width:15px !important; height:15px; display:inline; margin-right:1em;}
+.checklabel { width:100px; line-height:15px; display:inline-block; height:15px;}
 .missing { border:2px solid #E87600 !important;}
+
 /* isbn search */
 .isbn-form { background-color:#eee; padding:15px; width:90%;}
 #isbn { margin:10px}

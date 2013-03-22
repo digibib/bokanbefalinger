@@ -15,27 +15,26 @@
 	<form id="review-form" action="/review" method="POST">
 		<input type="hidden" id="isbn" name="isbn" value="<%= @utgave["isbn"] %>" />
 		<input type="hidden" id="published" name="published" value="false" />
-		<input id="title" class="required" type="text" name="title" placeholder="Tittel på anbefalingen"/>
-		<textarea id="teaser" class="required" name="teaser" rows="2" placeholder="Skriv en teaser, maks to setninger"></textarea>
-		<textarea id="text" class="required" name="text" rows="20" placeholder="Skriv en omtale"></textarea>
+		<label>Tittel på anbefalingen<span class="redstar">*</span><br>
+		<input id="title" class="required" type="text" name="title" placeholder="Lag en tittel som innbyr til lesing"/></label>
+		<label>Kort teaser<span class="redstar">*</span><br>
+		<textarea id="teaser" class="required" name="teaser" rows="2" placeholder="Skriv en teaser, maks to setninger"></textarea></label>
+		<label>Omtale<br>
+		<textarea id="text" name="text" rows="20" placeholder="Skriv en omtale"></textarea></label>
 
+		<span>Målgruppe for anbefalingen<span class="redstar">*</span></span>
 		<fieldset id="audiences-fieldset">
-			<p>Målgruppe(r) for <em>anbefalingen</em>, ikke for boka:</p>
-			<input id="a1" class="audiences" name="a1" type="checkbox" value="barn">
-			<label for="a1" class="checklabel">barn</label>
-			<input id="a2" class="audiences" name="a2" type="checkbox" value="ungdom">
-			<label for="a2" class="checklabel">ungdom</label>
-			<input id="a3" class="audiences" name="a3" type="checkbox" value="voksen">
-			<label for="a3" class="checklabel">voksne</label>
+			<label for="a1" class="checklabel">barn
+			<input id="a1" class="audiences" name="a1" type="checkbox" value="barn"></label><br>
+			<label for="a2" class="checklabel">ungdom
+			<input id="a2" class="audiences" name="a2" type="checkbox" value="ungdom"></label><br>
+			<label for="a3" class="checklabel">voksne
+			<input id="a3" class="audiences" name="a3" type="checkbox" value="voksen"></label><br>
 		</fieldset>
 
 		<div class="clearfix"></div>
 
 		<div style="margin-top:20px;">
-<!-- 			<div style="float:left">
-				<button class="medium gray">Slett</button>
-				<button class="medium gray">Forhåndsvisning</button>
-			</div> -->
 			<div style="float:right;margin-right:-25px">
 				<button type="submit" id="draft" class="medium gray">Lagre kladd</button>
 				<button type="submit" id="publish" class="medium red">Publisér</button>
