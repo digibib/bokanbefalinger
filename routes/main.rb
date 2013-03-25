@@ -19,4 +19,9 @@ class BokanbefalingerApp < Sinatra::Application
     @title = "Om API-et"
     erb :api
   end
+
+  get "/search" do
+    @title = "Søk etter anbefalinger"
+    erb :search
+  end
 end

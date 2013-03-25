@@ -573,6 +573,15 @@ select.kriterium { vertical-align:top;}
 #innstillinger-fieldset button { margin-top:1em}
 span.error { background-color: #F9D654; display:none; padding:0.2em;}
 
+
+/* avansert søk */
+#advanced-search { background:#eee; border:2px solid #ccc; padding:1em; width: 88%;}
+#advanced-search label { width: 170px; display:inline-block;}
+#advanced-search input { margin: 5px; width: 300px;}
+#advanced-search button { float: right;}
+
+
+
 /**
  * HINT- A CSS tooltip library
  */

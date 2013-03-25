@@ -26,13 +26,8 @@
     <header>
       <div id="header-inner">
         <a href="/"><span id="logo">Bokanbefalinger</span></a><br />
-        <form id="search-form" action="/søk" method="GET">
-          <input type="search" name="forfatter" id="search-input" placeholder="Søk på forfatter, boktittel eller ISBN">
-          <input type="hidden" name="tittel" id="search-input-copy">
-          <input type="hidden" name="isbn" id="search-input-isbn">
-          <button type="submit" id="search-button">Søk</button>
-        </form>
         <div id="header-links">
+          <a href="/search">Søk i bokanbefalinger</a>
           <a href="/om">Om bokanbefalinger</a><a href="/api">API</a>
           <% if session[:user] %><a href="/skrivetips">Skrivetips</a><% end %>
         </div>
@@ -53,6 +48,9 @@
         </li>
         <li <%= 'class="active"' if request.path_info == '/lag-lister' %>>
           <a href="/lag-lister"><span class="inner-navbutton">Lag lister</span></a>
+        </li>
+        <li <%= 'class="active"' if request.path_info == '/search' %>>
+          <a href="/search"><span class="inner-navbutton">Søk</span></a>
         </li>
       </ul>
       <div id="messages">
