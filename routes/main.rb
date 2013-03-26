@@ -20,7 +20,7 @@ class BokanbefalingerApp < Sinatra::Application
     erb :api
   end
 
-  get "/search" do
+  get "/søk" do
     @title = "Søk etter anbefalinger"
     erb :search
   end

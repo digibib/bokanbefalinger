@@ -3,38 +3,6 @@ require "json"
 
 class BokanbefalingerApp < Sinatra::Application
 
-  get "/søk" do
-    # default values to avoid nil in views
-    @num_titles, @num_authors, @num_isbn = 0, 0, 0
-    @isbn, @sorted, @authors = [], [], []
-    @error_message = nil
-
-    if request.params["forfatter"] and not request.params["forfatter"].strip.empty?
-      @searchterms = request.params["forfatter"]
-      @error_message, @sorted, @num_authors = Review.search_by_author(@searchterms) unless @searchterms.nil?
-    end
-
-    if request.params["tittel"] and not request.params["tittel"].strip.empty?
-      @searchterms = request.params["tittel"]
-      @error_message, @titles, @num_titles = Review.search_by_title(@searchterms)
-    end
-
-    if request.params["isbn"] and not request.params["isbn"].strip.empty?
-      @searchterms = request.params["isbn"]
-      @error_message, @isbn, @num_isbn = Review.search_by_isbn(@searchterms)
-    end
-
-    @error_message = "Mangler søkestreng" unless @searchterms
-
-    if @error_message
-      @title = "Feil"
-      erb :error
-    else
-      @title = "Søk i anbefalinger: #{@searchterms}"
-      erb :searchresults
-    end
-  end
-
   post '/review' do
     audiences = [params["a1"], params["a2"], params["a3"]].compact.join("|")
     @error_message, @review = Review.publish(params["title"], params["teaser"],
