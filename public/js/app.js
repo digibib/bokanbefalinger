@@ -419,7 +419,7 @@ $('#generate-list').on('click', function() {
 	  url: '/lister',
 	  type: "POST",
 	  data: data,
-	  dataType: "json"
+	  dataType: "html"
 	});
 
 	$('#list-rsslink').hide();
@@ -430,13 +430,14 @@ $('#generate-list').on('click', function() {
     }
 	request.done(function(data) {
 		$('#list-rsslink').show();
-		var l = data.length;
-		if (l > 10) {
-			$('#list-results').html("<h2>"+ data.length +" treff, viser de første 10:</h2>");
-		} else {
-			$('#list-results').html("<h2>"+ data.length +" treff:</h2>");
-		}
-		data.forEach(printReviews);
+		$('#list-results').html(data);
+		// var l = data.length;
+		// if (l > 10) {
+		// 	$('#list-results').html("<h2>"+ data.length +" treff, viser de første 10:</h2>");
+		// } else {
+		// 	$('#list-results').html("<h2>"+ data.length +" treff:</h2>");
+		// }
+		// data.forEach(printReviews);
 	});
 });
 

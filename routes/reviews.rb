@@ -123,14 +123,15 @@ class BokanbefalingerApp < Sinatra::Application
 
   post "/lister" do
     puts params
-    reviews = List.get(Array(params["authors"]), Array(params["subjects"]),
+    @reviews = List.get(Array(params["authors"]), Array(params["subjects"]),
                       Array(params["persons"]), JSON.parse(params["pages"]),
                       JSON.parse(params["years"]), Array(params["audience"]),
                       Array(params["review_audience"]), Array(params["genres"]),
                       Array(params["languages"]), Array(params["formats"]),
                       Array(params["nationalities"]))
 
-    reviews.to_json
+    #reviews.to_json
+    erb :list, :layout => false
   end
 
   post "/dropdown" do
