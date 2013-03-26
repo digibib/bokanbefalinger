@@ -19,13 +19,13 @@
 		<% r = work["reviews"].first %>
 		<div class="clearfix"></div>
 		<div class="listevisning">
-			<div class="liste-img <%= "light-gray" if work['cover_url'].empty? %>">
+			<div class="liste-img <%= "light-gray" unless work['cover_url'] %>">
 				<img src="<%= work['cover_url'] %>">
 			</div>
 			<div class="liste-info">
-				<p class="liste-title"><a href="/anbefaling/<%= r["uri"][24,200] %>"><%= work["title"] %></a></p>
-				<p class="liste-author">av <%= work["author"] %></p>
-				<p class="liste-under">anbefalt av <span class="liste-reviewer"><%= r["reviewer"] %></span> <span class="liste-date"><%= dateformat(r["issued"]) %></span> </p>
+				<p class="liste-title"><a href="/anbefaling/<%= r["uri"][24,200] %>"><%= work["prefTitle"] %></a></p>
+				<p class="liste-author">av <%= work["authors"].map { |a| a["name"] } .join ", " %></p>
+				<p class="liste-under">anbefalt av <span class="liste-reviewer"><%= r["reviewer"]["name"] %></span> <span class="liste-date"><%= dateformat(r["issued"]) %></span> </p>
 				<p class="liste-teaser"><%= r["teaser"] %></p>
 			</div>
 		</div>
