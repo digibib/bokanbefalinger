@@ -23,7 +23,7 @@
 				<img src="<%= work['cover_url'] %>">
 			</div>
 			<div class="liste-info">
-				<p class="liste-title"><a href="/anbefaling/<%= r["uri"][24,200] %>"><%= work["prefTitle"] %></a></p>
+				<p class="liste-title"><a href="/anbefaling/<%= r["uri"][24,200] %>"><%= work["prefTitle"] || work["originalTitle"] %></a></p>
 				<p class="liste-author">av <%= work["authors"].map { |a| a["name"] } .join ", " %></p>
 				<p class="liste-under">anbefalt av <span class="liste-reviewer"><%= r["reviewer"]["name"] %></span> <span class="liste-date"><%= dateformat(r["issued"]) %></span> </p>
 				<p class="liste-teaser"><%= r["teaser"] %></p>
