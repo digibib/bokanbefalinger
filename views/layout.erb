@@ -27,7 +27,7 @@
       <div id="header-inner">
         <a href="/"><span id="logo">Bokanbefalinger</span></a><br />
         <div id="header-links">
-          <a href="/search">Søk i bokanbefalinger</a>
+          <a href="/søk">Søk i bokanbefalinger</a>
           <a href="/om">Om bokanbefalinger</a><a href="/api">API</a>
           <% if session[:user] %><a href="/skrivetips">Skrivetips</a><% end %>
         </div>
@@ -49,7 +49,7 @@
         <li <%= 'class="active"' if request.path_info == '/lag-lister' %>>
           <a href="/lag-lister"><span class="inner-navbutton">Lag lister</span></a>
         </li>
-        <li <%= 'class="active"' if request.path_info == '/search' %>>
+        <li <%= 'class="active"' if request.path_info == '/søk' %>>
           <a href="/søk"><span class="inner-navbutton">Søk</span></a>
         </li>
       </ul>
