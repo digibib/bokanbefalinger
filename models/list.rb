@@ -187,6 +187,7 @@ class List
     query.where([:work, RDF::DEICHMAN.assumedFirstEdition, :year]) unless years.empty?
     query.where([:book, RDF::DC.audience, :audience]) unless audience.empty?
     query.where([:review, RDF::DC.audience, :review_audience, :context => REVIEWGRAPH]) unless review_audience.empty?
+    query.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
     unless genres.empty?
       query.where([:book, RDF::DBO.literaryGenre, :narrower])
       query.where([:narrower, RDF::SKOS.broader, :genre])
@@ -203,6 +204,7 @@ class List
     query.filter("?language = <" + languages.join("> || ?language = <") +">") unless languages.empty?
     query.filter("?format = <" + formats.join("> || ?format = <") +">") unless formats.empty?
     query.filter("?nationality = <" + nationalities.join("> || ?nationality = <") +">") unless nationalities.empty?
+    query.order_by("DESC(?issued)")
 
     unless pages.empty?
       pages_filter = []
