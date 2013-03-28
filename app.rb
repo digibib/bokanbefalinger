@@ -1,6 +1,5 @@
 # encoding: utf-8
 require "sinatra"
-require "redis"
 require "time"
 
 require_relative "settings"
@@ -12,10 +11,6 @@ BASE_URI = Settings::GRAPHS[:base]
 class BokanbefalingerApp < Sinatra::Application
   enable :sessions
 
-  configure :production do
-    #set :clean_trace, true
-  end
-
   configure :development do
     require "sinatra/reloader"
     register Sinatra::Reloader
@@ -23,9 +18,6 @@ class BokanbefalingerApp < Sinatra::Application
   end
 
   helpers do
-    include Rack::Utils
-    alias_method :h, :escape_html
-
     def create_uri(path)
       BASE_URI+"/"+path.join("")
     end
