@@ -3,17 +3,18 @@
 <% else %>
 	<h3><%= @reviews.count %> treff</h3>
 <% end %>
-<% @reviews[0..10].each do |r| %>
+<% @reviews.each do |work| %>
+	<% r = work["reviews"].first %>
 	<div class="clearfix"></div>
 	<div class="listevisning">
-		<div class="liste-img light-gray">
-			<!-- <img src="<%= r['cover_url'] %>"> -->
+		<div class="liste-img <%= "light-gray" unless work['cover_url'] %>">
+			<img src="<%= work['cover_url'] %>">
 		</div>
 		<div class="liste-info">
-			<p class="liste-title"><a href="/anbefaling/<%= r[24,200] %>"><%= "Tittel på boka" %></a></p>
-			<p class="liste-author">av <%= "Forfatter Forfattersen" %></p>
-			<p class="liste-under">anbefalt av <span class="liste-reviewer"><%= "A. Anbefalersen" %></span> <span class="liste-date">01.01.2013</span> </p>
-			<p class="liste-teaser"><%= "teaser til #{r} kommer her" %></p>
+			<p class="liste-title"><a href="/anbefaling/<%= r["uri"][24,200] %>"><%= work["prefTitle"] || work["originalTitle"] %></a></p>
+			<p class="liste-author">av <%= work["authors"].map { |a| a["name"] } .join ", " %></p>
+			<p class="liste-under">anbefalt av <span class="liste-reviewer"><%= r["reviewer"]["name"] %></span> <span class="liste-date"><%= dateformat(r["issued"]) %></span> </p>
+				<p class="liste-teaser"><%= r["teaser"] %></p>
 		</div>
 	</div>
 <% end %>
