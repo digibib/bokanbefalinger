@@ -1,85 +1,50 @@
 # encoding: utf-8
-class Cache
-  # Assumes Redis is running on http://localhost:6379
-  @@redis = Redis.new
-  # Disable caching here
-  @@caching = true
+require "redis"
+require "json"
 
-  def self.del(key)
-    return nil unless @@caching
-    begin
-      cached = @@redis.del key
-      puts "Delete cache: #{key}"
-    rescue Redis::CannotConnectError
-      puts "DEBUG: Redis not available. Cannot write to cache."
-    end
-    cached
+class Cache
+
+  def self.redis(config={})
+    @@redis ||= Redis.new(config)
+  end
+
+  def self.set(key, data)
+    redis.set key, to_json(data)
+  rescue Redis::CannotConnectError
+    return nil
   end
 
   def self.get(key)
-    return nil unless @@caching
-    begin
-      cached = @@redis.get key
-      puts "Reading from cache: #{key}"
-    rescue Redis::CannotConnectError
-      puts "DEBUG: Redis not available. Cannot read from cache."
-    end
-    puts "Not in cache: #{key}" unless cached
-    cached
+    from_json redis.get(key)
+  rescue => error
+    yield(error)
   end
 
-  def self.set(key, value)
-    return nil unless @@caching
-    begin
-      @@redis.set key, value
-      puts "Setting cache for: #{key}"
-    rescue Redis::CannotConnectError, Redis::Encoding::CompatibilityError
-      puts "DEBUG: Redis not available. Cannot write to cache."
-    end
+  def self.del(key)
+    redis.del key
+  rescue Redis::CannotConnectError
+    return nil
   end
 
-  def self.hget(key, field)
-    return nil unless @@caching
-    begin
-      cached = @@redis.hget key, field
-      puts "Reading from cache: #{key} / #{field}"
-    rescue Redis::CannotConnectError
-      puts "DEBUG: Redis not available. Cannot read from cache."
+  private
+
+  def self.from_json(result)
+    case result
+    when Array
+      result.map { |r| from_json(r) }
+    when Hash
+      result
+    when nil
+      raise KeyError
+    else
+      JSON.parse(result)
     end
-    puts "Not in cache: #{key} / #{field}" unless cached
-    cached
+  rescue JSON::ParserError
+    raise KeyError
   end
 
-  def self.hset(key, field, value)
-    return nil unless @@caching
-    begin
-      @@redis.hset key, field, value
-      puts "Setting cache for: #{key} / #{field}"
-    rescue Redis::CannotConnectError, Redis::Encoding::CompatibilityError
-      puts "DEBUG: Redis not available. Cannot write to cache."
-    end
-  end
-
-  def self.hdel(key, field)
-    return nil unless @@caching
-    begin
-      @@redis.hdel key, field
-      puts "Delete cache: #{key} / #{field}"
-    rescue Redis::CannotConnectError, Redis::Encoding::CompatibilityError
-      puts "DEBUG: Redis not available. Cannot write to cache."
-    end
-  end
-
-  def self.hgetall(key)
-    return nil unless @@caching
-    begin
-      cached = @@redis.hgetall key
-      puts "Reading from cache: #{key}"
-    rescue Redis::CannotConnectError
-      puts "DEBUG: Redis not available. Cannot read from cache."
-    end
-    puts "Not in cache: #{key}" if cached.empty?
-    cached
+  def self.to_json(data)
+    data.to_json
   end
 
 end
