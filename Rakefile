@@ -74,6 +74,9 @@ namespace :cache do
 
   desc "Caches contents of dropdowns for the list generator and search."
   task :dropdown do
+    print "\nFetching URIs and labels to populate dropdowns..."
+    List.populate_dropdowns
+    print "OK\nCaching...OK"
   end
 
 end

@@ -38,7 +38,7 @@
 	<span class="kriterium-inner s1">
 		<select data-placeholder="velg sjanger" class="genre inner-input">
 			<option></option>
-			<% @genres.sort_by { |k,v| v }.each do |k,v| %>
+			<% @dropdown.genres.sort_by { |k,v| v }.each do |k,v| %>
 			<option value="<%= k %>"><%= v %></option>
 			<% end %>
 		</select>
@@ -47,7 +47,7 @@
 	<span class="kriterium-inner s2">
 		<select data-placeholder="velg emne" class="emne inner-input">
 			<option></option>
-			<% @subjects.sort_by { |k,v| v }.each do |k,v| %>
+			<% @dropdown.subjects.sort_by { |k,v| v }.each do |k,v| %>
 			<option value="<%= k %>"><%= v %></option>
 			<% end %>
 		</select>
@@ -56,7 +56,7 @@
 	<span class="kriterium-inner s3">
 		<select data-placeholder="velg literær form" class="litform inner-input">
 			<option></option>
-			<% @formats.sort_by { |k,v| v }.each do |k,v| %>
+			<% @dropdown.formats.sort_by { |k,v| v }.each do |k,v| %>
 			<option value="<%= k %>"><%= v %></option>
 			<% end %>
 		</select>
@@ -78,7 +78,7 @@
 	<span class="kriterium-inner s5">
 		<select data-placeholder="velg forfatter" class="forfatter inner-input">
 			<option></option>
-			<% @authors.sort_by { |k,v| v }.each do |k,v| %>
+			<% @dropdown.authors.sort_by { |k,v| v }.each do |k,v| %>
 			<option value="<%= k %>"><%= v %></option>
 			<% end %>
 		</select>
@@ -87,7 +87,7 @@
 	<span class="kriterium-inner s6">
 		<select data-placeholder="velg forfatters nasjonalitet" class="nasjonalitet inner-input">
 			<option></option>
-			<% @nationalities.sort_by { |k,v| v }.each do |k,v| %>
+			<% @dropdown.nationalities.sort_by { |k,v| v }.each do |k,v| %>
 			<option value="<%= k %>"><%= v %></option>
 			<% end %>
 		</select>
@@ -96,7 +96,7 @@
 	<span class="kriterium-inner s7">
 		<select data-placeholder="velg omtalt person" class="person inner-input">
 			<option></option>
-			<% @persons.sort_by { |k,v| v }.each do |k,v| %>
+			<% @dropdown.persons.sort_by { |k,v| v }.each do |k,v| %>
 			<option value="<%= k %>"><%= v %></option>
 			<% end %>
 		</select>
@@ -116,7 +116,7 @@
 	<span class="kriterium-inner s10">
 		<select data-placeholder="velg dokumentspråk" class="language inner-input">
 			<option></option>
-			<% @languages.sort_by { |k,v| v }.each do |k,v| %>
+			<% @dropdown.languages.sort_by { |k,v| v }.each do |k,v| %>
 			<option value="<%= k %>"><%= v %></option>
 			<% end %>
 		</select>

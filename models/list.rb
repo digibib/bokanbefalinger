@@ -1,88 +1,76 @@
 # encoding: utf-8
 
+Dropdown = Struct.new(:subjects, :persons, :genres, :languages, :authors,
+                      :formats, :nationalities, :titles)
 class List
 
   def self.populate_dropdowns()
-    subjects, persons, genres = Cache.get("subjects"), Cache.get("persons"), Cache.get("genres")
-    languages, authors, formats, nationalities = Cache.get("languages"), Cache.get("authors"), Cache.get("formats"), Cache.get("nationalities")
-    return [eval(subjects), eval(persons), eval(genres), eval(languages), eval(authors), eval(formats), eval(nationalities)] if persons and subjects and genres and languages and authors and formats and nationalities
 
-    # query = QUERY.select(:subject_id, :subject_label, :person_id, :person_label, :genre_id, :genre_label)
+    lists = Cache.get("dropdowns") {
 
-    # query.distinct.from(BOOKGRAPH)
-    # query.where([:work, RDF::FABIO.hasManifestation, :book],
-    #             [:book, RDF::REV.hasReview, :review])
-    # query.union([:book, RDF::DBO.literaryGenre, :narrower],
-    #             [:narrower, RDF::SKOS.broader, :genre_id],
-    #             [:genre_id, RDF::RDFS.label, :genre_label])
-    # query.union([:book, RDF::DC.subject, :subject_narrower],
-    #             [:subject_id, RDF::SKOS.narrower, :subject_narrower],
-    #             [:subject_id, RDF::SKOS.prefLabel, :subject_label])
-    # query.union([:book, RDF::DC.subject, :person_id],
-    #             [:person_id, RDF::FOAF.name, :person_label])
+      querystring="SELECT   DISTINCT ?subject_id ?subject_label ?person_id (CONCAT(?person_label, ' ', ?lifespan) AS ?person_label) ?genre_id ?genre_label ?lang_id ?lang_label ?creator ?creator_label ?format ?format_label ?nationality ?nationality_label ?title sql:sample(?original_title)
+      FROM <http://data.deichman.no/books>
+      WHERE {
+      ?work <http://purl.org/spar/fabio/hasManifestation> ?book .
+      ?book <http://purl.org/stuff/rev#hasReview> ?review ;
+            <http://purl.org/dc/terms/title> ?title .
+      ?work <http://purl.org/dc/terms/title> ?original_title .
+      { ?work <http://purl.org/dc/terms/creator> ?creator .
+        ?creator <http://xmlns.com/foaf/0.1/name> ?creator_label .
+        ?creator <http://www.foafrealm.org/xfoaf/0.1/nationality> ?nationality .
+        ?nationality <http://www.w3.org/2000/01/rdf-schema#label> ?nationality_label . }
+      UNION
+      { ?book <http://data.deichman.no/literaryFormat> ?format .
+        ?format <http://www.w3.org/2000/01/rdf-schema#label> ?format_label . }
+      UNION
+      { ?book <http://dbpedia.org/ontology/literaryGenre> ?narrower .
+        ?narrower <http://www.w3.org/2004/02/skos/core#broader> ?genre_id .
+        ?genre_id <http://www.w3.org/2000/01/rdf-schema#label> ?genre_label . }
+      UNION
+      { ?book <http://purl.org/dc/terms/subject> ?subject_narrower .
+        ?subject_id <http://www.w3.org/2004/02/skos/core#narrower> ?subject_narrower .
+        ?subject_id <http://www.w3.org/2004/02/skos/core#prefLabel> ?subject_label .
+      }
+      UNION
+      { ?book <http://purl.org/dc/terms/subject> ?person_id .
+        ?person_id a <http://xmlns.com/foaf/0.1/Person> .
+        ?person_id <http://xmlns.com/foaf/0.1/name> ?person_label .
+        OPTIONAL { ?person_id <http://data.deichman.no/lifespan> ?lifespan .} }
+      UNION
+      { ?book <http://purl.org/dc/terms/language> ?lang_id .
+       ?lang_id <http://www.w3.org/2000/01/rdf-schema#label> ?lang_label . }
+      }
+      "
+      result = REPO.select(querystring)
 
-    # puts query
+      d = Dropdown.new({},{},{},{},{},{},{},{})
 
-    querystring="SELECT DISTINCT ?subject_id ?subject_label ?person_id (CONCAT(?person_label, ' ', ?lifespan) AS ?person_label) ?genre_id ?genre_label ?lang_id ?lang_label ?creator ?creator_label ?format ?format_label ?nationality ?nationality_label
-FROM <http://data.deichman.no/books>
-WHERE {
-?work <http://purl.org/spar/fabio/hasManifestation> ?book .
-?book <http://purl.org/stuff/rev#hasReview> ?review .
-{ ?work <http://purl.org/dc/terms/creator> ?creator .
-  ?creator <http://xmlns.com/foaf/0.1/name> ?creator_label .
-  ?creator <http://www.foafrealm.org/xfoaf/0.1/nationality> ?nationality .
-  ?nationality <http://www.w3.org/2000/01/rdf-schema#label> ?nationality_label . }
-UNION
-{ ?book <http://data.deichman.no/literaryFormat> ?format .
-  ?format <http://www.w3.org/2000/01/rdf-schema#label> ?format_label . }
-UNION
-{ ?book <http://dbpedia.org/ontology/literaryGenre> ?narrower .
-  ?narrower <http://www.w3.org/2004/02/skos/core#broader> ?genre_id .
-  ?genre_id <http://www.w3.org/2000/01/rdf-schema#label> ?genre_label . }
-UNION
-{ ?book <http://purl.org/dc/terms/subject> ?subject_narrower .
-  ?subject_id <http://www.w3.org/2004/02/skos/core#narrower> ?subject_narrower .
-  ?subject_id <http://www.w3.org/2004/02/skos/core#prefLabel> ?subject_label .
-}
-UNION
-{ ?book <http://purl.org/dc/terms/subject> ?person_id .
-  ?person_id a <http://xmlns.com/foaf/0.1/Person> .
-  ?person_id <http://xmlns.com/foaf/0.1/name> ?person_label .
-  OPTIONAL { ?person_id <http://data.deichman.no/lifespan> ?lifespan .} }
-UNION
-{ ?book <http://purl.org/dc/terms/language> ?lang_id .
- ?lang_id <http://www.w3.org/2000/01/rdf-schema#label> ?lang_label . }
-}"
+      result.each do |s|
+        d.authors[s[:creator].to_s] = s[:creator_label].to_s
+        d.languages[s[:lang_id].to_s] = s[:lang_label].to_s
+        d.persons[s[:person_id].to_s] = s[:person_label].to_s
+        d.formats[s[:format].to_s] = s[:format_label].to_s
+        d.nationalities[s[:nationality].to_s] = s[:nationality_label].to_s
 
-    result = REPO.select(querystring)
-    return [] if result.empty?
+        sub_label = s[:subject_label].to_s
+        sub_label += " (ungdom)" if s[:subject_id].to_s.match(/Juvenile/)
+        d.subjects[s[:subject_id].to_s] = sub_label
 
-    persons, subjects, genres, languages, authors, formats, nationalities = {}, {}, {}, {}, {}, {}, {}
-    result.each do |s|
-      authors[s[:creator].to_s] = s[:creator_label].to_s
-      languages[s[:lang_id].to_s] = s[:lang_label].to_s
-      persons[s[:person_id].to_s] = s[:person_label].to_s
-      formats[s[:format].to_s] = s[:format_label].to_s
-      nationalities[s[:nationality].to_s] = s[:nationality_label].to_s
+        gen_label = s[:genre_label].to_s
+        gen_label += " (ungdom)" if s[:genre_id].to_s.match(/Juvenile/)
+        d.genres[s[:genre_id].to_s] = gen_label
 
-      sub_label = s[:subject_label].to_s
-      sub_label += " (ungdom)" if s[:subject_id].to_s.match(/Juvenile/)
-      subjects[s[:subject_id].to_s] = sub_label
+        original_title = ""
+        original_title += " (#{s[:original_title]})" unless s[:title] == s[:original_title]
+        d.titles[s[:work].to_s] = s[:title].to_s + original_title
+      end
 
-      gen_label = s[:genre_label].to_s
-      gen_label += " (ungdom)" if s[:genre_id].to_s.match(/Juvenile/)
-      genres[s[:genre_id].to_s] = gen_label
-    end
+      all = Hash[d.each_pair.to_a]
+      Cache.set "dropdowns", all
+      all
+    }
 
-    Cache.set "subjects", subjects
-    Cache.set "persons", persons
-    Cache.set "genres", genres
-    Cache.set "languages", languages
-    Cache.set "authors", authors
-    Cache.set "formats", formats
-    Cache.set "nationalities", nationalities
-
-    return [subjects, persons, genres, languages, authors, formats, nationalities]
+     Dropdown.new(*lists.values)
   end
 
   def self.repopulate_dropdown(dropdown, authors, subjects, persons, pages, years, audience, review_audience, genres, languages, formats, nationalities)
