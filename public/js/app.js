@@ -526,3 +526,8 @@ $('.liste-tittel').on('click', function() {
 $('.rss-copy').on('click', function() {
 	window.prompt("Trykk Ctrl+C, så Enter for å kopiere", $(this).prev().val());
 });
+
+
+// Avansert søk
+$('#search-author').chosen({no_results_text: "Ingen treff for", allow_single_deselect: true});
+$('#search-title').chosen({no_results_text: "Ingen treff for", allow_single_deselect: true})

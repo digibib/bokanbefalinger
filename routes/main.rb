@@ -21,7 +21,9 @@ class BokanbefalingerApp < Sinatra::Application
   end
 
   get "/søk" do
+    puts params
     @title = "Søk etter anbefalinger"
+    @dropdown = List.populate_dropdowns
     erb :search
   end
 end

@@ -1,12 +1,24 @@
 <div class="main-left">
 	<p class="lokkeskrift">Søk etter anbefalinger</p>
 	<form id="advanced-search">
-		<label>Boktittel</label><input type="text"><br>
-		<label>Forfatter av boken</label><input type="text"><br>
-		<label>ISBN-nummer</label><input type="text"><br>
-		<label>Illustratør</label><input type="text"><br>
-		<label>Oversetter</label><input type="text"><br>
-		<label>Anbefalers navn</label><input type="text"><br>
+		<label>Boktittel</label>
+		<select name="forfatter" id="search-author" style="width:305px" data-placeholder="søk/velg tittel">
+			<option></option>
+			<% @dropdown.titles.sort_by { |k,v| v }.each do |k,v| %>
+			<option value="<%= k %>"><%= v %></option>
+			<% end %>
+		</select><br><br>
+		<label>Forfatter av boken</label>
+		<select name="tittel" id="search-title" style="width:305px" data-placeholder="søk/velg forfatter">
+			<option></option>
+			<% @dropdown.authors.sort_by { |k,v| v }.each do |k,v| %>
+			<option value="<%= k %>"><%= v %></option>
+			<% end %>
+		</select><br>
+		<label>ISBN-nummer</label><input name="isbn" type="text"><br>
+		<label>Illustratør</label><input type="text" placeholder="ikke implementert ennå" disabled="disabled"><br>
+		<label>Oversetter</label><input type="text" placeholder="ikke implementert ennå" disabled="disabled"><br>
+		<label>Anbefalers navn</label><input type="text" placeholder="ikke implementert ennå" disabled="disabled"><br>
 		<button type="submit" class="red medium">Søk</button>
 		<div class="clearfix"></div>
 	</form>
