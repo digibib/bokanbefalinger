@@ -24,8 +24,11 @@ namespace :cache do
   task :all do
     limit = 500
     offset = 0
+
     while true
+
       print "\nFetching reviews #{offset}-#{offset+limit}..."
+
       begin
         resp = API.get do |req|
           req.body = {:limit => limit, :offset => offset,
@@ -36,17 +39,37 @@ namespace :cache do
         puts "Fatal: API unavaiable"
         exit(0)
       end
+
       break if resp.body.match(/no reviews found/)
-      print "OK\nCaching..."
+      print "OK\nCaching...OK"
+
       JSON.parse(resp.body)["works"].each do |work|
         Cache.set(work["reviews"].first["uri"], {"works" => [work]})
       end
+
       offset += limit
     end
   end
 
   desc "Caches last 100 modified reviews."
   task :latest do
+    print "\nFetching 100 latest reviews..."
+
+    begin
+      resp = API.get do |req|
+        req.body = {:limit => 100, :offset => 0,
+                    :order_by => "issued", :order => "desc"}.to_json
+      end
+    rescue => error
+      puts error
+      puts "Fatal: API unavaiable"
+      exit(0)
+    end
+
+    print "OK\nCaching...OK"
+
+    #latest = JSON.parse(resp.body)["works"].collect { |w| w["reviews"].first["uri"] }
+    Cache.set("reviews:latest", JSON.parse(resp.body))
   end
 
   desc "Caches contents of dropdowns for the list generator and search."

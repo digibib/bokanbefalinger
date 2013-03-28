@@ -8,18 +8,24 @@ class Review
 
   def self.get_latest(limit, offset, order_by, order)
 
-    begin
-      resp = @@conn.get do |req|
-        req.body = {:limit => limit, :offset => offset,
-                    :order_by => order_by, :order => order}.to_json
+    latest = Cache.get("reviews:latest") {
+      begin
+        resp = @@conn.get do |req|
+          req.body = {:limit => 100, :offset => 0,
+                      :order_by => order_by, :order => order}.to_json
+        end
+      rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
+        error = "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"
       end
-    rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
-      return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil]
-    end
 
-    return ["Får ikke kontakt med ekstern ressurs (#{Settings::API}).", nil] if resp.status != 200
+      error = "Får ikke kontakt med ekstern ressurs (#{Settings::API})." if resp.status != 200
+      return error, nil if error
 
-    return nil, JSON.parse(resp.body)
+      revs = JSON.parse(resp.body)
+      Cache.set("reviews:latest", revs)
+      revs
+    }
+    return nil, {"works" => latest["works"][offset..(offset+limit)]}
   end
 
   def self.search_by_author(searchterms)
