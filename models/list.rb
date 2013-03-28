@@ -8,7 +8,7 @@ class List
 
     lists = Cache.get("dropdowns") {
 
-      querystring="SELECT   DISTINCT ?subject_id ?subject_label ?person_id (CONCAT(?person_label, ' ', ?lifespan) AS ?person_label) ?genre_id ?genre_label ?lang_id ?lang_label ?creator ?creator_label ?format ?format_label ?nationality ?nationality_label ?title sql:sample(?original_title)
+      querystring="SELECT DISTINCT ?work ?subject_id ?subject_label ?person_id (CONCAT(?person_label, ' ', ?lifespan) AS ?person_label) ?genre_id ?genre_label ?lang_id ?lang_label ?creator ?creator_label ?format ?format_label ?nationality ?nationality_label ?title (sql:sample(?original_title) AS ?original_title)
       FROM <http://data.deichman.no/books>
       WHERE {
       ?work <http://purl.org/spar/fabio/hasManifestation> ?book .
