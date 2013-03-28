@@ -4,7 +4,7 @@ require "faraday"
 
 class Review
 
-  @@conn = Faraday.new(:url => Settings::API)
+  @@conn = Faraday.new(:url => Settings::API + "reviews")
 
   def self.get_latest(limit, offset, order_by, order)
 
@@ -146,74 +146,26 @@ class Review
     return [result, num_isbn || 0, nil]
   end
 
-  def self.get_reviews_from_uri(uri)
+  def self.get(uri)
 
-    # 1. Get review by id
-    cached_review = Cache.get(uri)
-
-    if cached_review
-      review = JSON.parse(cached_review)
-      # also set cache for manifestation TODO move this out
-      manifestation = {"work" => [{"author" => review["works"].first["author"],
-                       "author_id" => review["works"].first["author_id"].first,
-                       "cover_url" => review["works"].first["cover_url"],
-                       "isbn" => review["works"].first["isbn"].first,
-                       "manifestation" => review["works"].first["manifestation"],
-                       "title" => review["works"].first["title"],
-                       "uri" => review["works"].first["uri"]}]}
-
-      Cache.set review["works"].first["manifestation"], manifestation.to_json
-    else
+    review = Cache.get(uri) {
        begin
          resp = @@conn.get do |req|
            req.body = {:uri => uri}.to_json
            puts "API REQUEST to #{@@conn.url_prefix.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
          end
        rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
-          return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil, nil]
+          error = "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"
        end
-
-       return ["Får ikke kontakt med ekstern ressurs (#{Settings::API}).",nil, nil] if resp.status != 200
-       return [ "Finner ingen anbefaling med denne ID-en (#{uri}).", nil, nil] if resp.body.match(/no reviews found/)
-
-       review = JSON.parse(resp.body)
-       puts "API RESPONSE:\n#{review}\n\n" if ENV['RACK_ENV'] == 'development'
-
-       Cache.set uri, review.to_json
-    end
-
-    # 2. Fetch other reviews if any by work_id
-    work_uri = review["works"].first["uri"]
-    cached_work = Cache.get(uri)
-
-    if cached_work
-      work = JSON.parse(cached_work)
-    else
-      begin
-        resp = @@conn.get do |req|
-          req.body = {:work => work_uri}.to_json
-           puts "API REQUEST to #{@@conn.url_prefix.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
-        end
-      rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
-        return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil, nil]
-      end
-
-      return ["Får ikke kontakt med ekstern ressurs (#{Settings::API}).", nil, nil] if resp.status != 200
-      return ["Finner ingen verk med denne ID-en (#{uri}).", nil, nil] unless resp.body.match(/works/)
-
-      work = JSON.parse(resp.body)
-      puts "API RESPONSE:\n#{work}\n\n" if ENV['RACK_ENV'] == 'development'
-
-      Cache.set uri, resp.body
-    end
-
-    # 3. Check if there are other reviews other than uri
-    other_reviews = []
-    work["works"].first["reviews"].each do |r|
-      other_reviews << r unless r["uri"] == uri
-    end
-
-    return nil, review["works"].first, other_reviews.uniq
+       error = "Får ikke kontakt med ekstern ressurs (#{Settings::API})." if resp.status != 200
+       error = "Finner ingen anbefaling med denne ID-en (#{uri})." if resp.body.match(/no reviews found/)
+       return error, nil, nil if error
+       rev = JSON.parse(resp.body)
+       #puts "API RESPONSE:\n#{rev}\n\n" if ENV['RACK_ENV'] == 'development'
+       Cache.set uri, rev
+       rev
+    }
+    return nil, review["works"].first, [] #other_reviews.uniq
   end
 
   def self.publish(title, teaser, text, audiences, reviewer, isbn, api_key, published)

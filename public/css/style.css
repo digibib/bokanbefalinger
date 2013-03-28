@@ -463,10 +463,6 @@ p.title {
   width: 180px;
   text-align: center;
 }
-.review-teaser {
-  float: left;
-  width: 500px;
-}
 
 /* single review page */
 
@@ -476,17 +472,23 @@ a:hover.author-link { text-decoration: underline }
 a.work-link { text-decoration: none; color:#444; }
 a:hover.work-link { text-decoration: underline }
 
-.teaser {
-  background: #eee;
-  padding: 10px;
-  width:706px;
-  clear:both;
-}
 
 .review-text {
   width:100%;
   clear:both;
+  font-size:14px;
 }
+
+.review-info {
+  float: left;
+  width: 520px;
+  font-size: 14px;
+  display: inline-block;
+  margin: 0;
+  padding-top: 10px;
+}
+
+.review-teaser { background: #eee; padding: 1em;}
 
 .other-reviews {
   clear:both;

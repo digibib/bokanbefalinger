@@ -54,7 +54,7 @@ class BokanbefalingerApp < Sinatra::Application
     end
 
     uri = "http://data.deichman.no/" + uri
-    @error_message, @review, @other_reviews = Review.get_reviews_from_uri(uri)
+    @error_message, @review, @other_reviews = Review.get(uri)
 
     if @error_message
       @title ="Feil"
