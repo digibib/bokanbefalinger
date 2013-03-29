@@ -2,23 +2,29 @@
 	<p class="lokkeskrift">Søk etter anbefalinger</p>
 	<form id="advanced-search">
 		<label>Boktittel</label>
-		<select name="forfatter" id="search-author" style="width:305px" data-placeholder="søk/velg tittel">
+		<select name="tittel" id="search-author" style="width:305px" data-placeholder="søk/velg tittel">
 			<option></option>
 			<% @dropdown.titles.sort_by { |k,v| v }.each do |k,v| %>
-			<option value="<%= k %>"><%= v %></option>
+			<option value="<%= k %>"  <%= 'selected="selected"' if params["tittel"] == k %>><%= v %></option>
 			<% end %>
 		</select><br><br>
 		<label>Forfatter av boken</label>
-		<select name="tittel" id="search-title" style="width:305px" data-placeholder="søk/velg forfatter">
+		<select name="forfatter" id="search-title" style="width:305px" data-placeholder="søk/velg forfatter">
 			<option></option>
 			<% @dropdown.authors.sort_by { |k,v| v }.each do |k,v| %>
-			<option value="<%= k %>"><%= v %></option>
+			<option value="<%= k %>" <%= 'selected="selected"' if params["forfatter"] == k %>><%= v %></option>
 			<% end %>
 		</select><br>
 		<label>ISBN-nummer</label><input name="isbn" type="text"><br>
-		<label>Illustratør</label><input type="text" placeholder="ikke implementert ennå" disabled="disabled"><br>
-		<label>Oversetter</label><input type="text" placeholder="ikke implementert ennå" disabled="disabled"><br>
-		<label>Anbefalers navn</label><input type="text" placeholder="ikke implementert ennå" disabled="disabled"><br>
+<!-- 		<label>Illustratør</label><input type="text" placeholder="ikke implementert ennå" disabled="disabled"><br>
+		<label>Oversetter</label><input type="text" placeholder="ikke implementert ennå" disabled="disabled"><br> -->
+		<label>Anbefalers navn</label>
+		<select name="anmelder" id="search-reviewer" style="width:305px" type="text" data-placeholder="søk/velg anbefaler">
+			<option></option>
+			<% @dropdown.reviewers.sort_by { |k,v| v }.each do |k,v| %>
+			<option value="<%= k %>" <%= 'selected="selected"' if params["anmelder"] == k %>><%= v %></option>
+			<% end %>
+		</select><br>
 		<button type="submit" class="red medium">Søk</button>
 		<div class="clearfix"></div>
 	</form>
@@ -27,3 +33,11 @@
 <div class="main-right">
 	<%= erb :login %>
 </div>
+
+<script>
+$(document).ready(function() {
+	$('#search-author').chosen({no_results_text: "Ingen treff for",allow_single_deselect: true});
+	$('#search-title').chosen({no_results_text: "Ingen treff for", allow_single_deselect: true});
+	$('#search-reviewer').chosen({no_results_text: "Ingen treff for", allow_single_deselect: true});
+});
+</script>
