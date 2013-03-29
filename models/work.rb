@@ -19,35 +19,30 @@ class Work
       error = "Får ikke kontakt med ekstern ressurs (#{Settings::API})." if resp.status != 200
       return error, nil if error
 
-      works = JSON.parse(resp.body)
-      Cache.set(author, works)
-      works
+      cache = JSON.parse(resp.body)
+      Cache.set(author, cache)
+      cache
     }
     return nil, all_works["works"]
   end
 
   def self.get(work_id)
-    cached_work = Cache.get(work_id)
-
-    if cached_work
-      work = JSON.parse(cached_work)
-    else
+    work = Cache.get(work_id) {
       begin
         resp = @@conn.get do |req|
-          req.body = {:work => work_id}.to_json
-          puts "API REQUEST to #{@@conn.url_prefix.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
+          req.body = {:uri => work_id, :reviews => true}.to_json
         end
-      rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
-        return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil]
+      rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
+        error = "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"
       end
 
-      return ["Får ikke kontakt med ekstern ressurs (#{Settings::API}).", nil] if resp.status != 200
-      return ["Finner ingen verk med denne ID-en (#{work_id}).", nil] unless resp.body.match(/works/)
-      work = JSON.parse(resp.body)
-      puts "API RESPONSE:\n#{work}\n\n" if ENV['RACK_ENV'] == 'development'
+      error = "Får ikke kontakt med ekstern ressurs (#{Settings::API})." if resp.status != 200
+      return error, nil if error
 
-      Cache.set work_id, resp.body
-    end
+      cache = JSON.parse(resp.body)
+      Cache.set(work_id, cache)
+      cache
+    }
 
     return nil, work["works"].first
   end

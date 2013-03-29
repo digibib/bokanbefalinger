@@ -54,6 +54,21 @@
 				<% end %>
 			<% end %>
 		<% end %>
+
+		<% if @work %>
+			<h3>Fant <%= @work["reviews"].length %> anbefaling av <%= @work["prefTitle"] || @work["originalTitle"] %> av <%= @work["authors"].map { |a| a["name"] } .join ", " %></h3>
+			<% puts @work %>
+			<% @work["reviews"].each do |r| %>
+					<div class="search-hit">
+						<span class="left">
+							<strong class="red-text"><a href="/anbefaling<%= r['uri'][23..-1] %>"><%= r["title"]%></a></strong>
+						</span><br>
+					</div>
+					<p class="liste-under">anbefalt av <a href="/søk?anmelder=<%= r["reviewer"]["uri"]%>" class="liste-reviewer"><%= r["reviewer"]["name"] %></a> <span class="liste-date"><%= dateformat(r["issued"]) %></span> </p>
+					<p style="width:90%; margin-top:10px"><%= r["teaser"] %></p>
+			<% end %>
+		<% end %>
+
 	</div>
 </div>
 
