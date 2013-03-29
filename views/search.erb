@@ -2,14 +2,14 @@
 	<p class="lokkeskrift">Søk etter anbefalinger</p>
 	<form id="advanced-search">
 		<label>Boktittel</label>
-		<select name="tittel" id="search-author" style="width:305px" data-placeholder="søk/velg tittel">
+		<select name="tittel" id="search-author" style="width:305px;" data-placeholder="søk/velg tittel">
 			<option></option>
 			<% @dropdown.titles.sort_by { |k,v| v }.each do |k,v| %>
 			<option value="<%= k %>"  <%= 'selected="selected"' if params["tittel"] == k %>><%= v %></option>
 			<% end %>
 		</select><br><br>
 		<label>Forfatter av boken</label>
-		<select name="forfatter" id="search-title" style="width:305px" data-placeholder="søk/velg forfatter">
+		<select name="forfatter" id="search-title" style="width:305px;" data-placeholder="søk/velg forfatter">
 			<option></option>
 			<% @dropdown.authors.sort_by { |k,v| v }.each do |k,v| %>
 			<option value="<%= k %>" <%= 'selected="selected"' if params["forfatter"] == k %>><%= v %></option>
@@ -28,6 +28,33 @@
 		<button type="submit" class="red medium">Søk</button>
 		<div class="clearfix"></div>
 	</form>
+
+	<div id="search-results">
+		<% if @works %>
+			<h3>Anbefalinger av <%= @works.first["authors"].first["name"] %>s bøker</h3>
+			<% countable = @works.reject { |w| w["reviews"].nil? || w["reviews"].empty? || w["reviews"].all? { |r| r["published"] == false } } %>
+			<p style="color: #aaa"><%= countable.map {|c| c["reviews"].reject { |r| r["published"] == false} .length } .inject(&:+) %> anbefalinger av <%= countable.count %> ulike bøker</p>
+			<% @works.each do |w| %>
+				<% if w["reviews"] && w["reviews"].length >= 1 %>
+					<div class="search-hit">
+						<span class="left">
+							<strong class="red-text"><%= w["prefTitle"] || w["originalTitle"] %></strong>
+						</span>
+						<span class="right num">
+							<%= w["reviews"].length %> anbefaling<%= 'er' if w["reviews"].length > 1 %>
+						</span><br/>
+					</div>
+					<% w["reviews"].each do |r| %>
+						<% unless r["published"] == false %>
+							<p>
+								<a href="/anbefaling<%= r['uri'][23..-1] %>"><%= r["title"]%></a> anbefalt av <a href="/søk?anmelder=<%= r["reviewer"]["uri"]%>" class="liste-reviewer"><%= r["reviewer"]["name"] %></a> <span class="liste-date"><%= dateformat(r["issued"]) %></span>
+							</p>
+						<% end %>
+					<% end %>
+				<% end %>
+			<% end %>
+		<% end %>
+	</div>
 </div>
 
 <div class="main-right">

@@ -40,7 +40,8 @@ textarea { overflow: auto; vertical-align: top; }
 button, input, select, textarea { font-family: inherit;   font-size: 100%;
     margin: 0; }
 table { border-collapse: collapse; border-spacing: 0; }
-a { color: #c12121; }
+a { color: #c12121; text-decoration: none;}
+a:hover { text-decoration: underline;}
 a:focus { outline: thin dotted; }
 a:active, a:hover { outline: 0; }
 img { border: 0; }
@@ -88,6 +89,10 @@ h1, h2, h3 { color :#333; line-height: 1.1em;}
 /* global styles */
 
 .clearfix { clear:both;}
+
+.right { float: right;}
+
+.left { float: left;}
 
 .gray { background: #808080; }
 
@@ -583,7 +588,11 @@ span.error { background-color: #F9D654; display:none; padding:0.2em;}
 #advanced-search input { margin: 5px; width: 300px;}
 #advanced-search button { float: right;}
 
-
+#search-results { margin: 40px 0; }
+#search-results p { font-size:14px; margin:0;}
+.search-hit { width: 90%; border-bottom: 1px solid #ccc; display:block; margin-top:1em;}
+.search-hit span { display:inline-block;}
+.num { font-size:14px;}
 
 /**
  * HINT- A CSS tooltip library

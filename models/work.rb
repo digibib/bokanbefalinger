@@ -4,7 +4,27 @@ require "faraday"
 
 class Work
 
-  @@conn = Faraday.new(:url => Settings::API)
+  @@conn = Faraday.new(:url => Settings::API + "works")
+
+  def self.by_author(author)
+    all_works = Cache.get(author) {
+      begin
+        resp = @@conn.get do |req|
+          req.body = {:author => author, :reviews => true}.to_json
+        end
+      rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
+        error = "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"
+      end
+
+      error = "Får ikke kontakt med ekstern ressurs (#{Settings::API})." if resp.status != 200
+      return error, nil if error
+
+      works = JSON.parse(resp.body)
+      Cache.set(author, works)
+      works
+    }
+    return nil, all_works["works"]
+  end
 
   def self.get(work_id)
     cached_work = Cache.get(work_id)
