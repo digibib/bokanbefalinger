@@ -543,7 +543,8 @@ select.kriterium { vertical-align:top;}
 .liste-title a:hover { text-decoration: underline;}
 .liste-author {border-bottom: 1px solid #ddd; font-size:16px; margin:0;}
 .liste-under { margin:2px 0 ;}
-.liste-reviewer { color: #c12121; }
+.liste-reviewer { color: #c12121; text-decoration:none;}
+.liste-reviewer:hover { text-decoration:underline;}
 .liste-date { color: #999 ;}
 .liste-teaser { font-size: 13px;}
 .liste-pagination { clear:both; font-size: 14px; margin:20px 0;
