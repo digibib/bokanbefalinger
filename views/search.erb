@@ -69,6 +69,20 @@
 			<% end %>
 		<% end %>
 
+		<% if @reviews %>
+			<h3><%= @dropdown.reviewers[params["anmelder"]] %>s anbefalinger</h3>
+			<% @reviews.each do |w| %>
+			<% r = w["reviews"].first %>
+				<div class="search-hit">
+					<span class="left">
+						<strong class="red-text"><a href="/anbefaling<%= r['uri'][23..-1] %>"><%= r["title"]%></a></strong>
+					</span><br>
+				</div>
+				<p class="liste-under">anbefalt av <a href="/søk?anmelder=<%= r["reviewer"]["uri"]%>" class="liste-reviewer"><%= r["reviewer"]["name"] %></a> <span class="liste-date"><%= dateformat(r["issued"]) %></span> </p>
+				<p style="width:90%; margin-top:10px"><%= r["teaser"] %></p>
+		<% end %>
+		<% end %>
+
 	</div>
 </div>
 

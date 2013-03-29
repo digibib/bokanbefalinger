@@ -21,11 +21,31 @@ class Review
       error = "Får ikke kontakt med ekstern ressurs (#{Settings::API})." if resp.status != 200
       return error, nil if error
 
-      revs = JSON.parse(resp.body)
-      Cache.set("reviews:latest", revs)
-      revs
+      cache = JSON.parse(resp.body)
+      Cache.set("reviews:latest", cache)
+      cache
     }
     return nil, {"works" => latest["works"][offset..(offset+limit)]}
+  end
+
+  def self.by_reviewer(reviewer)
+    reviews = Cache.get(reviewer) {
+      begin
+        resp = @@conn.get do |req|
+          req.body = {:reviewer => reviewer, :limit => 100}.to_json
+        end
+      rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
+        error = "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"
+      end
+
+      error = "Får ikke kontakt med ekstern ressurs (#{Settings::API})." if resp.status != 200
+      return error, nil if error
+
+      cache = JSON.parse(resp.body)
+      Cache.set(reviewer, cache)
+      cache
+    }
+    return nil, reviews["works"]
   end
 
   def self.search_by_author(searchterms)
@@ -234,39 +254,6 @@ class Review
     return ["Skriving av anbefaling til RDF-storen feilet", nil] unless resp.body.match(/uri/)
 
     return [nil, resp.body]
-  end
-
-  def self.get_by_user(user, user_uri)
-    cached = Cache.hgetall user_uri
-    unless cached.empty?
-      res = cached
-      res.each { |k,v| res[k] = eval(v)}
-      res = {"works" => res.values }
-    else
-      # fetch reviews from api/reviews reviewer=user
-      begin
-        resp = @@conn.get do |req|
-          req.body = {:reviewer => user , :cluster => false}.to_json
-          puts "API REQUEST to #{@@conn.url_prefix.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
-        end
-      rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
-        return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil]
-      end
-
-      return ["Får ikke kontakt med ekstern ressurs (#{Settings::API}).", nil] if resp.status != 200
-
-      return [nil, {"works" => []}] if resp.body.match(/error/)
-      res = JSON.parse(resp.body)
-      puts "API RESPONSE:\n#{res}\n\n" if ENV['RACK_ENV'] == 'development'
-      # set user cache
-
-      res["works"].each do |w|
-        Cache.hset user_uri, w["reviews"].first["uri"], w
-        Cache.set w["reviews"].first["uri"], {"works" => [w]}.to_json
-      end
-    end
-
-    return [nil, res]
   end
 
 end

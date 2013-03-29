@@ -21,7 +21,6 @@ class BokanbefalingerApp < Sinatra::Application
   end
 
   get "/søk" do
-    puts params
     @dropdown = List.populate_dropdowns
 
     if params["forfatter"] and not params["forfatter"].empty?
@@ -30,6 +29,10 @@ class BokanbefalingerApp < Sinatra::Application
 
     if params["tittel"] and not params["tittel"].empty?
       @error_message, @work = Work.get(params["tittel"])
+    end
+
+    if params["anmelder"] and not params["anmelder"].empty?
+      @error_message, @reviews = Review.by_reviewer(params["anmelder"])
     end
 
     if @error_message
