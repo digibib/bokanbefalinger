@@ -2,14 +2,14 @@
 	<p class="lokkeskrift">Søk etter anbefalinger</p>
 	<form id="advanced-search">
 		<label>Boktittel</label>
-		<select name="tittel" id="search-author" style="width:305px;" data-placeholder="søk/velg tittel">
+		<select name="tittel" id="search-title" style="width:305px;" data-placeholder="søk/velg tittel">
 			<option></option>
 			<% @dropdown.titles.sort_by { |k,v| v }.each do |k,v| %>
 			<option value="<%= k %>"  <%= 'selected="selected"' if params["tittel"] == k %>><%= v %></option>
 			<% end %>
 		</select><br><br>
 		<label>Forfatter av boken</label>
-		<select name="forfatter" id="search-title" style="width:305px;" data-placeholder="søk/velg forfatter">
+		<select name="forfatter" id="search-author" style="width:305px;" data-placeholder="søk/velg forfatter">
 			<option></option>
 			<% @dropdown.authors.sort_by { |k,v| v }.each do |k,v| %>
 			<option value="<%= k %>" <%= 'selected="selected"' if params["forfatter"] == k %>><%= v %></option>
@@ -78,8 +78,38 @@
 
 <script>
 $(document).ready(function() {
-	$('#search-author').chosen({no_results_text: "Ingen treff for",allow_single_deselect: true});
-	$('#search-title').chosen({no_results_text: "Ingen treff for", allow_single_deselect: true});
-	$('#search-reviewer').chosen({no_results_text: "Ingen treff for", allow_single_deselect: true});
+	$('#search-author').chosen({no_results_text: "Ingen treff for", allow_single_deselect: true}).change(function() {
+		var selected = $(this).find('option:selected').val();
+		if (selected != "") {
+			$('#search-title').attr('disabled', true).trigger("liszt:updated");
+			$('#search-reviewer').attr('disabled', true).trigger("liszt:updated");
+		} else {
+			$('#search-title').attr('disabled', false).trigger("liszt:updated");
+			$('#search-reviewer').attr('disabled', false).trigger("liszt:updated");
+		}
+	});
+
+	$('#search-title').chosen({no_results_text: "Ingen treff for", allow_single_deselect: true}).change(function() {
+		var selected = $(this).find('option:selected').val();
+		if (selected != "") {
+			$('#search-author').attr('disabled', true).trigger("liszt:updated");
+			$('#search-reviewer').attr('disabled', true).trigger("liszt:updated");
+		} else {
+			$('#search-author').attr('disabled', false).trigger("liszt:updated");
+			$('#search-reviewer').attr('disabled', false).trigger("liszt:updated");
+		}
+	});
+
+	$('#search-reviewer').chosen({no_results_text: "Ingen treff for", allow_single_deselect: true}).change(function() {
+		var selected = $(this).find('option:selected').val();
+		if (selected != "") {
+			$('#search-title').attr('disabled', true).trigger("liszt:updated");
+			$('#search-author').attr('disabled', true).trigger("liszt:updated");
+		} else {
+			$('#search-title').attr('disabled', false).trigger("liszt:updated");
+			$('#search-author').attr('disabled', false).trigger("liszt:updated");
+		}
+	});
+
 });
 </script>
