@@ -4,7 +4,7 @@ require "faraday"
 
 class User
 
-  @@conn = Faraday.new(:url => "http://datatest.deichman.no")
+  @@conn = Faraday.new(:url => "http://marc2rdf.deichman.no")
 
   def self.log_in(username, password, session)
     # Returns error + authorized true or false
@@ -20,7 +20,7 @@ class User
     rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
       return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil]
     end
-    return ["Får ikke kontakt med eksternt API(#{Settings::API}",nil] if resp.status != 200
+    return ["Får ikke kontakt med eksternt API (#{Settings::API})",nil] if resp.status != 200
 
     res = JSON.parse(resp.body)
     puts "API RESPONSE:\n#{res}\n\n" if ENV['RACK_ENV'] == 'development'
