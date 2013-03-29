@@ -1,20 +1,24 @@
 # encoding: utf-8
 
 Dropdown = Struct.new(:subjects, :persons, :genres, :languages, :authors,
-                      :formats, :nationalities, :titles)
+                      :formats, :nationalities, :titles, :reviewers)
 class List
 
   def self.populate_dropdowns()
 
     lists = Cache.get("dropdowns") {
 
-      querystring="SELECT DISTINCT ?work ?subject_id ?subject_label ?person_id (CONCAT(?person_label, ' ', ?lifespan) AS ?person_label) ?genre_id ?genre_label ?lang_id ?lang_label ?creator ?creator_label ?format ?format_label ?nationality ?nationality_label ?title (sql:sample(?original_title) AS ?original_title)
+      querystring="SELECT DISTINCT ?work ?subject_id ?subject_label ?person_id (CONCAT(?person_label, ' ', ?lifespan) AS ?person_label) ?genre_id ?genre_label ?lang_id ?lang_label ?creator ?creator_label ?format ?format_label ?nationality ?nationality_label ?title (sql:sample(?original_title) AS ?original_title) ?reviewer ?reviewer_name
       FROM <http://data.deichman.no/books>
+      FROM NAMED <http://data.deichman.no/reviews>
+      FROM NAMED <http://data.deichman.no/sources>
       WHERE {
       ?work <http://purl.org/spar/fabio/hasManifestation> ?book .
       ?book <http://purl.org/stuff/rev#hasReview> ?review ;
             <http://purl.org/dc/terms/title> ?title .
       ?work <http://purl.org/dc/terms/title> ?original_title .
+      GRAPH <http://data.deichman.no/reviews> { ?review <http://purl.org/stuff/rev#reviewer> ?reviewer .  }
+      GRAPH <http://data.deichman.no/sources> { ?reviewer <http://xmlns.com/foaf/0.1/name> ?reviewer_name . }
       { ?work <http://purl.org/dc/terms/creator> ?creator .
         ?creator <http://xmlns.com/foaf/0.1/name> ?creator_label .
         ?creator <http://www.foafrealm.org/xfoaf/0.1/nationality> ?nationality .
@@ -43,7 +47,7 @@ class List
       "
       result = REPO.select(querystring)
 
-      d = Dropdown.new({},{},{},{},{},{},{},{})
+      d = Dropdown.new({},{},{},{},{},{},{},{}, {})
 
       result.each do |s|
         d.authors[s[:creator].to_s] = s[:creator_label].to_s
@@ -63,6 +67,8 @@ class List
         original_title = ""
         original_title += " (#{s[:original_title]})" unless s[:title] == s[:original_title]
         d.titles[s[:work].to_s] = s[:title].to_s + original_title
+
+        d.reviewers[s[:reviewer].to_s] = s[:reviewer_name].to_s
       end
 
       all = Hash[d.each_pair.to_a]
