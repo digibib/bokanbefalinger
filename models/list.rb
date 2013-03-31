@@ -22,6 +22,13 @@ class List
     "http://anbefalinger.deichman.no/feed?" + params.map { |k,v| "#{k}=" + v.join("&#{k}=") }.join("&")
   end
 
+  def self.params_from_feed_url(url)
+    params = Hash[url[37..-1].split("&").map { |s| s.split("=") }.group_by(&:first).map { |k,v| [k, v.map(&:last)]}]
+    params["years"] = params["years_from"].zip(params["years_to"])
+    params["pages"] = params["pages_from"].zip(params["pages_to"])
+    params.map { |k,v| params.delete(k) if ["years_from", "years_to", "pages_from", "pages_to"].include?(k) }
+  end
+
   def self.populate_dropdowns()
 
     lists = Cache.get("dropdowns") {
