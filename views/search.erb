@@ -15,7 +15,7 @@
 			<option value="<%= k %>" <%= 'selected="selected"' if params["forfatter"] == k %>><%= v %></option>
 			<% end %>
 		</select><br>
-		<label>ISBN-nummer</label><input name="isbn" type="text" value="<%= params["isbn"] %>"><br>
+		<label>ISBN-nummer</label><input name="isbn" id="search-isbn" type="text" value="<%= params["isbn"] %>"><br>
 <!-- 		<label>Illustratør</label><input type="text" placeholder="ikke implementert ennå" disabled="disabled"><br>
 		<label>Oversetter</label><input type="text" placeholder="ikke implementert ennå" disabled="disabled"><br> -->
 		<label>Anbefalers navn</label>
@@ -114,9 +114,12 @@ $(document).ready(function() {
 		if (selected != "") {
 			$('#search-title').attr('disabled', true).trigger("liszt:updated");
 			$('#search-reviewer').attr('disabled', true).trigger("liszt:updated");
+			$('#search-isbn').attr('disabled', true);
 		} else {
 			$('#search-title').attr('disabled', false).trigger("liszt:updated");
 			$('#search-reviewer').attr('disabled', false).trigger("liszt:updated");
+			$('#search-isbn').attr('disabled', false);
+
 		}
 	});
 
@@ -125,9 +128,12 @@ $(document).ready(function() {
 		if (selected != "") {
 			$('#search-author').attr('disabled', true).trigger("liszt:updated");
 			$('#search-reviewer').attr('disabled', true).trigger("liszt:updated");
+			$('#search-isbn').attr('disabled', true);
 		} else {
 			$('#search-author').attr('disabled', false).trigger("liszt:updated");
 			$('#search-reviewer').attr('disabled', false).trigger("liszt:updated");
+			$('#search-isbn').attr('disabled', false);
+
 		}
 	});
 
@@ -136,10 +142,25 @@ $(document).ready(function() {
 		if (selected != "") {
 			$('#search-title').attr('disabled', true).trigger("liszt:updated");
 			$('#search-author').attr('disabled', true).trigger("liszt:updated");
+			$('#search-isbn').attr('disabled', true);
 		} else {
 			$('#search-title').attr('disabled', false).trigger("liszt:updated");
 			$('#search-author').attr('disabled', false).trigger("liszt:updated");
+			$('#search-isbn').attr('disabled', false);
 		}
+	});
+
+	$('#search-isbn').on('keyup', function() {
+		if ( $(this).val() == "") {
+			$('#search-reviewer').attr('disabled', false).trigger("liszt:updated");
+			$('#search-title').attr('disabled', false).trigger("liszt:updated");
+			$('#search-author').attr('disabled', false).trigger("liszt:updated");
+		} else {
+			$('#search-reviewer').attr('disabled', true).trigger("liszt:updated");
+			$('#search-title').attr('disabled', true).trigger("liszt:updated");
+			$('#search-author').attr('disabled', true).trigger("liszt:updated");
+		}
+
 	});
 
 });
