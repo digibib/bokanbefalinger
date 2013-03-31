@@ -15,7 +15,7 @@
 			<option value="<%= k %>" <%= 'selected="selected"' if params["forfatter"] == k %>><%= v %></option>
 			<% end %>
 		</select><br>
-		<label>ISBN-nummer</label><input name="isbn" type="text"><br>
+		<label>ISBN-nummer</label><input name="isbn" type="text" value="<%= params["isbn"] %>"><br>
 <!-- 		<label>Illustratør</label><input type="text" placeholder="ikke implementert ennå" disabled="disabled"><br>
 		<label>Oversetter</label><input type="text" placeholder="ikke implementert ennå" disabled="disabled"><br> -->
 		<label>Anbefalers navn</label>
@@ -30,6 +30,9 @@
 	</form>
 
 	<div id="search-results">
+		<% if @error_message %>
+			<p class="error"><strong><%= @error_message %></strong></p>
+		<% end %>
 		<% if @works %>
 			<h3>Anbefalinger av <%= @works.first["authors"].first["name"] %>s bøker</h3>
 			<% countable = @works.reject { |w| w["reviews"].nil? || w["reviews"].empty? || w["reviews"].all? { |r| r["published"] == false } } %>
@@ -57,8 +60,22 @@
 
 		<% if @work %>
 			<h3>Fant <%= @work["reviews"].length %> anbefaling av <%= @work["prefTitle"] || @work["originalTitle"] %> av <%= @work["authors"].map { |a| a["name"] } .join ", " %></h3>
-			<% puts @work %>
 			<% @work["reviews"].each do |r| %>
+					<div class="search-hit">
+						<span class="left">
+							<strong class="red-text"><a href="/anbefaling<%= r['uri'][23..-1] %>"><%= r["title"]%></a></strong>
+						</span><br>
+					</div>
+					<p class="liste-under">anbefalt av <a href="/søk?anmelder=<%= r["reviewer"]["uri"]%>" class="liste-reviewer"><%= r["reviewer"]["name"] %></a> <span class="liste-date"><%= dateformat(r["issued"]) %></span> </p>
+					<p style="width:90%; margin-top:10px"><%= r["teaser"] %></p>
+			<% end %>
+		<% end %>
+
+
+		<% if @isbn %>
+			<% puts @isbn %>
+			<h3>Fant <%= Array(@isbn["reviews"]).length %> anbefalinger av <%= @isbn["prefTitle"] || @isbn["originalTitle"] %> av <%= Array(@isbn["authors"]).map { |a| a["name"] } .join ", " %></h3>
+			<% Array(@isbn["reviews"]).each do |r| %>
 					<div class="search-hit">
 						<span class="left">
 							<strong class="red-text"><a href="/anbefaling<%= r['uri'][23..-1] %>"><%= r["title"]%></a></strong>
@@ -80,7 +97,7 @@
 				</div>
 				<p class="liste-under">anbefalt av <a href="/søk?anmelder=<%= r["reviewer"]["uri"]%>" class="liste-reviewer"><%= r["reviewer"]["name"] %></a> <span class="liste-date"><%= dateformat(r["issued"]) %></span> </p>
 				<p style="width:90%; margin-top:10px"><%= r["teaser"] %></p>
-		<% end %>
+			<% end %>
 		<% end %>
 
 	</div>

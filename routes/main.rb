@@ -35,12 +35,11 @@ class BokanbefalingerApp < Sinatra::Application
       @error_message, @reviews = Review.by_reviewer(params["anmelder"])
     end
 
-    if @error_message
-      @title ="Feil"
-      erb :error
-    else
-      @title = "Søk etter anbefalinger"
-      erb :search
+    if params["isbn"] and not params["isbn"].gsub(/[^0-9X]/, "").empty?
+      @error_message, @isbn = Work.by_isbn(params["isbn"].gsub(/[^0-9X]/, ""))
     end
+
+    @title = "Søk etter anbefalinger"
+    erb :search
   end
 end
