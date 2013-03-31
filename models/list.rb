@@ -23,10 +23,11 @@ class List
   end
 
   def self.params_from_feed_url(url)
-    params = Hash[url[37..-1].split("&").map { |s| s.split("=") }.group_by(&:first).map { |k,v| [k, v.map(&:last)]}]
-    params["years"] = params["years_from"].zip(params["years_to"])
-    params["pages"] = params["pages_from"].zip(params["pages_to"])
+    params = Hash[url.gsub(/^(.)*\?/,"").split("&").map { |s| s.split("=") }.group_by(&:first).map { |k,v| [k, v.map(&:last)]}]
+    params["years"] = params["years_from"].zip(params["years_to"]) if params["years_from"]
+    params["pages"] = params["pages_from"].zip(params["pages_to"]) if params["pages_from"]
     params.map { |k,v| params.delete(k) if ["years_from", "years_to", "pages_from", "pages_to"].include?(k) }
+    params
   end
 
   def self.populate_dropdowns()
