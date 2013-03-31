@@ -47,7 +47,7 @@ class List
       "
       result = REPO.select(querystring)
 
-      d = Dropdown.new({},{},{},{},{},{},{},{}, {})
+      d = Dropdown.new({},{},{},{},{},{},{},{},{})
 
       result.each do |s|
         d.authors[s[:creator].to_s] = s[:creator_label].to_s
