@@ -137,11 +137,15 @@ class BokanbefalingerApp < Sinatra::Application
     end
     @reviews.compact!
     puts @reviews.count
+
+    @feed_url = List.create_feed_url(params.each { |k,v| params[k] = JSON.parse(v) if v.class == String })
+
     erb :list, :layout => false
   end
 
   post "/dropdown" do
     puts params
+
     uris = List.repopulate_dropdown(params["dropdown"],
                       Array(params["authors"]), Array(params["subjects"]),
                       Array(params["persons"]), JSON.parse(params["pages"]),

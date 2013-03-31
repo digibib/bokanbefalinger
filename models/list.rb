@@ -4,6 +4,24 @@ Dropdown = Struct.new(:subjects, :persons, :genres, :languages, :authors,
                       :formats, :nationalities, :titles, :reviewers)
 class List
 
+  def self.create_feed_url(params)
+    params = params.reject { |k,v| v.empty? }
+
+    if params["pages"]
+      params["pages_from"] = params["pages"].map { |p| p.first }
+      params["pages_to"] = params["pages"].map { |p| p.last }
+      params.delete "pages"
+    end
+
+    if params["years"]
+      params["years_from"] = params["years"].map { |y| y.first }
+      params["years_to"] = params["years"].map { |y| y.last }
+      params.delete "years"
+    end
+
+    "http://anbefalinger.deichman.no/feed?" + params.map { |k,v| "#{k}=" + v.join("&#{k}=") }.join("&")
+  end
+
   def self.populate_dropdowns()
 
     lists = Cache.get("dropdowns") {

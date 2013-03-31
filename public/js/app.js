@@ -422,14 +422,12 @@ $('#generate-list').on('click', function() {
 	  dataType: "html"
 	});
 
-	$('#list-rsslink').hide();
 	$('#list-results').html("<img class='loading' src='img/loading.gif'>").show();
 
     function printReviews(element, index, array) {
     	$('#list-results').append('<p>'+element+'</p>');
     }
 	request.done(function(data) {
-		$('#list-rsslink').show();
 		$('#list-results').html(data);
 		// var l = data.length;
 		// if (l > 10) {
@@ -523,6 +521,6 @@ $('.liste-tittel').on('click', function() {
 	$(this).next().click();
 });
 
-$('.rss-copy').on('click', function() {
+$("#list-results").on('click', '#rss-copy', function() {
 	window.prompt("Trykk Ctrl+C, så Enter for å kopiere", $(this).prev().val());
 });
