@@ -7,6 +7,7 @@ GEM
       httparty
       net-http-persistent
     backports (2.6.5)
+    builder (3.2.0)
     coderay (1.0.8)
     daemons (1.1.9)
     em-synchrony (1.0.2)
@@ -64,6 +65,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  builder
   em-synchrony
   faraday
   hiredis
