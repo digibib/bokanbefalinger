@@ -12,17 +12,17 @@
 			<% end %>
 		</div>
 		<div>
-			<p><strong><%= @utgave["title"] %></strong></p>
-			<p><strong><%= @utgave["author"] %></strong></p>
+			<p><strong><%= @utgave["prefTitle"]  || @utgave["originalTitle"] %></strong></p>
+			<p><strong><%= @utgave["authors"].map { |a| a["name"] } .join ", " %></strong></p>
 		</div>
 	</div>
 	<div class="reviewform-other">
-		<%= @utgave["title"] %> har<br>
+		<%= @utgave["prefTitle"]  || @utgave["originalTitle"] %> har<br>
 		<span class="red-text">x andre anbefalinger</span>
 	</div>
 	<div class="clearfix"></div>
 	<form id="review-form" action="/review" method="POST">
-		<input type="hidden" id="isbn" name="isbn" value="<%= @utgave["isbn"] %>" />
+		<input type="hidden" id="isbn" name="isbn" value="<%= @utgave["isbns"].first %>" />
 		<input type="hidden" id="published" name="published" value="false" />
 		<label>Tittel på anbefalingen<span class="redstar">*</span><br>
 		<input id="title" class="required" type="text" name="title" placeholder="Lag en tittel som innbyr til lesing"/></label>

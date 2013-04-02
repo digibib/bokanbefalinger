@@ -64,22 +64,22 @@ class Work
 
       cache = JSON.parse(resp.body)
       Cache.set(isbn, cache)
+      # also cache by edition (manifestastion)
+      cache["works"].first["editions"].each do |ed|
+        Cache.set(ed["uri"], cache)
+      end
+
       cache
     }
 
     return nil, work["works"].first
   end
 
-  def self.find_by_manifestation(uri)
-    cached_manifest = Cache.get(uri)
-
-    if cached_manifest
-      manifestation = JSON.parse(cached_manifest)
-    else
+  def self.by_manifestation(uri)
+    work = Cache.get(uri) {
       return "Not yet in cache", nil
-      #API works/ uri=x not yet implemented
-    end
+    }
 
-    return nil, manifestation
+    return nil, work
   end
 end

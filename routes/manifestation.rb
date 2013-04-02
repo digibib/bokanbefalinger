@@ -14,14 +14,14 @@ class BokanbefalingerApp < Sinatra::Application
       uri = path
     end
 
-    @error_message, @manifestation = Work.find_by_manifestation("http://data.deichman.no/"+uri)
+    @error_message, @manifestation = Work.by_manifestation("http://data.deichman.no/"+uri)
 
     if @error_message
       @title ="Feil"
       erb :error
     elsif create_new
       @title = "Skriv ny anbefaling"
-      @utgave = @manifestation["work"].first
+      @utgave = @manifestation["works"].first
       erb :new_by_manifestation
     else
       @manifestation
