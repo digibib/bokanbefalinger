@@ -520,7 +520,7 @@ input.number { width: 40px;}
 select.kriterium { vertical-align:top;}
 .fjern {  float:right; margin-right:10px;}
 
-#list-results { margin-top: 40px;}
+#list-results { margin: 40px 0;}
 #list-rsslink { margin-top: 40px; height: 24px; vertical-align: bottom;}
 #rss-link { margin-left:6px; width:68%; font-size: 13px; padding: 2px; height:18px;}
 #rss-copy { margin-left: 1em;}
