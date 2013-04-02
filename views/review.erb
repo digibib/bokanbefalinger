@@ -28,7 +28,7 @@
 		<% else %>
 			<%= text %>
 		<% end %>
-		<p><em>Målgruppe for denne anbefalingen er <%= r["audience"]["label"].first.downcase %></em></p>
+		<p><em>Målgruppe for denne anbefalingen er <%= r["audience"].map { |a| a.downcase } .join("/") %></em></p>
 	</div>
 	<div class="clearfix" style="margin-top:50px"></div>
 	<% if @other_reviews.size > 0 %>
