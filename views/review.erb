@@ -42,13 +42,12 @@
 			</div></div>
 		<% end %>
 	<% end %>
-	<% if session[:user] %>
+<!-- 	<% if session[:user] %>
 		<div class="clearfix"></div>
 		<div class="review-snippet" style="text-align:right;">
-				<p><a href="/manifestasjon<%= r["book_id"][23..-1] %>/ny"><button class="long green" style="margin-right:150px">Skriv ny anbefaling</button></a></p>
-
+				<p><a href="/manifestasjon<%= r["uri"][23..-1] %>/ny"><button class="long green" style="margin-right:150px">Skriv ny anbefaling</button></a></p>
 		</div>
-	<% end %>
+	<% end %> -->
 </div>
 <div class="main-right">
 	<%= erb :login %>
