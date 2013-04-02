@@ -33,9 +33,10 @@ class BokanbefalingerApp < Sinatra::Application
   end
 
   get "/work_by_isbn/" do
-    halt 404 unless work = Work.find_by_isbn(params[:isbn])
+    error, work = Work.by_isbn(params[:isbn])
+    halt 404 if error
 
-    work
+    work.to_json
   end
 
 end

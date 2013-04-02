@@ -52,8 +52,9 @@ $('#isbn').on('keypress', function(evt) {
 $("#isbn-button").on('click', function() {
 	var isbn_input = $('#isbn').val();
 
-	if (isbn == "") {
-	 return;
+	if (! /^[0-9-xX]*$/.test(isbn_input)) {
+		event.preventDefault();
+	 	return;
 	}
 
 	var request = $.ajax({
@@ -72,16 +73,20 @@ $("#isbn-button").on('click', function() {
 		$('#isbn').prop("disabled", false);
 		$('.loading-message').hide();
 		$('#isbn-notfound').hide();
-		$('#isbn-author').html(data.work[0].author);
-		$('#isbn-title').html(data.work[0].title);
-		if (data.work[0].cover_url) {
+		$('#isbn-author').html(data.authors[0].name);
+		if (data.prefTitle) {
+			$('#isbn-title').html(data.prefTitle);
+		} else {
+			$('#isbn-title').html(data.originalfTitle);
+		}
+		if (data.cover_url) {
 			$('.book-cover').removeClass("gray");
-			$('#isbn-cover').html("<img class='cover' src='"+data.work[0].cover_url+"'>");
+			$('#isbn-cover').html("<img class='cover' src='"+data.cover_url+"'>");
 		} else {
 			$('.book-cover').addClass("light-gray");
 			$('#isbn-cover').html("");
 		}
-		$('#anmeld').attr('href', '/manifestasjon'+data.work[0].manifestation.substr(23)+'/ny');
+		$('#anmeld').attr('href', '/manifestasjon'+data.editions[0].uri.substr(23)+'/ny');
 		$('#isbn-results').show()
 	});
 
