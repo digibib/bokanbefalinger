@@ -10,7 +10,8 @@ class Work
     all_works = Cache.get(author) {
       begin
         resp = @@conn.get do |req|
-          req.body = {:author => author, :reviews => true}.to_json
+          req.body = {:author => author, :reviews => true,
+                      :order_by => "issued", :order => "desc"}.to_json
         end
       rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
         error = "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"
@@ -30,7 +31,8 @@ class Work
     work = Cache.get(work_id) {
       begin
         resp = @@conn.get do |req|
-          req.body = {:uri => work_id, :reviews => true}.to_json
+          req.body = {:uri => work_id, :reviews => true,
+                      :order_by => "issued", :order => "desc"}.to_json
         end
       rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
         error = "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"
