@@ -32,7 +32,8 @@ class Review
     reviews = Cache.get(reviewer) {
       begin
         resp = @@conn.get do |req|
-          req.body = {:reviewer => reviewer, :limit => 100}.to_json
+          req.body = {:reviewer => reviewer, :limit => 100,
+                      :order_by => "issued", :order => "desc"}.to_json
         end
       rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
         error = "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"
