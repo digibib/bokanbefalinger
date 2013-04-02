@@ -221,8 +221,6 @@ header {
 #header-links { display: inline-block; float: right;}
 
 #header-links a {
-  text-decoration: none;
-  border-bottom: 1px solid white;
   color: #fff;
   letter-spacing: 0.1em;
   margin-right: 20px;
@@ -290,6 +288,10 @@ span.inner-navbutton {
   height:100%;
   display: inline-block;
 }
+span.inner-navbutton:hover {
+  font-weight:bold;
+}
+
 
 #navbar li.active {
   font-weight: bold;
