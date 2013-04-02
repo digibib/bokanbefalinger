@@ -31,7 +31,7 @@ class User
     begin
       resp = @@conn.get do |req|
         req.url '/api/users'
-        req.body = {:name => username}.to_json
+        req.body = {:accountName => username}.to_json
         puts "API REQUEST to #{req.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
       end
     rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
@@ -41,9 +41,9 @@ class User
     res = JSON.parse(resp.body)
     puts "API RESPONSE:\n#{res}\n\n" if ENV['RACK_ENV'] == 'development'
 
-    session[:source_uri] = res["user"]["accountServiceHomepage"]
-    session[:email] = res["user"]["email"]
-    session[:user_uri] = res["user"]["uri"]
+    session[:source_uri] = res["reviewer"]["accountServiceHomepage"]
+    session[:name] = res["reviewer"]["name"]
+    session[:user_uri] = res["reviewer"]["uri"]
 
     # 3. Get source api_key: api/sources source=x
     begin
@@ -78,13 +78,13 @@ class User
     session.clear
   end
 
-  def self.save(session, email, password)
+  def self.save(session, name, password)
     # Update user settings
     # Returns nil if success, error response if not
 
     body = {:api_key => session[:api_key],
-            :name => session[:user]}
-    body[:email] = email unless email.empty?
+            :uri => session[:user_uri]}
+    body[:name] = name unless name.empty?
     body[:password] = password unless password.empty?
 
     begin
@@ -101,7 +101,7 @@ class User
     puts "API RESPONSE:\n#{res}\n\n" if ENV['RACK_ENV'] == 'development'
 
     if resp.status == 200
-      session[:email] = res["reviewer"]["email"]
+      session[:name] = res["reviewer"]["name"]
       return nil
     else
       return res

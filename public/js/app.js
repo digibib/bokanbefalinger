@@ -465,25 +465,10 @@ $('#my-reviews-sorting').on('change', function() {
 
 // Brukerinnstillinger - validering
 
-function validateEmail($email)
-  {
-  	var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-  	return emailReg.test( $email );
-  }
-
 $('#lagre-innstillinger').on('click', function(event) {
 	// valider epostadresse
 	var validationFail = false;
 	$('span.error').hide();
-
-	var email = $('#email').val();
-	var oldemail = $('#oldemail').val();
-	if (email) {
-		if (!validateEmail(email)) {
-			$('.email-validation').html("Ugyldig epostadresse").show();
-			validationFail = true;
-		}
-	}
 
 	// kontroller at passordene er like
 	var passord1 = $('#passord1').val();
@@ -494,7 +479,7 @@ $('#lagre-innstillinger').on('click', function(event) {
 	}
 
 	// Ikke noe å lagre?
-	if ( !validationFail && !passord1 && !passord2 && (email === oldemail ) ) {
+	if ( !validationFail && !passord1 && !passord2 && (name === oldname ) ) {
 		$('span.error').html("Ingen endringer").show();
 		validationFail = true;
 	}

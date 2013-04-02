@@ -43,7 +43,7 @@ class BokanbefalingerApp < Sinatra::Application
   end
 
   post "/innstillinger" do
-    @error_message = User.save(session, params["email"], params["password1"])
+    @error_message = User.save(session, params["name"], params["password1"])
 
     if @error_message
       session[:flash_error].push @error_message

@@ -1,11 +1,10 @@
 <div id="login-box" class="right-bar">
 	<% if session[:user] %>
-		<p><strong>Hei, <%= session[:user] %>!</strong></p>
+		<p><strong>Hei, <%= session[:name].split(" ").first %>!</strong></p>
 		<a href="/finn"><button class="button-big" id="logout-button" type="submit">Skriv anbefaling</button></a><br/>
 		<span class="small-link"><a href="/minside">Mine anbefalinger</a></span>
 		<span class="small-link"><a href="/innstillinger">Endre brukerinnstillinger</a></span>
 		<span class="small-link" style="text-align:right"><a href="/logout?take_me_back=<%= request.path_info %>">Logg ut</a></span>
-
 	<% else %>
 		<span id="logg-inn-her">Logg deg inn her for å skrive en anbefaling!</span><br>
 		<img id="logg-inn-pil" src="/img/logg_inn_pil.png" alt="pil" />

@@ -2,13 +2,13 @@
 	<h2>Brukerinnstillinger</h2>
 	<form action="/innstillinger" method="POST">
 		<fieldset id="innstillinger-fieldset">
-			<label for="username">Brukernavn:</label>
+			<label for="username">Brukernavn/Epost:</label>
 			<input name="username" type="text" disabled="true" value="<%= session[:user] %>">
 			<br/>
-			<label for="email">E-post:</label>
-			<input id="oldemail" type="hidden" value="<%= session[:email] %>">
-			<input id="email" name="email" type="email" value="<%= session[:email] %>">
-			<span  class="error email-validation"></span>
+			<label for="name">Navn:</label>
+			<input id="oldname" type="hidden" value="<%= session[:name] %>">
+			<input id="name" name="name" type="text" value="<%= session[:name] %>">
+			<span  class="error name-validation"></span>
 			<br/>
 			<label for="password1">Nytt passord:</label>
 			<input id="passord1" type="password" name="password1">
