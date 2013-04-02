@@ -61,7 +61,7 @@ class BokanbefalingerApp < Sinatra::Application
       erb :error
     elsif edit
       @title = "Rediger anbefaling"
-      @error_message, my_reviews = Review.get_by_user(session[:user], session[:user_uri])
+      @error_message, my_reviews = Review.by_reviewer(session[:user_uri])
       my_reviews["works"].each do |w|
         @review = w if w["reviews"].first["uri"] == uri
       end
@@ -91,14 +91,14 @@ class BokanbefalingerApp < Sinatra::Application
 
   get "/minside" do
     redirect "/" unless session[:user]
-    @error_message, my_reviews = Review.get_by_user(session[:user], session[:user_uri])
+    @error_message, my_reviews = Review.by_reviewer(session[:user_uri])
 
     if @error_message
       @title ="Feil"
       erb :error
     else
       @published, @draft = {}, {}
-      my_reviews["works"].each do |w|
+      Array(my_reviews).each do |w|
         if w["reviews"].first["published"] == true
           @published[w["reviews"].first["uri"]] = {"works" => w }
         else
