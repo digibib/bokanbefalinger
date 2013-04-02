@@ -87,7 +87,7 @@
 		<% end %>
 
 		<% if @reviews %>
-			<h3><%= @dropdown.reviewers[params["anmelder"]] %>s anbefalinger</h3>
+			<h3>Anbefalinger av <%= @dropdown.reviewers[params["anmelder"]] %></h3>
 			<% @reviews.each do |w| %>
 			<% r = w["reviews"].first %>
 				<div class="search-hit">
