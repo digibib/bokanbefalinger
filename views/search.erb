@@ -88,7 +88,7 @@
 
 		<% if @reviews %>
 			<h3>Anbefalinger av <%= @dropdown.reviewers[params["anmelder"]] %></h3>
-			<% @reviews.each do |w| %>
+			<% @reviews.reject { |w| w["reviews"].first["issued"].nil? } .each do |w| %>
 			<% r = w["reviews"].first %>
 				<div class="search-hit">
 					<span class="left">
