@@ -80,7 +80,7 @@ $("#isbn-button").on('click', function() {
 			$('#isbn-title').html(data.originalfTitle);
 		}
 		if (data.cover_url) {
-			$('.book-cover').removeClass("gray");
+			$('.book-cover').removeClass("light-gray");
 			$('#isbn-cover').html("<img class='cover' src='"+data.cover_url+"'>");
 		} else {
 			$('.book-cover').addClass("light-gray");
