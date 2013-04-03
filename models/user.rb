@@ -72,7 +72,7 @@ class User
 
   def self.log_out(session)
     # Clear user cache
-    Cache.del "user:"+session[:user]
+    Cache.del session[:user_uri]
 
     # Clear user session variables
     session.clear
