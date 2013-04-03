@@ -188,6 +188,7 @@ label { font-weight: bold;}
 .tooltip-content {
   display: none;
   position: absolute;
+  margin-top:100px;
   padding: 10px;
   border: 3px solid #AF8A31;
   background-color: #FFC848;
@@ -389,7 +390,7 @@ span.small-link { font-size:0.9em; display:block; padding: 0 24px; margin:0.5em;
 #review-form select { padding: 4px;}
 #review-form label { font-weight: normal !important }
 
-#review-heading { width: 100%; }
+#review-heading { width: 100%; position: relative;}
 #review-heading div { float:left;}
 #review-heading p { margin-left:30px;}
 
@@ -400,8 +401,8 @@ span.small-link { font-size:0.9em; display:block; padding: 0 24px; margin:0.5em;
 .checklabel { width:100px; line-height:15px; display:inline-block; height:15px;}
 .missing { border:2px solid #E87600 !important;}
 
-.reviewform-other { width: 200px; display: block; float:right; border: 1px solid red;
-                 background: #eee; padding: 1em; margin-right: 100px; margin-top: 130px;}
+.reviewform-other { width: 200px; display: block; position:absolute; border: 1px solid red;
+                 background: #eee; padding: 1em; top: 130px; right:100px;}
 
 /* isbn search */
 .isbn-form { background-color:#eee; padding:15px; width:90%; border: 2px solid #ccc;}

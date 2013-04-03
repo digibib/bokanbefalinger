@@ -15,10 +15,10 @@
 			<p><strong><%= @utgave["prefTitle"]  || @utgave["originalTitle"] %></strong></p>
 			<p><strong><%= @utgave["authors"].map { |a| a["name"] } .join ", " %></strong></p>
 		</div>
-	</div>
-	<div class="reviewform-other">
-		<%= @utgave["prefTitle"]  || @utgave["originalTitle"] %> har<br>
-		<span class="red-text">x andre anbefalinger</span>
+		<div class="reviewform-other">
+			<%= @utgave["prefTitle"]  || @utgave["originalTitle"] %> har<br>
+			<span class="red-text">x andre anbefalinger</span>
+		</div>
 	</div>
 	<div class="clearfix"></div>
 	<form id="review-form" action="/review" method="POST">
