@@ -32,8 +32,11 @@ class BokanbefalingerApp < Sinatra::Application
     end
 
     def text2markup(s)
-      puts s.inspect
-      s.gsub(/\r/,'').gsub(/\n\n/, "\n&nbsp;\n").gsub(/^\s*(.*?)\s*$/xm, '<p>\1</p>').gsub("\n","")
+      if s.strip.empty?
+        ""
+      else
+        s.gsub(/\r/,'').gsub(/\n\n/, "\n&nbsp;\n").gsub(/^\s*(.*?)\s*$/xm, '<p>\1</p>').gsub("\n","")
+      end
     end
 
     def markup2text(s)
