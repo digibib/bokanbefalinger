@@ -22,7 +22,7 @@ namespace :cache do
 
   desc "Caches all reviews; this could take a while..."
   task :all do
-    limit = 500
+    limit = 100
     offset = 0
 
     while true
