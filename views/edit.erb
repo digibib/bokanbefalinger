@@ -21,7 +21,7 @@
 		<label>Kort teaser<span class="redstar">*</span><br>
 		<textarea id="teaser" class="required" name="teaser" rows="2" placeholder="Skriv en teaser, maks to setninger"><%= @review['reviews'].first['teaser']%></textarea></label>
 		<label>Omtale<br>
-		<textarea id="text" class="required" name="text" rows="20" placeholder="Skriv en omtale"><%= markup2text(@review['reviews'].first['text']) %></textarea></label>
+		<textarea id="text" name="text" rows="20" placeholder="Skriv en omtale"><%= markup2text(@review['reviews'].first['text']) %></textarea></label>
 
 		<div>
 		<span>Målgruppe for anbefalingen<span class="redstar">*</span></span>
