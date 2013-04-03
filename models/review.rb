@@ -60,6 +60,7 @@ class Review
        rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
           error = "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"
        end
+       return error, nil, nil if error
        error = "Får ikke kontakt med ekstern ressurs (#{Settings::API})." if resp.status != 200
        error = "Finner ingen anbefaling med denne ID-en (#{uri})." if resp.body.match(/no reviews found/)
        return error, nil, nil if error
@@ -83,7 +84,7 @@ class Review
     rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
       return [nil, "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"]
     end
-
+    puts "API RESPONSE:\n#{resp.body}\n\n" if ENV['RACK_ENV'] == 'development'
     return ["Får ikke kontakt med ekstern ressurs (#{Settings::API}).", nil] if resp.status != 201
     return ["Skriving av anbefaling til RDF-storen feilet", nil] unless resp.body.match(/uri/)
 
@@ -105,7 +106,7 @@ class Review
     rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
       return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil]
     end
-
+    puts "API RESPONSE:\n#{resp.body}\n\n" if ENV['RACK_ENV'] == 'development'
 
     return ["Får ikke kontakt med ekstern ressurs (#{Settings::API}).", nil] if resp.status != 200
     return ["Skriving av anbefaling til RDF-storen feilet", nil] unless resp.body.match(/uri/)

@@ -62,7 +62,7 @@ class BokanbefalingerApp < Sinatra::Application
     elsif edit
       @title = "Rediger anbefaling"
       @error_message, my_reviews = Review.by_reviewer(session[:user_uri])
-      my_reviews["works"].each do |w|
+      my_reviews.each do |w|
         @review = w if w["reviews"].first["uri"] == uri
       end
       erb :edit

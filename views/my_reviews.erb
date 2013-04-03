@@ -22,7 +22,7 @@
 
 					<div class="bottom">
 						<p class="my-reviews-audiences">Målgruppe for anbefalingen:
-							<%= r["audience"] || "Ikke valgt ennå" %></p><a href="/anbefaling<%= r['uri'][23..-1] %>/rediger"><button class="medium green">Rediger</button></a></div>
+							<%= r["audience"].map { |a| a.downcase } .join("/") || "Ikke valgt ennå" %></p><a href="/anbefaling<%= r['uri'][23..-1] %>/rediger"><button class="medium green">Rediger</button></a></div>
 				</div>
 			</div>
 		<% end %>
