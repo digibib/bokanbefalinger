@@ -54,6 +54,14 @@ class BokanbefalingerApp < Sinatra::Application
         "<a href='/søk?anmelder=#{r["reviewer"]["uri"]}' class='liste-reviewer'>#{r["reviewer"]["name"]}</a>, #{r["source"]["name"]}"
       end
     end
+
+    def enforce_length(s, length)
+      if s.length < length
+        s
+      else
+        s[0..length]+"..."
+      end
+    end
   end
 
 end

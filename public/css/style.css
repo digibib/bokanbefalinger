@@ -564,14 +564,14 @@ select.kriterium { vertical-align:top;}
 /* mine anbefalinger */
 
 .my-review { margin-top:1em; height:230px; clear:both; position: relative;}
-.my-reviews-info { float: left; height:200px;}
+.my-reviews-info { float: left; height:200px; width:500px;display:inline-block;}
 .my-reviews-header { margin-top: 1em; height: 45px; width: 85%; border-bottom: 1px dashed #ccc }
 #my-reviews-sorting { float:right; margin-top:10px;}
 .my-review p { margin:0.4em;}
 .date { font-size:0.9em; color: #c12121;}
 .review-title { font-size:1.2em; font-weight: bold;}
 .isbn { font-size:0.9em;}
-.my-reviews-teaser { font-size:0.9em;}
+.my-reviews-teaser { font-size:13px; }
 .my-reviews-audiences { font-size:0.9em;}
 .bottom { position:absolute; bottom: 20px; }
 .draft { display:none;}

@@ -18,7 +18,7 @@
 				<div class="my-reviews-info">
 					<p class="date"><%= r['published'] ? 'Sist oppdatert' : 'Lagret som kladd' %> <%= r["modified"][0..9] %></p>
 					<p class="review-title"><%= [r["title"], "Uten tittel"].reject { |x| x.empty? } .first%></p>
-					<p class="my-reviews-teaser"><%= r["teaser"] %></p>
+					<p class="my-reviews-teaser"><%= enforce_length(r["teaser"], 200) %></p>
 
 					<div class="bottom">
 						<p class="my-reviews-audiences">Målgruppe for anbefalingen:
