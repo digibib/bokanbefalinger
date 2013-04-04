@@ -46,6 +46,14 @@ class BokanbefalingerApp < Sinatra::Application
     def dateformat(s)
       Date.strptime(s).strftime("%d.%m.%Y")
     end
+
+    def reviewerformatted(r)
+      if r["reviewer"]["name"].downcase == "anonymous"
+        "#{r["source"]["name"]}"
+      else
+        "<a href='/søk?anmelder=#{r["reviewer"]["uri"]}' class='liste-reviewer'>#{r["reviewer"]["name"]}</a>, #{r["source"]["name"]}"
+      end
+    end
   end
 
 end
