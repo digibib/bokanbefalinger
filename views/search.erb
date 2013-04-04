@@ -95,7 +95,7 @@
 						<strong class="red-text"><a href="/anbefaling<%= r['uri'][23..-1] %>"><%= r["title"]%></a></strong>
 					</span><br>
 				</div>
-				<p class="liste-under">anbefalt av <a href="/søk?anmelder=<%= r["reviewer"]["uri"]%>" class="liste-reviewer"><%= r["reviewer"]["name"] %></a> <span class="liste-date"><%= dateformat(r["issued"]) %></span> </p>
+				<p class="liste-under">anbefalt av <a href="/søk?anmelder=<%= r["reviewer"]["uri"] || params["anmelder"] %>" class="liste-reviewer"><%= r["reviewer"]["name"] %></a> <span class="liste-date"><%= dateformat(r["issued"]) %></span> </p>
 				<p style="width:90%; margin-top:10px"><%= r["teaser"] %></p>
 			<% end %>
 		<% end %>
