@@ -122,13 +122,15 @@ class BokanbefalingerApp < Sinatra::Application
   end
 
   post "/lister" do
-    puts params
-    @uris = List.get(Array(params["authors"]), Array(params["subjects"]),
-                    Array(params["persons"]), JSON.parse(params["pages"]),
-                    JSON.parse(params["years"]), Array(params["audience"]),
-                    Array(params["review_audience"]), Array(params["genres"]),
-                    Array(params["languages"]), Array(params["formats"]),
-                    Array(params["nationalities"]))
+    list_params = params
+    list_params.map do |k,v|
+      if k == "years" || k == "pages"
+        list_params[k] = JSON.parse(v)
+      else
+        list_params[k] = Array(v)
+      end
+    end
+    @uris = List.get(list_params)
     @reviews = []
     @uris[0..10].each do |uri|
       _, r = Review.get(uri)

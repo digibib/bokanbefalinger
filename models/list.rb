@@ -197,7 +197,7 @@ class List
     Array(result.bindings[:uri]).uniq.collect { |b| b.to_s }
   end
 
-  def self.get(authors, subjects, persons, pages, years, audience, review_audience, genres, languages, formats, nationalities)
+  def self.get(params)
     # all parameters are arrays
 
     query = QUERY.select(:review)
@@ -209,46 +209,46 @@ class List
                 [:creator, RDF::FOAF.name, :author],
                 [:book, RDF::REV.hasReview, :review])
 
-    query.where([:book, RDF::DC.language, :language]) unless languages.empty?
-    unless subjects.empty?
+    query.where([:book, RDF::DC.language, :language]) if params["languages"]
+    if params["subjects"]
       query.where([:book, RDF::DC.subject, :subject_narrower])
       query.where([:subject, RDF::SKOS.narrower, :subject_narrower])
     end
-    query.where([:book, RDF::DC.subject, :person]) unless persons.empty?
-    query.where([:book, RDF::BIBO.numPages, :pages]) unless pages.empty?
-    query.where([:work, RDF::DEICHMAN.assumedFirstEdition, :year]) unless years.empty?
-    query.where([:book, RDF::DC.audience, :audience]) unless audience.empty?
-    query.where([:review, RDF::DC.audience, :review_audience, :context => REVIEWGRAPH]) unless review_audience.empty?
+    query.where([:book, RDF::DC.subject, :person]) if params["persons"]
+    query.where([:book, RDF::BIBO.numPages, :pages]) if params["pages"]
+    query.where([:work, RDF::DEICHMAN.assumedFirstEdition, :year]) if params["years"]
+    query.where([:book, RDF::DC.audience, :audience]) if params["audience"]
+    query.where([:review, RDF::DC.audience, :review_audience, :context => REVIEWGRAPH]) if params["review_audience"]
     query.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
-    unless genres.empty?
+    if params["genres"]
       query.where([:book, RDF::DBO.literaryGenre, :narrower])
       query.where([:narrower, RDF::SKOS.broader, :genre])
     end
-    query.where([:book, RDF::DEICHMAN.literaryFormat, :format]) unless formats.empty?
-    query.where([:creator, RDF::XFOAF.nationality, :nationality]) unless nationalities.empty?
+    query.where([:book, RDF::DEICHMAN.literaryFormat, :format]) if params["formats"]
+    query.where([:creator, RDF::XFOAF.nationality, :nationality]) if params["nationalities"]
 
-    query.filter("?subject = <" + subjects.join("> || ?subject = <") +">") unless subjects.empty?
-    query.filter("?person = <" + persons.join("> || ?person = <") +">") unless persons.empty?
-    query.filter("?creator = <" + authors.join("> || ?creator = <") +">") unless authors.empty?
-    query.filter("?audience = <" + audience.join("> || ?audience = <") +">") unless audience.empty?
-    query.filter("?review_audience = <" + review_audience.join("> || ?review_audience = <") +">") unless review_audience.empty?
-    query.filter("?genre = <" + genres.join("> || ?genre = <") +">") unless genres.empty?
-    query.filter("?language = <" + languages.join("> || ?language = <") +">") unless languages.empty?
-    query.filter("?format = <" + formats.join("> || ?format = <") +">") unless formats.empty?
-    query.filter("?nationality = <" + nationalities.join("> || ?nationality = <") +">") unless nationalities.empty?
+    query.filter("?subject = <" + params["subjects"].join("> || ?subject = <") +">") if params["subjects"]
+    query.filter("?person = <" + params["persons"].join("> || ?person = <") +">") if params["persons"]
+    query.filter("?creator = <" + params["authors"].join("> || ?creator = <") +">") if params["authors"]
+    query.filter("?audience = <" + params["audience"].join("> || ?audience = <") +">") if params["audience"]
+    query.filter("?review_audience = <" + params["review_audience"].join("> || ?review_audience = <") +">") if params["review_audience"]
+    query.filter("?genre = <" + params["genres"].join("> || ?genre = <") +">") if params["genres"]
+    query.filter("?language = <" + params["languages"].join("> || ?language = <") +">") if params["languages"]
+    query.filter("?format = <" + params["formats"].join("> || ?format = <") +">") if params["formats"]
+    query.filter("?nationality = <" + params["nationalities"].join("> || ?nationality = <") +">") if params["nationalities"]
     query.order_by("DESC(?issued)")
 
-    unless pages.empty?
+    unless params["pages"].empty?
       pages_filter = []
-      pages.each do |from_to|
+      params["pages"].each do |from_to|
         pages_filter.push("(xsd:integer(?pages) > #{from_to[0]} && xsd:integer(?pages) < #{from_to[1]})")
       end
       query.filter(pages_filter.join(" || "))
     end
 
-    unless years.empty?
+    unless params["years"].empty?
       years_filter = []
-      years.each do |from_to|
+      params["years"].each do |from_to|
         years_filter.push("(xsd:integer(?year) > #{from_to[0]} && xsd:integer(?year) < #{from_to[1]})")
       end
       query.filter(years_filter.join(" || "))
