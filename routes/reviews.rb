@@ -78,7 +78,7 @@ class BokanbefalingerApp < Sinatra::Application
     else
       @page = 1
     end
-    @error_message, @reviews = Review.get_latest(25, (@page*25)-25, 'issued', 'desc')
+    @error_message, @reviews = Review.get_latest(24, (@page*25)-25, 'issued', 'desc')
 
     if @error_message
       @title ="Feil"
