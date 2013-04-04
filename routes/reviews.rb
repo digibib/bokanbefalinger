@@ -22,7 +22,7 @@ class BokanbefalingerApp < Sinatra::Application
     if params[:delete] == "delete"
       # DELETE review
       @error_message, @review = Review.delete params["uri"], session[:api_key]
-      Cache.hdel session[:user_uri], params["uri"]
+
       session[:flash_info].push "Anbefaling slettet." unless @error_message
     else
       # PUT review
