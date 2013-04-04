@@ -238,7 +238,7 @@ class List
     query.filter("?nationality = <" + params["nationalities"].join("> || ?nationality = <") +">") if params["nationalities"]
     query.order_by("DESC(?issued)")
 
-    unless params["pages"].empty?
+    if params["pages"] and not params["pages"].empty?
       pages_filter = []
       params["pages"].each do |from_to|
         pages_filter.push("(xsd:integer(?pages) > #{from_to[0]} && xsd:integer(?pages) < #{from_to[1]})")
@@ -246,7 +246,7 @@ class List
       query.filter(pages_filter.join(" || "))
     end
 
-    unless params["years"].empty?
+    if params["years"] and not params["years"].empty?
       years_filter = []
       params["years"].each do |from_to|
         years_filter.push("(xsd:integer(?year) > #{from_to[0]} && xsd:integer(?year) < #{from_to[1]})")
@@ -261,5 +261,14 @@ class List
     return [] if result.empty?
 
     Array(result.bindings[:review]).uniq.collect { |b| b.to_s }
+  end
+
+  def self.get_feed(url)
+    reviews = Cache.get(url) {
+      cache = List.get(params_from_feed_url(url))
+      Cache.set(url, cache)
+      cache
+    }
+    reviews
   end
 end

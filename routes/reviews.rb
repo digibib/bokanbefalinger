@@ -112,6 +112,33 @@ class BokanbefalingerApp < Sinatra::Application
   end
 
   get "/se-lister" do
+    @lists = [{:title => "Anbefalinger av bøker for voksne",
+               :feed => "http://anbefalinger.deichman.no/feed?audience=http://data.deichman.no/audience/adult"},
+              {:title => "Anbefalinger av bøker for barn og ungdom",
+               :feed => "http://anbefalinger.deichman.no/feed?audience=http://data.deichman.no/audience/ages_0-5&audience=http://data.deichman.no/audience/ages_6-7&audience=http://data.deichman.no/audience/ages_8-9&audience=http://data.deichman.no/audience/ages_10-11&audience=http://data.deichman.no/audience/ages_12-15&audience=http://data.deichman.no/audience/juvenile"},
+              {:title => "Anbefalte fantasybøker for barn og ungdom",
+               :feed => "http://anbefalinger.deichman.no/feed?audience=http://data.deichman.no/audience/juvenile&audience=http://data.deichman.no/audience/ages_0-5&audience=http://data.deichman.no/audience/ages_6-7&audience=http://data.deichman.no/audience/ages_8-9&audience=http://data.deichman.no/audience/ages_10-11&audience=http://data.deichman.no/audience/ages_12-15&genres=http://data.deichman.no/genreBroader/fantastisk"},
+              {:title => "Anbefalte bøker fra 90-tallet",
+               :feed => "http://anbefalinger.deichman.no/feed?years_from=1990&years_to=2000"},
+              {:title => "Tynne bøker (under 200 sider) for voksne",
+               :feed => "http://anbefalinger.deichman.no/feed?audience=http://data.deichman.no/audience/adult&pages_from=0&pages_to=200"},
+              {:title => "Anbefalinger av Karin Fossums krimbøker",
+                :feed => "http://anbefalinger.deichman.no/feed?authors=http://data.deichman.no/person/x26297400&genres=http://data.deichman.no/genreBroader/krim_og_spenning"},
+              #{:title => "Anbefalinger av bøker om Henrik Ibsen",
+              # :feed => "http://anbefalinger.deichman.no/feed?persons=http://data.deichman.no/person/x14062100"},
+              {:title => "Bøker av amerikanske forfattere",
+               :feed => "http://anbefalinger.deichman.no/feed?nationalities=http://data.deichman.no/nationality/am"}]
+
+    @lists.map do |list|
+      list[:reviews] = []
+      reviews = List.get_feed(list[:feed])
+      reviews[0..9].each do |uri|
+        _, r = Review.get(uri)
+        list[:reviews] << r
+      end
+      list[:reviews].compact!
+    end
+
     erb :see_lists
   end
 
