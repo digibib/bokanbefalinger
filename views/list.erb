@@ -3,10 +3,10 @@
 	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Du kan legge inn lenken på din blogg eller abonnere på i din RSS-leser"><img class="rss" src="img/feed-icon-28x28.png"></span><input id="rss-link" class="text" disabled="disabled" value="<%= @feed_url %>"></input>
 	<button class="long green" id="rss-copy">Kopier RSS-lenken</button>
 </div>
-<% if @reviews.count > 10 %>
-	<h3><%= @reviews.count %> treff, viser de første 10</h3>
+<% if @uris.count > 10 %>
+	<h3><%= @uris.count %> treff, viser de siste 10</h3>
 <% else %>
-	<h3><%= @reviews.count %> treff</h3>
+	<h3><%= @uris.count %> treff</h3>
 <% end %>
 <% @reviews.each do |work| %>
 	<% r = work["reviews"].first %>

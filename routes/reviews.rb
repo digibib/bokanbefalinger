@@ -123,20 +123,18 @@ class BokanbefalingerApp < Sinatra::Application
 
   post "/lister" do
     puts params
-    uris = List.get(Array(params["authors"]), Array(params["subjects"]),
+    @uris = List.get(Array(params["authors"]), Array(params["subjects"]),
                     Array(params["persons"]), JSON.parse(params["pages"]),
                     JSON.parse(params["years"]), Array(params["audience"]),
                     Array(params["review_audience"]), Array(params["genres"]),
                     Array(params["languages"]), Array(params["formats"]),
                     Array(params["nationalities"]))
     @reviews = []
-    puts uris
-    uris[0..10].each do |uri|
+    @uris[0..10].each do |uri|
       _, r = Review.get(uri)
       @reviews << r
     end
     @reviews.compact!
-    puts @reviews.count
 
     @feed_url = List.create_feed_url(params.each { |k,v| params[k] = JSON.parse(v) if v.class == String })
 
