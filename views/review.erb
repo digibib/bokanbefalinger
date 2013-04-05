@@ -13,7 +13,9 @@
 				<p class="liste-title"><a href="/anbefaling/<%= r["uri"][24,200] %>"><%= @review["prefTitle"] || @review["originalTitle"] %></a></p>
 				<p class="liste-author">av <%= @review["authors"].map { |a| a["name"] } .join ", " %></p>
 				<p class="liste-under">anbefalt av <%= reviewerformatted(r) %> <span class="liste-date"><%= dateformat(r["issued"]) %></span> </p>
-				<p class="review-teaser"><%= r["teaser"] %></p>
+				<% if r["teaser"] %>
+					<p class="review-teaser"><%= r["teaser"] %></p>
+				<% end %>
 			</div>
 		<div>
 			<p><strong><a class="author-link" href="/søk?forfatter=<%= @review["author"] %>"><%= @review["author"] %></a></strong></p>
