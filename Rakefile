@@ -57,7 +57,7 @@ namespace :cache do
 
     begin
       resp = API.get do |req|
-        req.body = {:limit => 100, :offset => 0,
+        req.body = {:limit => 100, :offset => 0, :published => true,
                     :order_by => "issued", :order => "desc"}.to_json
       end
     rescue => error
