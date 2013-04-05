@@ -129,7 +129,7 @@ class Review
     puts "API RESPONSE:\n#{JSON.parse(resp.body)}\n\n" if ENV['RACK_ENV'] == 'development'
 
     return ["Får ikke kontakt med ekstern ressurs (#{Settings::API}).", nil] if resp.status != 200
-    return ["Skriving av anbefaling til RDF-storen feilet", nil] unless resp.body.match(/uri/)
+    return ["Skriving av anbefaling til RDF-storen feilet", nil] unless resp.body.match(/done/)
 
     return [nil, resp.body]
   end
