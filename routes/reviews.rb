@@ -126,8 +126,8 @@ class BokanbefalingerApp < Sinatra::Application
                :feed => "http://anbefalinger.deichman.no/feed?audience=http://data.deichman.no/audience/adult&pages_from=0&pages_to=200"},
               {:title => "Anbefalinger av Karin Fossums krimbøker",
                 :feed => "http://anbefalinger.deichman.no/feed?authors=http://data.deichman.no/person/x26297400&genres=http://data.deichman.no/genreBroader/krim_og_spenning"},
-              #{:title => "Anbefalinger av bøker om Henrik Ibsen",
-              # :feed => "http://anbefalinger.deichman.no/feed?persons=http://data.deichman.no/person/x14062100"},
+              {:title => "Anbefalinger av bøker om Henrik Ibsen",
+              :feed => "http://anbefalinger.deichman.no/feed?persons=http://data.deichman.no/person/x14062100"},
               {:title => "Bøker av amerikanske forfattere",
                :feed => "http://anbefalinger.deichman.no/feed?nationalities=http://data.deichman.no/nationality/am"}]
 
