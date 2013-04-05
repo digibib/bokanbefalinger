@@ -31,7 +31,7 @@ namespace :cache do
 
       begin
         resp = API.get do |req|
-          req.body = {:limit => limit, :offset => offset,
+          req.body = {:limit => limit, :offset => offset, :published => true,
                       :order_by => "issued", :order => "desc"}.to_json
         end
       rescue => error
