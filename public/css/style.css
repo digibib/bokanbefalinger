@@ -496,7 +496,7 @@ a:hover.work-link { text-decoration: underline }
   padding-top: 10px;
 }
 
-.review-teaser { background: #eee; padding: 1em;}
+.review-teaser { padding: 1em;}
 
 .other-reviews {
   clear:both;
