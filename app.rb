@@ -55,6 +55,10 @@ class BokanbefalingerApp < Sinatra::Application
       end
     end
 
+    def authors_links(authors)
+      authors.map { |a| "<a href='/søk?forfatter=#{a['uri']}'>#{a['name']}</a>" } .join(", ")
+    end
+
     def enforce_length(s, length)
       if s.length < length
         s
