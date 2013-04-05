@@ -60,6 +60,7 @@ class BokanbefalingerApp < Sinatra::Application
     end
 
     def enforce_length(s, length)
+      return "" unless s
       if s.length < length
         s
       else
