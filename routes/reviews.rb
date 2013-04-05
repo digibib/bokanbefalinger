@@ -31,9 +31,11 @@ class BokanbefalingerApp < Sinatra::Application
                                                text2markup(params["text"]), audiences,
                                                session[:user], params["uri"],
                                                session[:api_key], params["published"])
-      Cache.del session[:user_uri]
       session[:flash_info].push "Anbefaling lagret." unless @error_message
     end
+
+    # clear cache after updates so changes are visible to the user
+    Cache.del session[:user_uri] unless @error_message
 
     session[:flash_error].push @error_message if @error_message
     redirect '/minside'
