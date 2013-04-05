@@ -35,5 +35,7 @@
 </div>
 
 <script>
-$("#my-reviews-list > div:visible").tsort('',{attr:'timestamp', order:"desc"});
+$('document').ready(function() {
+	$("#my-reviews-list > div:visible").tsort('',{attr:'timestamp', order:"desc"});
+});
 </script>
