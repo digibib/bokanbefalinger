@@ -61,8 +61,8 @@
 		<% end %>
 
 		<% if @work %>
-			<h3>Fant <%= @work["reviews"].length %> anbefaling av <%= @work["prefTitle"] || @work["originalTitle"] %> av <%= @work["authors"].map { |a| a["name"] } .join ", " %></h3>
-			<% @work["reviews"].each do |r| %>
+			<h3>Fant <%= Array(@work["reviews"]).length %> anbefaling av <%= @work["prefTitle"] || @work["originalTitle"] %> av <%= @work["authors"].map { |a| a["name"] } .join ", " %></h3>
+			<% Array(@work["reviews"]).each do |r| %>
 					<div class="search-hit">
 						<span class="left">
 							<strong class="red-text"><a href="/anbefaling<%= r['uri'][23..-1] %>"><%= r["title"]%></a></strong>
