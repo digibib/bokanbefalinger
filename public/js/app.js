@@ -102,51 +102,6 @@ $("#isbn-button").on('click', function() {
 });
 
 
-/* Skriv ny/rediger anbefaling */
-
-$('#delete-button').on('click', function(event) {
-	if (confirm("Er du sikker?")) {
-		$('#delete').val("delete");
-	} else {
-		event.preventDefault();
-	}
-});
-
-
-$('#draft').on('click', function(event) {
-	//event.preventDefault();
-});
-
-$('#publish').on('click', function(event) {
-	var missing=0;
-	// validering
-	$('.required').each(function(i) {
-		if (this.value == "") {
-			this.className += " missing";
-			missing += 1;
-		}
-	});
-	if ($('.audiences:checked').length == 0) {
-		$('#audiences-fieldset').addClass("missing");
-		missing += 1;
-	}
-
-	if (missing > 0) {
-		event.preventDefault();
-	} else {
-		$('#published').val("true");
-	}
-});
-
-$('#review-form').on('focus', '.required', function () {
-if ($(this).hasClass('missing')) {
-  $(this).removeClass('missing');
-  }
-});
-
-$('.audiences').on('change', function(e) {
-	$('#audiences-fieldset').removeClass("missing");
-});
 
 // nytt søk = søk
 $('#isbn').on('keypress', function(evt) {

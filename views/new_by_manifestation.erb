@@ -56,3 +56,44 @@
 	<%= erb :login %>
 	<%= erb :tipsbar %>
 </div>
+<script>
+$(document).ready(function() {
+
+	$('#draft').on('click', function(event) {
+		//event.preventDefault();
+	});
+
+	$('#publish').on('click', function(event) {
+		var missing=0;
+		// validering
+		$('.required').each(function(i) {
+			if (this.value == "") {
+				this.className += " missing";
+				missing += 1;
+			}
+		});
+		if ($('.audiences:checked').length == 0) {
+			$('#audiences-fieldset').addClass("missing");
+			missing += 1;
+		}
+
+		if (missing > 0) {
+			event.preventDefault();
+			$('#messages').append("<p class='error'>Vennligst fyll inn obligatoriske felt!</p>");
+		} else {
+			$('#published').val("true");
+		}
+	});
+
+	$('#review-form').on('focus', '.required', function () {
+	if ($(this).hasClass('missing')) {
+	  $(this).removeClass('missing');
+	  }
+	});
+
+	$('.audiences').on('change', function(e) {
+		$('#audiences-fieldset').removeClass("missing");
+	});
+
+});
+</script>
