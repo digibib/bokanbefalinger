@@ -49,9 +49,9 @@ class BokanbefalingerApp < Sinatra::Application
 
     def reviewerformatted(r)
       if r["reviewer"]["name"].downcase == "anonymous"
-        "#{r["source"]["name"]}"
+        " <a href='/søk?kilde=#{r["source"]["uri"]}'>#{r["source"]["name"]}</a>"
       else
-        "<a href='/søk?anmelder=#{r["reviewer"]["uri"]}' class='liste-reviewer'>#{r["reviewer"]["name"]}</a>, #{r["source"]["name"]}"
+        "<a href='/søk?anmelder=#{r["reviewer"]["uri"]}' class='liste-reviewer'>#{r["reviewer"]["name"]}</a>, <a href='/søk?kilde=#{r["source"]["uri"]}'>#{r["source"]["name"]}</a>"
       end
     end
 

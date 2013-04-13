@@ -23,6 +23,10 @@ class BokanbefalingerApp < Sinatra::Application
   get "/søk" do
     @dropdown = Review.search_dropdowns
 
+    if params["kilde"] and not params["kilde"].empty?
+      @error_message, @source = Review.by_source(params["kilde"])
+    end
+
     if params["forfatter"] and not params["forfatter"].empty?
       @error_message, @works = Work.by_author(params["forfatter"])
     end

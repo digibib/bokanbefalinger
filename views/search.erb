@@ -2,14 +2,14 @@
 	<p class="lokkeskrift">Søk etter anbefalinger</p>
 	<form id="advanced-search">
 		<label>Boktittel</label>
-		<select name="tittel" id="search-title" style="width:305px;" data-placeholder="søk/velg tittel">
+		<select class="dropdowns" name="tittel" id="search-title" style="width:305px;" data-placeholder="søk/velg tittel">
 			<option></option>
 			<% @dropdown.titles.sort_by { |k,v| v }.each do |k,v| %>
 			<option value="<%= k %>"  <%= 'selected="selected"' if params["tittel"] == k %>><%= v %></option>
 			<% end %>
 		</select><br><br>
 		<label>Forfatter av boken</label>
-		<select name="forfatter" id="search-author" style="width:305px;" data-placeholder="søk/velg forfatter">
+		<select class="dropdowns" name="forfatter" id="search-author" style="width:305px;" data-placeholder="søk/velg forfatter">
 			<option></option>
 			<% @dropdown.authors.sort_by { |k,v| v }.each do |k,v| %>
 			<option value="<%= k %>" <%= 'selected="selected"' if params["forfatter"] == k %>><%= v %></option>
@@ -19,12 +19,19 @@
 <!-- 		<label>Illustratør</label><input type="text" placeholder="ikke implementert ennå" disabled="disabled"><br>
 		<label>Oversetter</label><input type="text" placeholder="ikke implementert ennå" disabled="disabled"><br> -->
 		<label>Anbefalers navn</label>
-		<select name="anmelder" id="search-reviewer" style="width:305px" type="text" data-placeholder="søk/velg anbefaler">
+		<select class="dropdowns" name="anmelder" id="search-reviewer" style="width:305px" type="text" data-placeholder="søk/velg anbefaler">
 			<option></option>
 			<% @dropdown.reviewers.sort_by { |k,v| v }.each do |k,v| %>
 			<% unless k == "http://data.deichman.no/reviewer/id_0" %>
 				<option value="<%= k %>" <%= 'selected="selected"' if params["anmelder"] == k %>><%= v %></option>
 			<% end %>
+			<% end %>
+		</select><br>
+		<label>Kilde</label>
+		<select class="dropdowns" name="kilde" id="search-source" style="width:305px" type="text" data-placeholder="søk/velg kilde">
+			<option></option>
+			<% @dropdown.sources.sort_by { |k,v| v }.each do |k,v| %>
+				<option value="<%= k %>" <%= 'selected="selected"' if params["kilde"] == k %>><%= v %></option>
 			<% end %>
 		</select><br>
 		<button type="submit" class="red medium">Søk</button>
@@ -102,6 +109,20 @@
 			<% end %>
 		<% end %>
 
+		<% if @source %>
+			<h3>Anbefalinger fra <%= @source.first["reviews"].first["source"]["name"]%></h3>
+			<% @source.reject { |w| w["reviews"].first["issued"].nil? } .each do |w| %>
+			<% r = w["reviews"].first %>
+				<div class="search-hit">
+					<span class="left">
+						<strong class="red-text"><a href="/anbefaling<%= r['uri'][23..-1] %>"><%= r["title"]%></a></strong>
+					</span><br>
+				</div>
+				<p class="liste-under">anbefalt av <%= reviewerformatted(r) %> <span class="liste-date"><%= dateformat(r["issued"]) %></span> </p>
+				<p style="width:90%; margin-top:10px"><%= r["teaser"] %></p>
+			<% end %>
+		<% end %>
+
 	</div>
 </div>
 
@@ -114,12 +135,21 @@ $(document).ready(function() {
 	$('#search-author').chosen({no_results_text: "Ingen treff for", allow_single_deselect: true}).change(function() {
 		var selected = $(this).find('option:selected').val();
 		if (selected != "") {
-			$('#search-title').attr('disabled', true).trigger("liszt:updated");
-			$('#search-reviewer').attr('disabled', true).trigger("liszt:updated");
+			$('.dropdowns:not(#search-author)').attr('disabled', true).trigger("liszt:updated");
 			$('#search-isbn').attr('disabled', true);
 		} else {
-			$('#search-title').attr('disabled', false).trigger("liszt:updated");
-			$('#search-reviewer').attr('disabled', false).trigger("liszt:updated");
+			$('.dropdowns').attr('disabled', false).trigger("liszt:updated");
+			$('#search-isbn').attr('disabled', false);
+		}
+	});
+
+	$('#search-source').chosen({no_results_text: "Ingen treff for", allow_single_deselect: true}).change(function() {
+		var selected = $(this).find('option:selected').val();
+		if (selected != "") {
+			$('.dropdowns:not(#search-source)').attr('disabled', true).trigger("liszt:updated");
+			$('#search-isbn').attr('disabled', true);
+		} else {
+			$('.dropdowns').attr('disabled', false).trigger("liszt:updated");
 			$('#search-isbn').attr('disabled', false);
 
 		}
@@ -128,12 +158,10 @@ $(document).ready(function() {
 	$('#search-title').chosen({no_results_text: "Ingen treff for", allow_single_deselect: true}).change(function() {
 		var selected = $(this).find('option:selected').val();
 		if (selected != "") {
-			$('#search-author').attr('disabled', true).trigger("liszt:updated");
-			$('#search-reviewer').attr('disabled', true).trigger("liszt:updated");
+			$('.dropdowns:not(#search-title)').attr('disabled', true).trigger("liszt:updated");
 			$('#search-isbn').attr('disabled', true);
 		} else {
-			$('#search-author').attr('disabled', false).trigger("liszt:updated");
-			$('#search-reviewer').attr('disabled', false).trigger("liszt:updated");
+			$('.dropdowns').attr('disabled', false).trigger("liszt:updated");
 			$('#search-isbn').attr('disabled', false);
 
 		}
@@ -142,25 +170,19 @@ $(document).ready(function() {
 	$('#search-reviewer').chosen({no_results_text: "Ingen treff for", allow_single_deselect: true}).change(function() {
 		var selected = $(this).find('option:selected').val();
 		if (selected != "") {
-			$('#search-title').attr('disabled', true).trigger("liszt:updated");
-			$('#search-author').attr('disabled', true).trigger("liszt:updated");
+			$('.dropdowns:not(#search-reviewer)').attr('disabled', true).trigger("liszt:updated");
 			$('#search-isbn').attr('disabled', true);
 		} else {
-			$('#search-title').attr('disabled', false).trigger("liszt:updated");
-			$('#search-author').attr('disabled', false).trigger("liszt:updated");
+			$('.dropdowns').attr('disabled', false).trigger("liszt:updated");
 			$('#search-isbn').attr('disabled', false);
 		}
 	});
 
 	$('#search-isbn').on('keyup', function() {
 		if ( $(this).val() == "") {
-			$('#search-reviewer').attr('disabled', false).trigger("liszt:updated");
-			$('#search-title').attr('disabled', false).trigger("liszt:updated");
-			$('#search-author').attr('disabled', false).trigger("liszt:updated");
+			$('.dropdowns').attr('disabled', false).trigger("liszt:updated");
 		} else {
-			$('#search-reviewer').attr('disabled', true).trigger("liszt:updated");
-			$('#search-title').attr('disabled', true).trigger("liszt:updated");
-			$('#search-author').attr('disabled', true).trigger("liszt:updated");
+			$('.dropdowns').attr('disabled', true).trigger("liszt:updated");
 		}
 
 	});

@@ -154,6 +154,28 @@ class Review
     return nil, reviews["works"]
   end
 
+  def self.by_source(source)
+    reviews = Cache.get(source) {
+      begin
+        resp = @@conn.get do |req|
+          req.body = {:source => source, :limit => 25,
+                      :order_by => "issued", :order => "desc",
+                      :published => true}.to_json
+        end
+      rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
+        error = "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"
+      end
+
+      error = "Får ikke kontakt med ekstern ressurs (#{Settings::API})." if resp.status != 200
+      return error, nil if error
+
+      cache = JSON.parse(resp.body)
+      Cache.set(source, cache)
+      cache
+    }
+    return nil, reviews["works"]
+  end
+
   def self.get(uri)
 
     review = Cache.get(uri) {
