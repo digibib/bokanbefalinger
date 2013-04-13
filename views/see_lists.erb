@@ -27,3 +27,10 @@
 <div class="main-right">
 	<%= erb :login %>
 </div>
+<script>
+	$(document).ready(function() {
+		$(".anbefalingsliste").on('click', '.rss-copy', function() {
+			window.prompt("Trykk Ctrl+C, så Enter for å kopiere", $(this).prev().val());
+		});
+	});
+</script>
