@@ -15,7 +15,11 @@ class BokanbefalingerApp < Sinatra::Application
       session[:flash_info].push "Anbefaling opprettet."
       Cache.del session[:user_uri]
     end
-    redirect '/minside'
+    if params["published"] == "false"
+      redirect "/anbefaling" + @review["works"].first["reviews"].first["uri"][23..-1]+"/rediger"
+    else
+      redirect '/minside'
+    end
   end
 
   post '/update' do
@@ -38,7 +42,12 @@ class BokanbefalingerApp < Sinatra::Application
     Cache.del session[:user_uri] unless @error_message
 
     session[:flash_error].push @error_message if @error_message
-    redirect '/minside'
+
+    if params["published"] == "false" and params[:delete] != "delete"
+      redirect "/anbefaling" + @review["works"].first["reviews"].first["uri"][23..-1]+"/rediger"
+    else
+      redirect '/minside'
+    end
   end
 
   get '/anbefaling/*' do
