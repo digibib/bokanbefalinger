@@ -36,7 +36,7 @@
 			<p class="error"><strong><%= @error_message %></strong></p>
 		<% end %>
 		<% if @works %>
-			<h3>Anbefalinger av <%= @works.first["authors"].first["name"] %>s bøker</h3>
+			<h3>Anbefalinger av bøker av <%= @works.first["authors"].first["name"] %></h3>
 			<% countable = @works.reject { |w| w["reviews"].nil? || w["reviews"].empty? || w["reviews"].all? { |r| r["published"] == false } } %>
 			<p style="color: #aaa"><%= countable.map {|c| c["reviews"].reject { |r| r["published"] == false} .length } .inject(&:+) %> anbefalinger av <%= countable.count %> ulike bøker</p>
 			<% @works.each do |w| %>
