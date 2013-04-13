@@ -61,7 +61,7 @@
 		<% end %>
 
 		<% if @work %>
-			<h3>Fant <%= Array(@work["reviews"]).length %> anbefaling av <%= @work["prefTitle"] || @work["originalTitle"] %> av <%= @work["authors"].map { |a| a["name"] } .join ", " %></h3>
+			<h3>Fant <%= Array(@work["reviews"]).length %> anbefaling<%= 'er' unless Array(@work["reviews"]).length == 1 %> av <%= @work["prefTitle"] || @work["originalTitle"] %> av <%= @work["authors"].map { |a| a["name"] } .join ", " %></h3>
 			<% Array(@work["reviews"]).each do |r| %>
 					<div class="search-hit">
 						<span class="left">
