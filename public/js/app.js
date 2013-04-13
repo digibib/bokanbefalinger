@@ -26,6 +26,7 @@ setInterval(function() {
   $("#loading").html(""+Array(i+1).join("."));
 }, 500);
 
+
 // set isbn as query param if searchstring matches only /^[0-9-]/
 // set tittel=forfatter som get parameter hvis ikke
 $("#search-button").on('click', function() {
@@ -467,32 +468,6 @@ $('#my-reviews-sorting').on('change', function() {
 	$("#my-reviews-list > div:visible").tsort('',{attr:'timestamp', order:$('#my-reviews-sorting option:selected').val()});
 });
 
-
-// Brukerinnstillinger - validering
-
-$('#lagre-innstillinger').on('click', function(event) {
-	// valider epostadresse
-	var validationFail = false;
-	$('span.error').hide();
-
-	// kontroller at passordene er like
-	var passord1 = $('#passord1').val();
-	var passord2 = $('#passord2').val();
-	if (passord1 != passord2) {
-		$('.password-validation').html("Passordene er ikke like").show();
-		validationFail = true;
-	}
-
-	// Ikke noe å lagre?
-	if ( !validationFail && !passord1 && !passord2 && (name === oldname ) ) {
-		$('span.error').html("Ingen endringer").show();
-		validationFail = true;
-	}
-
-	if ( validationFail ) {
-		event.preventDefault();
-	}
-})
 
 // Se lister
 $('.anbefalingsliste').on('click', '.triangle.close', function() {

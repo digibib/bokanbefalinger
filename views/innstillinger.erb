@@ -2,8 +2,10 @@
 	<h2>Brukerinnstillinger</h2>
 	<form action="/innstillinger" method="POST">
 		<fieldset id="innstillinger-fieldset">
-			<label for="username">Brukernavn/Epost:</label>
-			<input name="username" type="text" disabled="true" value="<%= session[:user] %>">
+			<label for="username">E-postadresse:</label>
+			<input id="oldemail" type="hidden" value="<%= session[:user] %>">
+			<input id="username" name="username" type="text" value="<%= session[:user] %>">
+			<span  class="error email-validation"></span>
 			<br/>
 			<label for="name">Navn:</label>
 			<input id="oldname" type="hidden" value="<%= session[:name] %>">
@@ -26,3 +28,47 @@
 <div class="main-right">
 	<%= erb :login %>
 </div>
+
+<script>
+$(document).ready(function() {
+	// Brukerinnstillinger - validering
+
+	$('#lagre-innstillinger').on('click', function(event) {
+		// valider epostadresse
+		var validationFail = false;
+		$('span.error').hide();
+
+		// kontroller at passordene er like
+		var passord1 = $('#passord1').val();
+		var passord2 = $('#passord2').val();
+		var email = $("#username").val();
+		var name = $("#name").val();
+		var oldname = $("#oldname").val();
+		var oldemail = $("#oldemail").val();
+		console.log(oldname);
+		console.log(oldemail);
+
+		if (passord1 != passord2) {
+			$('.password-validation').html("Passordene er ikke like").show();
+			validationFail = true;
+		}
+
+		var re = /\S+@\S+\.\S+/;
+		if (!re.test(email)) {
+			$('.email-validation').html("Ugyldig e-postadresse").show();
+			validationFail = true;
+		}
+
+		// Ikke noe å lagre?
+		if ( !validationFail && !passord1 && !passord2 && (name === oldname ) && (email === oldemail)) {
+			$('span.error').html("Ingen endringer").show();
+			validationFail = true;
+		}
+
+		if ( validationFail ) {
+			event.preventDefault();
+		}
+	})
+
+});
+</script>

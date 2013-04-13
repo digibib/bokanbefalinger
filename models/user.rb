@@ -78,12 +78,13 @@ class User
     session.clear
   end
 
-  def self.save(session, name, password)
+  def self.save(session, name, password, email)
     # Update user settings
     # Returns nil if success, error response if not
 
     body = {:api_key => session[:api_key],
-            :uri => session[:user_uri]}
+            :uri => session[:user_uri],
+            :accountName => email}
     body[:name] = name unless name.empty?
     body[:password] = password unless password.empty?
 
@@ -102,6 +103,7 @@ class User
 
     if resp.status == 200
       session[:name] = res["reviewer"]["name"]
+      session[:user] = res["reviewer"]["accountName"]
       return nil
     else
       return res
