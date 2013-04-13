@@ -22,7 +22,9 @@
 		<select name="anmelder" id="search-reviewer" style="width:305px" type="text" data-placeholder="søk/velg anbefaler">
 			<option></option>
 			<% @dropdown.reviewers.sort_by { |k,v| v }.each do |k,v| %>
-			<option value="<%= k %>" <%= 'selected="selected"' if params["anmelder"] == k %>><%= v %></option>
+			<% unless k == "http://data.deichman.no/reviewer/id_0" %>
+				<option value="<%= k %>" <%= 'selected="selected"' if params["anmelder"] == k %>><%= v %></option>
+			<% end %>
 			<% end %>
 		</select><br>
 		<button type="submit" class="red medium">Søk</button>
