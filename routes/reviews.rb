@@ -58,7 +58,7 @@ class BokanbefalingerApp < Sinatra::Application
     if path =~ /\/rediger$/
       # edit the review
       uri = path[0..-9]
-      redirect "/anbefaling/"+uri unless session[:user]
+      redirect "/anbefaling/"+uri unless session[:user] and Array(session[:my_reviews]).include?("http://data.deichman.no/" + uri)
       edit = true
     else
       uri = path
