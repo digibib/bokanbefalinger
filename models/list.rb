@@ -307,8 +307,8 @@ class List
       query.where([:subject, RDF::SKOS.narrower, :subject_narrower])
     end
     query.where([:book, RDF::DC.subject, :person]) if params["persons"]
-    query.where([:book, RDF::BIBO.numPages, :pages]) if params["pages"]
-    query.where([:work, RDF::DEICHMAN.assumedFirstEdition, :year]) if params["years"]
+    query.where([:book, RDF::BIBO.numPages, :pages]) unless params["pages"].empty?
+    query.where([:work, RDF::DEICHMAN.assumedFirstEdition, :year]) unless params["years"].empty?
     query.where([:book, RDF::DC.audience, :audience]) if params["audience"]
     query.where([:review, RDF::DC.audience, :review_audience, :context => REVIEWGRAPH]) if params["review_audience"]
     query.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
