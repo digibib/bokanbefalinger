@@ -34,7 +34,7 @@ class Review
         authors[s[:author].to_s] = s[:author_name].to_s
       end
 
-      Cache.set("dropwdown:authors", authors)
+      Cache.set("dropdown:authors", authors)
       authors
     }
 
