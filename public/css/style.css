@@ -593,7 +593,7 @@ span.error { background-color: #F9D654; display:none; padding:0.2em;}
 
 #search-results { margin: 40px 0; }
 #search-results p { font-size:14px; margin:0;}
-.search-hit { width: 90%; border-bottom: 1px solid #ccc; display:block; margin-top:1em;}
+.search-hit { clear:left; width: 90%; border-bottom: 1px solid #ccc; display:block; margin-top:1em;}
 .search-hit span { display:inline-block;}
 .num { font-size:14px;}
 
