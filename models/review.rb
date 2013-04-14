@@ -2,9 +2,114 @@
 require "json"
 require "faraday"
 
+SearchDropdown = Struct.new(:authors, :titles, :reviewers, :sources)
+
 class Review
 
   @@conn = Faraday.new(:url => Settings::API + "reviews")
+
+  def self.search_dropdowns(clear_cache=false)
+    # Returns a Dropdown Struct with the criteria used for dropdown-search,
+    # with URIs as keys and labels as values.
+
+    if clear_cache
+      Cache.del("dropdown:authors")
+      Cache.del("dropdown:titles")
+      Cache.del("dropdown:reviewers")
+      Cache.del("dropdown:sources")
+    end
+
+    authors = Cache.get("dropdown:authors") {
+      q = QUERY.select(:author, :author_name)
+      q.distinct
+      q.from(BOOKGRAPH)
+      q.where([:work, RDF::FABIO.hasManifestation, :book],
+              [:work, RDF::DC.creator, :author],
+              [:author, RDF::FOAF.name, :author_name],
+              [:book, RDF::REV.hasReview, :review])
+      res = REPO.select(q)
+      authors = {}
+
+      res.each do |s|
+        authors[s[:author].to_s] = s[:author_name].to_s
+      end
+
+      Cache.set("dropwdown:authors", authors)
+      authors
+    }
+
+    titles = Cache.get("dropdown:titles") {
+      q = QUERY.select(:work, :title)
+      q.sample(:original_title)
+      q.distinct
+      q.from(BOOKGRAPH)
+      q.where([:work, RDF::FABIO.hasManifestation, :book],
+              [:work, RDF::DC.title, :original_title],
+              [:book, RDF::REV.hasReview, :review],
+              [:book, RDF::DC.title, :title])
+      res = REPO.select(q)
+      titles = {}
+
+      res.each do |s|
+        original_title = ""
+        original_title += " (#{s[:original_title]})" unless s[:title] == s[:original_title]
+        titles[s[:work].to_s] = s[:title].to_s + original_title
+      end
+
+      Cache.set("dropdown:titles", titles)
+      titles
+    }
+
+    reviewers = Cache.get("dropdown:reviewers") {
+      q = QUERY.select(:reviewer, :reviewer_name)
+      q.distinct
+      q.from(BOOKGRAPH)
+      q.from_named(REVIEWGRAPH)
+      q.from_named(APIGRAPH)
+      q.where([:work, RDF::FABIO.hasManifestation, :book],
+              [:book, RDF::REV.hasReview, :review])
+      q.where([:review, RDF::REV.reviewer, :reviewer, :context => REVIEWGRAPH])
+      q.where([:reviewer, RDF::FOAF.name, :reviewer_name, :context => APIGRAPH])
+      res = REPO.select(q)
+      reviewers = {}
+
+      res.each do |s|
+        reviewers[s[:reviewer].to_s] = s[:reviewer_name].to_s
+      end
+
+      Cache.set("dropdown:reviewers", reviewers)
+      reviewers
+    }
+
+    sources = Cache.get("dropdown:sources") {
+      q = QUERY.select(:source, :source_name)
+      q.distinct
+      q.from(BOOKGRAPH)
+      q.from_named(REVIEWGRAPH)
+      q.from_named(APIGRAPH)
+      q.where([:work, RDF::FABIO.hasManifestation, :book],
+              [:book, RDF::REV.hasReview, :review])
+      q.where([:review, RDF::DC.source, :source, :context => REVIEWGRAPH])
+      q.where([:source, RDF::FOAF.name, :source_name, :context => APIGRAPH])
+
+      res = REPO.select(q)
+      sources = {}
+
+      res.each do |s|
+        sources[s[:source].to_s] = s[:source_name].to_s
+      end
+
+      Cache.set("dropdown:sources", sources)
+      sources
+    }
+
+    d = SearchDropdown.new
+    d.authors = authors
+    d.titles = titles
+    d.reviewers = reviewers
+    d.sources = sources
+    d
+  end
 
   def self.get_latest(limit, offset, order_by, order)
 
