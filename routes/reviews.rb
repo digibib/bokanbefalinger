@@ -117,6 +117,10 @@ class BokanbefalingerApp < Sinatra::Application
         end
       end
 
+      # Store users' reviews in session, in order to show 'edit' button when
+      # user views her own review.
+      session[:my_reviews] = @published.keys
+
       @title  = "Mine anbefalinger"
       erb :my_reviews
     end

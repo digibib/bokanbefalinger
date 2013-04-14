@@ -44,6 +44,9 @@
 			</div></div>
 		<% end %>
 	<% end %>
+	<% if session[:user] and Array(session[:my_reviews]).include?(r["uri"]) %>
+		<a href="<%= request.path+'/rediger' %>"><button class="medium green">Rediger</button></a>
+	<% end %>
 <!-- 	<% if session[:user] %>
 		<div class="clearfix"></div>
 		<div class="review-snippet" style="text-align:right;">
