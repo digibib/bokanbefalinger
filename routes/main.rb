@@ -21,7 +21,7 @@ class BokanbefalingerApp < Sinatra::Application
   end
 
   get "/søk" do
-    @dropdown = List.populate_dropdowns
+    @dropdown = Review.search_dropdowns
 
     if params["forfatter"] and not params["forfatter"].empty?
       @error_message, @works = Work.by_author(params["forfatter"])
