@@ -6,7 +6,7 @@
 	<div id="review-heading">
 		<div class="book-cover <%= "light-gray" unless @review["cover_url"] %>">
 			<% if @review["cover_url"] %>
-				<img class="cover" src="<%= @review["cover_url"] %>"/>
+				<img class="cover" src="<%= select_cover(@review) %>"/>
 			<% end %>
 		</div>
 			<div class="review-info">
