@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 Dropdown = Struct.new(:subjects, :persons, :genres, :languages, :authors,
-                      :formats, :nationalities, :titles, :reviewers)
+                      :formats, :nationalities)
 class List
 
   def self.create_feed_url(params)
@@ -30,79 +30,171 @@ class List
     params
   end
 
-  def self.populate_dropdowns()
+  def self.populate_dropdowns(clear_cache=false)
+    # Populate the dropdowns used by the list-generator
 
-    lists = Cache.get("dropdowns") {
+    if clear_cache
+      Cache.del("dropdown:subjects")
+      Cache.del("dropdown:persons")
+      Cache.del("dropdown:genres")
+      Cache.del("dropdown:languages")
+      Cache.del("dropdown:authors")
+      Cache.del("dropdown:formats")
+      Cache.del("dropdown:nationalities")
+    end
 
-      querystring="SELECT DISTINCT ?work ?subject_id ?subject_label ?person_id (CONCAT(?person_label, ' ', ?lifespan) AS ?person_label) ?genre_id ?genre_label ?lang_id ?lang_label ?creator ?creator_label ?format ?format_label ?nationality ?nationality_label ?title (sql:sample(?original_title) AS ?original_title) ?reviewer ?reviewer_name
-      FROM <http://data.deichman.no/books>
-      FROM NAMED <http://data.deichman.no/reviews>
-      FROM NAMED <http://data.deichman.no/sources>
-      WHERE {
-      ?work <http://purl.org/spar/fabio/hasManifestation> ?book .
-      ?book <http://purl.org/stuff/rev#hasReview> ?review ;
-            <http://purl.org/dc/terms/title> ?title .
-      ?work <http://purl.org/dc/terms/title> ?original_title .
-      GRAPH <http://data.deichman.no/reviews> { ?review <http://purl.org/stuff/rev#reviewer> ?reviewer .  }
-      GRAPH <http://data.deichman.no/sources> { ?reviewer <http://xmlns.com/foaf/0.1/name> ?reviewer_name . }
-      { ?work <http://purl.org/dc/terms/creator> ?creator .
-        ?creator <http://xmlns.com/foaf/0.1/name> ?creator_label .
-        ?creator <http://www.foafrealm.org/xfoaf/0.1/nationality> ?nationality .
-        ?nationality <http://www.w3.org/2000/01/rdf-schema#label> ?nationality_label . }
-      UNION
-      { ?book <http://data.deichman.no/literaryFormat> ?format .
-        ?format <http://www.w3.org/2000/01/rdf-schema#label> ?format_label . }
-      UNION
-      { ?book <http://dbpedia.org/ontology/literaryGenre> ?narrower .
-        ?narrower <http://www.w3.org/2004/02/skos/core#broader> ?genre_id .
-        ?genre_id <http://www.w3.org/2000/01/rdf-schema#label> ?genre_label . }
-      UNION
-      { ?book <http://purl.org/dc/terms/subject> ?subject_narrower .
-        ?subject_id <http://www.w3.org/2004/02/skos/core#narrower> ?subject_narrower .
-        ?subject_id <http://www.w3.org/2004/02/skos/core#prefLabel> ?subject_label .
-      }
-      UNION
-      { ?book <http://purl.org/dc/terms/subject> ?person_id .
-        ?person_id a <http://xmlns.com/foaf/0.1/Person> .
-        ?person_id <http://xmlns.com/foaf/0.1/name> ?person_label .
-        OPTIONAL { ?person_id <http://data.deichman.no/lifespan> ?lifespan .} }
-      UNION
-      { ?book <http://purl.org/dc/terms/language> ?lang_id .
-       ?lang_id <http://www.w3.org/2000/01/rdf-schema#label> ?lang_label . }
-      }
-      "
-      result = REPO.select(querystring)
+    subjects = Cache.get("dropdown:subjects") {
+      q = QUERY.select(:subject, :subject_label)
+      q.distinct
+      q.from(BOOKGRAPH)
+      q.where([:work, RDF::FABIO.hasManifestation, :book],
+              [:book, RDF::REV.hasReview, :review],
+              [:book, RDF::DC.subject, :subject_narrower],
+              [:subject, RDF::SKOS.narrower, :subject_narrower],
+              [:subject, RDF::SKOS.prefLabel, :subject_label])
+      res = REPO.select(q)
+      subjects = {}
 
-      d = Dropdown.new({},{},{},{},{},{},{},{},{})
-
-      result.each do |s|
-        d.authors[s[:creator].to_s] = s[:creator_label].to_s
-        d.languages[s[:lang_id].to_s] = s[:lang_label].to_s
-        d.persons[s[:person_id].to_s] = s[:person_label].to_s
-        d.formats[s[:format].to_s] = s[:format_label].to_s
-        d.nationalities[s[:nationality].to_s] = s[:nationality_label].to_s
-
-        sub_label = s[:subject_label].to_s
-        sub_label += " (ungdom)" if s[:subject_id].to_s.match(/Juvenile/)
-        d.subjects[s[:subject_id].to_s] = sub_label
-
-        gen_label = s[:genre_label].to_s
-        gen_label += " (ungdom)" if s[:genre_id].to_s.match(/Juvenile/)
-        d.genres[s[:genre_id].to_s] = gen_label
-
-        original_title = ""
-        original_title += " (#{s[:original_title]})" unless s[:title] == s[:original_title]
-        d.titles[s[:work].to_s] = s[:title].to_s + original_title
-
-        d.reviewers[s[:reviewer].to_s] = s[:reviewer_name].to_s
+      res.each do |s|
+        subjects[s[:subject].to_s] = s[:subject_label].to_s
       end
 
-      all = Hash[d.each_pair.to_a]
-      Cache.set "dropdowns", all
-      all
+      Cache.set("dropdown:subjects", subjects)
+      subjects
     }
 
-     Dropdown.new(*lists.values)
+    persons = Cache.get("dropdown:persons") {
+      q = QUERY.select(:person, :person_name, :lifespan)
+      q.distinct
+      q.from(BOOKGRAPH)
+      q.where([:work, RDF::FABIO.hasManifestation, :book],
+              [:book, RDF::REV.hasReview, :review],
+              [:book, RDF::DC.subject, :person],
+              [:person, RDF::FOAF.name, :person_name],
+              [:person, RDF::URI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), RDF::FOAF.Person])
+      q.optional([:person, RDF::DEICHMAN.lifespan, :lifespan])
+      res = REPO.select(q)
+      persons = {}
+
+      res.each do |s|
+        if s[:lifespan]
+          lifespan = " (#{s[:lifespan]})"
+        else
+          lifespan = ""
+        end
+        persons[s[:person].to_s] = s[:person_name].to_s + lifespan
+      end
+
+      Cache.set("dropdown:persons", persons)
+      persons
+    }
+
+    genres = Cache.get("dropdown:genres") {
+      q = QUERY.select(:genre, :genre_label)
+      q.distinct
+      q.from(BOOKGRAPH)
+      q.where([:work, RDF::FABIO.hasManifestation, :book],
+              [:book, RDF::REV.hasReview, :review],
+              [:book, RDF::DBO.literaryGenre, :narrower],
+              [:narrower, RDF::SKOS.broader, :genre],
+              [:genre, RDF::RDFS.label, :genre_label])
+      res = REPO.select(q)
+      genres = {}
+
+      res.each do |s|
+        genres[s[:genre].to_s] = s[:genre_label].to_s
+      end
+
+      Cache.set("dropdown:genres", genres)
+      genres
+    }
+
+    languages = Cache.get("dropdown:languages") {
+      q = QUERY.select(:language, :language_label)
+      q.distinct
+      q.from(BOOKGRAPH)
+      q.where([:work, RDF::FABIO.hasManifestation, :book],
+              [:book, RDF::REV.hasReview, :review],
+              [:book, RDF::DC.language, :language],
+              [:language, RDF::RDFS.label, :language_label])
+      res = REPO.select(q)
+      languages = {}
+
+      res.each do |s|
+        languages[s[:language].to_s] = s[:language_label].to_s
+      end
+
+      Cache.set("dropdown:languages", languages)
+      languages
+    }
+
+    authors = Cache.get("dropdown:authors") {
+      q = QUERY.select(:author, :author_name)
+      q.distinct
+      q.from(BOOKGRAPH)
+      q.where([:work, RDF::FABIO.hasManifestation, :book],
+              [:work, RDF::DC.creator, :author],
+              [:author, RDF::FOAF.name, :author_name],
+              [:book, RDF::REV.hasReview, :review])
+      res = REPO.select(q)
+      authors = {}
+
+      res.each do |s|
+        authors[s[:author].to_s] = s[:author_name].to_s
+      end
+
+      Cache.set("dropdown:authors", authors)
+      authors
+    }
+
+    formats = Cache.get("dropdown:formats") {
+      q = QUERY.select(:format, :format_label)
+      q.distinct
+      q.from(BOOKGRAPH)
+      q.where([:work, RDF::FABIO.hasManifestation, :book],
+              [:book, RDF::REV.hasReview, :review],
+              [:book, RDF::DEICHMAN.literaryFormat, :format],
+              [:format, RDF::RDFS.label, :format_label])
+      res = REPO.select(q)
+      formats = {}
+
+      res.each do |s|
+        formats[s[:format].to_s] = s[:format_label].to_s
+      end
+
+      Cache.set("dropdown:formats", formats)
+      formats
+    }
+
+    nationalities = Cache.get("dropdown:nationalities") {
+      q = QUERY.select(:nationality, :nationality_label)
+      q.distinct
+      q.from(BOOKGRAPH)
+      q.where([:work, RDF::FABIO.hasManifestation, :book],
+              [:book, RDF::REV.hasReview, :review],
+              [:work, RDF::DC.creator, :creator],
+              [:creator, RDF::XFOAF.nationality, :nationality],
+              [:nationality, RDF::RDFS.label, :nationality_label])
+      res = REPO.select(q)
+      nationalities = {}
+
+      res.each do |s|
+        nationalities[s[:nationality].to_s] = s[:nationality_label].to_s
+      end
+
+      Cache.set("dropdown:nationalities", nationalities)
+      nationalities
+    }
+
+    d = Dropdown.new
+    d.subjects = subjects
+    d.persons = persons
+    d.genres = genres
+    d.authors = authors
+    d.formats = formats
+    d.languages = languages
+    d.nationalities = nationalities
+    d
   end
 
   def self.repopulate_dropdown(dropdown, authors, subjects, persons, pages, years, audience, review_audience, genres, languages, formats, nationalities)
