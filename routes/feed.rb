@@ -22,7 +22,7 @@ class BokanbefalingerApp < Sinatra::Application
       @title = "Feil"
       erb :error
     else
-      builder :feed, :locals => {:result => @result, :format => request.accept, :url => request.url}
+      builder :feed, :locals => {:result => @result, :format => request.accept, :url => request.url, :title => params["title"]}
     end
 
   end

@@ -2,7 +2,7 @@ xml.instruct! :xml, :version => '1.0'
 case
 when format.include?('application/atom+xml')
   xml.feed :xmlns => "http://www.w3.org/2005/Atom", "xmlns:dc" => "http://purl.org/dc/elements/1.1/", "xmlns:media" => "http://search.yahoo.com/mrss/" do
-    xml.title "Bokanbefalinger feed"
+    xml.title title || "Bokanbefalinger feed"
     xml.id url
     xml.updated Time.parse(result["works"].first["reviews"].first["issued"].to_s).xmlschema
     xml.subtitle "Atom Feed fra bokanbefalinger.deichman.no"
@@ -28,7 +28,7 @@ when format.include?('application/atom+xml')
 else
   xml.rss :version => "2.0", "xmlns:dc" => "http://purl.org/dc/elements/1.1/", "xmlns:media" => "http://search.yahoo.com/mrss/" do
     xml.channel do
-      xml.title "Bokanbefalinger feed"
+      xml.title title || "Bokanbefalinger feed"
       xml.description "RSS Feed fra bokanbefalinger.deichman.no"
       xml.link "http://anbefalinger.deichman.no/"
 
