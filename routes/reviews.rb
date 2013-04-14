@@ -1,5 +1,6 @@
 # encoding: utf-8
 require "json"
+require "cgi"
 
 class BokanbefalingerApp < Sinatra::Application
 
@@ -145,6 +146,7 @@ class BokanbefalingerApp < Sinatra::Application
                :feed => "http://anbefalinger.deichman.no/feed?nationalities=http://data.deichman.no/nationality/am"}]
 
     @lists.map do |list|
+      list[:feed] += "&title=#{CGI.escape(list[:title])}"
       list[:reviews] = []
       reviews = List.get_feed(list[:feed])
       reviews[0..9].each do |uri|
