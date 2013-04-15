@@ -44,7 +44,7 @@
 			</div></div>
 		<% end %>
 	<% end %>
-	<% if session[:user] and Array(session[:my_reviews]).include?(r["uri"]) %>
+	<% if session[:user] and session[:user_uri] == r["reviewer"]["uri"] %>
 		<a href="<%= request.path+'/rediger' %>"><button class="medium green">Rediger</button></a>
 	<% end %>
 <!-- 	<% if session[:user] %>

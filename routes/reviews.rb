@@ -59,7 +59,7 @@ class BokanbefalingerApp < Sinatra::Application
     if path =~ /\/rediger$/
       # edit the review
       uri = path[0..-9]
-      redirect "/anbefaling/"+uri unless session[:user] and Array(session[:my_reviews]).include?("http://data.deichman.no/" + uri)
+      redirect "/anbefaling/"+uri unless session[:user]
       edit = true
     else
       uri = path
@@ -77,6 +77,7 @@ class BokanbefalingerApp < Sinatra::Application
       my_reviews.each do |w|
         @review = w if w["reviews"].first["uri"] == uri
       end
+      redirect "/anbefaling/"+path[0..-9] unless session[:user] and session[:user_uri] == @review["reviews"].first["reviewer"]["uri"]
       erb :edit
     else
       @title = @review["reviews"].first["title"]
@@ -117,10 +118,6 @@ class BokanbefalingerApp < Sinatra::Application
           @draft[w["reviews"].first["uri"]] = {"works" => w }
         end
       end
-
-      # Store users' reviews in session, in order to show 'edit' button when
-      # user views her own review.
-      session[:my_reviews] = @published.keys
 
       @title  = "Mine anbefalinger"
       erb :my_reviews
