@@ -41,6 +41,7 @@ class BokanbefalingerApp < Sinatra::Application
 
     if params["isbn"] and not params["isbn"].gsub(/[^0-9X]/, "").empty?
       @error_message, @isbn = Work.by_isbn(params["isbn"].gsub(/[^0-9X]/, ""))
+      @isbn["reviews"] = Array(@isbn["reviews"]).reject { |r| r["published"] == false}
     end
 
     @title = "Søk etter anbefalinger"
