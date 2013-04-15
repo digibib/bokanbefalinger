@@ -37,7 +37,11 @@ else
         xml.item do
           xml.title review["title"]
           xml.link "http://anbefalinger.deichman.no/anbefaling/#{review["uri"][24..-1]}"
-          xml.description review['text']
+          if review['text'] and not review['text'].empty?
+            xml.description review['text']
+          else
+            xml.description review['teaser']
+          end
           xml.enclosure(:url=>"#{select_cover(work)}", :type=>"image/jpeg") if select_cover(work)
           xml.pubDate Time.parse(review["issued"].to_s).rfc822
           xml.guid review["uri"]
