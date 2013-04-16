@@ -1,5 +1,5 @@
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     addressable (2.3.3)
     api_smith (1.2.0)
@@ -7,16 +7,17 @@ GEM
       httparty
       net-http-persistent
     backports (2.6.5)
+    blankslate (2.1.2.4)
     builder (3.2.0)
     coderay (1.0.8)
-    daemons (1.1.9)
-    em-synchrony (1.0.2)
-      eventmachine (>= 1.0.0.beta.1)
+    edn (1.0.0)
+      parslet (~> 1.4.0)
     eventmachine (1.0.0)
+    eventmachine (1.0.0-java)
     faraday (0.8.4)
       multipart-post (~> 1.1)
+    ffi (1.7.0-java)
     hashie (1.2.0)
-    hiredis (0.4.5)
     httparty (0.10.2)
       multi_json (~> 1.0)
       multi_xml (>= 0.5.2)
@@ -25,15 +26,23 @@ GEM
     multi_xml (0.5.3)
     multipart-post (1.1.5)
     net-http-persistent (2.8)
+    parslet (1.4.0)
+      blankslate (~> 2.0)
     pry (0.9.10)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
       slop (~> 3.3.1)
+    pry (0.9.10-java)
+      coderay (~> 1.0.5)
+      method_source (~> 0.8)
+      slop (~> 3.3.1)
+      spoon (~> 0.0)
     rack (1.4.1)
     rack-protection (1.3.2)
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
+    rake (10.0.4)
     rdf (1.0.3)
       addressable (>= 2.2)
     rdf-virtuoso (0.1.2)
@@ -55,20 +64,53 @@ GEM
     sinatra-reloader (1.0)
       sinatra-contrib
     slop (3.3.3)
-    thin (1.5.0)
-      daemons (>= 1.0.9)
-      eventmachine (>= 0.12.6)
-      rack (>= 1.0.0)
+    spoon (0.0.3)
+      ffi
+    thor (0.18.1)
     tilt (1.3.3)
+    torquebox (2.3.0)
+      thor (>= 0.14.6)
+      torquebox-cache (= 2.3.0)
+      torquebox-configure (= 2.3.0)
+      torquebox-core (= 2.3.0)
+      torquebox-messaging (= 2.3.0)
+      torquebox-naming (= 2.3.0)
+      torquebox-rake-support (= 2.3.0)
+      torquebox-security (= 2.3.0)
+      torquebox-stomp (= 2.3.0)
+      torquebox-transactions (= 2.3.0)
+      torquebox-web (= 2.3.0)
+    torquebox-cache (2.3.0-java)
+      torquebox-core (= 2.3.0)
+      torquebox-transactions (= 2.3.0)
+    torquebox-configure (2.3.0-java)
+      blankslate (= 2.1.2.4)
+    torquebox-core (2.3.0-java)
+    torquebox-messaging (2.3.0-java)
+      edn (= 1.0.0)
+      torquebox-core (= 2.3.0)
+      torquebox-transactions (= 2.3.0)
+    torquebox-naming (2.3.0-java)
+    torquebox-rake-support (2.3.0)
+      rake (>= 0.8.7)
+    torquebox-security (2.3.0-java)
+      torquebox-core (= 2.3.0)
+    torquebox-server (2.3.0-java)
+      torquebox (= 2.3.0)
+    torquebox-stomp (2.3.0)
+      torquebox-core (= 2.3.0)
+      torquebox-messaging (= 2.3.0)
+    torquebox-transactions (2.3.0)
+      torquebox-core (= 2.3.0)
+    torquebox-web (2.3.0-java)
 
 PLATFORMS
+  java
   ruby
 
 DEPENDENCIES
   builder
-  em-synchrony
   faraday
-  hiredis
   pry
   rack-test
   rdf
@@ -76,4 +118,4 @@ DEPENDENCIES
   redis
   sinatra
   sinatra-reloader
-  thin
+  torquebox-server

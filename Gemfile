@@ -1,9 +1,7 @@
-source :rubygems
-gem "thin"
+source "https://rubygems.org"
+gem "torquebox-server"
 gem "sinatra"
 gem "redis"
-gem "hiredis"
-gem "em-synchrony"
 gem "faraday"
 gem "rdf"
 gem "rdf-virtuoso"
