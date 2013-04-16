@@ -16,15 +16,13 @@ Last ned og installer torquebox:
 
 ```bash
 $ wget http://torquebox.org/release/org/torquebox/torquebox-dist/2.3.0/torquebox-dist-2.3.0-bin.zip
-  # Torquebox is owned by user 'torquebox'
-$ sudo adduser torquebox --disabled-login
+$ sudo adduser torquebox --disabled-login # Torquebox MÅ eies av bruker 'torquebox'
 $ sudo mkdir /opt/torquebox
 $ sudo chown torquebox:torquebox /opt/torquebox
 $ sudo su torquebox
 $ unzip torquebox-dist-2.3.0-bin.zip -d /opt/torquebox/
 $ cd /opt/torquebox
-  # Symlink current version of torquebox, so it will be easy to upgrade later.
-$ ln -s torquebox-2.3.0 current
+$ ln -s torquebox-2.3.0 current # Symlink gjeldende versjon, så blir det enkelt å oppgradere senere.
 ```
 
 Set opp environment. Legg til i `/home/torquebox/.bashrc`:
@@ -42,10 +40,13 @@ Konfigurer oppstartsjobb:
 
 ```bash
 $ cd $TORQUEBOX_HOME
-  # NB must be run with user who can write to /etc/init
-$ rake torquebox:upstart:install
+$ rake torquebox:upstart:install # NB må kjøres av bruker med tilatelse til å skrive til /etc/init.
 $ sudo service torquebox start
 ```
+
+## Routing
+JBoss server til port 8080.
+TODO Apache config her
 
 ### Redis
 Applikasjonen bruker [Redis](http://redis.io/) til å cache anbefalingene.
