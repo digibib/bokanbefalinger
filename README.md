@@ -3,7 +3,7 @@
 ## Installasjon
 
 ### Torquebox applikasjonsserver
-Forsikre deg om at det er en ny versjon (1.6 eller nyere) av java installert:
+Forsikre deg om at det er en ny versjon av java installert (1.6 eller nyere):
 
 ```bash
 $ java -version
@@ -44,12 +44,35 @@ $ rake torquebox:upstart:install # NB må kjøres av bruker med tilatelse til å
 $ sudo service torquebox start
 ```
 
-## Routing
+### Apache routing
 JBoss server til port 8080.
-TODO Apache config her
 
-### Redis
-Applikasjonen bruker [Redis](http://redis.io/) til å cache anbefalingene.
+```
+<VirtualHost *:80>
+  ServerName anbefalinger.deichman.no
+  DocumentRoot /home/torquebox/bokanbefalinger
+
+  ProxyRequests Off
+  ProxyPreserveHost on
+  ProxyTimeout        300
+  # Proxy ACL
+  <Proxy *>
+      Order deny,allow
+      Allow from all
+  </Proxy>
+  <Proxy />
+    Allow from all
+    ProxyPass http://localhost:8080/ timeout=300
+    ProxyPassReverse http://localhost:8080/
+  </Proxy>
+
+  ErrorLog /var/log/apache2/nyeanbefalinger.deichman.no_error
+  CustomLog /var/log/apache2/nyeanbefalinger.deichman.no_access combined
+</VirtualHost>
+```
+
+### Cache
+JBoss har en egen cache-modul (Infinispan), men appen bruker fremdeles [Redis](http://redis.io/) til å cache anbefalingene. Redis er superrask fungerer så bra at jeg vet ikke om det er noe vits å bytte. Må teste ut Infinispan litt mere først.
 
 For å installere Redis:
 ```shell
