@@ -177,7 +177,7 @@ class Review
   end
 
   def self.get(uri)
-    review = Cache.get(uri) {
+     review = Cache.get(uri) {
        begin
          resp = @@conn.get do |req|
            req.body = {:uri => uri}.to_json
@@ -195,7 +195,11 @@ class Review
        Cache.set uri, rev
        rev
     }
-    err, other_reviews = Work.get(review["works"].first["uri"])
+    if review["works"].empty?
+      err =true
+    else
+      err, other_reviews = Work.get(review["works"].first["uri"])
+    end
     unless err
       other_reviews = other_reviews["reviews"].reject { |r| r["uri"] == review["works"].first["reviews"].first["uri"]}
     end

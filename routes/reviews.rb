@@ -148,7 +148,7 @@ class BokanbefalingerApp < Sinatra::Application
       reviews = List.get_feed(list[:feed])
       reviews[0..9].each do |uri|
         _, r = Review.get(uri)
-        list[:reviews] << r
+        list[:reviews] << r if r
       end
       list[:reviews].compact!
     end
