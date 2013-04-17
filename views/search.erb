@@ -58,7 +58,7 @@
 					</div>
 					<% w["reviews"].each do |r| %>
 						<% unless r["published"] == false %>
-							<p>
+							<p class="search">
 								<a href="/anbefaling<%= r['uri'][23..-1] %>"><%= r["title"]%></a> anbefalt av <%= reviewerformatted(r) %> <span class="liste-date"><%= dateformat(r["issued"]) %></span>
 							</p>
 						<% end %>
