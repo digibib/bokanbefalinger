@@ -47,7 +47,7 @@ $ sudo service torquebox start
 ### Apache routing
 JBoss server til port 8080.
 
-```
+```apache
 <VirtualHost *:80>
   ServerName anbefalinger.deichman.no
   DocumentRoot /home/torquebox/bokanbefalinger
