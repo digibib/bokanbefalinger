@@ -4,8 +4,8 @@
 	<% end %>
 	<% r = @review["reviews"].first %>
 	<div id="review-heading">
-		<div class="book-cover <%= "light-gray" unless @review["cover_url"] %>">
-			<% if @review["cover_url"] %>
+		<div class="book-cover <%= "light-gray" unless select_cover(@review) %>">
+			<% if select_cover(@review) %>
 				<img class="cover" src="<%= select_cover(@review) %>"/>
 			<% end %>
 		</div>
