@@ -68,7 +68,7 @@
 			<div class="clearfix" style="margin:20px"></div>
 			<div class="liste-link">
 				<% feed_url = "http://anbefalinger.deichman.no/feed?authors=#{params['forfatter']}" %>
-				<h3>RSS-strøm for dette søket</h3>
+				<h3>Abonnér på dette søket:</h3>
 				<span class="hint hint--bottom" data-hint="RSS også kalt «levende bokmerker» er en ordning der en nettleser på en datamaskin henter nyheter eller annet materiale fra Internett fortløpende og automatisk. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Du kan legge inn lenken på din blogg eller abonnere på i din RSS-leser"><img class="rss" src="img/feed-icon-28x28.png"></span><input class="rss-link" class="text" disabled="disabled" value="<%= feed_url %>"><button class="medium green" id="rss-copy">Kopier</button>
 			</div>
 		<% end %>
@@ -87,7 +87,7 @@
 			<div class="clearfix" style="margin:20px"></div>
 			<div class="liste-link">
 			<% feed_url = "http://anbefalinger.deichman.no/feed?work=#{params['tittel']}" %>
-				<h3>RSS-strøm for dette søket</h3>
+				<h3>Abonnér på dette søket:</h3>
 				<span class="hint hint--bottom" data-hint="RSS også kalt «levende bokmerker» er en ordning der en nettleser på en datamaskin henter nyheter eller annet materiale fra Internett fortløpende og automatisk. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Du kan legge inn lenken på din blogg eller abonnere på i din RSS-leser"><img class="rss" src="img/feed-icon-28x28.png"></span><input class="rss-link" class="text" disabled="disabled" value="<%= feed_url %>"><button class="medium green" id="rss-copy">Kopier</button>
 			</div>
 		<% end %>
@@ -108,7 +108,7 @@
 			<div class="clearfix" style="margin:20px"></div>
 			<div class="liste-link">
 			<% feed_url = "http://anbefalinger.deichman.no/feed?isbn=#{params['isbn']}" %>
-				<h3>RSS-strøm for dette søket</h3>
+				<h3>Abonnér på dette søket:</h3>
 				<span class="hint hint--bottom" data-hint="RSS også kalt «levende bokmerker» er en ordning der en nettleser på en datamaskin henter nyheter eller annet materiale fra Internett fortløpende og automatisk. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Du kan legge inn lenken på din blogg eller abonnere på i din RSS-leser"><img class="rss" src="img/feed-icon-28x28.png"></span><input class="rss-link" class="text" disabled="disabled" value="<%= feed_url %>"><button class="medium green" id="rss-copy">Kopier</button>
 			</div>
 		<% end %>
@@ -133,7 +133,7 @@
 			<div class="clearfix" style="margin:20px"></div>
 			<div class="liste-link">
 			<% feed_url = "http://anbefalinger.deichman.no/feed?reviewer=#{params['anmelder']}" %>
-				<h3>RSS-strøm for dette søket</h3>
+				<h3>Abonnér på dette søket:</h3>
 				<span class="hint hint--bottom" data-hint="RSS også kalt «levende bokmerker» er en ordning der en nettleser på en datamaskin henter nyheter eller annet materiale fra Internett fortløpende og automatisk. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Du kan legge inn lenken på din blogg eller abonnere på i din RSS-leser"><img class="rss" src="img/feed-icon-28x28.png"></span><input class="rss-link" class="text" disabled="disabled" value="<%= feed_url %>"><button class="medium green" id="rss-copy">Kopier</button>
 			</div>
 		<% end %>
@@ -158,7 +158,7 @@
 			<div class="clearfix" style="margin:20px"></div>
 			<div class="liste-link">
 			<% feed_url = "http://#{request.host}:#{request.port}/feed?source=#{params['kilde']}" %>
-				<h3>RSS-strøm for dette søket</h3>
+				<h3>Abonnér på dette søket:</h3>
 				<span class="hint hint--bottom" data-hint="RSS også kalt «levende bokmerker» er en ordning der en nettleser på en datamaskin henter nyheter eller annet materiale fra Internett fortløpende og automatisk. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Du kan legge inn lenken på din blogg eller abonnere på i din RSS-leser"><img class="rss" src="img/feed-icon-28x28.png"></span><input class="rss-link" class="text" disabled="disabled" value="<%= feed_url %>"><button class="medium green" id="rss-copy">Kopier</button>
 			</div>
 		<% end %>
