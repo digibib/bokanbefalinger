@@ -13,13 +13,13 @@ class Review
     # with URIs as keys and labels as values.
 
     if clear_cache
-      Cache.del("dropdown:authors")
-      Cache.del("dropdown:titles")
-      Cache.del("dropdown:reviewers")
-      Cache.del("dropdown:sources")
+      Cache.del("dropdown:authors", :dropdowns)
+      Cache.del("dropdown:titles", :dropdowns)
+      Cache.del("dropdown:reviewers", :dropdowns)
+      Cache.del("dropdown:sources", :dropdowns)
     end
 
-    authors = Cache.get("dropdown:authors") {
+    authors = Cache.get("dropdown:authors", :dropdowns) {
       q = QUERY.select(:author, :author_name)
       q.distinct
       q.from(BOOKGRAPH)
@@ -34,11 +34,11 @@ class Review
         authors[s[:author].to_s] = s[:author_name].to_s
       end
 
-      Cache.set("dropdown:authors", authors)
+      Cache.set("dropdown:authors", authors, :dropdowns)
       authors
     }
 
-    titles = Cache.get("dropdown:titles") {
+    titles = Cache.get("dropdown:titles", :dropdowns) {
       q = QUERY.select(:work, :title)
       q.sample(:original_title)
       q.distinct
@@ -56,11 +56,11 @@ class Review
         titles[s[:work].to_s] = s[:title].to_s + original_title
       end
 
-      Cache.set("dropdown:titles", titles)
+      Cache.set("dropdown:titles", titles, :dropdowns)
       titles
     }
 
-    reviewers = Cache.get("dropdown:reviewers") {
+    reviewers = Cache.get("dropdown:reviewers", :dropdowns) {
       q = QUERY.select(:reviewer, :reviewer_name)
       q.distinct
       q.from(BOOKGRAPH)
@@ -77,12 +77,12 @@ class Review
         reviewers[s[:reviewer].to_s] = s[:reviewer_name].to_s
       end
 
-      Cache.set("dropdown:reviewers", reviewers)
+      Cache.set("dropdown:reviewers", reviewers, :dropdowns)
       reviewers
     }
 
     sources = Cache.get("dropdown:sources") {
-      q = QUERY.select(:source, :source_name)
+      q = QUERY.select(:source, :source_name, :dropdowns)
       q.distinct
       q.from(BOOKGRAPH)
       q.from_named(REVIEWGRAPH)
@@ -99,7 +99,7 @@ class Review
         sources[s[:source].to_s] = s[:source_name].to_s
       end
 
-      Cache.set("dropdown:sources", sources)
+      Cache.set("dropdown:sources", sources, :dropdowns)
       sources
     }
 
@@ -113,7 +113,7 @@ class Review
 
   def self.get_latest(limit, offset, order_by, order)
 
-    latest = Cache.get("reviews:latest") {
+    latest = Cache.get("reviews:latest", :reviews) {
       begin
         resp = @@conn.get do |req|
           req.body = {:limit => 100, :offset => 0,
@@ -127,14 +127,14 @@ class Review
       return error, nil if error
 
       cache = JSON.parse(resp.body)
-      Cache.set("reviews:latest", cache)
+      Cache.set("reviews:latest", cache, :reviews)
       cache
     }
     return nil, {"works" => latest["works"][offset..(offset+limit)]}
   end
 
   def self.by_reviewer(reviewer)
-    reviews = Cache.get(reviewer) {
+    reviews = Cache.get(reviewer, :reviewers) {
       begin
         resp = @@conn.get do |req|
           req.body = {:reviewer => reviewer, :limit => 100,
@@ -148,14 +148,14 @@ class Review
       return error, nil if error
 
       cache = JSON.parse(resp.body)
-      Cache.set(reviewer, cache)
+      Cache.set(reviewer, cache, :reviewers)
       cache
     }
     return nil, reviews["works"]
   end
 
   def self.by_source(source)
-    reviews = Cache.get(source) {
+    reviews = Cache.get(source, :sources) {
       begin
         resp = @@conn.get do |req|
           req.body = {:source => source, :limit => 25,
@@ -170,14 +170,13 @@ class Review
       return error, nil if error
 
       cache = JSON.parse(resp.body)
-      Cache.set(source, cache)
+      Cache.set(source, cache, :sources)
       cache
     }
     return nil, reviews["works"]
   end
 
   def self.get(uri)
-
     review = Cache.get(uri) {
        begin
          resp = @@conn.get do |req|

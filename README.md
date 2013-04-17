@@ -72,7 +72,7 @@ JBoss server til port 8080.
 ```
 
 ### Cache
-JBoss har en egen cache-modul (Infinispan), men appen bruker fremdeles [Redis](http://redis.io/) til å cache anbefalingene. Redis er superrask fungerer så bra at jeg vet ikke om det er noe vits å bytte. Må teste ut Infinispan litt mere først.
+JBoss har en egen cache-modul (Infinispan), men appen bruker fremdeles [Redis](http://redis.io/) til å cache anbefalingene. Redis er superrask og fungerer så bra at jeg vet ikke om det er noe vits å bytte. Må teste ut Infinispan litt mere først.
 
 For å installere Redis:
 ```shell
@@ -84,5 +84,5 @@ make
 
 Starte ved å kjøre `/redis-stable/src/redis-server`. Hvis du ikke angir en konfigurasjonsfil som første parameter, vil Redis bruke standardverdier, og serve fra port 6379.
 
-#### Foreløbige innstillinger i redis.conf
+#### Innstillinger i redis.conf:
 `deamonize yes`

@@ -34,16 +34,16 @@ class List
     # Populate the dropdowns used by the list-generator
 
     if clear_cache
-      Cache.del("dropdown:subjects")
-      Cache.del("dropdown:persons")
-      Cache.del("dropdown:genres")
-      Cache.del("dropdown:languages")
-      Cache.del("dropdown:authors")
-      Cache.del("dropdown:formats")
-      Cache.del("dropdown:nationalities")
+      Cache.del("dropdown:subjects", :dropdowns)
+      Cache.del("dropdown:persons", :dropdowns)
+      Cache.del("dropdown:genres", :dropdowns)
+      Cache.del("dropdown:languages", :dropdowns)
+      Cache.del("dropdown:authors", :dropdowns)
+      Cache.del("dropdown:formats", :dropdowns)
+      Cache.del("dropdown:nationalities", :dropdowns)
     end
 
-    subjects = Cache.get("dropdown:subjects") {
+    subjects = Cache.get("dropdown:subjects", :dropdowns) {
       q = QUERY.select(:subject, :subject_label)
       q.distinct
       q.from(BOOKGRAPH)
@@ -59,11 +59,11 @@ class List
         subjects[s[:subject].to_s] = s[:subject_label].to_s
       end
 
-      Cache.set("dropdown:subjects", subjects)
+      Cache.set("dropdown:subjects", subjects, :dropdowns)
       subjects
     }
 
-    persons = Cache.get("dropdown:persons") {
+    persons = Cache.get("dropdown:persons", :dropdowns) {
       q = QUERY.select(:person, :person_name, :lifespan)
       q.distinct
       q.from(BOOKGRAPH)
@@ -85,11 +85,11 @@ class List
         persons[s[:person].to_s] = s[:person_name].to_s + lifespan
       end
 
-      Cache.set("dropdown:persons", persons)
+      Cache.set("dropdown:persons", persons, :dropdowns)
       persons
     }
 
-    genres = Cache.get("dropdown:genres") {
+    genres = Cache.get("dropdown:genres", :dropdowns) {
       q = QUERY.select(:genre, :genre_label)
       q.distinct
       q.from(BOOKGRAPH)
@@ -105,11 +105,11 @@ class List
         genres[s[:genre].to_s] = s[:genre_label].to_s
       end
 
-      Cache.set("dropdown:genres", genres)
+      Cache.set("dropdown:genres", genres, :dropdowns)
       genres
     }
 
-    languages = Cache.get("dropdown:languages") {
+    languages = Cache.get("dropdown:languages", :dropdowns) {
       q = QUERY.select(:language, :language_label)
       q.distinct
       q.from(BOOKGRAPH)
@@ -124,11 +124,11 @@ class List
         languages[s[:language].to_s] = s[:language_label].to_s
       end
 
-      Cache.set("dropdown:languages", languages)
+      Cache.set("dropdown:languages", languages, :dropdowns)
       languages
     }
 
-    authors = Cache.get("dropdown:authors") {
+    authors = Cache.get("dropdown:authors", :dropdowns) {
       q = QUERY.select(:author, :author_name)
       q.distinct
       q.from(BOOKGRAPH)
@@ -143,11 +143,11 @@ class List
         authors[s[:author].to_s] = s[:author_name].to_s
       end
 
-      Cache.set("dropdown:authors", authors)
+      Cache.set("dropdown:authors", authors, :dropdowns)
       authors
     }
 
-    formats = Cache.get("dropdown:formats") {
+    formats = Cache.get("dropdown:formats", :dropdowns) {
       q = QUERY.select(:format, :format_label)
       q.distinct
       q.from(BOOKGRAPH)
@@ -162,11 +162,11 @@ class List
         formats[s[:format].to_s] = s[:format_label].to_s
       end
 
-      Cache.set("dropdown:formats", formats)
+      Cache.set("dropdown:formats", formats, :dropdowns)
       formats
     }
 
-    nationalities = Cache.get("dropdown:nationalities") {
+    nationalities = Cache.get("dropdown:nationalities", :dropdowns) {
       q = QUERY.select(:nationality, :nationality_label)
       q.distinct
       q.from(BOOKGRAPH)
@@ -182,7 +182,7 @@ class List
         nationalities[s[:nationality].to_s] = s[:nationality_label].to_s
       end
 
-      Cache.set("dropdown:nationalities", nationalities)
+      Cache.set("dropdown:nationalities", nationalities, :dropdowns)
       nationalities
     }
 
@@ -356,9 +356,9 @@ class List
   end
 
   def self.get_feed(url)
-    reviews = Cache.get(url) {
+    reviews = Cache.get(url, :feeds) {
       cache = List.get(params_from_feed_url(url))
-      Cache.set(url, cache)
+      Cache.set(url, cache, :feeds)
       cache
     }
     reviews

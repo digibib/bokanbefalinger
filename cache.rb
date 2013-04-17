@@ -3,25 +3,29 @@ require "redis"
 require "json"
 
 class Cache
+  # Use different Redis database for each uri-type. Defaults to 0 (reviews)
+  @@db = {:reviews => 0, :works => 1, :authors => 2, :reviewers => 3,
+          :sources => 4, :feeds => 5, :dropdowns => 6}
+  @@clients = {}
 
-  def self.redis(config={})
-    @@redis ||= Redis.new(config)
+  def self.redis(n=0)
+    @@clients[n] ||= Redis.new(:db => n)
   end
 
-  def self.set(key, data)
-    redis.set key, to_json(data)
+  def self.set(key, data, where=:reviews)
+    redis(@@db[where]).set key, to_json(data)
   rescue Redis::CannotConnectError
     return nil
   end
 
-  def self.get(key)
-    from_json redis.get(key)
+  def self.get(key, where=:reviews)
+    from_json redis(@@db[where]).get(key)
   rescue => error
     yield(error)
   end
 
-  def self.del(key)
-    redis.del key
+  def self.del(key, where=:reviews)
+    redis[@@db[where]].del key
   rescue Redis::CannotConnectError
     return nil
   end
