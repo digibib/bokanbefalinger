@@ -44,6 +44,12 @@ class Work
 
       cache = JSON.parse(resp.body)
       Cache.set(work_id, cache, :works)
+
+      # also cache by edition (manifestastion)
+      cache["works"].first["editions"].each do |ed|
+        Cache.set(ed["uri"], cache, :editions)
+      end
+
       cache
     }
 
@@ -77,7 +83,7 @@ class Work
   end
 
   def self.by_manifestation(uri)
-    work = Cache.get(uri) {
+    work = Cache.get(uri, :editions) {
       return "Not yet in cache", nil
     }
 

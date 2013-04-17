@@ -32,6 +32,9 @@
 		<% end %>
 		<p><em>Målgruppe for denne anbefalingen er <%= r["audience"].map { |a| a.downcase } .join("/") %></em></p>
 	</div>
+	<% if session[:user] and session[:user_uri] == r["reviewer"]["uri"] %>
+		<a href="<%= request.path+'/rediger' %>"><button class="medium green">Rediger</button></a>
+	<% end %>
 	<div class="clearfix" style="margin-top:50px"></div>
 	<% if @other_reviews.size > 0 %>
 		<h3 class="no-bold border">Andre anbefalinger av <em><%= @review["prefTitle"] || @review["originalTitle"] %></em></h3>
@@ -47,12 +50,9 @@
 	<% else %>
 		<h3 class="no-bold border">Det finnes ingen andre anbefalinger av <em><%= @review["prefTitle"] || @review["originalTitle"] %></em></h3>
 	<% end %>
-	<% if session[:user] and session[:user_uri] == r["reviewer"]["uri"] %>
-		<a href="<%= request.path+'/rediger' %>"><button class="medium green">Rediger</button></a>
-	<% end %>
 	<% if session[:user] %>
 		<div class="clearfix"></div>
-		<p><a href="/manifestasjon<%= r["uri"][23..-1] %>/ny"><button class="big green" style="margin-right:150px">Skriv en anbefaling av denne boka</button></a></p>
+		<p><a href="/manifestasjon<%= r["edition"][23..-1] %>/ny"><button class="big green" style="margin-right:150px">Skriv en anbefaling av denne boka</button></a></p>
 	<% else %>
 <!-- 		<div class="clearfix"></div>
 		<p>Logg deg inn for å skrive en anbefaling av denne boka!</p> -->
