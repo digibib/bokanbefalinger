@@ -111,6 +111,10 @@ h1, h2, h3 { color :#333; line-height: 1.1em;}
 .lokkeskrift { font-family: 'Sacramento', cursive; font-size:50px;
                 line-height: 1.2em; color: #c12121; margin:25px 0;}
 
+.no-bold { font-weight: normal }
+
+.border { border-bottom: 1px solid #ccc;}
+
 img.loading { margin: 0 1.5em;}
 
 img.rss { width: 22px; height: 22px; margin: auto; margin-bottom:-6px;}
@@ -125,6 +129,16 @@ button:active { position:relative; top: 3px; }
 button.medium {
   padding: 4px;
   width: 130px;
+  color: #fff;
+  border-radius: 3px;
+  border:0;
+  line-height:1.4em;
+  margin-right:0.5em;
+}
+
+button.big {
+  padding: 4px 20px;
+  width: 180px;
   color: #fff;
   border-radius: 3px;
   border:0;
@@ -498,11 +512,8 @@ a:hover.work-link { text-decoration: underline }
 
 .review-teaser { padding: 1em;}
 
-.other-reviews {
-  clear:both;
-  padding: 10px;
-  border-top: 1px dashed #ccc;
-}
+.other-reviews { font-size:14px; margin:0; }
+.other-teaser { font-size:14px; margin-top:1em;}
 
 /* work page */
 
@@ -593,10 +604,10 @@ span.error { background-color: #F9D654; display:none; padding:0.2em;}
 
 #search-results { margin: 40px 0; }
 #search-results p { font-size:14px; margin:0;}
-.search-hit { clear:left; width: 90%; border-bottom: 1px solid #ccc; display:block; margin-top:1em;}
+.search-hit { clear:left; width: 90%; border-bottom: 1px solid #ccc; display:block; margin-top:1em; }
 .search-hit span { display:inline-block;}
 .num { font-size:14px;}
-p.search { width: 90%; }
+p.search { width: 90%;}
 
 /**
  * HINT- A CSS tooltip library

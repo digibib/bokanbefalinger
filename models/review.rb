@@ -195,7 +195,11 @@ class Review
        Cache.set uri, rev
        rev
     }
-    return nil, review["works"].first, [] #other_reviews.uniq
+    err, other_reviews = Work.get(review["works"].first["uri"])
+    unless err
+      other_reviews = other_reviews["reviews"].reject { |r| r["uri"] == review["works"].first["reviews"].first["uri"]}
+    end
+    return nil, review["works"].first, Array(other_reviews)
   end
 
   def self.publish(title, teaser, text, audiences, reviewer, isbn, api_key, published)

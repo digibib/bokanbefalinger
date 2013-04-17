@@ -34,25 +34,29 @@
 	</div>
 	<div class="clearfix" style="margin-top:50px"></div>
 	<% if @other_reviews.size > 0 %>
-		<h3>Det finnes andre anbefalinger av denne boka:</h3>
+		<h3 class="no-bold border">Andre anbefalinger av <em><%= @review["prefTitle"] || @review["originalTitle"] %></em></h3>
 		<% @other_reviews.each do |r| %>
-			<div class="other-reviews"><div class="review-teaser">
-				<p>
-					<%= r["teaser"] %>
-					<a href="/anbefaling/<%= r["uri"][24,200] %>">...les mer</a>
-				</p>
-			</div></div>
+			<div class="border">
+				<span class="left">
+					<strong class="red-text"><a href="/anbefaling<%= r['uri'][23..-1] %>"><%= r["title"]%></a></strong>
+				</span><br>
+			</div>
+			<p class="other-reviews">anbefalt av <%= reviewerformatted(r) %> <span class="liste-date"><%= dateformat(r["issued"]) %></span> </p>
+			<p class="other-teaser"><%= r["teaser"] %></p>
 		<% end %>
+	<% else %>
+		<h3 class="no-bold border">Det finnes ingen andre anbefalinger av <em><%= @review["prefTitle"] || @review["originalTitle"] %></em></h3>
 	<% end %>
 	<% if session[:user] and session[:user_uri] == r["reviewer"]["uri"] %>
 		<a href="<%= request.path+'/rediger' %>"><button class="medium green">Rediger</button></a>
 	<% end %>
-<!-- 	<% if session[:user] %>
+	<% if session[:user] %>
 		<div class="clearfix"></div>
-		<div class="review-snippet" style="text-align:right;">
-				<p><a href="/manifestasjon<%= r["uri"][23..-1] %>/ny"><button class="long green" style="margin-right:150px">Skriv ny anbefaling</button></a></p>
-		</div>
-	<% end %> -->
+		<p><a href="/manifestasjon<%= r["uri"][23..-1] %>/ny"><button class="big green" style="margin-right:150px">Skriv en anbefaling av denne boka</button></a></p>
+	<% else %>
+<!-- 		<div class="clearfix"></div>
+		<p>Logg deg inn for å skrive en anbefaling av denne boka!</p> -->
+	<% end %>
 </div>
 <div class="main-right">
 	<%= erb :login %>
