@@ -3,9 +3,9 @@ require "redis"
 require "json"
 
 class Cache
-  # Use different Redis database for each uri-type. Defaults to 0 (reviews)
-  @@db = {:reviews => 0, :works => 1, :authors => 2, :reviewers => 3,
-          :sources => 4, :feeds => 5, :dropdowns => 6, :editions => 7}
+  # Use different Redis database for each uri-type. Defaults to 0 (various)
+  @@db = {:various => 0, :reviews => 1, :works => 2, :editions => 3,
+          :authors => 4, :reviewers => 5, :sources => 6, :feeds => 7, :dropdowns => 8}
   @@clients = {}
 
   def self.redis(n=0)

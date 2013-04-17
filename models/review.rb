@@ -113,7 +113,7 @@ class Review
 
   def self.get_latest(limit, offset, order_by, order)
 
-    latest = Cache.get("reviews:latest", :reviews) {
+    latest = Cache.get("reviews:latest", :various) {
       begin
         resp = @@conn.get do |req|
           req.body = {:limit => 100, :offset => 0,
@@ -127,7 +127,7 @@ class Review
       return error, nil if error
 
       cache = JSON.parse(resp.body)
-      Cache.set("reviews:latest", cache, :reviews)
+      Cache.set("reviews:latest", cache, :various)
       cache
     }
     return nil, {"works" => latest["works"][offset..(offset+limit)]}
