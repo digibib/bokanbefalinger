@@ -8,7 +8,7 @@
 	<div id="review-heading">
 		<div class="book-cover <%= "light-gray" unless @utgave["cover_url"] %>">
 			<% if @utgave["cover_url"] %>
-				<img class="cover" src="<%= @utgave["cover_url"] %>"/>
+				<img class="cover" src="<%= select_cover(@utgave) %>"/>
 			<% end %>
 		</div>
 		<div>
