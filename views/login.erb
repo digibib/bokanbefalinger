@@ -17,3 +17,6 @@
 		</form>
 	<% end %>
 </div>
+<% if session[:user] %>
+	<%= erb :tipsbar %>
+<% end %>
