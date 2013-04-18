@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.3.3)
+    addressable (2.3.4)
     api_smith (1.2.0)
       hashie (~> 1.0)
       httparty
@@ -16,13 +16,14 @@ GEM
     eventmachine (1.0.0-java)
     faraday (0.8.4)
       multipart-post (~> 1.1)
+    ffi (1.7.0)
     ffi (1.7.0-java)
     hashie (1.2.0)
     httparty (0.10.2)
       multi_json (~> 1.0)
       multi_xml (>= 0.5.2)
     method_source (0.8.1)
-    multi_json (1.6.1)
+    multi_json (1.7.2)
     multi_xml (0.5.3)
     multipart-post (1.1.5)
     net-http-persistent (2.8)
@@ -43,9 +44,9 @@ GEM
     rack-test (0.6.2)
       rack (>= 1.0)
     rake (10.0.4)
-    rdf (1.0.3)
+    rdf (1.0.5)
       addressable (>= 2.2)
-    rdf-virtuoso (0.1.2)
+    rdf-virtuoso (0.1.4)
       api_smith (~> 1.2.0)
       httparty (~> 0.10.2)
       rdf (~> 1.0.3)
