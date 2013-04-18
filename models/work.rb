@@ -57,27 +57,23 @@ class Work
   end
 
   def self.by_isbn(isbn)
-    work = Cache.get(isbn) {
-      begin
-        resp = @@conn.get do |req|
-          req.body = {:isbn => isbn, :reviews => true}.to_json
-        end
-      rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
-        error = "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"
+    begin
+      resp = @@conn.get do |req|
+        req.body = {:isbn => isbn, :reviews => true}.to_json
       end
+    rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
+      error = "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"
+    end
 
-      error = "Finner ingen bøker med ISBN-nummer: #{isbn}" if resp.status != 200
-      return error, nil if error
+    error = "Finner ingen bøker med ISBN-nummer: #{isbn}" if resp.status != 200
+    return error, nil if error
 
-      cache = JSON.parse(resp.body)
-      Cache.set(isbn, cache)
-      # also cache by edition (manifestastion)
-      cache["works"].first["editions"].each do |ed|
-        Cache.set(ed["uri"], cache)
-      end
+    work = JSON.parse(resp.body)
 
-      cache
-    }
+    # also cache by edition (manifestastion)
+    work["works"].first["editions"].each do |ed|
+      Cache.set(ed["uri"], work, :editions)
+    end
 
     return nil, work["works"].first
   end
