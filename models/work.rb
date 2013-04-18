@@ -45,9 +45,9 @@ class Work
       cache = JSON.parse(resp.body)
       Cache.set(work_id, cache, :works)
 
-      # also cache by edition (manifestastion)
-      cache["works"].first["editions"].each do |ed|
-        Cache.set(ed["uri"], cache, :editions)
+      # also cache by editions (review manifestastion)
+      cache["works"].first["reviews"].each do |r|
+        Cache.set(r["edition"], cache, :editions)
       end
 
       cache
