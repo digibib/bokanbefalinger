@@ -46,24 +46,26 @@ class User
     session[:user_uri] = res["reviewer"]["uri"]
 
     # 3. Get source api_key: api/sources source=x
-    begin
-      resp = @@conn.get do |req|
-        req.url '/api/sources'
-        req.headers[:secret_session_key] = Settings::SECRET_SESSION_KEY
-        req.body = {:uri => session[:source_uri]}.to_json
-        puts "API REQUEST to #{req.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
+    res = Cache.get(session[:source_uri]) {
+      begin
+        resp = @@conn.get do |req|
+          req.url '/api/sources'
+          req.headers[:secret_session_key] = Settings::SECRET_SESSION_KEY
+          req.body = {:uri => session[:source_uri]}.to_json
+          puts "API REQUEST to #{req.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
+        end
+      rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
+        return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil]
       end
-    rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
-      return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil]
-    end
-
-    res = JSON.parse(resp.body)
-    puts "API RESPONSE:\n#{res}\n\n" if ENV['RACK_ENV'] == 'development'
+      source = JSON.parse(resp.body)
+      puts "API RESPONSE:\n#{source}\n\n" if ENV['RACK_ENV'] == 'development'
+      source["source"]
+    }
 
     # Set user session variables
-    session[:source_name] = res["source"]["name"]
-    session[:source_homepage] = res["source"]["homepage"] || ""
-    session[:api_key] = res["source"]["api_key"]
+    session[:source_name] = res["name"]
+    session[:source_homepage] = res["homepage"] || ""
+    session[:api_key] = res["api_key"]
     session[:flash_info] = []
     session[:flash_error] = []
 
