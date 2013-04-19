@@ -25,7 +25,7 @@ class Cache
   end
 
   def self.del(key, where=:various)
-    redis[@@db[where]].del key
+    redis(@@db[where]).del key
   rescue Redis::CannotConnectError
     return nil
   end
