@@ -177,7 +177,7 @@ class Review
   end
 
   def self.get(uri)
-     review = Cache.get(uri) {
+     review = Cache.get(uri, :reviews) {
        begin
          resp = @@conn.get do |req|
            req.body = {:uri => uri}.to_json
