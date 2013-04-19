@@ -12,19 +12,19 @@ class Cache
     @@clients[n] ||= Redis.new(:db => n)
   end
 
-  def self.set(key, data, where=:reviews)
+  def self.set(key, data, where=:various)
     redis(@@db[where]).set key, to_json(data)
   rescue Redis::CannotConnectError
     return nil
   end
 
-  def self.get(key, where=:reviews)
+  def self.get(key, where=:various)
     from_json redis(@@db[where]).get(key)
   rescue => error
     yield(error)
   end
 
-  def self.del(key, where=:reviews)
+  def self.del(key, where=:various)
     redis[@@db[where]].del key
   rescue Redis::CannotConnectError
     return nil
