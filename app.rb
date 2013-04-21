@@ -1,7 +1,7 @@
 # encoding: utf-8
 require "sinatra"
 require "time"
-require "torquebox-server"
+require "torquebox"
 
 require_relative "settings"
 require_relative "cache"

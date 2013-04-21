@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-gem "torquebox-server"
+gem "torquebox"
 gem "sinatra"
 gem "redis"
 gem "faraday"
