@@ -24,6 +24,7 @@ class BokanbefalingerApp < Sinatra::Application
     end
 
     def compare_clean(s)
+      s ||= ""
       # Convert <br/> to space and remove all other html tags in order to
       # compare teaser and text, as in text.start_with?(teaser)
       # It also converts carriage return to space
