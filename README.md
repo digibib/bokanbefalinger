@@ -12,23 +12,32 @@ OpenJDK Runtime Environment (IcedTea7 2.3.7) (7u15-2.3.7-0ubuntu1~12.04.1)
 OpenJDK Server VM (build 23.7-b01, mixed mode)
 ```
 
-Last ned og installer torquebox:
+Innstaller [Leiningen](http://leiningen.org/):
 
 ```bash
-$ wget http://torquebox.org/release/org/torquebox/torquebox-dist/2.3.0/torquebox-dist-2.3.0-bin.zip
-$ sudo adduser torquebox --disabled-login # Torquebox MÅ eies av bruker 'torquebox'
-$ sudo mkdir /opt/torquebox
-$ sudo chown torquebox:torquebox /opt/torquebox
+$ wget https://raw.github.com/technomancy/leiningen/stable/bin/lein
+$ sudo cp lein /usr/bin/lein
+$ sudo chmod a+x /usr/bin/lein
+$ sudo adduser torquebox --disabled-login
 $ sudo su torquebox
-$ unzip torquebox-dist-2.3.0-bin.zip -d /opt/torquebox/
-$ cd /opt/torquebox
-$ ln -s torquebox-2.3.0 current # Symlink gjeldende versjon, så blir det enkelt å oppgradere senere.
+$ lein
+```
+
+Innstaller [Torquebox](http://torquebox.org) og [Immutant](http://immutang.org):
+
+```bash
+$ cat > /home/torquebox/.lein/profiles.clj
+$ {:user {:plugins [[lein-immutant "0.18.0"]] }}
+  (ctr+d)
+$ lein immutant install
+$ lein immutant overlay
 ```
 
 Set opp environment. Legg til i `/home/torquebox/.bashrc`:
 
 ```bash
-export TORQUEBOX_HOME=/opt/torquebox/current
+export TORQUEBOX_HOME=/home/torquebox/.lein/immutant/current
+export IMMUTANT_HOME=$TORQUEBOX_HOME
 export JBOSS_HOME=$TORQUEBOX_HOME/jboss
 export JRUBY_HOME=$TORQUEBOX_HOME/jruby
 PATH=$JBOSS_HOME/bin:$JRUBY_HOME/bin:$PATH
