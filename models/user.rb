@@ -14,7 +14,7 @@ class User
     begin
       resp = @@conn.post do |req|
         req.url '/api/users/authenticate'
-        req.body = {:username => username, :password => password}.to_json
+        req.body = {:username => username.downcase, :password => password.downcase}.to_json
         puts "API REQUEST to #{req.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
       end
     rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
