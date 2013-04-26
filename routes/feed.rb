@@ -3,7 +3,7 @@ require "time"
 
 class BokanbefalingerApp < Sinatra::Application
 
-  get '/feed', :provides => ['rss', 'atom', 'xml'] do
+  get '/feed' do
     list_params = List.params_from_feed_url(request.url)
 
     if list_params.empty?
