@@ -111,7 +111,11 @@ class Review
     d
   end
 
-  def self.get_latest(limit, offset, order_by, order)
+  def self.get_latest(limit, offset, order_by, order, clear_cache=false)
+
+    if clear_cache
+      Cache.del("revies:latest", :various)
+    end
 
     latest = Cache.get("reviews:latest", :various) {
       begin
@@ -133,7 +137,12 @@ class Review
     return nil, {"works" => latest["works"][offset..(offset+limit)]}
   end
 
-  def self.by_reviewer(reviewer)
+  def self.by_reviewer(reviewer, clear_cache=false)
+
+    if clear_cache
+      Cache.del(reviewer, :reviewers)
+    end
+
     reviews = Cache.get(reviewer, :reviewers) {
       begin
         resp = @@conn.get do |req|
@@ -154,7 +163,12 @@ class Review
     return nil, reviews["works"]
   end
 
-  def self.by_source(source)
+  def self.by_source(source, clear_cache=false)
+
+    if clear_cache
+      Cache.del(source, :sources)
+    end
+
     reviews = Cache.get(source, :sources) {
       begin
         resp = @@conn.get do |req|
@@ -176,7 +190,12 @@ class Review
     return nil, reviews["works"]
   end
 
-  def self.get(uri)
+  def self.get(uri, clear_cache=false)
+
+    if clear_cache
+      Cache.del(uri, :reviews)
+    end
+
      review = Cache.get(uri, :reviews) {
        begin
          resp = @@conn.get do |req|

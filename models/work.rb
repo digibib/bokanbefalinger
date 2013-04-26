@@ -6,7 +6,12 @@ class Work
 
   @@conn = Faraday.new(:url => Settings::API + "works")
 
-  def self.by_author(author)
+  def self.by_author(author, clear_cache=false)
+
+    if clear_cache
+      Cache.del(author, :authors)
+    end
+
     all_works = Cache.get(author, :authors) {
       begin
         resp = @@conn.get do |req|
@@ -28,7 +33,12 @@ class Work
     return nil, all_works["works"]
   end
 
-  def self.get(work_id)
+  def self.get(work_id, clear_cache=false)
+
+    if clear_cache
+      Cache.del(work_id, :works)
+    end
+
     work = Cache.get(work_id, :works) {
       begin
         resp = @@conn.get do |req|
@@ -70,7 +80,7 @@ class Work
 
     work = JSON.parse(resp.body)
 
-    # also cache by edition (manifestastion)
+    # Cache by edition (manifestastion)
     work["works"].first["editions"].each do |ed|
       Cache.set(ed["uri"], work, :editions)
     end

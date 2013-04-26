@@ -355,7 +355,12 @@ class List
     Array(result.bindings[:review]).uniq.collect { |b| b.to_s }
   end
 
-  def self.get_feed(url)
+  def self.get_feed(url, clear_cache=false)
+
+    if clear_cache
+      Cache.del(url, :feeds)
+    end
+
     reviews = Cache.get(url, :feeds) {
       cache = List.get(params_from_feed_url(url))
       Cache.set(url, cache, :feeds)
