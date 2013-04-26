@@ -20,6 +20,7 @@ class User
     rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
       return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil]
     end
+    return [nil, false] if resp.status == 404 # user not found
     return ["Får ikke kontakt med eksternt API (#{Settings::API})",nil] if resp.status != 200
 
     res = JSON.parse(resp.body)
