@@ -62,6 +62,7 @@ class BokanbefalingerApp < Sinatra::Application
     def select_cover(r)
       # Prefer cover_url from the manifestation the review is based on,
       # or use the cover_url associated with work if the former is not present.
+      return r["cover_url"] unless Array(r["reviews"]).size > 0
       r["editions"].select { |e| e["uri"] == r["reviews"].first["edition"] }.first["cover_url"] || r["cover_url"]
     end
 
