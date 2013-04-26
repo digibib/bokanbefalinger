@@ -211,7 +211,7 @@ class Review
        return error, nil, nil if error
        rev = JSON.parse(resp.body)
        #puts "API RESPONSE:\n#{rev}\n\n" if ENV['RACK_ENV'] == 'development'
-       Cache.set uri, rev
+       Cache.set(uri, rev, :reviews)
        rev
     }
     if review["works"].empty?
