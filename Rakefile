@@ -44,7 +44,7 @@ namespace :cache do
       print "OK\nCaching...OK"
 
       JSON.parse(resp.body)["works"].each do |work|
-        Cache.set(work["reviews"].first["uri"], {"works" => [work]})
+        Cache.set(work["reviews"].first["uri"], {"works" => [work]}, :reviews)
       end
 
       offset += limit
