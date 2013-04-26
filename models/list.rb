@@ -1,4 +1,5 @@
 # encoding: utf-8
+require "cgi"
 
 Dropdown = Struct.new(:subjects, :persons, :genres, :languages, :authors,
                       :formats, :nationalities)
@@ -19,10 +20,12 @@ class List
       params.delete "years"
     end
 
-    "http://anbefalinger.deichman.no/feed?" + params.map { |k,v| "#{k}=" + v.join("&#{k}=") }.join("&")
+    feedparams = params.map { |k,v| "#{k}=" + v.join("&#{k}=") }.join("&")
+    "http://anbefalinger.deichman.no/feed?" + CGI.escape(feedparams)
   end
 
   def self.params_from_feed_url(url)
+    url = CGI.unescape(url)
     params = Hash[url.gsub(/^(.)*\?/,"").split("&").map { |s| s.split("=") }.group_by(&:first).map { |k,v| [k, v.map(&:last)]}]
     params["years"] = params["years_from"].zip(params["years_to"]) if params["years_from"]
     params["pages"] = params["pages_from"].zip(params["pages_to"]) if params["pages_from"]
