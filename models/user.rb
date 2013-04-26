@@ -87,9 +87,9 @@ class User
 
     body = {:api_key => session[:api_key],
             :uri => session[:user_uri],
-            :accountName => email}
+            :accountName => email.downcase}
     body[:name] = name unless name.empty?
-    body[:password] = password unless password.empty?
+    body[:password] = password.downcase unless password.empty?
 
     begin
       resp = @@conn.put do |req|
