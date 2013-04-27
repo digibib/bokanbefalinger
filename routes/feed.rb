@@ -1,5 +1,6 @@
 # encoding: utf-8
 require "time"
+require "builder"
 
 class BokanbefalingerApp < Sinatra::Application
 
