@@ -118,23 +118,22 @@ class Review
     end
 
     latest = Cache.get("reviews:latest", :various) {
-      begin
-        resp = @@conn.get do |req|
-          req.body = {:limit => 100, :offset => 0,
-                      :order_by => order_by, :order => order}.to_json
-        end
-      rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed, Errno::ETIMEDOUT
-        error = "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"
-      end
+      query = QUERY.select(:review)
+      query.distinct
+      query.from(BOOKGRAPH)
+      query.from_named(REVIEWGRAPH)
+      query.where([:work, RDF::FABIO.hasManifestation, :book],
+                  [:book, RDF::REV.hasReview, :review])
+      query.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
+      query.order_by("DESC(?issued)")
+      query.limit(100)
 
-      error = "Får ikke kontakt med ekstern ressurs (#{Settings::API})." if resp.status != 200
-      return error, nil if error
-
-      cache = JSON.parse(resp.body)
+      res = REPO.select(query)
+      cache = res.bindings[:review]
       Cache.set("reviews:latest", cache, :various)
       cache
     }
-    return nil, {"works" => latest["works"][offset..(offset+limit)]}
+    return nil, latest[offset..(offset+limit)]
   end
 
   def self.by_reviewer(reviewer, clear_cache=false)
