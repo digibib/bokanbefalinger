@@ -288,6 +288,8 @@ class Review
   end
 
   def self.delete(uri, api_key)
+    err, rev, _ = get(uri)
+
     begin
       resp = @@conn.delete do |req|
         req.body = {:api_key => api_key, :uri => uri}.to_json
@@ -301,6 +303,15 @@ class Review
 
     return ["Får ikke kontakt med ekstern ressurs (#{Settings::API}).", nil] if resp.status != 200
     return ["Skriving av anbefaling til RDF-storen feilet", nil] unless resp.body.match(/done/)
+
+    Cache.del(uri, :reviews)
+    unless err
+      QUEUE.publish({:type => :reviewer, :uri => rev["reviews"].first["reviewer"]})
+      QUEUE.publish({:type => :work, :uri => rev["uri"]})
+      rev["authors"].each do |author|
+        QUEUE.publish({:type => :author, :uri => author["uri"]})
+      end
+    end
 
     return [nil, resp.body]
   end
