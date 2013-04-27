@@ -15,7 +15,7 @@
 			<a href="/anbefalinger?side=<%= @page+1 %>">Neste</a>
 		<% end %>
 	</div>
-	<% @reviews["works"].each do |work| %>
+	<% @reviews.each do |work| %>
 		<% r = work["reviews"].first %>
 		<div class="clearfix"></div>
 		<div class="listevisning">

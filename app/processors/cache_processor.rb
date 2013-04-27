@@ -7,9 +7,31 @@ require_relative "../../cache"
 class CacheProcessor < TorqueBox::Messaging::MessageProcessor
   @@works = Faraday.new(:url => Settings::API + "works")
   @@rev = Faraday.new(:url => Settings::API + "reviews")
+  @@repo =  RDF::Virtuoso::Repository.new(
+              Settings::SPARQL,
+              :update_uri => Settings::SPARUL,
+              :username => Settings::USER,
+              :password => Settings::PASSWORD,
+              :auth_method => Settings::AUTH_METHOD)
+  @@query = RDF::Virtuoso::Query
 
   def on_message(body)
     case body[:type]
+    when :latest
+      q = @@query.select(:review)
+      q.distinct
+      q.from(RDF::URI(Settings::GRAPHS[:book]))
+      q.from_named(RDF::URI(Settings::GRAPHS[:review]))
+      q.where([:work, RDF::FABIO.hasManifestation, :book],
+                  [:book, RDF::REV.hasReview, :review])
+      q.where([:review, RDF::DC.issued, :issued, :context => RDF::URI(Settings::GRAPHS[:review])])
+      q.order_by("DESC(?issued)")
+      q.limit(100)
+
+      res = @@repo.select(q)
+      cache = res.bindings[:review]
+      Cache.set("reviews:latest", cache, :various)
+      puts "Refreshed latest reviews cache"
     when :review
       begin
         resp = @@rev.get do |req|
