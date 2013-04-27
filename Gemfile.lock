@@ -117,3 +117,4 @@ DEPENDENCIES
   sinatra
   sinatra-reloader
   torquebox
+  torquebox-messaging

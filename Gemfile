@@ -1,5 +1,6 @@
 source "https://rubygems.org"
 gem "torquebox"
+gem "torquebox-messaging"
 gem "sinatra"
 gem "redis"
 gem "faraday"

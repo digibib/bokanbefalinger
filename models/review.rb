@@ -244,6 +244,15 @@ class Review
     res = JSON.parse(resp.body)
     puts "API RESPONSE:\n#{res}\n\n" if ENV['RACK_ENV'] == 'development'
 
+    if published
+      QUEUE.publish({:type => :review, :uri => res["works"].first["reviews"].first["uri"]})
+      QUEUE.publish({:type => :reviewer, :uri => res["works"].first["reviews"].first["reviewer"]})
+      QUEUE.publish({:type => :work, :uri => res["works"].first["uri"]})
+      res["works"].first["authors"].each do |author|
+        QUEUE.publish({:type => :author, :uri => author["uri"]})
+      end
+    end
+
     return [nil, res]
   end
 
@@ -265,6 +274,15 @@ class Review
     return ["Skriving av anbefaling til RDF-storen feilet", nil] unless resp.body.match(/uri/)
     res = JSON.parse(resp.body)
     puts "API RESPONSE:\n#{res}\n\n" if ENV['RACK_ENV'] == 'development'
+
+    if published
+      QUEUE.publish({:type => :review, :uri => uri})
+      QUEUE.publish({:type => :reviewer, :uri => res["works"].first["reviews"].first["reviewer"]})
+      QUEUE.publish({:type => :work, :uri => res["works"].first["uri"]})
+      res["works"].first["authors"].each do |author|
+        QUEUE.publish({:type => :author, :uri => author["uri"]})
+      end
+    end
 
     return [nil, res]
   end

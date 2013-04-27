@@ -2,12 +2,13 @@
 require "sinatra"
 require "time"
 require "torquebox"
+require "torquebox-messaging"
 
 require_relative "settings"
 require_relative "cache"
 
 BASE_URI = Settings::GRAPHS[:base]
-
+QUEUE = TorqueBox::Messaging::Queue.new('/queues/cache')
 
 class BokanbefalingerApp < Sinatra::Application
   enable :sessions

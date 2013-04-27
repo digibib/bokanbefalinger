@@ -3,10 +3,11 @@ TorqueBox.configure do
     context "/"
   end
 
-  # re-caching queues
-  queue '/queues/reviews'
-  queue '/queues/works'
-  queue '/queues/authors'
-  queue '/queues/reviewers'
+  options_for :messaging, :default_message_encoding => :edn
+
+  # Message queues
+  queue '/queues/cache' do
+    processor CacheProcessor
+  end
 
 end
