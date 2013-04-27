@@ -14,7 +14,7 @@ class BokanbefalingerApp < Sinatra::Application
       session[:flash_error].push @error_message
     else
       session[:flash_info].push "Anbefaling opprettet."
-      Cache.del session[:user_uri]
+      Cache.del(session[:user_uri], :reviewers)
     end
     if params["published"] == "false"
       redirect "/anbefaling" + @review["works"].first["reviews"].first["uri"][23..-1]+"/rediger"
@@ -40,7 +40,7 @@ class BokanbefalingerApp < Sinatra::Application
     end
 
     # clear cache after updates so changes are visible to the user
-    Cache.del session[:user_uri] unless @error_message
+    Cache.del(session[:user_uri], :reviewers) unless @error_message
 
     session[:flash_error].push @error_message if @error_message
 
