@@ -2,6 +2,14 @@
 class BokanbefalingerApp < Sinatra::Application
   get "/" do
     @title = "Bokanbefalinger"
+
+    _, rev = Review.get_latest(3, 0, 'issued', 'desc')
+    @reviews = []
+    rev.each do |uri|
+      _, r, _ = Review.get(uri)
+      @reviews << r if r
+    end
+    @reviews.compact!
     erb :index
   end
 

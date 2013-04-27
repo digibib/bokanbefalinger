@@ -390,6 +390,19 @@ span.small-link { font-size:0.9em; display:block; padding: 0 24px; margin:0.5em;
 #tips-box li { font-size: 1.1em; height:2.5em; }
 #tips-box a, #tips-box a:visited  { color: #444;}
 
+/* forside */
+
+.forside-boks {
+  display: inline-block;
+  width: 200px;
+  background:#eee;
+  margin-left: 20px;
+  padding: 5px;
+  font-size:14px;
+  color: #c12121;
+  border: 2px solid #aaa;
+}
+
 /* new review */
 
 #review-form { width: 600px; margin-top: 30px;}
