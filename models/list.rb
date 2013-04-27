@@ -20,8 +20,7 @@ class List
       params.delete "years"
     end
 
-    feedparams = params.map { |k,v| "#{k}=" + v.join("&#{k}=") }.join("&")
-    "http://anbefalinger.deichman.no/feed?" + CGI.escape(feedparams)
+    "http://anbefalinger.deichman.no/feed?" + params.map { |k,v| "#{k}=" + v.map { |e| CGI.escape(e)}.join("&#{k}=") }.join("&")
   end
 
   def self.params_from_feed_url(url)

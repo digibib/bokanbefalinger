@@ -126,28 +126,28 @@ class BokanbefalingerApp < Sinatra::Application
 
   get "/se-lister" do
     @lists = [{:title => "Anbefalinger av bøker for voksne",
-               :feed => "http://anbefalinger.deichman.no/feed?audience=http://data.deichman.no/audience/adult"},
+               :feed => "http://anbefalinger.deichman.no/feed?audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fadult"},
               {:title => "Anbefalinger av bøker for barn og ungdom",
-               :feed => "http://anbefalinger.deichman.no/feed?audience=http://data.deichman.no/audience/ages_0-5&audience=http://data.deichman.no/audience/ages_6-7&audience=http://data.deichman.no/audience/ages_8-9&audience=http://data.deichman.no/audience/ages_10-11&audience=http://data.deichman.no/audience/ages_12-15&audience=http://data.deichman.no/audience/juvenile"},
+               :feed => "http://anbefalinger.deichman.no/feed?audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fjuvenile&audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fages_0-5&audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fages_6-7&audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fages_8-9&audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fages_10-11&audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fages_12-15"},
               {:title => "Anbefalte fantasybøker for barn og ungdom",
-               :feed => "http://anbefalinger.deichman.no/feed?audience=http://data.deichman.no/audience/juvenile&audience=http://data.deichman.no/audience/ages_0-5&audience=http://data.deichman.no/audience/ages_6-7&audience=http://data.deichman.no/audience/ages_8-9&audience=http://data.deichman.no/audience/ages_10-11&audience=http://data.deichman.no/audience/ages_12-15&genres=http://data.deichman.no/genreBroader/fantastisk"},
+               :feed => "http://anbefalinger.deichman.no/feed?audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fjuvenile&audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fages_0-5&audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fages_6-7&audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fages_8-9&audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fages_10-11&audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fages_12-15&genres=http%3A%2F%2Fdata.deichman.no%2FgenreBroader%2Ffantastisk"},
               {:title => "Anbefalte bøker fra 90-tallet",
                :feed => "http://anbefalinger.deichman.no/feed?years_from=1990&years_to=2000"},
               {:title => "Tynne bøker (under 200 sider) for voksne",
-               :feed => "http://anbefalinger.deichman.no/feed?audience=http://data.deichman.no/audience/adult&pages_from=0&pages_to=200"},
+               :feed => "http://anbefalinger.deichman.no/feed?audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fadult&pages_from=0&pages_to=200"},
               {:title => "Anbefalinger av Karin Fossums krimbøker",
-                :feed => "http://anbefalinger.deichman.no/feed?authors=http://data.deichman.no/person/x26297400&genres=http://data.deichman.no/genreBroader/krim_og_spenning"},
+                :feed => "http://anbefalinger.deichman.no/feed?authors=http%3A%2F%2Fdata.deichman.no%2Fperson%2Fx26297400&genres=http%3A%2F%2Fdata.deichman.no%2FgenreBroader%2Fkrim_og_spenning"},
               {:title => "Anbefalinger av bøker om Henrik Ibsen",
-              :feed => "http://anbefalinger.deichman.no/feed?persons=http://data.deichman.no/person/x14062100"},
+              :feed => "http://anbefalinger.deichman.no/feed?persons=http%3A%2F%2Fdata.deichman.no%2Fperson%2Fx14062100"},
               {:title => "Bøker av amerikanske forfattere",
-               :feed => "http://anbefalinger.deichman.no/feed?nationalities=http://data.deichman.no/nationality/am"}]
+               :feed => "http://anbefalinger.deichman.no/feed?nationalities=http%3A%2F%2Fdata.deichman.no%2Fnationality%2Fam"}]
 
     @lists.map do |list|
       list[:feed] += "&title=#{CGI.escape(list[:title])}"
       list[:reviews] = []
       reviews = List.get_feed(list[:feed])
       reviews[0..9].each do |uri|
-        _, r = Review.get(uri)
+        _, r, _ = Review.get(uri)
         list[:reviews] << r if r
       end
       list[:reviews].compact!
@@ -174,7 +174,7 @@ class BokanbefalingerApp < Sinatra::Application
     @uris = List.get(list_params)
     @reviews = []
     @uris[0..10].each do |uri|
-      _, r = Review.get(uri)
+      _, r,_ = Review.get(uri)
       @reviews << r
     end
     @reviews.compact!
