@@ -26,9 +26,9 @@ $ lein
 Innstaller [Torquebox](http://torquebox.org) og [Immutant](http://immutang.org):
 
 ```bash
-$ cat > /home/torquebox/.lein/profiles.clj
+$ cat > /home/torquebox/.lein/profiles.clj <<EOF
 $ {:user {:plugins [[lein-immutant "0.18.0"]] }}
-  (ctr+d)
+$ EOF
 $ lein immutant install
 $ lein immutant overlay
 ```
