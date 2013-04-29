@@ -1,5 +1,5 @@
 require "rdf/virtuoso"
-require_relative "vocabularies"
+require_relative "../lib/vocabularies"
 
 REPO        = RDF::Virtuoso::Repository.new(
               Settings::SPARQL,
@@ -12,6 +12,8 @@ REVIEWGRAPH = RDF::URI(Settings::GRAPHS[:review])
 BOOKGRAPH   = RDF::URI(Settings::GRAPHS[:book])
 APIGRAPH    = RDF::URI(Settings::GRAPHS[:api])
 QUERY       = RDF::Virtuoso::Query
+
+QUEUE = TorqueBox::Messaging::Queue.new('/queues/cache')
 
 module RDF::Virtuoso
   class Query

@@ -8,7 +8,6 @@ require "config/settings"
 require "lib/cache"
 
 BASE_URI = Settings::GRAPHS[:base]
-QUEUE = TorqueBox::Messaging::Queue.new('/queues/cache')
 
 class BokanbefalingerApp < Sinatra::Application
   enable :sessions
