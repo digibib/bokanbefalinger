@@ -28,7 +28,7 @@ class BokanbefalingerApp < Sinatra::Application
     erb :api
   end
 
-  get "/søk" do
+  get "/sok" do
     @dropdown = Review.search_dropdowns
 
     if params["kilde"] and not params["kilde"].empty?

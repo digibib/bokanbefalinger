@@ -49,8 +49,8 @@
         <li <%= 'class="active"' if request.path_info == '/lag-lister' %>>
           <a href="/lag-lister"><span class="inner-navbutton">Lag lister</span></a>
         </li>
-        <li <%= 'class="active"' if request.path_info.match /s%C3%B8k/ %>>
-          <a href="/søk"><span class="inner-navbutton">Søk</span></a>
+        <li <%= 'class="active"' if request.path_info.match /sok/ %>>
+          <a href="/sok"><span class="inner-navbutton">Søk</span></a>
         </li>
       </ul>
       <div id="messages">
