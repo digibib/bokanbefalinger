@@ -219,7 +219,7 @@ class Review
       err, other_reviews = Work.get(review["works"].first["uri"])
     end
     unless err
-      other_reviews = other_reviews["reviews"].reject { |r| r["uri"] == review["works"].first["reviews"].first["uri"]}
+      other_reviews = Array(other_reviews["reviews"]).reject { |r| r["uri"] == review["works"].first["reviews"].first["uri"]}
     end
     return nil, review["works"].first, Array(other_reviews)
   end
