@@ -70,13 +70,13 @@ class User
     session[:flash_info] = []
     session[:flash_error] = []
 
+    # Clear reviewer cache
+    Cache.del session[:user_uri], :reviewers
+
     return [nil, true]
   end
 
   def self.log_out(session)
-    # Clear user cache
-    Cache.del session[:user_uri]
-
     # Clear user session variables
     session.clear
   end
