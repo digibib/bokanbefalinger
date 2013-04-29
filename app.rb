@@ -4,8 +4,8 @@ require "time"
 require "torquebox"
 require "torquebox-messaging"
 
-require_relative "settings"
-require_relative "cache"
+require "config/settings"
+require "lib/cache"
 
 BASE_URI = Settings::GRAPHS[:base]
 QUEUE = TorqueBox::Messaging::Queue.new('/queues/cache')

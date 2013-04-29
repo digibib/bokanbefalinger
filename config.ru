@@ -1,3 +1,3 @@
-root = ::File.dirname(__FILE__)
-require ::File.join( root, 'app' )
+$LOAD_PATH.unshift(File.dirname(__FILE__))
+require "app"
 run BokanbefalingerApp.new

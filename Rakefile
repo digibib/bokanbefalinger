@@ -3,7 +3,7 @@ require "pry"
 require "faraday"
 
 require_relative "app"
-require_relative "settings"
+require_relative "config/settings"
 
 Rake::TestTask.new do |t|
   t.pattern = "test/*_{test,spec}.rb"

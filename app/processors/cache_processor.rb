@@ -1,8 +1,10 @@
 require "faraday"
 require "rdf/virtuoso"
+
 require_relative "../../models/vocabularies"
-require_relative "../../settings"
-require_relative "../../cache"
+require_relative "../../config/settings"
+require_relative "../../lib/cache"
+require_relative "../../lib/refresh"
 
 class CacheProcessor < TorqueBox::Messaging::MessageProcessor
   @@works = Faraday.new(:url => Settings::API + "works")
@@ -18,8 +20,8 @@ class CacheProcessor < TorqueBox::Messaging::MessageProcessor
   def on_message(body)
     case body[:type]
     when :latest
-      # TODO Cache.get("reviews:latest") and compare with new,
-      # to update works/authors etc also
+      old = Cache.get("reviews:latest")
+
       q = @@query.select(:review)
       q.distinct
       q.from(RDF::URI(Settings::GRAPHS[:book]))
@@ -33,24 +35,23 @@ class CacheProcessor < TorqueBox::Messaging::MessageProcessor
       res = @@repo.select(q)
       cache = res.bindings[:review]
       Cache.set("reviews:latest", cache, :various)
+
+      # Check if any new reviews
+      new_reviews = cache.reject { |e| old.include?(e) }
+      new_reviews.each do |n|
+        puts "#{n} is a new review"
+        # Also recache works, author, reviewer etc
+      end
+
       puts "Refreshed latest reviews cache"
     when :feeds
       Cache.flush(:feeds)
       _ = Faraday.get("http://localhost:8080/se-lister")
       puts "Flushed feeds cache and recached example feeds"
+    when :dropdowns
+      #Todo
     when :review
-      begin
-        resp = @@rev.get do |req|
-         req.body = {:uri => body[:uri]}.to_json
-        end
-      rescue StandardError => e
-        puts "Could't refresh cache because #{e}"
-      end
-      unless e
-        cache = JSON.parse(resp.body)
-        Cache.set(body[:uri], cache, :reviews)
-        puts "Refreshed reviews cache for #{body[:uri]}"
-      end
+      Refresh.review(body[:uri])
     when :author
       begin
         resp = @@works.get do |req|
