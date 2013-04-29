@@ -18,6 +18,8 @@ class CacheProcessor < TorqueBox::Messaging::MessageProcessor
   def on_message(body)
     case body[:type]
     when :latest
+      # TODO Cache.get("reviews:latest") and compare with new,
+      # to update works/authors etc also
       q = @@query.select(:review)
       q.distinct
       q.from(RDF::URI(Settings::GRAPHS[:book]))
@@ -32,6 +34,10 @@ class CacheProcessor < TorqueBox::Messaging::MessageProcessor
       cache = res.bindings[:review]
       Cache.set("reviews:latest", cache, :various)
       puts "Refreshed latest reviews cache"
+    when :feeds
+      Cache.flush(:feeds)
+      _ = Faraday.get("http://localhost:8080/se-lister")
+      puts "Flushed feeds cache and recached example feeds"
     when :review
       begin
         resp = @@rev.get do |req|

@@ -12,6 +12,10 @@ class Cache
     @@clients[n] ||= Redis.new(:db => n)
   end
 
+  def self.flush(where=:various)
+    redis(@@db[where]).flushdb
+  end
+
   def self.set(key, data, where=:various)
     redis(@@db[where]).set key, to_json(data)
   rescue Redis::CannotConnectError
