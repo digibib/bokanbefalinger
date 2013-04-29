@@ -10,4 +10,8 @@ TorqueBox.configure do
     processor CacheProcessor
   end
 
+  # Scheduled jobs (cron)
+  job LatestJob do
+    cron "0 0/15 * * * ?"
+  end
 end
