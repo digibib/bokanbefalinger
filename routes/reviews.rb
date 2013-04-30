@@ -7,7 +7,7 @@ class BokanbefalingerApp < Sinatra::Application
   post '/review' do
     audiences = [params["a1"], params["a2"], params["a3"]].compact.join("|")
     @error_message, @review = Review.publish(params["title"], params["teaser"],
-                                             params["text"], audiences,
+                                             text2markup(params["text"]), audiences,
                                              session[:user], params["isbn"],
                                              session[:api_key], params["published"])
     if @error_message
