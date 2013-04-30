@@ -117,6 +117,7 @@ module Refresh
     unless e
       cache = JSON.parse(resp.body)
       Cache.set(uri, cache, :sources)
+      puts "Refreshed source cache for #{uri}"
     end
   end
 

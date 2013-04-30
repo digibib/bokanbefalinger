@@ -252,6 +252,7 @@ class Review
       res["works"].first["authors"].each do |author|
         QUEUE.publish({:type => :author, :uri => author["uri"]})
       end
+      QUEUE.publish({:type => :source, :uri => res["works"].first["reviews"].first["source"]})
     end
 
     return [nil, res]
@@ -285,6 +286,7 @@ class Review
       res["works"].first["authors"].each do |author|
         QUEUE.publish({:type => :author, :uri => author["uri"]})
       end
+      QUEUE.publish({:type => :source, :uri => res["works"].first["reviews"].first["source"]})
     end
 
     return [nil, res]
