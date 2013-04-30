@@ -53,9 +53,9 @@ class BokanbefalingerApp < Sinatra::Application
       # Make reviewer and source clickable.
       # Only show source, if reviewer is anonymous.
       if r["reviewer"]["name"].downcase == "anonymous"
-        " <a href='/søk?kilde=#{r["source"]["uri"]}'>#{r["source"]["name"]}</a>"
+        " <a href='/sok?kilde=#{r["source"]["uri"]}'>#{r["source"]["name"]}</a>"
       else
-        "<a href='/søk?anmelder=#{r["reviewer"]["uri"]}' class='liste-reviewer'>#{r["reviewer"]["name"]}</a>, <a href='/søk?kilde=#{r["source"]["uri"]}'>#{r["source"]["name"]}</a>"
+        "<a href='/sok?anmelder=#{r["reviewer"]["uri"]}' class='liste-reviewer'>#{r["reviewer"]["name"]}</a>, <a href='/sok?kilde=#{r["source"]["uri"]}'>#{r["source"]["name"]}</a>"
       end
     end
 
