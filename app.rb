@@ -68,7 +68,7 @@ class BokanbefalingerApp < Sinatra::Application
 
     def authors_links(authors)
       # Make each author of a book clickable
-      authors.map { |a| "<a href='/søk?forfatter=#{a['uri']}'>#{a['name']}</a>" } .join(", ")
+      authors.map { |a| "<a href='/sok?forfatter=#{a['uri']}'>#{a['name']}</a>" } .join(", ")
     end
 
     def enforce_length(s, length)
