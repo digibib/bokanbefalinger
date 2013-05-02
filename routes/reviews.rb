@@ -68,6 +68,9 @@ class BokanbefalingerApp < Sinatra::Application
     uri = "http://data.deichman.no/" + uri
     @error_message, @review, @other_reviews = Review.get(uri)
 
+    # Don't give access to other drafts
+    @error_message = "Ikke tilgang" if @review["reviews"].first["issued"].nil? and session[:user_uri] != @review["reviews"].first["reviewer"]["uri"]
+
     if @error_message
       @title ="Feil"
       erb :error
