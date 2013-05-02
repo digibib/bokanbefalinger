@@ -69,7 +69,9 @@ class BokanbefalingerApp < Sinatra::Application
     @error_message, @review, @other_reviews = Review.get(uri)
 
     # Don't give access to other drafts
-    @error_message = "Ikke tilgang" if @review["reviews"].first["issued"].nil? and session[:user_uri] != @review["reviews"].first["reviewer"]["uri"]
+    # TODO refactor this
+    # also includes temp fix to counter different api responses after post/put
+    @error_message = "Ikke tilgang" if @review["reviews"].first["issued"].nil? and session[:user_uri] != ( @review["reviews"].first["reviewer"]["uri"] || @review["reviews"].first["reviewer"])
 
     if @error_message
       @title ="Feil"
