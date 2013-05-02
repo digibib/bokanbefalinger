@@ -4,7 +4,7 @@
 		<a href="/finn"><button class="button-big" id="logout-button" type="submit">Skriv anbefaling</button></a><br/>
 		<span class="small-link"><a href="/minside">Mine anbefalinger</a></span>
 		<span class="small-link"><a href="/innstillinger">Endre brukerinnstillinger</a></span>
-		<span class="small-link" style="text-align:right"><a href="/logout?take_me_back=<%= request.path_info %>">Logg ut</a></span>
+		<span class="small-link" style="text-align:right"><a href="/logout?take_me_back=<%= request.path_info.match(/rediger|minside|innstillinger/) ? '/' : request.path_info %>">Logg ut</a></span>
 	<% else %>
 		<span id="logg-inn-her">Logg deg inn her for å skrive en anbefaling!</span><br>
 		<img id="logg-inn-pil" src="/img/logg_inn_pil.png" alt="pil" />
