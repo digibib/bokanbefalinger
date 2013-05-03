@@ -1,4 +1,6 @@
+#encoding: UTF-8
 require "faraday"
+require "torquebox-messaging"
 
 require_relative "../config/settings"
 require_relative "../models/init"
@@ -9,6 +11,7 @@ module Refresh
 
   REVIEWS_ENDPOINT = Faraday.new(:url => Settings::API + "reviews")
   WORKS_ENDPOINT = Faraday.new(:url => Settings::API + "works")
+  QUEUE = TorqueBox::Messaging::Queue.new('/queues/cache')
 
   def latest
     old = Cache.get("reviews:latest")
@@ -31,7 +34,8 @@ module Refresh
     new_reviews = cache.reject { |e| old.include?(e) }
     new_reviews.each do |n|
       puts "#{n} is a new review"
-      # Also recache works, author, reviewer etc
+      u = n.to_s
+      QUEUE.publish({:type => :review_include_affected, :uri => u})
     end
 
     puts "Refreshed latest reviews cache"
@@ -49,6 +53,7 @@ module Refresh
       cache = JSON.parse(resp.body)
       Cache.set(uri, cache, :reviews)
       puts "Refreshed reviews cache for #{uri}"
+      return cache
     end
   end
 

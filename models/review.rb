@@ -244,15 +244,7 @@ class Review
     puts "API RESPONSE:\n#{res}\n\n" if ENV['RACK_ENV'] == 'development'
 
     if published
-      QUEUE.publish({:type => :review, :uri => res["works"].first["reviews"].first["uri"]}) #TODO remove when API fixed
       QUEUE.publish({:type => :latest, :uri => nil})
-      Cache.set(res["works"].first["reviews"].first["uri"], res, :reviews)
-      QUEUE.publish({:type => :reviewer, :uri => res["works"].first["reviews"].first["reviewer"]})
-      QUEUE.publish({:type => :work, :uri => res["works"].first["uri"]})
-      res["works"].first["authors"].each do |author|
-        QUEUE.publish({:type => :author, :uri => author["uri"]})
-      end
-      QUEUE.publish({:type => :source, :uri => res["works"].first["reviews"].first["source"]})
     end
 
     return [nil, res]
@@ -278,15 +270,7 @@ class Review
     puts "API RESPONSE:\n#{res}\n\n" if ENV['RACK_ENV'] == 'development'
 
     if published
-      QUEUE.publish({:type => :review, :uri => res["works"].first["reviews"].first["uri"]}) #TODO remove when API fixed
       QUEUE.publish({:type => :latest, :uri => nil})
-      Cache.set(res["works"].first["reviews"].first["uri"], res, :reviews)
-      QUEUE.publish({:type => :reviewer, :uri => res["works"].first["reviews"].first["reviewer"]})
-      QUEUE.publish({:type => :work, :uri => res["works"].first["uri"]})
-      res["works"].first["authors"].each do |author|
-        QUEUE.publish({:type => :author, :uri => author["uri"]})
-      end
-      QUEUE.publish({:type => :source, :uri => res["works"].first["reviews"].first["source"]})
     end
 
     return [nil, res]
