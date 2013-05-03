@@ -17,7 +17,12 @@
 				</div>
 				<div class="my-reviews-info">
 					<p class="date"><%= r['published'] ? 'Sist oppdatert' : 'Lagret som kladd' %> <%= r["modified"][0..9] %></p>
-					<p class="review-title"><%= [r["title"], "Uten tittel"].reject { |x| x.empty? } .first%></p>
+					<p class="review-title">
+					<% if r["issued"] %>
+						<a href="/anbefaling<%=r['uri'][23..-1] %>"><%= r["title"] %></a></p>
+					<% else %>
+						<a href="/anbefaling<%= r['uri'][23..-1] %>/rediger"><%= [r["title"], "Uten tittel"].reject { |x| x.empty? } .first %></a></p>
+					<% end %>
 					<p class="my-reviews-teaser"><%= enforce_length(r["teaser"], 200) %></p>
 
 					<div class="bottom">
