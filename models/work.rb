@@ -56,7 +56,7 @@ class Work
       Cache.set(work_id, cache, :works)
 
       # also cache by editions (review manifestastion)
-      cache["works"].first["reviews"].each do |r|
+      Array(cache["works"].first["reviews"]).each do |r|
         Cache.set(r["edition"], cache, :editions)
       end
 

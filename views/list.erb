@@ -13,7 +13,12 @@
 	<div class="clearfix"></div>
 	<div class="listevisning">
 		<div class="liste-img <%= "light-gray" unless work['cover_url'] %>">
-			<img src="<%= select_cover(work) %>">
+			<% if work['cover_url'] %>
+				<img src="<%= select_cover(work) %>">
+			<% else %>
+				<p class="cover-author"><%= work["authors"].map { |a| a["name"] }.join(", ")%></p>
+				<p class="cover-title"><%= r["title"] %></p>
+			<% end %>
 		</div>
 		<div class="liste-info">
 			<p class="liste-title"><a href="/anbefaling/<%= r["uri"][24,200] %>"><%= work["prefTitle"] || work["originalTitle"] %></a></p>

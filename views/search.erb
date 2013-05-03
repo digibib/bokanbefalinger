@@ -119,8 +119,13 @@
 				<% r = w["reviews"].first %>
 				<div class="clearfix"></div>
 				<div class="listevisning">
-					<div class="liste-img <%= "light-gray" unless w['cover_url'] %>">
-						<img src="<%= select_cover(w) %>">
+					<div class="liste-img <%= "light-gray" unless select_cover(w) %>">
+						<% if select_cover(w) %>
+							<img src="<%= select_cover(w) %>">
+						<% else %>
+							<p class="cover-author"><%= w["authors"].map { |a| a["name"] }.join(", ")%></p>
+							<p class="cover-title"><%= w["prefTitle"] || w["originalTitle"] %></p>
+						<% end %>
 					</div>
 					<div class="liste-info">
 						<p class="liste-title"><a href="/anbefaling/<%= r["uri"][24,200] %>"><%= w["prefTitle"] || w["originalTitle"] %></a></p>
@@ -144,8 +149,13 @@
 				<% r = w["reviews"].first %>
 				<div class="clearfix"></div>
 				<div class="listevisning">
-					<div class="liste-img <%= "light-gray" unless w['cover_url'] %>">
-						<img src="<%= select_cover(w) %>">
+					<div class="liste-img <%= "light-gray" unless select_cover(w) %>">
+						<% if select_cover(w) %>
+							<img src="<%= select_cover(w) %>">
+						<% else %>
+							<p class="cover-author"><%= w["authors"].map { |a| a["name"] }.join(", ")%></p>
+							<p class="cover-title"><%= w["prefTitle"] || w["originalTitle"] %></p>
+						<% end %>
 					</div>
 					<div class="liste-info">
 						<p class="liste-title"><a href="/anbefaling/<%= r["uri"][24,200] %>"><%= w["prefTitle"] || w["originalTitle"] %></a></p>
