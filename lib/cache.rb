@@ -1,11 +1,25 @@
 # encoding: utf-8
+
+# -----------------------------------------------------------------------------
+# cache.rb - cache abstraction class
+# -----------------------------------------------------------------------------
+# Thin abstraction layer over Redis.
+#
+# Should we choose another caching database, (for example Infinispan),
+# it should be easy to just make a few mods here, without changing anything
+# in the application.
+
 require "redis"
 require "json"
 
 class Cache
-  # Use different Redis database for each uri-type. Defaults to 0 (various)
+
+  # We use a different Redis database for each URI-type.
+  # Defaults to 0 (various)
   @@db = {:various => 0, :reviews => 1, :works => 2, :editions => 3,
-          :authors => 4, :reviewers => 5, :sources => 6, :feeds => 7, :dropdowns => 8}
+          :authors => 4, :reviewers => 5, :sources => 6, :feeds => 7,
+          :dropdowns => 8}
+
   @@clients = {}
 
   def self.redis(n=0)
