@@ -1,5 +1,5 @@
 ## Application directory layout
-```
+<pre>
 ├── app                      <b>torquebox processes (running indepedently)</b>
 │   ├── jobs                 <strong>scheduled jobs</strong>
 │   │   ├── feeds_job.rb       <em>recache feeds once per day</em>
@@ -41,4 +41,4 @@
 ├── Gemfile.lock
 ├── Rakefile                   rake tasks
 └── README.md                  basic info
-```
+</pre>
