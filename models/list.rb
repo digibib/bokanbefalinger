@@ -1,4 +1,9 @@
-# encoding: utf-8
+# encoding: UTF-8
+
+# -----------------------------------------------------------------------------
+# list.rb - list/feed class
+# -----------------------------------------------------------------------------
+
 require "cgi"
 
 Dropdown = Struct.new(:subjects, :persons, :genres, :languages, :authors,

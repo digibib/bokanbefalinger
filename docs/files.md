@@ -10,6 +10,9 @@
 ├── <b>config</b>                     <b>configuration</b>
 │   ├── settings.rb              <em>application settings</em>
 │   └── torquebox.rb             <em>torquebox settings</em>
+├── <b>docs</b>                       <b>documentation</b>
+│   ├── files.md                 <em>this file</em>
+│   └── install.md               <em>installation instructions</em>
 ├── <b>lib</b>                        <b>various application logic</b>
 │   ├── cache.rb                 <em>abstraction over cache layer</em>
 │   ├── formatting.rb            <em>various string formatting helpers</em>
@@ -25,7 +28,7 @@
 │   ├── css                      <em>styling</em>
 │   ├── img                      <em>images</em>
 │   └── js                       <em>javascript</em>
-├── <b>routes</b>                     <b>application routes</b>
+├── <b>routes</b>                     <b>application routing</b>
 │   ├── init.rb                  <em>load all routes</em>
 │   ├── feed.rb                  <em>feed routes (RSS)</em>
 │   ├── main.rb
