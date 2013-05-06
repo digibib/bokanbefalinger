@@ -39,6 +39,7 @@ class Cache
   def self.get(key, where=:various)
     from_json redis(@@db[where]).get(key)
   rescue => error
+    # Client MUST supply a block to deal with missing keys (or parse errors)
     yield(error)
   end
 
