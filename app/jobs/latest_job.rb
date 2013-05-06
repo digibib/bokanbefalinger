@@ -1,3 +1,8 @@
+# -----------------------------------------------------------------------------
+# latest_job.rb - job to refresh cache and fetch latest reviews
+# -----------------------------------------------------------------------------
+# Dispatches a message to the recaching queue
+
 require "torquebox-messaging"
 
 class LatestJob

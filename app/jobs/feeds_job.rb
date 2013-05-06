@@ -1,3 +1,8 @@
+# -----------------------------------------------------------------------------
+# feeds_job.rb - job to refresh feeds cache
+# -----------------------------------------------------------------------------
+# Dispatches a message to the recaching queue
+
 require "torquebox-messaging"
 
 class FeedsJob
