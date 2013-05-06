@@ -48,7 +48,7 @@ class CacheProcessor < TorqueBox::Messaging::MessageProcessor
     when :feeds
       Refresh.feeds
     when :dropdowns
-      #Todo
+      Refresh.dropdowns
     end
   end
 end

@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------------
-# latest_job.rb - job to refresh cache and fetch latest reviews
+# latest_job.rb - job to refresh cache and fetch latest reviews + dropdowns
 # -----------------------------------------------------------------------------
 # Dispatches a message to the recaching queue
 
@@ -12,7 +12,8 @@ class LatestJob
 
   def run
     @queue.publish({:type => :latest, :url => nil})
-    #TODO also cache dropdowns
-    #@queue.publish({:type => :dropdowns, :url => nil})
+
+    # also refresh dropdowns cache
+    @queue.publish({:type => :dropdowns, :url => nil})
   end
 end
