@@ -1,4 +1,4 @@
-# encoding: utf-8
+# encoding: UTF-8
 
 # -----------------------------------------------------------------------------
 # formatting.rb - various string formatting helpers

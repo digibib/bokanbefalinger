@@ -1,5 +1,13 @@
+# encoding: UTF-8
+
+# -----------------------------------------------------------------------------
+# init.rb - application globals + load all models
+# -----------------------------------------------------------------------------
+
 require "rdf/virtuoso"
 require_relative "../lib/vocabularies"
+
+# Globals:
 
 REPO        = RDF::Virtuoso::Repository.new(
               Settings::SPARQL,
@@ -18,11 +26,14 @@ QUEUE = TorqueBox::Messaging::Queue.new('/queues/cache')
 module RDF::Virtuoso
   class Query
     def pp
-      self.to_s.gsub(/(SELECT|FROM|WHERE|GRAPH|FILTER)/,"\n"+'\1').gsub(/(\s\.\s|WHERE\s{\s|})(?!})/, '\1'+"\n")
+      # monkeypatch to pretty-print SPARQL queries when debugging
+      self.to_s.gsub(/(SELECT|FROM|WHERE|GRAPH|FILTER)/,"\n"+'\1')
+               .gsub(/(\s\.\s|WHERE\s{\s|})(?!})/, '\1'+"\n")
     end
   end
 end
 
+# load all models
 require_relative "review"
 require_relative "work"
 require_relative "list"
