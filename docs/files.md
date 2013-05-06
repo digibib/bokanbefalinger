@@ -1,44 +1,44 @@
 ## Application directory layout
 <pre>
-├── app                      <b>torquebox processes (running indepedently)</b>
-│   ├── jobs                 <strong>scheduled jobs</strong>
+├── <b>app</b>               torquebox processes (running indepedently)
+│   ├── <b>jobs</b>          scheduled jobs
 │   │   ├── feeds_job.rb       <em>recache feeds once per day</em>
-│   │   └── latest_job.rb      fetch latest reviews each 15 min
-│   ├── processors           message queue processors
-│   │   └── cache_processor.rb process the re-caching queue
-│   └── services             background jobs/deamons
-├── config                   configuration
-│   ├── settings.rb            application settings
-│   └── torquebox.rb           torquebox settings
-├── lib                      various application logic
-│   ├── cache.rb               abstraction over cache layer
-│   ├── formatting.rb          various string formatting helpers
-│   ├── refresh.rb             cache reloading methods
-│   └── vocabularies.rb        rdf prefixes
-├── models                   main application logic
-│   ├── init.rb                application globals, load all models
-│   ├── list.rb                list class
-│   ├── review.rb              review class
-│   ├── user.rb                reviewer (user) class
-│   └── work.rb                work class
-├── public                   static content
-│   ├── css                    styling
-│   ├── img                    images
-│   └── js                     javascript
-├── routes                   application routes
-│   ├── init.rb                load all routes
-│   ├── feed.rb                /feed
+│   │   └── latest_job.rb      <em>fetch latest reviews each 15 min</em>
+│   ├── <b>processors</b>    message queue processors
+│   │   └── cache_processor.rb <em>process the re-caching queue</em>
+│   └── <b>services</b>      background jobs/deamons
+├── <b>config</b>            configuration
+│   ├── settings.rb            <em>application settings</em>
+│   └── torquebox.rb           <em>torquebox settings</em>
+├── <b>lib</b>               various application logic
+│   ├── cache.rb               <em>abstraction over cache layer</em>
+│   ├── formatting.rb          <em>various string formatting helpers</em>
+│   ├── refresh.rb             <em>cache reloading methods</em>
+│   └── vocabularies.rb        <em>rdf prefixes</em>
+├── <b>models</b>            main application logic
+│   ├── init.rb                <em>application globals, load all models</em>
+│   ├── list.rb                <em>list class</em>
+│   ├── review.rb              <em>review class</em>
+│   ├── user.rb                <em>reviewer (user) class</em>
+│   └── work.rb                <em>work class</em>
+├── <b>public</b>            static content
+│   ├── css                    <em>styling</em>
+│   ├── img                    <em>images</em>
+│   └── js                     <em>javascript</em>
+├── <b>routes</b>            application routes
+│   ├── init.rb                <em>load all routes</em>
+│   ├── feed.rb                <em>/feed</em>
 │   ├── main.rb
 │   ├── manifestation.rb
 │   ├── reviews.rb
-│   ├── user.rb                user interaction routes
+│   ├── user.rb                <em>user interaction routes</em>
 │   └── works.rb
-├── views                    template views
-├── test                     tests
-├── app.rb                     application entry point
-├── config.ru                  rackup-file, picked up by torquebox server
-├── Gemfile                    dependencies
+├── <b>views</b>             template views
+├── <b>test</b>              tests
+├── app.rb                     <em>application entry point</em>
+├── config.ru                  <em>rackup-file, picked up by torquebox server</em>
+├── Gemfile                    <em>dependencies</em>
 ├── Gemfile.lock
-├── Rakefile                   rake tasks
-└── README.md                  basic info
+├── Rakefile                   <em>rake tasks</em>
+└── README.md                  <em>basic info</em>
 </pre>
