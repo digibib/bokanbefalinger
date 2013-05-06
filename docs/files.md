@@ -1,6 +1,6 @@
 ## Application directory layout
 ```
-├── app                      torquebox processes (running indepedently)
+├── app                      *torquebox processes (running indepedently)*
 │   ├── jobs                 scheduled jobs
 │   │   ├── feeds_job.rb       recache feeds once per day
 │   │   └── latest_job.rb      fetch latest reviews each 15 min
