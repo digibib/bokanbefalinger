@@ -35,10 +35,10 @@
 │   └── works.rb
 ├── <b>views</b>                      <b>template views</b>
 ├── <b>test</b>                       <b>tests</b>
-├── app.rb                       <em>application entry point</em>
-├── config.ru                    <em>rackup-file, picked up by torquebox server</em>
-├── Gemfile                      <em>dependencies</em>
+├── app.rb                     <em>application entry point</em>
+├── config.ru                  <em>rackup-file, picked up by torquebox server</em>
+├── Gemfile                    <em>dependencies</em>
 ├── Gemfile.lock
-├── Rakefile                     <em>rake tasks</em>
-└── README.md                    <em>basic info</em>
+├── Rakefile                   <em>rake tasks</em>
+└── README.md                  <em>basic info</em>
 </pre>
