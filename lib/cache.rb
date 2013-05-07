@@ -5,17 +5,21 @@
 # -----------------------------------------------------------------------------
 # Thin abstraction layer over Redis.
 #
-# Should we choose another caching database, (for example Infinispan),
-# it should be easy to just make a few mods here, without changing anything
-# in the application.
+# All data is stored as JSON. Most in an unmodified form as received from the
+# API. This makes it easy to substitute an API call with the cached version.
+#
+# Should we choose another caching database (for example Infinispan which is
+# included in JBoss) it would be easy to just make a few mods here, without
+# changing anything elsewhere in the application.
 
 require "redis"
 require "json"
 
 class Cache
 
-  # We use a different Redis database for each URI-type.
-  # Defaults to 0 (various)
+  # Redis allows us to organize the keys in numbered databases.
+  # We use a different Redis database for each URI-type, default 0 (various).
+
   @@db = {:various => 0, :reviews => 1, :works => 2, :editions => 3,
           :authors => 4, :reviewers => 5, :sources => 6, :feeds => 7,
           :dropdowns => 8}
@@ -23,27 +27,36 @@ class Cache
   @@clients = {}
 
   def self.redis(n=0)
+    # Return a Redis client, optionally with a specified database.
+    # Defaults to 0 (various).
     @@clients[n] ||= Redis.new(:db => n)
   end
 
   def self.flush(where=:various)
+    # Flush a given database.
     redis(@@db[where]).flushdb
   end
 
   def self.set(key, data, where=:various)
+    # Sets a key to data.
+    # Return ?? or nil if unsucsessfull
     redis(@@db[where]).set key, to_json(data)
   rescue Redis::CannotConnectError
     return nil
   end
 
   def self.get(key, where=:various)
+    # Fetch a key.
+    # Returns the value or raises an error if not found or cache unavailable.
     from_json redis(@@db[where]).get(key)
   rescue => error
-    # Client MUST supply a block to deal with missing keys (or parse errors)
+    # Client MUST supply a block to handle missing keys (or JSON parsing errors).
     yield(error)
   end
 
   def self.del(key, where=:various)
+    # Deletes a key.
+    # Returns number of keys deleted, or nil if unsucsessfull
     redis(@@db[where]).del key
   rescue Redis::CannotConnectError
     return nil
@@ -52,6 +65,8 @@ class Cache
   private
 
   def self.from_json(result)
+    # Decode JSON to corresponding Ruby datastructure.
+    # Raises an error the key is empty or parsing otherwise is unsucsessfull.
     case result
     when Array
       result.map { |r| from_json(r) }
@@ -67,6 +82,7 @@ class Cache
   end
 
   def self.to_json(data)
+    # Encode to JSON
     data.to_json
   end
 
