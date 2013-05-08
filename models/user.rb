@@ -42,7 +42,7 @@ class User
     res = JSON.parse(resp.body)
     puts "API RESPONSE:\n#{res}\n\n" if ENV['RACK_ENV'] == 'development'
 
-    session[:source_uri] = res["reviewer"]["accountServiceHomepage"]
+    session[:source_uri] = res["reviewer"]["userAccount"]["accountServiceHomepage"]
     session[:name] = res["reviewer"]["name"]
     session[:user_uri] = res["reviewer"]["uri"]
 
@@ -106,7 +106,7 @@ class User
 
     if resp.status == 200
       session[:name] = res["reviewer"]["name"]
-      session[:user] = res["reviewer"]["accountName"]
+      session[:user] = res["reviewer"]["userAccount"]["accountName"]
       return nil
     else
       return res
