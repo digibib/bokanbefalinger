@@ -41,7 +41,7 @@ class Cache
     # Sets a key to data.
     # Return ?? or nil if unsucsessfull
     redis(@@db[where]).set key, to_json(data)
-  rescue Redis::CannotConnectError
+  rescue Redis::BaseError
     return nil
   end
 
@@ -49,7 +49,7 @@ class Cache
     # Fetch a key.
     # Returns the value or raises an error if not found or cache unavailable.
     from_json redis(@@db[where]).get(key)
-  rescue => error
+  rescue Redis::BaseError => error
     # Client MUST supply a block to handle missing keys (or JSON parsing errors).
     yield(error)
   end
@@ -58,7 +58,7 @@ class Cache
     # Deletes a key.
     # Returns number of keys deleted, or nil if unsucsessfull
     redis(@@db[where]).del key
-  rescue Redis::CannotConnectError
+  rescue Redis::BaseError
     return nil
   end
 
