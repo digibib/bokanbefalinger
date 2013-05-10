@@ -49,6 +49,16 @@ module FormattingHelpers
     end
   end
 
+  def reviewer_link(r)
+    # Returns the link to reviewer / source. Link only to source if reviewer
+    # is anonymous.
+    if r.reviewer["name"].downcase == "anonymous"
+      " <a href='/sok?kilde=#{r.source["uri"]}'>#{r.source["name"]}</a>"
+    else
+      "<a href='/sok?anmelder=#{r.reviewer["uri"]}' class='liste-reviewer'>#{r.reviewer["name"]}</a>, <a href='/sok?kilde=#{r.source["uri"]}'>#{r.source["name"]}</a>"
+    end
+  end
+
   def select_cover(r)
     # Prefer cover_url from the manifestation the review is based on,
     # or use the cover_url associated with work if the former is not present.
