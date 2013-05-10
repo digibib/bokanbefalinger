@@ -42,8 +42,6 @@ class Work2
     @editions  = Array(work["editions"])
 
     # Reviews
-    @reviews   = reviews.map do |r|
-      copy = raw
     @reviews   = Array(reviews).map do |r|
       copy = @raw
       copy["works"].first["reviews"]=[r]
