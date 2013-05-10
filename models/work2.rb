@@ -23,16 +23,16 @@ class Work2
       else                    # Create a review from ISBN
         params = {:isbn => param, :reviews => true}
         # works are not cahched by ISBN, ask API directly
-        raw = API.get(:works, params) { |error| yield(error); return }
+        @raw = API.get(:works, params) { |error| yield(error); return }
       end
     else
       # Create a work instance from data; expects a hash in the API response format:
       #   {:works => [{:reviews => [{..}] }}]
-      raw = param
+      @raw = param
     end
 
-    work = raw["works"].first
-    reviews = raw["works"].first["reviews"]
+    work = @raw["works"].first
+    reviews = @raw["works"].first["reviews"]
 
     # Work data
     @uri       = work["uri"]
@@ -44,9 +44,14 @@ class Work2
     # Reviews
     @reviews   = reviews.map do |r|
       copy = raw
+    @reviews   = Array(reviews).map do |r|
+      copy = @raw
       copy["works"].first["reviews"]=[r]
       Review2.new(copy)
     end
   end
 
+  def to_json
+    @raw["works"].first.to_json
+  end
 end
