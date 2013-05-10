@@ -35,6 +35,9 @@ end
 
 # load all models
 require_relative "review"
+require_relative "review2"
+require_relative "list2"
+require_relative "work2"
 require_relative "work"
 require_relative "list"
 require_relative "user"
