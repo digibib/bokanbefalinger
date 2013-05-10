@@ -49,7 +49,7 @@ class Cache
     # Fetch a key.
     # Returns the value or raises an error if not found or cache unavailable.
     from_json redis(@@db[where]).get(key)
-  rescue Redis::BaseError => error
+  rescue KeyError, Redis::BaseError => error
     # Client MUST supply a block to handle missing keys (or JSON parsing errors).
     yield(error)
   end
