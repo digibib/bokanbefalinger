@@ -1,25 +1,68 @@
-# encoding: utf-8
+# encoding: UTF-8
+
 require "json"
 require "cgi"
 
 class BokanbefalingerApp < Sinatra::Application
 
+  get '/ny' do
+    # Create new review, expects query params "isbn" and "edition"
+    redirect "/" unless session[:user]
+
+    @isbn = params["isbn"]
+    @work = Work2.new(@isbn) { |err| @error_message = err.message }
+    @cover = @work.editions.select { |e| e["uri"] == params["edition"] }.first["cover_url"] || @work.cover
+
+    if @error_message
+      @title = "Feil"
+      erb :error
+    else
+      @title = "Skriv ny anbefaling"
+      erb :new
+    end
+  end
+
+  get '/rediger' do
+    # Edit review, excepcts the review uri as query param
+    redirect "/" unless session[:user]
+
+    @review = Review2.new(params["uri"]) { |err| @error_message = err.message }
+    @other_reviews = List2.from_work(@review.book_work, false)
+      .reject { |r| r.uri == @review.uri }  # reject current review
+
+    if @error_message
+      @title = "Feil"
+      erb :error
+    else
+      redirect "/anbefaling/"+params["uri"][0..-9] unless @review.reviewer["uri"] == session[:user_uri]
+      @title = "Rediger anbefaling"
+      erb :edit
+    end
+  end
+
+
   post '/review' do
     audiences = [params["a1"], params["a2"], params["a3"]].compact.join("|")
-    @error_message, @review = Review.publish(params["title"], params["teaser"],
-                                             text2markup(params["text"]), audiences,
-                                             session[:user], params["isbn"],
-                                             session[:api_key], params["published"])
+    rparams = {:audience => audiences, :teaser => params["teaser"],
+               :text => text2markup(params["text"]), :reviewer => session[:user],
+               :isbn => params["isbn"], :published => params["published"],
+               :api_key => session[:api_key]}
+    @review = Review2.create(rparams) { |err| @error_message = err.message }
+
     if @error_message
       session[:flash_error].push @error_message
+      # TODO redirect "/rediger?uri=#{@review.uri}"
+      "feil fikk ikke opprettet review"
     else
       session[:flash_info].push "Anbefaling opprettet."
       Cache.del(session[:user_uri], :reviewers)
-    end
-    if params["published"] == "false"
-      redirect "/anbefaling" + @review["works"].first["reviews"].first["uri"][23..-1]+"/rediger"
-    else
-      redirect '/minside'
+      if @review.published == false
+        redirect "/rediger?uri=#{@review.uri}"
+      else
+        QUEUE.publish({:type => :review_include_affected, :uri => @review.uri})
+        QUEUE.publish({:type => :latest, :uri => nil})
+        redirect '/minside'
+      end
     end
   end
 
@@ -41,6 +84,7 @@ class BokanbefalingerApp < Sinatra::Application
 
     # clear cache after updates so changes are visible to the user
     Cache.del(session[:user_uri], :reviewers) unless @error_message
+    Cache.del(params["uri"], :reviews)
 
     session[:flash_error].push @error_message if @error_message
 
@@ -54,38 +98,23 @@ class BokanbefalingerApp < Sinatra::Application
   get '/anbefaling/*' do
     path = params[:splat].first
     redirect request.path.chop if request.path =~ /\/$/
-    edit = false
 
-    if path =~ /\/rediger$/
-      # edit the review
-      uri = path[0..-9]
-      redirect "/anbefaling/"+uri unless session[:user]
-      edit = true
-    else
-      uri = path
-    end
-
-    uri = "http://data.deichman.no/" + uri
-    @error_message, @review, @other_reviews = Review.get(uri)
+    uri = "http://data.deichman.no/" + path
+    @review = Review2.new(uri) { |err| @error_message = err.message }
+    @other_reviews = List2.from_work(@review.book_work, false)
+      .reject { |r| r.uri == @review.uri }  # reject current review
 
     # Don't give access to other drafts
     # TODO refactor this
-    # also includes temp fix to counter different api responses after post/put
-    @error_message = "Ikke tilgang" if @review["reviews"].first["issued"].nil? and session[:user_uri] != ( @review["reviews"].first["reviewer"]["uri"] || @review["reviews"].first["reviewer"])
+    if @review.published == false
+      @error_message = "Ikke tilgang" if session[:user_uri] != @review.reviewer["uri"]
+    end
 
     if @error_message
       @title ="Feil"
       erb :error
-    elsif edit
-      @title = "Rediger anbefaling"
-      @error_message, my_reviews = Review.by_reviewer(session[:user_uri])
-      my_reviews.each do |w|
-        @review = w if w["reviews"].first["uri"] == uri
-      end
-      redirect "/anbefaling/"+path[0..-9] unless session[:user] and session[:user_uri] == @review["reviews"].first["reviewer"]["uri"]
-      erb :edit
     else
-      @title = @review["reviews"].first["title"]
+      @title = @review.title
       erb :review
     end
   end
