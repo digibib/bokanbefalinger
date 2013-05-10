@@ -5,6 +5,7 @@ require "torquebox-messaging"
 
 require "config/settings"
 require "lib/cache"
+require "lib/api"
 require "lib/formatting"
 
 class BokanbefalingerApp < Sinatra::Application
