@@ -6,23 +6,23 @@
 	</div>
 	<h2>Skriv ny anbefaling av:</h2>
 	<div id="review-heading">
-		<div class="book-cover <%= "light-gray" unless @utgave["cover_url"] %>">
-			<% if @utgave["cover_url"] %>
-				<img class="cover" src="<%= select_cover(@utgave) %>"/>
+		<div class="book-cover <%= "light-gray" unless @cover %>">
+			<% if @cover %>
+				<img class="cover" src="<%= @cover %>"/>
 			<% end %>
 		</div>
 		<div>
-			<p><strong><%= @utgave["prefTitle"]  || @utgave["originalTitle"] %></strong></p>
-			<p><strong><%= @utgave["authors"].map { |a| a["name"] } .join ", " %></strong></p>
+			<p><strong><%= @work.title %></strong></p>
+			<p><strong><%= authors_links(@work.authors) %></strong></p>
 		</div>
 		<div class="reviewform-other">
-			<%= @utgave["prefTitle"]  || @utgave["originalTitle"] %> har<br>
-			<span class="red-text">x andre anbefalinger</span>
+			<%= @work.title %> har<br>
+			<span class="red-text"><%= @work.reviews.count %> andre anbefalinger</span>
 		</div>
 	</div>
 	<div class="clearfix"></div>
 	<form id="review-form" action="/review" method="POST">
-		<input type="hidden" id="isbn" name="isbn" value="<%= @utgave["isbns"].first %>" />
+		<input type="hidden" id="isbn" name="isbn" value="<%= @isbn %>" />
 		<input type="hidden" id="published" name="published" value="false" />
 		<label>Tittel på anbefalingen<span class="redstar">*</span><br>
 		<input id="title" class="required" type="text" name="title" placeholder="Lag en tittel som innbyr til lesing"/></label>
