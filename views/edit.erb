@@ -1,37 +1,37 @@
 <div class="main-left">
 	<h2>Rediger Anbefaling</h2>
 	<div id="review-heading">
-		<div class="book-cover <%= "light-gray" unless @review["cover_url"] %>">
-			<% if @review["cover_url"] %>
-				<img class="cover" src="<%= @review["cover_url"] %>"/>
+		<div class="book-cover <%= "light-gray" unless @review.book_cover %>">
+			<% if @review.book_cover %>
+				<img class="cover" src="<%= @review.book_cover %>"/>
 			<% end %>
 		</div>
 		<div>
-			<p><strong><%= @review["prefTitle"]  || @review["originalTitle"] %></strong></p>
-			<p><strong><%= @review["authors"].map { |a| a["name"] } .join ", " %></strong></p>
+			<p><strong><%= @review.book_title %></strong></p>
+			<p><strong><%= authors_links(@review.book_authors) %></strong></p>
 		</div>
 	</div>
 	<div class="clearfix"></div>
 	<form id="review-form" action="/update" method="POST">
-		<input type="hidden" name="uri" id="uri" value="<%= @review["reviews"].first["uri"] %>">
+		<input type="hidden" name="uri" id="uri" value="<%= @review.uri %>">
 		<input type="hidden" id="published" name="published" value="false" />
 		<input type="hidden" id="delete" name="delete" value="false" />
 		<label>Tittel på anbefalingen<span class="redstar">*</span><br>
-		<input id="title" class="required" type="text" name="title" placeholder="Tittel på anbefalingen" value="<%= @review['reviews'].first['title']%>"/></label>
+		<input id="title" class="required" type="text" name="title" placeholder="Tittel på anbefalingen" value="<%= @review.title %>"/></label>
 		<label>Kort teaser<span class="redstar">*</span><br>
-		<textarea id="teaser" class="required" name="teaser" rows="2" placeholder="Skriv en teaser, maks to setninger"><%= @review['reviews'].first['teaser']%></textarea></label>
+		<textarea id="teaser" class="required" name="teaser" rows="2" placeholder="Skriv en teaser, maks to setninger"><%= @review.teaser %></textarea></label>
 		<label>Omtale<br>
-		<textarea id="text" name="text" rows="20" placeholder="Skriv en omtale"><%= markup2text(@review['reviews'].first['text']) %></textarea></label>
+		<textarea id="text" name="text" rows="20" placeholder="Skriv en omtale"><%= markup2text(@review.text) %></textarea></label>
 
 		<div>
 		<span>Målgruppe for anbefalingen<span class="redstar">*</span></span>
 		<fieldset id="audiences-fieldset">
 			<label for="a1" class="checklabel">barn
-			<input id="a1" class="audiences" name="a1" <%= 'checked="checked"' if @review['reviews'].first['audience'].include? "Barn" %> type="checkbox" value="barn"></label><br>
+			<input id="a1" class="audiences" name="a1" <%= 'checked="checked"' if @review.audiences.include? "Barn" %> type="checkbox" value="barn"></label><br>
 			<label for="a2" class="checklabel">ungdom
-			<input id="a2" class="audiences" name="a2" <%= 'checked="checked"' if @review['reviews'].first['audience'].include? "Ungdom" %> type="checkbox" value="ungdom"></label><br>
+			<input id="a2" class="audiences" name="a2" <%= 'checked="checked"' if @review.audiences.include? "Ungdom" %> type="checkbox" value="ungdom"></label><br>
 			<label for="a3" class="checklabel">voksne
-			<input id="a3" class="audiences" name="a3" <%= 'checked="checked"' if @review['reviews'].first['audience'].include? "Voksen" %> type="checkbox" value="voksen"></label><br>
+			<input id="a3" class="audiences" name="a3" <%= 'checked="checked"' if @review.audiences.include? "Voksen" %> type="checkbox" value="voksen"></label><br>
 		</fieldset>
 		</div>
 
@@ -42,11 +42,10 @@
 				<button id="delete-button" class="medium gray">Slett</button>
 			</div>
 			<div style="float:right;margin-right:-25px">
-				<% if @review["reviews"].first["published"] == false %>
+				<% if @review.published == false %>
 					<button id="draft" class="medium gray">Lagre</button>
 					<button id="publish" class="medium red">Publisér</button>
 				<% else %>
-<!-- 					<button id="draft" class="medium gray">Trekk tilbake</button> -->
 					<button id="publish" class="medium red">Oppdater</button>
 				<% end %>
 			</div>
