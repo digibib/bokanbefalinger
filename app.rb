@@ -19,6 +19,10 @@ class BokanbefalingerApp < Sinatra::Application
 
   helpers FormattingHelpers
 
+  before do
+    @error_message = nil
+  end
+
 end
 
 require_relative 'models/init'
