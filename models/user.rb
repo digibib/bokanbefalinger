@@ -1,66 +1,41 @@
-# encoding: utf-8
-require "json"
-require "faraday"
+# encoding: UTF-8
+
+# -----------------------------------------------------------------------------
+# user.rb - user/reviewer class
+# -----------------------------------------------------------------------------
+# Methods to log in and out user/reviewer
+
+# TODO: don't pass session object around, rather return a hash and set session
+#       variables in the route
 
 class User
 
-  @@conn = Faraday.new(:url => "http://marc2rdf.deichman.no")
-
   def self.log_in(username, password, session)
-    # Returns error + authorized true or false
-    # Sets user session variables
+    # Logs in usersand sets user session variables.
+    # Returns two values: error|nil + authorized true or false
 
     # 1. Check username+password: api/users/authenticate
-    begin
-      resp = @@conn.post do |req|
-        req.url '/api/users/authenticate'
-        req.body = {:username => username.downcase, :password => password.downcase}.to_json
-        puts "API REQUEST to #{req.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
-      end
-    rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
-      return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil]
-    end
-    return [nil, false] if resp.status == 404 # user not found
-    return ["Får ikke kontakt med eksternt API (#{Settings::API})",nil] if resp.status != 200
-
-    res = JSON.parse(resp.body)
-    puts "API RESPONSE:\n#{res}\n\n" if ENV['RACK_ENV'] == 'development'
+    params = {:username => username.downcase, :password => password.downcase}
+    res = API.post(:authenticate, params) { |err| return err.message, false }
     return [nil, false] unless res["authenticated"]
+    # user+pass OK, set session user
     session[:user] = username
 
     # 2. Get source via username: api/users name=x
-    begin
-      resp = @@conn.get do |req|
-        req.url '/api/users'
-        req.body = {:accountName => username}.to_json
-        puts "API REQUEST to #{req.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
-      end
-    rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
-      return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil]
-    end
-
-    res = JSON.parse(resp.body)
-    puts "API RESPONSE:\n#{res}\n\n" if ENV['RACK_ENV'] == 'development'
-
+    params = {:accountName => username}
+    res = API.get(:users, params) { |err| return err.message, false }
+    # set user session variables
     session[:source_uri] = res["reviewer"]["userAccount"]["accountServiceHomepage"]
     session[:name] = res["reviewer"]["name"]
     session[:user_uri] = res["reviewer"]["uri"]
 
-    # 3. Get source api_key: api/sources source=x
+    # 3. Get source api_key: api/sources source=x (or preferably from cache)
     res = Cache.get(session[:source_uri]) {
-      begin
-        resp = @@conn.get do |req|
-          req.url '/api/sources'
-          req.headers[:secret_session_key] = Settings::SECRET_SESSION_KEY
-          req.body = {:uri => session[:source_uri]}.to_json
-          puts "API REQUEST to #{req.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
-        end
-      rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
-        return ["Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare", nil]
-      end
-      source = JSON.parse(resp.body)
-      puts "API RESPONSE:\n#{source}\n\n" if ENV['RACK_ENV'] == 'development'
-      source["source"]
+      headers = {:secret_session_key => Settings::SECRET_SESSION_KEY}
+      params = {:uri => session[:source_uri]}
+      res = API.get(:sources, params, headers) { |err| return err.message, false }
+      Cache.set(session[:source_uri], res["source"])
+      res["source"]
     }
 
     # Set user session variables
@@ -70,10 +45,10 @@ class User
     session[:flash_info] = []
     session[:flash_error] = []
 
-    # Clear reviewer cache
+    # Clear reviewer cache, to make sure we're not stuck with an old cached version
     Cache.del session[:user_uri], :reviewers
 
-    return [nil, true]
+    return nil, true
   end
 
   def self.log_out(session)
@@ -85,32 +60,18 @@ class User
     # Update user settings
     # Returns nil if success, error response if not
 
-    body = {:api_key => session[:api_key],
+    params = {:api_key => session[:api_key],
             :uri => session[:user_uri],
             :accountName => email.downcase}
-    body[:name] = name unless name.empty?
-    body[:password] = password.downcase unless password.empty?
+    params[:name] = name unless name.empty?
+    params[:password] = password.downcase unless password.empty?
 
-    begin
-      resp = @@conn.put do |req|
-        req.url '/api/users'
-        req.body = body.to_json
-        puts "API REQUEST to #{req.path}:\n#{req.body}\n\n" if ENV['RACK_ENV'] == 'development'
-      end
-    rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed
-      return "Forespørsel til eksternt API(#{Settings::API}) brukte for lang tid å svare"
-    end
+    res = API.put(:users, params) { |err| return err.message }
 
-    res = JSON.parse(resp.body)
-    puts "API RESPONSE:\n#{res}\n\n" if ENV['RACK_ENV'] == 'development'
-
-    if resp.status == 200
-      session[:name] = res["reviewer"]["name"]
-      session[:user] = res["reviewer"]["userAccount"]["accountName"]
-      return nil
-    else
-      return res
-    end
+    # update user session variables
+    session[:name] = res["reviewer"]["name"]
+    session[:user] = res["reviewer"]["userAccount"]["accountName"]
+    return nil
   end
 
 end
