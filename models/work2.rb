@@ -15,7 +15,7 @@ class Work2
     if param.instance_of?(String)
       if param.match(/http/)  # Create a review from URI
         params = {:uri => param, :reviews => true}
-        raw = Cache.get(uri, :works) {
+        @raw = Cache.get(uri, :works) {
           res = API.get(:works, params) { |error| yield(error); return }
           Cache.set(uri, res, :works)
           res
