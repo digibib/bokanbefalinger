@@ -2,7 +2,7 @@ require "rake/testtask"
 require "pry"
 require "faraday"
 
-require_relative "app"
+require_relative "lib/cache"
 require_relative "config/settings"
 
 Rake::TestTask.new do |t|
