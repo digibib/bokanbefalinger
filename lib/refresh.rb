@@ -69,10 +69,6 @@ module Refresh
     unless e
       cache = JSON.parse(resp.body)
       Cache.set(uri, cache, :works)
-      # also cache by editions (review manifestastion)
-      cache["works"].first["reviews"].each do |r|
-        Cache.set(r["edition"], cache, :editions)
-      end
       puts "Refreshed works cache for #{uri}"
     end
   end
