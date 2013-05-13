@@ -55,6 +55,7 @@ class BokanbefalingerApp < Sinatra::Application
   end
 
   post '/review' do
+    # Create a new review
     audiences = [params["a1"], params["a2"], params["a3"]].compact.join("|")
     rparams = {:audience => audiences, :teaser => params["teaser"],
                :text => text2markup(params["text"]), :reviewer => session[:user],
@@ -80,18 +81,24 @@ class BokanbefalingerApp < Sinatra::Application
   end
 
   post '/update' do
+    # Update existing review
     if params[:delete] == "delete"
       # DELETE review
-      @error_message, @review = Review.delete params["uri"], session[:api_key]
+      prms = {"uri" => params["uri"], "api_key" => session[:api_key] }
+      Review2.delete(prms) { |err|
+        @error_message = err.message
+      }
 
       session[:flash_info].push "Anbefaling slettet." unless @error_message
     else
       # PUT review
-      audiences = [params["a1"], params["a2"], params["a3"]].compact.join("|")
-      @error_message, @review = Review.update(params["title"], params["teaser"],
-                                               text2markup(params["text"]), audiences,
-                                               session[:user], params["uri"],
-                                               session[:api_key], params["published"])
+      p = params
+      p["audience"] = [params["a1"], params["a2"], params["a3"]].compact.join("|")
+      p["text"] = text2markup(p["text"])
+      p["user"] = session[:user]
+      p["api_key"] = session[:api_key]
+
+      @review = Review2.update(p) { |err| @error_message = err.message }
       session[:flash_info].push "Anbefaling lagret." unless @error_message
     end
 
@@ -102,7 +109,7 @@ class BokanbefalingerApp < Sinatra::Application
     session[:flash_error].push @error_message if @error_message
 
     if params["published"] == "false" and params[:delete] != "delete"
-      redirect "/anbefaling" + @review["works"].first["reviews"].first["uri"][23..-1]+"/rediger"
+      redirect "/rediger?uri=" + @review.uri
     else
       redirect '/minside'
     end
