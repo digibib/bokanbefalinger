@@ -5,9 +5,7 @@
 # -----------------------------------------------------------------------------
 
 # TODO:
-# * there is significant code duplication of models. Find out how to use one
-#   single method, without blocking any usage browsing the webapp. DRY.
-# * remove debugging puts
+# * remove debugging puts => use JBoss logger
 
 require "faraday"
 require "torquebox-messaging"
