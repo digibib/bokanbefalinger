@@ -92,4 +92,27 @@ module API
       end
   end
 
+  def self.delete(endpoint, params, headers={})
+    # Perform a DELETE request with parmas as JSON-encoded body.
+    # It returns the parsed JSON result, or yields to a block with an error
+    # if the request failed.
+    resp = ENDPOINTS[endpoint].delete do |req|
+        req.headers = headers
+        req.body = params.to_json
+        log "API REQUEST to #{ENDPOINTS[endpoint].url_prefix.path}: #{req.body}"
+      end
+    rescue Faraday::Error, Errno::ETIMEDOUT => err
+       log "API request to #{ENDPOINTS[endpoint].url_prefix.path} with params" +
+           " #{params} failed because: #{err.message}"
+       yield StandardError.new("Forespørsel til eksternt API(#{Settings::API})" +
+                               " brukte for lang tid på å svare.")
+    else
+      log "API RESPONSE [#{resp.status}]: #{JSON.parse(resp.body)}"
+      unless resp.status == 200
+        yield StandardError.new("Forespørsel feilet")
+      else
+        JSON.parse(resp.body)
+      end
+  end
+
 end
