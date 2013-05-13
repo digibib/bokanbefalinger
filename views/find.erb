@@ -2,8 +2,8 @@
 	<h2>Søk opp boka du vil anmelde</h2>
 	<div class="isbn-form">
 		<label>ISBN
-		<% if request.params["isbn"] %>
-			<input type="text" name="isbn" id="isbn" disabled="disabled" value="<%= request.params['isbn'] %>">
+		<% if @isbn %>
+			<input type="text" name="isbn" id="isbn" value="<%= @isbn %>">
 		<% else %>
 			<input type="text" name="isbn" id="isbn">
 		<% end %>
@@ -34,19 +34,8 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-	if ( $("#isbn").val() != "" ) {
-		$("#isbn-button").trigger('click');
-	}
-
-	// Enter = søk
-	$('#isbn').on('keypress', function(evt) {
-		if (evt.which == 13) {
-			$("#isbn-button").trigger('click');
-		}
-	});
-
 	// Søk etter bok via ISBN
-	$("#isbn-button").on('click', function() {
+	$("#isbn-button").on('click', function(event) {
 		var isbn_input = $('#isbn').val();
 
 		if (! /^[0-9-xX\s]*$/.test(isbn_input)) {
@@ -66,7 +55,7 @@ $(document).ready(function() {
 		$('#isbn-results').hide()
 
 		request.done(function(data) {
-			$('#isbn').val('');
+			//$('#isbn').val('');
 			$('#isbn').prop("disabled", false);
 			$('.loading-message').hide();
 			$('#isbn-notfound').hide();
@@ -83,12 +72,12 @@ $(document).ready(function() {
 				$('.book-cover').addClass("light-gray");
 				$('#isbn-cover').html("");
 			}
-			$('#anmeld').attr('href', '/manifestasjon'+data.editions[0].uri.substr(23)+'/ny');
+			$('#anmeld').attr('href', '/ny?isbn=' +isbn_input);
 			$('#isbn-results').show()
 		});
 
 		request.fail(function(jqXHR, textStatus, errorThrown) {
-			$('#isbn').val('');
+			//$('#isbn').val('');
 			$('#isbn-error').html(isbn_input);
 			$('#isbn').prop("disabled", false);
 			$('.loading-message').hide();
@@ -96,5 +85,18 @@ $(document).ready(function() {
 		});
 
 	});
+
+	if ( $('#isbn').val() !== "" ) {
+		console.log("triggering");
+		$("#isbn-button").click();
+	}
+
+	// Enter = søk
+	$('#isbn').on('keypress', function(evt) {
+		if (evt.which == 13) {
+			$("#isbn-button").trigger('click');
+		}
+	});
+
 });
 </script>
