@@ -60,7 +60,7 @@ class BokanbefalingerApp < Sinatra::Application
     rparams = {:audience => audiences, :teaser => params["teaser"],
                :text => text2markup(params["text"]), :reviewer => session[:user],
                :isbn => params["isbn"], :published => params["published"],
-               :api_key => session[:api_key]}
+               :title => params["title"], :api_key => session[:api_key]}
     @review = Review2.create(rparams) { |err| @error_message = err.message }
 
     if @error_message
