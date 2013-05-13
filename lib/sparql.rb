@@ -57,7 +57,7 @@ module SPARQL
       query.limit(100)
 
       res = REPO.select(query)
-      latest = res.bindings[:review]
+      latest = res.bindings[:review].map { |b| b.to_s }
       latest[offset..(offset+(limit-1))]
     end
   end
