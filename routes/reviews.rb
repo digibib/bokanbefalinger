@@ -236,10 +236,18 @@ class BokanbefalingerApp < Sinatra::Application
   end
 
   get "/finn" do
-    #redirect "/" unless session[:user]
+    @isbn = params["isbn"]
+    if @isbn and not @isbn.empty?
+      @work = Work2.new(@isbn) { |err| @error_message = err.message }
+    end
 
-    @title = "Søk opp et verk"
-    erb :find
+    if @error_message
+      @title = feil
+      erb :error
+    else
+      @title = "Søk opp et verk"
+      erb :find
+    end
   end
 
 end
