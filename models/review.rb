@@ -25,87 +25,19 @@ class Review
     end
 
     authors = Cache.get("dropdown:authors", :dropdowns) {
-      q = QUERY.select(:author, :author_name)
-      q.distinct
-      q.from(BOOKGRAPH)
-      q.where([:work, RDF::FABIO.hasManifestation, :book],
-              [:work, RDF::DC.creator, :author],
-              [:author, RDF::FOAF.name, :author_name],
-              [:book, RDF::REV.hasReview, :review])
-      res = REPO.select(q)
-      authors = {}
-
-      res.each do |s|
-        authors[s[:author].to_s] = s[:author_name].to_s
-      end
-
-      Cache.set("dropdown:authors", authors, :dropdowns)
-      authors
+      SPARQL::Dropdown.authors
     }
 
     titles = Cache.get("dropdown:titles", :dropdowns) {
-      q = QUERY.select(:work, :title)
-      q.sample(:original_title)
-      q.distinct
-      q.from(BOOKGRAPH)
-      q.where([:work, RDF::FABIO.hasManifestation, :book],
-              [:work, RDF::DC.title, :original_title],
-              [:book, RDF::REV.hasReview, :review],
-              [:book, RDF::DC.title, :title])
-      res = REPO.select(q)
-      titles = {}
-
-      res.each do |s|
-        original_title = ""
-        original_title += " (#{s[:original_title]})" unless s[:title] == s[:original_title]
-        titles[s[:work].to_s] = s[:title].to_s + original_title
-      end
-
-      Cache.set("dropdown:titles", titles, :dropdowns)
-      titles
+      SPARQL::Dropdown.titles
     }
 
     reviewers = Cache.get("dropdown:reviewers", :dropdowns) {
-      q = QUERY.select(:reviewer, :reviewer_name)
-      q.distinct
-      q.from(BOOKGRAPH)
-      q.from_named(REVIEWGRAPH)
-      q.from_named(APIGRAPH)
-      q.where([:work, RDF::FABIO.hasManifestation, :book],
-              [:book, RDF::REV.hasReview, :review])
-      q.where([:review, RDF::REV.reviewer, :reviewer, :context => REVIEWGRAPH])
-      q.where([:reviewer, RDF::FOAF.name, :reviewer_name, :context => APIGRAPH])
-      res = REPO.select(q)
-      reviewers = {}
-
-      res.each do |s|
-        reviewers[s[:reviewer].to_s] = s[:reviewer_name].to_s
-      end
-
-      Cache.set("dropdown:reviewers", reviewers, :dropdowns)
-      reviewers
+      SPARQL::Dropdown.reviewers
     }
 
     sources = Cache.get("dropdown:sources") {
-      q = QUERY.select(:source, :source_name, :dropdowns)
-      q.distinct
-      q.from(BOOKGRAPH)
-      q.from_named(REVIEWGRAPH)
-      q.from_named(APIGRAPH)
-      q.where([:work, RDF::FABIO.hasManifestation, :book],
-              [:book, RDF::REV.hasReview, :review])
-      q.where([:review, RDF::DC.source, :source, :context => REVIEWGRAPH])
-      q.where([:source, RDF::FOAF.name, :source_name, :context => APIGRAPH])
-
-      res = REPO.select(q)
-      sources = {}
-
-      res.each do |s|
-        sources[s[:source].to_s] = s[:source_name].to_s
-      end
-
-      Cache.set("dropdown:sources", sources, :dropdowns)
-      sources
+      SPARQL::Dropdown.sources
     }
 
     d = SearchDropdown.new
@@ -123,22 +55,9 @@ class Review
     end
 
     latest = Cache.get("reviews:latest", :various) {
-      query = QUERY.select(:review)
-      query.distinct
-      query.from(BOOKGRAPH)
-      query.from_named(REVIEWGRAPH)
-      query.where([:work, RDF::FABIO.hasManifestation, :book],
-                  [:book, RDF::REV.hasReview, :review])
-      query.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
-      query.order_by("DESC(?issued)")
-      query.limit(100)
-
-      res = REPO.select(query)
-      cache = res.bindings[:review]
-      Cache.set("reviews:latest", cache, :various)
-      cache
+      SPARQL::Reviews.latest(0,100)
     }
-    return nil, latest[offset..(offset+limit)]
+    return nil, latest
   end
 
   def self.by_reviewer(reviewer, clear_cache=false)
