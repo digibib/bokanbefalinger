@@ -1,10 +1,11 @@
 # encoding: UTF-8
 
 # -----------------------------------------------------------------------------
-# list.rb - list class
+# models/list.rb - list class
 # -----------------------------------------------------------------------------
-# List class is used everyhwere a list of reviews is needed; ex a list of
-# reviews belonging to a certain reviewer, author.
+# List class is used everyhwere a list of reviews is needed; f. ex a list of
+# reviews belonging to a certain reviewer, author, or a list to generate a
+# certain rss feed.
 #
 # List always returns an array of Review instances (or an empty array)
 
@@ -38,6 +39,14 @@ class List2
   end
 
   def self.from_author(author_uri)
+    # Returns an array of all (or up to max 100) reviews of books by an author.
+    # Returns an empty array if no reviews found, or something went wrong.
+  end
+
+  def self.from_criteria(criteria)
+  end
+
+  def self.from_feed_url(feed_url)
   end
 
   private

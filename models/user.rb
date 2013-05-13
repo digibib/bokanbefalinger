@@ -12,7 +12,7 @@ class User
 
   def self.log_in(username, password, session)
     # Logs in usersand sets user session variables.
-    # Returns two values: error|nil + authorized true or false
+    # Returns two values: error/nil + authorized true/false
 
     # 1. Check username+password: api/users/authenticate
     params = {:username => username.downcase, :password => password.downcase}
