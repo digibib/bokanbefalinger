@@ -66,22 +66,17 @@ class Review2
     Review2.new(res) { |error| yield(error); return }
   end
 
-  def save
-    # delegate to update or publish
+  def self.update(params)
+    res = API.put(:reviews, params) { |error| yield(error); return }
+
+    # Return new Review instance
+    Review2.new(res)
   end
 
-  def delete
-    # todo
-  end
-
-  private
-
-  def publish
-    # todo
-  end
-
-  def update
-    # todo
+  def self.delete(params)
+    # Delete a review, expects the following params:
+    # {:uri, :api_key}
+    API.delete(:reviews, params) { |error| yield(error); return }
   end
 
 end
