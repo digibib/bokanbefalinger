@@ -40,6 +40,13 @@ class BokanbefalingerApp < Sinatra::Application
     end
   end
 
+  get "/work_by_isbn/" do
+    # Route to return work info when searching (by ISBN) for a book to review
+    work = Work2.new(params[:isbn].gsub(/[^0-9xX]/, "")) { |err| @error_message = err.message }
+    halt 404 if @error_message
+
+    work.to_json
+  end
 
   post '/review' do
     audiences = [params["a1"], params["a2"], params["a3"]].compact.join("|")

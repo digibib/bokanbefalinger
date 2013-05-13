@@ -2,5 +2,4 @@
 require_relative 'main'
 require_relative 'reviews'
 require_relative 'user'
-require_relative 'works'
 require_relative 'feed'
