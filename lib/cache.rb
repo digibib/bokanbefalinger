@@ -20,6 +20,7 @@ class Cache
   # Redis allows us to organize the keys in numbered databases.
   # We use a different Redis database for each URI-type, default 0 (various).
 
+  # TODO face out :editions
   @@db = {:various => 0, :reviews => 1, :works => 2, :editions => 3,
           :authors => 4, :reviewers => 5, :sources => 6, :feeds => 7,
           :dropdowns => 8}

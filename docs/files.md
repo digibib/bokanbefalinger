@@ -14,9 +14,11 @@
 │   ├── files.md                 <em>this file</em>
 │   └── install.md               <em>installation instructions</em>
 ├── <b>lib</b>                        <b>various application logic</b>
+│   ├── api.rb                   <em>abstraction over the API</em>
 │   ├── cache.rb                 <em>abstraction over cache layer</em>
 │   ├── formatting.rb            <em>various string formatting helpers</em>
 │   ├── refresh.rb               <em>cache reloading methods</em>
+│   ├── sparql.rb                <em>all SPARQL-queries</em>
 │   └── vocabularies.rb          <em>RDF prefixes</em>
 ├── <b>models</b>                     <b>main application logic</b>
 │   ├── init.rb                  <em>application globals, load all models</em>
@@ -30,12 +32,12 @@
 │   └── js                       <em>javascript</em>
 ├── <b>routes</b>                     <b>application routing</b>
 │   ├── init.rb                  <em>load all routes</em>
+│   ├── info.rb                  <em>front page and info pages</em>
 │   ├── feed.rb                  <em>feed routes (RSS)</em>
 │   ├── main.rb
 │   ├── manifestation.rb
 │   ├── reviews.rb               <em>main review routes</em>
-│   ├── user.rb                  <em>user interaction routes</em>
-│   └── works.rb
+│   └── user.rb                  <em>user interaction routes</em>
 ├── <b>views</b>                      <b>template views</b>
 ├── <b>test</b>                       <b>tests</b>
 ├── app.rb                     <em>application entry point</em>
