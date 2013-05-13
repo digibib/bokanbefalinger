@@ -13,17 +13,17 @@
 	<p>Noen eksempler:</p>
 
 	<p>hent anbefalinger:<br/>
-	<pre>GET marc2rdf.deichman.no/api/reviews limit=10 order_by=issued</pre>
+	<pre>GET anbefalinger.deichman.no/api/reviews limit=10 order_by=issued</pre>
 	</p>
 	<p>slå opp en bok på isbn og finn anbefalinger:<br>
-	<pre>GET marc2rdf.deichman.no/api/works isbn=9789512075997 reviews=true</pre></p>
+	<pre>GET anbefalinger.deichman.no/api/works isbn=9789512075997 reviews=true</pre></p>
 	<p>legg til en ny anbefaling:<br>
-	<pre>POST marc2rdf.deichman.no/api/reviews isbn=9789512075997 api_key=(din apinøkkel her) title="Vent ikke, les boka" teaser="Denne boka gir deg sjøbein!" text="Her er den fulle og hele omtalen av favorittboka di!" reviewer=(din brukerid)</pre></p>
+	<pre>POST anbefalinger.deichman.no/api/reviews isbn=9789512075997 api_key=(din apinøkkel her) title="Vent ikke, les boka" teaser="Denne boka gir deg sjøbein!" text="Her er den fulle og hele omtalen av favorittboka di!" reviewer=(din brukerid)</pre></p>
 	<p>(i responsen er det generert en unik id (URI) til anbefalingen som må brukes til å oppdatere eller slette)</p>
 	<p>oppdater en anbefaling:<br>
-	<pre>PUT marc2rdf.deichman.no/api/reviews uri=(den unike id-en som kom når den ble opprettet) api_key=(din apinøkkel her) title="Vent ikke, les boka" teaser="Denne boka gir deg sjøbein!" text="Her er den fulle og hele omtalen av favorittboka di!"</pre></p>
+	<pre>PUT anbefalinger.deichman.no/api/reviews uri=(den unike id-en som kom når den ble opprettet) api_key=(din apinøkkel her) title="Vent ikke, les boka" teaser="Denne boka gir deg sjøbein!" text="Her er den fulle og hele omtalen av favorittboka di!"</pre></p>
 	<p>slett en anbefaling:<br>
-	<pre>DELETE marc2rdf.deichman.no/api/reviews uri=(den unike id-en som kom når den ble opprettet) api_key=(din apinøkkel her)</pre></p>
+	<pre>DELETE anbefalinger.deichman.no/api/reviews uri=(den unike id-en som kom når den ble opprettet) api_key=(din apinøkkel her)</pre></p>
 	<h3>API-dokumetasjon</h3>
 	<p>Se <a href="https://github.com/digibib/data.deichman.api">github</a> for utfyllende dokumentasjon.</p>
 
