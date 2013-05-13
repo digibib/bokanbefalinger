@@ -29,7 +29,7 @@
 		<p><em>Målgruppe for denne anbefalingen er <%= @review.audiences.map { |a| a.downcase } .join("/") %></em></p>
 	</div>
 	<% if session[:user] and session[:user_uri] == @review.reviewer["uri"] %>
-		<a href="<%= request.path+'/rediger' %>"><button class="medium green">Rediger</button></a>
+		<a href="<%= '/rediger?uri=' + @review.uri %>"><button class="medium green">Rediger</button></a>
 	<% end %>
 	<div class="clearfix" style="margin-top:50px"></div>
 	<% if @other_reviews.size > 0 %>
