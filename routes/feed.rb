@@ -8,19 +8,19 @@ class BokanbefalingerApp < Sinatra::Application
     list_params = params_from_feed_url(request.query_string)
 
     if list_params.empty?
-      @result = List2.latest(0,9)
+      @result = List.latest(0,9)
     else
       if list_params["work"]
-        @result = List2.from_work(list_params["work"].first, false)
+        @result = List.from_work(list_params["work"].first, false)
       elsif list_params["reviewer"]
-        @result = List2.from_reviewer(list_params["reviewer"].first, false)
+        @result = List.from_reviewer(list_params["reviewer"].first, false)
       elsif list_params["isbn"]
-        work = Work2.new(list_params["isbn"].first)
+        work = Work.new(list_params["isbn"].first)
         @result = work.reviews.reject { |r| r.published == false }
       elsif list_params["source"]
-        @result = List2.from_source(list_params["source"].first)
+        @result = List.from_source(list_params["source"].first)
       else # assume feed is from the list-generator
-        @result = List2.from_feed_url(request.url)
+        @result = List.from_feed_url(request.url)
       end
     end
 

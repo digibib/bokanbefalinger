@@ -10,7 +10,7 @@ class BokanbefalingerApp < Sinatra::Application
     redirect "/" unless session[:user]
 
     @isbn = params["isbn"]
-    @work = Work2.new(@isbn) { |err| @error_message = err.message }
+    @work = Work.new(@isbn) { |err| @error_message = err.message }
 
     if params["edition"]
       @cover = @work.editions.select { |e| e["uri"] == params["edition"] }.first["cover_url"] || @work.cover
@@ -32,8 +32,8 @@ class BokanbefalingerApp < Sinatra::Application
     # Edit review, excepcts the review uri as query param
     redirect "/" unless session[:user]
 
-    @review = Review2.new(params["uri"]) { |err| @error_message = err.message }
-    @other_reviews = List2.from_work(@review.book_work, false)
+    @review = Review.new(params["uri"]) { |err| @error_message = err.message }
+    @other_reviews = List.from_work(@review.book_work, false)
       .reject { |r| r.uri == @review.uri }  # reject current review
 
     if @error_message
@@ -48,7 +48,7 @@ class BokanbefalingerApp < Sinatra::Application
 
   get "/work_by_isbn/" do
     # Route to return work info when searching (by ISBN) for a book to review
-    work = Work2.new(params[:isbn].gsub(/[^0-9xX]/, "")) { |err| @error_message = err.message }
+    work = Work.new(params[:isbn].gsub(/[^0-9xX]/, "")) { |err| @error_message = err.message }
     halt 404 if @error_message
 
     work.to_json
@@ -61,7 +61,7 @@ class BokanbefalingerApp < Sinatra::Application
                :text => text2markup(params["text"]), :reviewer => session[:user],
                :isbn => params["isbn"], :published => params["published"],
                :title => params["title"], :api_key => session[:api_key]}
-    @review = Review2.create(rparams) { |err| @error_message = err.message }
+    @review = Review.create(rparams) { |err| @error_message = err.message }
 
     if @error_message
       session[:flash_error].push @error_message
@@ -85,7 +85,7 @@ class BokanbefalingerApp < Sinatra::Application
     if params[:delete] == "delete"
       # DELETE review
       prms = {"uri" => params["uri"], "api_key" => session[:api_key] }
-      Review2.delete(prms) { |err|
+      Review.delete(prms) { |err|
         @error_message = err.message
       }
 
@@ -98,7 +98,7 @@ class BokanbefalingerApp < Sinatra::Application
       p["user"] = session[:user]
       p["api_key"] = session[:api_key]
 
-      @review = Review2.update(p) { |err| @error_message = err.message }
+      @review = Review.update(p) { |err| @error_message = err.message }
       session[:flash_info].push "Anbefaling lagret." unless @error_message
     end
 
@@ -120,8 +120,8 @@ class BokanbefalingerApp < Sinatra::Application
     redirect request.path.chop if request.path =~ /\/$/
 
     uri = "http://data.deichman.no/" + path
-    @review = Review2.new(uri) { |err| @error_message = err.message }
-    @other_reviews = List2.from_work(@review.book_work, false)
+    @review = Review.new(uri) { |err| @error_message = err.message }
+    @other_reviews = List.from_work(@review.book_work, false)
       .reject { |r| r.uri == @review.uri }  # reject current review
 
     # Don't give access to other drafts
@@ -146,7 +146,7 @@ class BokanbefalingerApp < Sinatra::Application
       @page = 1
     end
 
-    @reviews = List2.latest((@page*25)-25, 24)
+    @reviews = List.latest((@page*25)-25, 24)
     @title  = "Siste anbefalinger"
 
     erb :reviews
@@ -154,7 +154,7 @@ class BokanbefalingerApp < Sinatra::Application
 
   get "/minside" do
     redirect "/" unless session[:user]
-    reviews = List2.from_reviewer(session[:user_uri])
+    reviews = List.from_reviewer(session[:user_uri])
 
     @published = reviews.select { |r| r.published == true }
     @draft = reviews.select { |r| r.published == false }
@@ -167,7 +167,7 @@ class BokanbefalingerApp < Sinatra::Application
     @lists = Settings::EXAMPLEFEEDS
 
     @lists.map do |list|
-      list[:reviews] = List2.from_feed_url(list[:feed])
+      list[:reviews] = List.from_feed_url(list[:feed])
     end
 
     erb :see_lists
@@ -214,7 +214,7 @@ class BokanbefalingerApp < Sinatra::Application
     end
     reviews = SPARQL::List.generate(list_params)
     @count = reviews.count
-    @reviews = List2.from_uris reviews
+    @reviews = List.from_uris reviews
 
     @feed_url = create_feed_url(params.each { |k,v| params[k] = JSON.parse(v) if v.class == String })
 
@@ -237,7 +237,7 @@ class BokanbefalingerApp < Sinatra::Application
   get "/finn" do
     @isbn = params["isbn"]
     if @isbn and not @isbn.empty?
-      @work = Work2.new(@isbn) { |err| @error_message = err.message }
+      @work = Work.new(@isbn) { |err| @error_message = err.message }
     end
 
     if @error_message

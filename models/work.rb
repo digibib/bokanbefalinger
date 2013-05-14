@@ -4,7 +4,7 @@
 # work.rb - work class
 # -----------------------------------------------------------------------------
 
-class Work2
+class Work
 
   attr_reader :uri, :title, :authors, :cover, :reviews, :editions
 
@@ -45,7 +45,7 @@ class Work2
     @reviews   = Array(reviews).map do |r|
       copy = @raw
       copy["works"].first["reviews"]=[r]
-      Review2.new(copy)
+      Review.new(copy)
     end
   end
 

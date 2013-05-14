@@ -14,7 +14,7 @@ Dropdown = Struct.new(:subjects, :persons, :genres, :languages, :authors,
 require_relative "../lib/sparql"
 
 # load all models
-require_relative "review2"
-require_relative "list2"
-require_relative "work2"
+require_relative "review"
+require_relative "list"
+require_relative "work"
 require_relative "user"

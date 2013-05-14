@@ -12,7 +12,7 @@
 
 require "cgi"
 
-class List2
+class List
 
   def self.latest(offset, limit)
     # Returns an array of the latest (max 100) published reviews
@@ -23,7 +23,7 @@ class List2
     lista = []
     latest[offset..(offset+limit)].each do |uri|
       error = nil
-      r = Review2.new(uri) { |err| puts "#{err.message}: #{uri}"; error = err }
+      r = Review.new(uri) { |err| puts "#{err.message}: #{uri}"; error = err }
       next if error
       lista << r
     end
@@ -47,7 +47,7 @@ class List2
     Array(raw["works"].first["reviews"]).each do |r|
       copy = raw
       copy["works"].first["reviews"]=[r]
-      reviews << Review2.new(copy)
+      reviews << Review.new(copy)
     end
 
     if include_unpublished
@@ -73,7 +73,7 @@ class List2
       w["reviews"].each do |r|
         copy = {"works" => [w]}
         copy["works"].first["reviews"]=[r]
-        reviews << Review2.new(copy)
+        reviews << Review.new(copy)
       end
     end
 
@@ -102,7 +102,7 @@ class List2
       w["reviews"].each do |r|
         copy = {"works" => [w]}
         copy["works"].first["reviews"]=[r]
-        reviews << Review2.new(copy)
+        reviews << Review.new(copy)
       end
     end
 
@@ -123,7 +123,7 @@ class List2
     works = []
     Array(raw["works"]).each do |w|
       copy = {"works" => [w]}
-      works << Work2.new(copy) if w["reviews"] and w["reviews"].size > 0
+      works << Work.new(copy) if w["reviews"] and w["reviews"].size > 0
     end
     works
   end
@@ -134,7 +134,7 @@ class List2
     lista = []
     uris[0..9].each do |uri|
       error = nil
-      r = Review2.new(uri) { |err| error = err }
+      r = Review.new(uri) { |err| error = err }
       next if error
       lista << r
     end
@@ -153,7 +153,7 @@ class List2
     lista = []
     reviews[0..9].each do |uri|
       error = nil
-      r = Review2.new(uri) { |err| error = err }
+      r = Review.new(uri) { |err| error = err }
       next if error
       lista << r
     end

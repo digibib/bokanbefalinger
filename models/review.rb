@@ -4,7 +4,7 @@
 # review.rb - main review class
 # -----------------------------------------------------------------------------
 
-class Review2
+class Review
 
   attr_accessor :title, :teaser, :text, :audiences, :published
   attr_reader :uri, :source, :reviewer, :modified, :issued
@@ -73,14 +73,14 @@ class Review2
     # {:isbn, :title, :teaser, :text, :published, :audiences, :reviewer, :api_key}
     # Returns a Review instance if successfull, otherwise yield with an error.
     res = API.post(:reviews, params) { |error| yield(error); return }
-    Review2.new(res) { |error| yield(error); return }
+    Review.new(res) { |error| yield(error); return }
   end
 
   def self.update(params)
     res = API.put(:reviews, params) { |error| yield(error); return }
 
     # Return new Review instance
-    Review2.new(res)
+    Review.new(res)
   end
 
   def self.delete(params)
