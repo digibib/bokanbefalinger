@@ -24,7 +24,7 @@
 │   ├── init.rb                  <em>application globals, load all models</em>
 │   ├── list.rb                  <em>list class</em>
 │   ├── review.rb                <em>review class</em>
-│   ├── user.rb                  <em>reviewer (user) class</em>
+│   ├── user.rb                  <em>reviewer/user class</em>
 │   └── work.rb                  <em>work class</em>
 ├── <b>public</b>                     <b>static content</b>
 │   ├── css                      <em>styling</em>
@@ -34,8 +34,6 @@
 │   ├── init.rb                  <em>load all routes</em>
 │   ├── info.rb                  <em>front page and info pages</em>
 │   ├── feed.rb                  <em>feed routes (RSS)</em>
-│   ├── main.rb
-│   ├── manifestation.rb
 │   ├── reviews.rb               <em>main review routes</em>
 │   └── user.rb                  <em>user interaction routes</em>
 ├── <b>views</b>                      <b>template views</b>
