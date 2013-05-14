@@ -3,28 +3,24 @@
 	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Du kan legge inn lenken på din blogg eller abonnere på i din RSS-leser"><img class="rss" src="img/feed-icon-28x28.png"></span><input id="rss-link" class="text" disabled="disabled" value="<%= @feed_url %>"></input>
 	<button class="long green" id="rss-copy">Kopier RSS-lenken</button>
 </div>
-<% if @uris.count > 10 %>
-	<h3><%= @uris.count %> treff, viser de siste 10</h3>
-<% else %>
-	<h3><%= @uris.count %> treff</h3>
-<% end %>
-<% @reviews.each do |work| %>
-	<% r = work["reviews"].first %>
+
+<h3><%= @count %> treff<%= ', viser de siste 10' if @count > 10 %></h3>
+<% @reviews.each do |review| %>
 	<div class="clearfix"></div>
 	<div class="listevisning">
-		<div class="liste-img <%= "light-gray" unless work['cover_url'] %>">
-			<% if work['cover_url'] %>
-				<img src="<%= select_cover(work) %>">
+		<div class="liste-img <%= "light-gray" unless review.book_cover %>">
+			<% if review.book_cover %>
+				<img src="<%= review.book_cover %>">
 			<% else %>
-				<p class="cover-author"><%= work["authors"].map { |a| a["name"] }.join(", ")%></p>
-				<p class="cover-title"><%= r["title"] %></p>
+				<p class="cover-author"><%= review.book_authors.map { |a| a["name"] }.join(", ")%></p>
+				<p class="cover-title"><%= review.book_title %></p>
 			<% end %>
 		</div>
 		<div class="liste-info">
-			<p class="liste-title"><a href="/anbefaling/<%= r["uri"][24,200] %>"><%= work["prefTitle"] || work["originalTitle"] %></a></p>
-			<p class="liste-author">av <%= authors_links(work["authors"]) %></p>
-			<p class="liste-under">anbefalt av <%= reviewerformatted(r) %> <span class="liste-date"><%= dateformat(r["issued"]) %></span> </p>
-				<p class="liste-teaser"><%= r["teaser"] %></p>
+			<p class="liste-title"><a href="/anbefaling/<%= review.uri[24,200] %>"><%= review.book_title %></a></p>
+			<p class="liste-author">av <%= authors_links(review.book_authors) %></p>
+			<p class="liste-under">anbefalt av <%= reviewer_link(review) %> <span class="liste-date"><%= dateformat(review.issued) %></span> </p>
+				<p class="liste-teaser"><%= review.teaser %></p>
 		</div>
 	</div>
 <% end %>

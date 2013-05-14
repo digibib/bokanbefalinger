@@ -146,56 +146,35 @@ class BokanbefalingerApp < Sinatra::Application
       @page = 1
     end
 
-    @error_message, rev = Review.get_latest(24, (@page*25)-25, 'issued', 'desc')
+    rev = List2.latest((@page*25)-25, 24)
     @reviews = []
+    error = nil
     rev.each do |uri|
-      _, r, _ = Review.get(uri)
-      @reviews << r if r
+      r = Review2.new(uri) { |err| puts "#{err.message}: #{uri}"; error = err }
+      next if error
+      @reviews << r
     end
-    @reviews.compact!
 
-    if @error_message
-      @title ="Feil"
-      erb :error
-    else
-      @title  = "Siste anbefalinger"
-      erb :reviews
-    end
+    @title  = "Siste anbefalinger"
+    erb :reviews
   end
 
   get "/minside" do
     redirect "/" unless session[:user]
-    @error_message, my_reviews = Review.by_reviewer(session[:user_uri])
+    reviews = List2.from_reviewer(session[:user_uri])
 
-    if @error_message
-      @title ="Feil"
-      erb :error
-    else
-      @published, @draft = {}, {}
-      Array(my_reviews).each do |w|
-        if w["reviews"].first["published"] == true
-          @published[w["reviews"].first["uri"]] = {"works" => w }
-        else
-          @draft[w["reviews"].first["uri"]] = {"works" => w }
-        end
-      end
+    @published = reviews.select { |r| r.published == true }
+    @draft = reviews.select { |r| r.published == false }
 
-      @title  = "Mine anbefalinger"
-      erb :my_reviews
-    end
+    @title  = "Mine anbefalinger"
+    erb :my_reviews
   end
 
   get "/se-lister" do
     @lists = Settings::EXAMPLEFEEDS
 
     @lists.map do |list|
-      list[:reviews] = []
-      reviews = List.get_feed(list[:feed])
-      reviews[0..9].each do |uri|
-        _, r, _ = Review.get(uri)
-        list[:reviews] << r if r
-      end
-      list[:reviews].compact!
+      list[:reviews] = List2.from_feed_url(list[:feed])
     end
 
     erb :see_lists
@@ -203,7 +182,31 @@ class BokanbefalingerApp < Sinatra::Application
 
   get "/lag-lister" do
     @title = "Lister"
-    @dropdown = List.populate_dropdowns
+
+    @dropdown = Dropdown.new
+
+    @dropdown.subjects = Cache.get("dropdown:subjects", :dropdowns) {
+      SPARQL::Dropdown.subjects
+    }
+    @dropdown.persons = Cache.get("dropdown:persons", :dropdowns) {
+      SPARQL::Dropdown.persons
+    }
+    @dropdown.genres = Cache.get("dropdown:genres", :dropdowns) {
+      SPARQL::Dropdown.genres
+    }
+    @dropdown.languages = Cache.get("dropdown:languages", :dropdowns) {
+      SPARQL::Dropdown.languages
+    }
+    @dropdown.authors = Cache.get("dropdown:authors", :dropdowns) {
+      SPARQL::Dropdown.authors
+    }
+    @dropdown.formats = Cache.get("dropdown:formats", :dropdowns) {
+      SPARQL::Dropdown.formats
+    }
+    @dropdown.nationalities = Cache.get("dropdown:nationalities", :dropdowns) {
+      SPARQL::Dropdown.nationalities
+    }
+
     erb :make_lists
   end
 
@@ -216,15 +219,11 @@ class BokanbefalingerApp < Sinatra::Application
         list_params[k] = Array(v)
       end
     end
-    @uris = List.get(list_params)
-    @reviews = []
-    @uris[0..10].each do |uri|
-      _, r,_ = Review.get(uri)
-      @reviews << r
-    end
-    @reviews.compact!
+    reviews = SPARQL::List.generate(list_params)
+    @count = reviews.count
+    @reviews = List2.from_uris reviews
 
-    @feed_url = List.create_feed_url(params.each { |k,v| params[k] = JSON.parse(v) if v.class == String })
+    @feed_url = create_feed_url(params.each { |k,v| params[k] = JSON.parse(v) if v.class == String })
 
     erb :list, :layout => false
   end
@@ -232,7 +231,7 @@ class BokanbefalingerApp < Sinatra::Application
   post "/dropdown" do
     puts params
 
-    uris = List.repopulate_dropdown(params["dropdown"],
+    uris = SPARQL::Dropdown.repopulate(params["dropdown"],
                       Array(params["authors"]), Array(params["subjects"]),
                       Array(params["persons"]), JSON.parse(params["pages"]),
                       JSON.parse(params["years"]), Array(params["audience"]),
