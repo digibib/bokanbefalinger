@@ -12,6 +12,24 @@ module FormattingHelpers
     "http://data.deichman.no/"+path.join("")
   end
 
+  def create_feed_url(params)
+    params = params.reject { |k,v| v.empty? }
+
+    if params["pages"]
+      params["pages_from"] = params["pages"].map { |p| p.first }
+      params["pages_to"] = params["pages"].map { |p| p.last }
+      params.delete "pages"
+    end
+
+    if params["years"]
+      params["years_from"] = params["years"].map { |y| y.first }
+      params["years_to"] = params["years"].map { |y| y.last }
+      params.delete "years"
+    end
+
+    "http://anbefalinger.deichman.no/feed?" + params.map { |k,v| "#{k}=" + v.map { |e| CGI.escape(e)}.join("&#{k}=") }.join("&")
+  end
+
   def compare_clean(s)
     s ||= ""
     # Convert <br/> to space and remove all other html tags in order to
