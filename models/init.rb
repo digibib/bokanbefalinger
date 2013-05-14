@@ -7,6 +7,9 @@
 # Globals:
 QUEUE = TorqueBox::Messaging::Queue.new('/queues/cache')
 
+Dropdown = Struct.new(:subjects, :persons, :genres, :languages, :authors,
+                      :formats, :nationalities)
+
 require_relative "../lib/sparql"
 
 # load all models
@@ -15,5 +18,4 @@ require_relative "review2"
 require_relative "list2"
 require_relative "work2"
 require_relative "work"
-require_relative "list"
 require_relative "user"
