@@ -29,6 +29,16 @@ class Review2
       raw = param
     end
 
+    unless raw["works"].size > 0
+      # TEMP to handle responses like:
+      # http get marc2rdf.deichman.no/api/reviews uri=http://data.deichman.no/bookreviews/tfb/id_172
+      # {
+      #    "works": []
+      #  }
+      yield StandardError.new("malformed API response")
+      return
+    end
+
     review = raw["works"].first["reviews"].first
 
     # Review data (editable)
@@ -55,7 +65,6 @@ class Review2
     @book_authors = work["authors"]
     @book_title   = work["prefTitle"] || work["originalTitle"]
     @book_cover   = work["editions"].select { |e| e["uri"] == review["edition"] }.first["cover_url"] || work["cover_url"]
-
   end
 
   def self.create(params)
