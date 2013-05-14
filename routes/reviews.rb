@@ -6,18 +6,13 @@ require "cgi"
 class BokanbefalingerApp < Sinatra::Application
 
   get '/ny' do
-    # Create new review, expects query params "isbn" (TODO and "edition" atm)
+    # Create new review, expects query params "isbn"
     redirect "/" unless session[:user]
 
     @isbn = params["isbn"]
     @work = Work.new(@isbn) { |err| @error_message = err.message }
 
-    if params["edition"]
-      @cover = @work.editions.select { |e| e["uri"] == params["edition"] }.first["cover_url"] || @work.cover
-    else
-      # TODO remove this when ISBN is coupled with edition in API response
-      @cover = @work.cover
-    end
+    @cover = @work.editions.select { |e| e["isbn"] == params["isbn"] }.first["cover_url"] || @work.cover
 
     if @error_message
       @title = "Feil"

@@ -48,7 +48,7 @@
 	<% end %>
 	<% if session[:user] %>
 		<div class="clearfix"></div>
-		<p><a href="/ny?isbn=<%= @review.book_isbn %>&edition=<%= @review.book_edition %>"><button class="big green" style="margin-right:150px">Skriv en anbefaling av denne boka</button></a></p>
+		<p><a href="/ny?isbn=<%= @review.book_isbn %>"><button class="big green" style="margin-right:150px">Skriv en anbefaling av denne boka</button></a></p>
 	<% end %>
 </div>
 <div class="main-right">
