@@ -41,6 +41,8 @@ module FormattingHelpers
   end
 
   def compare_clean(s)
+    # TODO deprecate ?
+
     s ||= ""
     # Convert <br/> to space and remove all other html tags in order to
     # compare teaser and text, as in text.start_with?(teaser)
@@ -68,6 +70,8 @@ module FormattingHelpers
   end
 
   def reviewerformatted(r)
+    # TODO deprecate
+
     # Make reviewer and source clickable.
     # Only show source, if reviewer is anonymous.
     if r["reviewer"]["name"].downcase == "anonymous"
@@ -88,6 +92,8 @@ module FormattingHelpers
   end
 
   def select_cover(r)
+    # TODO deprecate
+
     # Prefer cover_url from the manifestation the review is based on,
     # or use the cover_url associated with work if the former is not present.
     return r["cover_url"] unless Array(r["reviews"]).size > 0

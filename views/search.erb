@@ -42,137 +42,65 @@
 		<% if @error_message %>
 			<p class="error"><strong><%= @error_message %></strong></p>
 		<% end %>
-		<% if @works %>
-			<h3>Anbefalinger av bøker av <%= @works.first["authors"].first["name"] %></h3>
-			<% countable = @works.reject { |w| w["reviews"].nil? || w["reviews"].empty? || w["reviews"].all? { |r| r["published"] == false } } %>
-			<p style="color: #aaa"><%= countable.map {|c| c["reviews"].reject { |r| r["published"] == false} .length } .inject(&:+) %> anbefalinger av <%= countable.count %> ulike bøker</p>
-			<% @works.each do |w| %>
-				<% if w["reviews"] && w["reviews"].length >= 1 %>
-					<div class="search-hit">
-						<span class="left">
-							<strong class="red-text"><%= w["prefTitle"] || w["originalTitle"] %></strong>
-						</span>
-						<span class="right num">
-							<%= w["reviews"].length %> anbefaling<%= 'er' if w["reviews"].length > 1 %>
-						</span><br/>
-					</div>
-					<% w["reviews"].each do |r| %>
-						<% unless r["published"] == false %>
-							<p class="search">
-								<a href="/anbefaling<%= r['uri'][23..-1] %>"><%= r["title"]%></a> anbefalt av <%= reviewerformatted(r) %> <span class="liste-date"><%= dateformat(r["issued"]) %></span>
-							</p>
+
+		<h3><%= @results_title %></h3>
+		<% if @type == "images" %>
+			<% @result.each do |review| %>
+				<div class="clearfix"></div>
+				<div class="listevisning">
+					<div class="liste-img <%= "light-gray" unless review.book_cover %>">
+						<% if review.book_cover %>
+							<img src="<%= review.book_cover %>">
+						<% else %>
+							<p class="cover-author"><%= review.book_authors.map { |a| a["name"] }.join(", ")%></p>
+							<p class="cover-title"><%= review.book_title %></p>
 						<% end %>
+					</div>
+					<div class="liste-info">
+						<p class="liste-title"><a href="/anbefaling/<%= review.uri[24,200] %>"><%= review.book_title %></a></p>
+						<p class="liste-author">av <%= authors_links(review.book_authors) %></p>
+						<p class="liste-under">anbefalt av <%= reviewer_link(review) %></a> <span class="liste-date"><%= dateformat(review.issued) %></span> </p>
+						<p class="liste-teaser"><%= review.teaser %></p>
+					</div>
+				</div>
+			<% end %>
+		<% elsif @type == "work-list" %>
+			<p style="color: #aaa"><%= @result.map {|w| w.reviews.reject { |r| r.published == false} .length } .inject(&:+) %> anbefalinger av <%= @result.count %> ulike bøker</p>
+			<% @result.each do |work| %>
+				<div class="search-hit">
+					<span class="left">
+						<strong class="red-text"><%= work.title %></strong>
+					</span>
+					<span class="right num">
+						<%= work.reviews.count %> anbefaling<%= 'er' if work.reviews.count > 1 %>
+					</span><br/>
+				</div>
+				<% work.reviews.each do |review| %>
+					<% unless review.published == false %>
+						<p class="search">
+							<a href="/anbefaling<%= review.uri[23..-1] %>"><%= review.title%></a> anbefalt av <%= reviewer_link(review) %> <span class="liste-date"><%= dateformat(review.issued) %></span>
+						</p>
 					<% end %>
 				<% end %>
 			<% end %>
-			<div class="clearfix" style="margin:20px"></div>
-			<div class="liste-link">
-				<% feed_url = "http://anbefalinger.deichman.no/feed?authors=#{params['forfatter']}" %>
-				<h3>Abonnér på dette søket:</h3>
-				<span class="hint hint--bottom" data-hint="RSS også kalt «levende bokmerker» er en ordning der en nettleser på en datamaskin henter nyheter eller annet materiale fra Internett fortløpende og automatisk. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Du kan legge inn lenken på din blogg eller abonnere på i din RSS-leser"><img class="rss" src="img/feed-icon-28x28.png"></span><input class="rss-link" class="text" disabled="disabled" value="<%= feed_url %>"><button class="medium green" id="rss-copy">Kopier</button>
-			</div>
-		<% end %>
-
-		<% if @work %>
-			<h3>Fant <%= Array(@work["reviews"]).length %> anbefaling<%= 'er' unless Array(@work["reviews"]).length == 1 %> av <%= @work["prefTitle"] || @work["originalTitle"] %> av <%= @work["authors"].map { |a| a["name"] } .join ", " %></h3>
-			<% Array(@work["reviews"]).each do |r| %>
-					<div class="search-hit">
-						<span class="left">
-							<strong class="red-text"><a href="/anbefaling<%= r['uri'][23..-1] %>"><%= r["title"]%></a></strong>
-						</span><br>
-					</div>
-					<p class="liste-under">anbefalt av <%= reviewerformatted(r) %> <span class="liste-date"><%= dateformat(r["issued"]) %></span> </p>
-					<p style="width:90%; margin-top:10px"><%= r["teaser"] %></p>
-			<% end %>
-			<div class="clearfix" style="margin:20px"></div>
-			<div class="liste-link">
-			<% feed_url = "http://anbefalinger.deichman.no/feed?work=#{params['tittel']}" %>
-				<h3>Abonnér på dette søket:</h3>
-				<span class="hint hint--bottom" data-hint="RSS også kalt «levende bokmerker» er en ordning der en nettleser på en datamaskin henter nyheter eller annet materiale fra Internett fortløpende og automatisk. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Du kan legge inn lenken på din blogg eller abonnere på i din RSS-leser"><img class="rss" src="img/feed-icon-28x28.png"></span><input class="rss-link" class="text" disabled="disabled" value="<%= feed_url %>"><button class="medium green" id="rss-copy">Kopier</button>
-			</div>
-		<% end %>
-
-
-		<% if @isbn %>
-			<% puts @isbn %>
-			<h3>Fant <%= Array(@isbn["reviews"]).length %> anbefalinger av <%= @isbn["prefTitle"] || @isbn["originalTitle"] %> av <%= Array(@isbn["authors"]).map { |a| a["name"] } .join ", " %></h3>
-			<% Array(@isbn["reviews"]).each do |r| %>
-					<div class="search-hit">
-						<span class="left">
-							<strong class="red-text"><a href="/anbefaling<%= r['uri'][23..-1] %>"><%= r["title"]%></a></strong>
-						</span><br>
-					</div>
-					<p class="liste-under">anbefalt av <%= reviewerformatted(r) %> <span class="liste-date"><%= dateformat(r["issued"]) %></span> </p>
-					<p style="width:90%; margin-top:10px"><%= r["teaser"] %></p>
-			<% end %>
-			<div class="clearfix" style="margin:20px"></div>
-			<div class="liste-link">
-			<% feed_url = "http://anbefalinger.deichman.no/feed?isbn=#{params['isbn']}" %>
-				<h3>Abonnér på dette søket:</h3>
-				<span class="hint hint--bottom" data-hint="RSS også kalt «levende bokmerker» er en ordning der en nettleser på en datamaskin henter nyheter eller annet materiale fra Internett fortløpende og automatisk. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Du kan legge inn lenken på din blogg eller abonnere på i din RSS-leser"><img class="rss" src="img/feed-icon-28x28.png"></span><input class="rss-link" class="text" disabled="disabled" value="<%= feed_url %>"><button class="medium green" id="rss-copy">Kopier</button>
-			</div>
-		<% end %>
-
-		<% if @reviews %>
-			<h3>Anbefalinger av <%= @dropdown.reviewers[params["anmelder"]] %></h3>
-			<% @reviews.reject { |w| w["reviews"].first["issued"].nil? } .each do |w| %>
-				<% r = w["reviews"].first %>
-				<div class="clearfix"></div>
-				<div class="listevisning">
-					<div class="liste-img <%= "light-gray" unless select_cover(w) %>">
-						<% if select_cover(w) %>
-							<img src="<%= select_cover(w) %>">
-						<% else %>
-							<p class="cover-author"><%= w["authors"].map { |a| a["name"] }.join(", ")%></p>
-							<p class="cover-title"><%= w["prefTitle"] || w["originalTitle"] %></p>
-						<% end %>
-					</div>
-					<div class="liste-info">
-						<p class="liste-title"><a href="/anbefaling/<%= r["uri"][24,200] %>"><%= w["prefTitle"] || w["originalTitle"] %></a></p>
-						<p class="liste-author">av <%= authors_links(w["authors"]) %></p>
-						<p class="liste-under">anbefalt av <%= reviewerformatted(r) %></a> <span class="liste-date"><%= dateformat(r["issued"]) %></span> </p>
-						<p class="liste-teaser"><%= r["teaser"] %></p>
-					</div>
+		<% else %>
+			<% @result.each do |review| %>
+				<div class="search-hit">
+					<span class="left">
+						<strong class="red-text"><a href="/anbefaling<%= review.uri[23..-1] %>"><%= review.title%></a></strong>
+					</span><br>
 				</div>
+				<p class="liste-under">anbefalt av <%= reviewer_link(review) %> <span class="liste-date"><%= dateformat(review.issued) %></span> </p>
+				<p style="width:90%; margin-top:10px"><%= review.teaser %></p>
 			<% end %>
-			<div class="clearfix" style="margin:20px"></div>
+		<% end %>
+		<div class="clearfix" style="margin:20px"></div>
+		<% if @feed_url %>
 			<div class="liste-link">
-			<% feed_url = "http://anbefalinger.deichman.no/feed?reviewer=#{params['anmelder']}" %>
-				<h3 style="margin-top:50px">Abonnér på dette søket:</h3>
-				<span class="hint hint--bottom" data-hint="RSS også kalt «levende bokmerker» er en ordning der en nettleser på en datamaskin henter nyheter eller annet materiale fra Internett fortløpende og automatisk. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Du kan legge inn lenken på din blogg eller abonnere på i din RSS-leser"><img class="rss" src="img/feed-icon-28x28.png"></span><input class="rss-link" class="text" disabled="disabled" value="<%= feed_url %>"><button class="medium green" id="rss-copy">Kopier</button>
+				<h3>Abonnér på dette søket:</h3>
+				<span class="hint hint--bottom" data-hint="RSS også kalt «levende bokmerker» er en ordning der en nettleser på en datamaskin henter nyheter eller annet materiale fra Internett fortløpende og automatisk. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Du kan legge inn lenken på din blogg eller abonnere på i din RSS-leser"><img class="rss" src="img/feed-icon-28x28.png"></span><input class="rss-link" class="text" disabled="disabled" value="<%= @feed_url %>"><button class="medium green" id="rss-copy">Kopier</button>
 			</div>
 		<% end %>
-
-		<% if @source %>
-			<h3>Anbefalinger fra <%= @source.first["reviews"].first["source"]["name"]%></h3>
-			<% @source.reject { |w| w["reviews"].first["issued"].nil? } .each do |w| %>
-				<% r = w["reviews"].first %>
-				<div class="clearfix"></div>
-				<div class="listevisning">
-					<div class="liste-img <%= "light-gray" unless select_cover(w) %>">
-						<% if select_cover(w) %>
-							<img src="<%= select_cover(w) %>">
-						<% else %>
-							<p class="cover-author"><%= w["authors"].map { |a| a["name"] }.join(", ")%></p>
-							<p class="cover-title"><%= w["prefTitle"] || w["originalTitle"] %></p>
-						<% end %>
-					</div>
-					<div class="liste-info">
-						<p class="liste-title"><a href="/anbefaling/<%= r["uri"][24,200] %>"><%= w["prefTitle"] || w["originalTitle"] %></a></p>
-						<p class="liste-author">av <%= authors_links(w["authors"]) %></p>
-						<p class="liste-under">anbefalt av <%= reviewerformatted(r) %></a> <span class="liste-date"><%= dateformat(r["issued"]) %></span> </p>
-						<p class="liste-teaser"><%= r["teaser"] %></p>
-					</div>
-				</div>
-			<% end %>
-			<div class="clearfix" style="margin:20px"></div>
-			<div class="liste-link">
-			<% feed_url = "http://#{request.host}:#{request.port}/feed?source=#{params['kilde']}" %>
-				<h3 style="margin-top:50px">Abonnér på dette søket:</h3>
-				<span class="hint hint--bottom" data-hint="RSS også kalt «levende bokmerker» er en ordning der en nettleser på en datamaskin henter nyheter eller annet materiale fra Internett fortløpende og automatisk. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Du kan legge inn lenken på din blogg eller abonnere på i din RSS-leser"><img class="rss" src="img/feed-icon-28x28.png"></span><input class="rss-link" class="text" disabled="disabled" value="<%= feed_url %>"><button class="medium green" id="rss-copy">Kopier</button>
-			</div>
-		<% end %>
-
 	</div>
 </div>
 

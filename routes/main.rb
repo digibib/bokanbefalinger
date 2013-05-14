@@ -1,4 +1,7 @@
-# encoding: utf-8
+# Encoding: UTF-8
+
+require "cgi"
+
 class BokanbefalingerApp < Sinatra::Application
   get "/" do
     @title = "Bokanbefalinger"
@@ -24,27 +27,57 @@ class BokanbefalingerApp < Sinatra::Application
   end
 
   get "/sok" do
-    @dropdown = Review.search_dropdowns
+
+    @dropdown = SearchDropdown.new
+    @dropdown.authors = Cache.get("dropdown:authors", :dropdowns) {
+      SPARQL::Dropdown.authors
+    }
+    @dropdown.titles = Cache.get("dropdown:titles", :dropdowns) {
+      SPARQL::Dropdown.titles
+    }
+    @dropdown.reviewers = Cache.get("dropdown:reviewers", :dropdowns) {
+      SPARQL::Dropdown.reviewers
+    }
+    @dropdown.sources = Cache.get("dropdown:sources", :dropdowns) {
+      SPARQL::Dropdown.sources
+    }
 
     if params["kilde"] and not params["kilde"].empty?
-      @error_message, @source = Review.by_source(params["kilde"])
+      @result = List2.from_source(params["kilde"])
+      @type = "images"
+      @results_title = "Anbefalinger fra #{@result.first.source["name"]}"
+      @feed_url = "http://anbefalinger.deichman.no/feed?source=#{CGI.escape(params['kilde'])}"
     end
 
     if params["forfatter"] and not params["forfatter"].empty?
-      @error_message, @works = Work.by_author(params["forfatter"])
+      @result = List2.from_author(params["forfatter"])
+      @type = "work-list"
+      @results_title = "Anbefalinger av bøker av #{@dropdown.authors[params['forfatter']]}"
+      @feed_url = "http://anbefalinger.deichman.no/feed?author=#{CGI.escape(params['forfatter'])}"
     end
 
     if params["tittel"] and not params["tittel"].empty?
-      @error_message, @work = Work.get(params["tittel"])
+      work = Work2.new(params["tittel"])
+      @result = work.reviews.reject {|r| r.published == false }
+      @results_title = "Fant #{@result.count} anbefalinger av #{work.title} av #{work.authors.map {|n| n["name"]} .join(", ")}"
+      @feed_url =  "http://anbefalinger.deichman.no/feed?work=#{CGI.escape(params['tittel'])}"
+      @type = "list"
     end
 
     if params["anmelder"] and not params["anmelder"].empty?
-      @error_message, @reviews = Review.by_reviewer(params["anmelder"])
+      @result = List2.from_reviewer(params["anmelder"], false)
+      @type = "images"
+      @results_title = "Anbefalinger skrevet av #{@dropdown.reviewers[params["anmelder"]]}"
+      @feed_url = "http://anbefalinger.deichman.no/feed?reviewer=#{CGI.escape(params['anmelder'])}"
     end
 
     if params["isbn"] and not params["isbn"].gsub(/[^0-9X]/, "").empty?
-      @error_message, @isbn = Work.by_isbn(params["isbn"].gsub(/[^0-9X]/, ""))
-      @isbn["reviews"] = Array(@isbn["reviews"]).reject { |r| r["published"] == false}
+      isbn = params["isbn"].gsub(/[^0-9X]/, "")
+      work = Work2.new(isbn)
+      @result = work.reviews.reject {|r| r.published == false }
+      @type = "list"
+      @results_title = "Fant #{work.reviews.count} anbefalinger av #{work.reviews.first.book_title} av #{work.authors.map {|n| n["name"]} .join(", ")}"
+      @feed_url = "http://anbefalinger.deichman.no/feed?isbn=#{isbn}"
     end
 
     @title = "Søk etter anbefalinger"

@@ -64,7 +64,8 @@ class Review2
     @book_work    = work["uri"]
     @book_authors = work["authors"]
     @book_title   = work["prefTitle"] || work["originalTitle"]
-    @book_cover   = work["editions"].select { |e| e["uri"] == review["edition"] }.first["cover_url"] || work["cover_url"]
+    # TODO fix this next line: make sure it never fails, witouh rescue nil
+    @book_cover   = work["editions"].select { |e| e["uri"] == review["edition"] }.first["cover_url"] || work["cover_url"] rescue nil
   end
 
   def self.create(params)

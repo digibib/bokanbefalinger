@@ -7,7 +7,8 @@
 # reviews belonging to a certain reviewer, author, or a list to generate a
 # certain rss feed.
 #
-# List always returns an array of Review instances (or an empty array)
+# List always returns an array of Review instances (or an empty array), except
+# from_author which returns an array of Work instances.
 
 require "cgi"
 
@@ -63,6 +64,7 @@ class List2
       params = {:reviewer => reviewer_uri, :limit => 100,
                 :order_by => "issued", :order => "desc"}
       res = API.get(:reviews, params) { |error| return [] }
+      Cache.set(reviewer_uri, res, :reviewers)
       res
     }
 
@@ -89,8 +91,9 @@ class List2
     raw = Cache.get(source_uri, :sources) {
       params = {:source => source_uri, :limit => 25,
                 :order_by => "issued", :order => "desc",
-                :published => true}.to_json
+                :published => true}
       res = API.get(:reviews, params) { |error| return [] }
+      Cache.set(source_uri, res, :sources)
       res
     }
 
@@ -107,8 +110,22 @@ class List2
   end
 
   def self.from_author(author_uri)
-    # Returns an array of all (or up to max 100) reviews of books by an author.
+    # Returns an array of all works (which has reviews) by an author.
     # Returns an empty array if no reviews found, or something went wrong.
+    raw = Cache.get(author_uri, :authors) {
+      params = {:author => author_uri, :reviews => true,
+                :order_by => "issued", :order => "desc"}
+      res = API.get(:works, params) { |error| return [] }
+      Cache.set(author_uri, res, :authors)
+      res
+    }
+
+    works = []
+    Array(raw["works"]).each do |w|
+      copy = {"works" => [w]}
+      works << Work2.new(copy) if w["reviews"] and w["reviews"].size > 0
+    end
+    works
   end
 
   def self.from_uris(uris, offset=0, limit=9)
