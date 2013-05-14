@@ -7,27 +7,26 @@
 		</select>
 	</div>
 	<div id="my-reviews-list">
-		<% @published.merge(@draft).each do |uri,w| %>
-			<% r = w["works"]["reviews"].first %>
-			<div timestamp="<%= r["modified"] %>" class="my-review <%= w['works']['reviews'].first['published'] ? 'published' : 'draft' %>">
-				<div class="book-cover book-description <%= "light-gray" unless w["works"]["cover_url"]  %>">
-					<% if w["works"]["cover_url"] %>
-						<img class="cover" src="<%= w["works"]["cover_url"] %>"/>
+		<% (@published+@draft).each do |review| %>
+			<div timestamp="<%= review.modified %>" class="my-review <%= review.published == true ? 'published' : 'draft' %>">
+				<div class="book-cover book-description <%= "light-gray" unless review.book_cover  %>">
+					<% if review.book_cover %>
+						<img class="cover" src="<%= review.book_cover %>"/>
 					<% end %>
 				</div>
 				<div class="my-reviews-info">
-					<p class="date"><%= r['published'] ? 'Sist oppdatert' : 'Lagret som kladd' %> <%= r["modified"][0..9] %></p>
+					<p class="date"><%= review.published ? 'Sist oppdatert' : 'Lagret som kladd' %> <%= review.modified[0..9] %></p>
 					<p class="review-title">
-					<% if r["issued"] %>
-						<a href="/anbefaling<%=r['uri'][23..-1] %>"><%= r["title"] %></a></p>
+					<% if review.issued %>
+						<a href="/anbefaling<%=review.uri[23..-1] %>"><%= review.title %></a></p>
 					<% else %>
-						<a href="/anbefaling<%= r['uri'][23..-1] %>/rediger"><%= [r["title"], "Uten tittel"].reject { |x| x.empty? } .first %></a></p>
+						<a href="/rediger?uri=<%= review.uri %>"><%= [review.title, "Uten tittel"].reject { |x| x.empty? } .first %></a></p>
 					<% end %>
-					<p class="my-reviews-teaser"><%= enforce_length(r["teaser"], 200) %></p>
+					<p class="my-reviews-teaser"><%= enforce_length(review.teaser, 200) %></p>
 
 					<div class="bottom">
 						<p class="my-reviews-audiences">Målgruppe for anbefalingen:
-							<%= r["audience"].map { |a| a.downcase } .join("/") || "Ikke valgt ennå" %></p><a href="/rediger?uri=<%= r['uri'] %>"><button class="medium green">Rediger</button></a></div>
+							<%= review.audiences.map { |a| a.downcase } .join("/") || "Ikke valgt ennå" %></p><a href="/rediger?uri=<%= review.uri %>"><button class="medium green">Rediger</button></a></div>
 				</div>
 			</div>
 		<% end %>
