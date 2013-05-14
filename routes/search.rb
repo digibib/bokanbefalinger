@@ -51,13 +51,18 @@ class BokanbefalingerApp < Sinatra::Application
 
     if params["isbn"] and not params["isbn"].gsub(/[^0-9X]/, "").empty?
       isbn = params["isbn"].gsub(/[^0-9X]/, "")
-      work = Work.new(isbn)
-      @result = work.reviews.reject {|r| r.published == false }
-      @type = "list"
-      @results_title = "Fant #{work.reviews.count} anbefalinger av #{work.reviews.first.book_title} av #{work.authors.map {|n| n["name"]} .join(", ")}"
-      @feed_url = "http://anbefalinger.deichman.no/feed?isbn=#{isbn}"
+      @not_found = false
+      work = Work.new(isbn) { |err| @not_found = true }
+      unless @not_found
+        @result = work.reviews.reject {|r| r.published == false }
+        @type = "list"
+        @results_title = "Fant #{work.reviews.count} anbefalinger av #{work.reviews.first.book_title} av #{work.authors.map {|n| n["name"]} .join(", ")}"
+        @feed_url = "http://anbefalinger.deichman.no/feed?isbn=#{isbn}"
+      end
     end
 
+    @result = Array(@result)
+    @results_title = "Ingen treff" if @not_found
     @title = "Søk etter anbefalinger"
     erb :search
   end
