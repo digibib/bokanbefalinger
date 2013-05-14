@@ -146,16 +146,9 @@ class BokanbefalingerApp < Sinatra::Application
       @page = 1
     end
 
-    rev = List2.latest((@page*25)-25, 24)
-    @reviews = []
-    error = nil
-    rev.each do |uri|
-      r = Review2.new(uri) { |err| puts "#{err.message}: #{uri}"; error = err }
-      next if error
-      @reviews << r
-    end
-
+    @reviews = List2.latest((@page*25)-25, 24)
     @title  = "Siste anbefalinger"
+
     erb :reviews
   end
 

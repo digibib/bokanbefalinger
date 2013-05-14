@@ -19,7 +19,14 @@ class List2
     latest = Cache.get("review:latest", :various) {
       SPARQL::Reviews.latest(0,100)
     }
-    latest[offset..(offset+limit)]
+    lista = []
+    latest[offset..(offset+limit)].each do |uri|
+      error = nil
+      r = Review2.new(uri) { |err| puts "#{err.message}: #{uri}"; error = err }
+      next if error
+      lista << r
+    end
+    lista
   end
 
   def self.from_work(work_uri, include_unpublished=true)
