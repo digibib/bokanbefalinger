@@ -80,8 +80,30 @@ class List2
     else
       reviews.reject { |r| r.published == false }
     end
+  end
 
+  def self.from_source(source_uri)
+    # Returns an array of all published reviews (up to 25) from a source.
+    # Returns an empty array if no reviews found, or something went wrong.
+    # TODO make 25 number configurable
+    raw = Cache.get(source_uri, :sources) {
+      params = {:source => source_uri, :limit => 25,
+                :order_by => "issued", :order => "desc",
+                :published => true}.to_json
+      res = API.get(:reviews, params) { |error| return [] }
+      res
+    }
 
+    reviews = []
+    Array(raw["works"]).each do |w|
+      w["reviews"].each do |r|
+        copy = {"works" => [w]}
+        copy["works"].first["reviews"]=[r]
+        reviews << Review2.new(copy)
+      end
+    end
+
+    reviews.reject { |r| r.published == false }
   end
 
   def self.from_author(author_uri)
