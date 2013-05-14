@@ -38,7 +38,7 @@ module API
                              " brukte for lang tid på å svare.")
   else
     log "API RESPONSE [#{resp.status}]: #{JSON.parse(resp.body)}"
-    if resp.status != 200 || resp.body.match(/no reviews found/) #TODO match other bodies as well
+    if resp.body.match(/error/) || resp.status != 200  #TODO match other bodies as well
       yield StandardError.new("Finner ingen ressurs med denne ID-en:" +
                               " #{params[:uri] || params}.")
     else
