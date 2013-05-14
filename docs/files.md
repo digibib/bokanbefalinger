@@ -35,6 +35,7 @@
 │   ├── info.rb                  <em>front page and info pages</em>
 │   ├── feed.rb                  <em>feed routes (RSS)</em>
 │   ├── reviews.rb               <em>main review routes</em>
+│   ├── search.rb                <em>handle search</em>
 │   └── user.rb                  <em>user interaction routes</em>
 ├── <b>views</b>                      <b>template views</b>
 ├── <b>test</b>                       <b>tests</b>
