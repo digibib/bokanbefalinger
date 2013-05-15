@@ -26,32 +26,3 @@ setInterval(function() {
   $("#loading").html(""+Array(i+1).join("."));
 }, 500);
 
-
-
-
-
-
-/* Mine anbefalinger */
-
-$('#show-draft').on('click', function() {
-	$('#show-draft').removeClass("gray").addClass("red");
-	$('#show-published').removeClass("red").addClass("gray");
-	$('.published').hide();
-	$('.draft').show();
-	$("#my-reviews-list > div:visible").tsort('',{attr:'timestamp', order:$('#my-reviews-sorting option:selected').val()});
-});
-
-$('#show-published').on('click', function() {
-	$('#show-published').removeClass("gray").addClass("red");
-	$('#show-draft').removeClass("red").addClass("gray");
-	$('.draft').hide();
-	$('.published').show();
-	$("#my-reviews-list > div:visible").tsort('',{attr:'timestamp', order:$('#my-reviews-sorting option:selected').val()});
-});
-
-// sortering:
-$('#my-reviews-sorting').on('change', function() {
-	$("#my-reviews-list > div:visible").tsort('',{attr:'timestamp', order:$('#my-reviews-sorting option:selected').val()});
-});
-
-
