@@ -8,16 +8,24 @@ class BokanbefalingerApp < Sinatra::Application
 
     @dropdown = SearchDropdown.new
     @dropdown.authors = Cache.get("dropdown:authors", :dropdowns) {
-      SPARQL::Dropdown.authors
+      res = SPARQL::Dropdown.authors
+      Cache.set("dropdown:authors", res, :dropdowns)
+      res
     }
     @dropdown.titles = Cache.get("dropdown:titles", :dropdowns) {
-      SPARQL::Dropdown.titles
+      res = SPARQL::Dropdown.titles
+      Cache.set("dropdown:titles", res, :dropdowns)
+      res
     }
     @dropdown.reviewers = Cache.get("dropdown:reviewers", :dropdowns) {
-      SPARQL::Dropdown.reviewers
+      res = SPARQL::Dropdown.reviewers
+      Cache.set("dropdown:reviewers", res, :dropdowns)
+      res
     }
     @dropdown.sources = Cache.get("dropdown:sources", :dropdowns) {
-      SPARQL::Dropdown.sources
+      res = SPARQL::Dropdown.sources
+      Cache.set("dropdown:sources", res, :dropdowns)
+      res
     }
 
     if params["kilde"] and not params["kilde"].empty?

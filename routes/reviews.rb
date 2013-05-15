@@ -174,25 +174,39 @@ class BokanbefalingerApp < Sinatra::Application
     @dropdown = Dropdown.new
 
     @dropdown.subjects = Cache.get("dropdown:subjects", :dropdowns) {
-      SPARQL::Dropdown.subjects
+      res = SPARQL::Dropdown.subjects
+      Cache.set("dropdown:subjects", res, :dropdowns)
+      res
     }
     @dropdown.persons = Cache.get("dropdown:persons", :dropdowns) {
-      SPARQL::Dropdown.persons
+      res = SPARQL::Dropdown.persons
+      Cache.set("dropdown:persons", res, :dropdowns)
+      res
     }
     @dropdown.genres = Cache.get("dropdown:genres", :dropdowns) {
-      SPARQL::Dropdown.genres
+      res = SPARQL::Dropdown.genres
+      Cache.set("dropdown:genres", res, :dropdowns)
+      res
     }
     @dropdown.languages = Cache.get("dropdown:languages", :dropdowns) {
-      SPARQL::Dropdown.languages
+      res = SPARQL::Dropdown.languages
+      Cache.set("dropdown:languages", res, :dropdowns)
+      res
     }
     @dropdown.authors = Cache.get("dropdown:authors", :dropdowns) {
-      SPARQL::Dropdown.authors
+      res = SPARQL::Dropdown.authors
+      Cache.set("dropdown:authors", res, :dropdowns)
+      res
     }
     @dropdown.formats = Cache.get("dropdown:formats", :dropdowns) {
-      SPARQL::Dropdown.formats
+      res = SPARQL::Dropdown.formates
+      Cache.set("dropdown:formates", res, :dropdowns)
+      res
     }
     @dropdown.nationalities = Cache.get("dropdown:nationalities", :dropdowns) {
-      SPARQL::Dropdown.nationalities
+      res = SPARQL::Dropdown.nationalities
+      Cache.set("dropdown:nationalities", res, :dropdowns)
+      res
     }
 
     erb :make_lists
