@@ -18,5 +18,6 @@
 	<% end %>
 </div>
 <% if session[:user] %>
+	<%= erb :my_lists %>
 	<%= erb :tipsbar %>
 <% end %>
