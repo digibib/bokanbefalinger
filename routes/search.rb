@@ -23,7 +23,7 @@ class BokanbefalingerApp < Sinatra::Application
     if params["kilde"] and not params["kilde"].empty?
       @result = List.from_source(params["kilde"])
       @type = "images"
-      @results_title = "Anbefalinger fra #{@result.first.source["name"]}"
+      @results_title = "Anbefalinger fra #{@dropdown.sources[params['kilde']]}"
       @feed_url = "http://anbefalinger.deichman.no/feed?source=#{CGI.escape(params['kilde'])}"
     end
 
