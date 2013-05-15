@@ -1,3 +1,18 @@
 <div id="mylist-box" class="right-bar">
 	<h3>Mine lister</h3>
+	<div class="my-lists">
+		<div class="single-list">
+			<div class="liste-tittel" style="font-size:16px">Uten tittel</div>
+			<div class="triangle open" style="font-size:20px"></div>
+			<div class="clearfix"></div>
+			<div class="liste-innhold" style="display:none">
+				<ol class="sortable">
+					<% [].each do |r| %>
+						<li><%= r %></li>
+					<% end %>
+				</ol>
+				<input class="liste-navn" placeholder="navn på lista" type="text"><button class="save-list">lagre</button>
+			</div>
+		</div>
+	</div>
 </div>

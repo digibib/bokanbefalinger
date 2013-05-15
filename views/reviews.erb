@@ -27,6 +27,8 @@
 				<% end %>
 			</div>
 			<div class="liste-info">
+				<input type="hidden" class="uri" value="<%= review.uri %>">
+				<% if session[:user] %><button class="pluss" tooltip="Legg til i 'Mine lister'">+</button><% end %>
 				<p class="liste-title"><a href="/anbefaling/<%= review.uri[24,200] %>"><%= review.book_title %></a></p>
 				<p class="liste-author">av <%= authors_links(review.book_authors) %></p>
 				<p class="liste-under">anbefalt av <%= reviewer_link(review) %></a> <span class="liste-date"><%= dateformat(review.issued) %></span> </p>

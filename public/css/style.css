@@ -157,6 +157,45 @@ button.long {
   font-size:15px;
 }
 
+button.pluss {
+  padding: 2px;
+  width: 20px;
+  height: 20px;
+  background: #eee;
+  color: #444;
+  font-family: monospace;
+  font-size: 14px;
+  font-weight:bold;
+  float: right;
+  position: relative;
+}
+
+button.pluss:hover:after {
+  font-size: 12px;
+  font-family: Arial;
+  background: #eee;
+  border-radius: 1px;
+  color: #888;
+  content: attr(tooltip);
+  left: -200px;
+  top: -4px;
+  padding: 5px 15px;
+  position: absolute;
+  z-index: 98;
+  width: 150px;
+}
+
+button.pluss:hover:before{
+    border: solid;
+    border-color: #fff #eee;
+    border-width: 10px 0 10px 10px;
+    top: -2px;
+    left: -20px;
+    content: "";
+    position: absolute;
+    z-index: 99;
+}
+
 .book-cover {
   text-align: center;
   width: 150px;
@@ -184,7 +223,6 @@ p.error-small {
   font-weight: bold;
 }
 
-
 p.info {
   background: #eee;
   padding: 15px;
@@ -204,6 +242,7 @@ label { font-weight: bold;}
 .cover-title {
   font-size:10px !important;
 }
+
 
 /* tooltips */
 
@@ -348,7 +387,7 @@ span.inner-navbutton:hover {
 
 /* Login-bar */
 
-#login-box { text-align: center; position: relative;}
+#login-box, #mylist-box { text-align: center; position: relative;}
 
 #login-box p {
   margin-top: 40px;
@@ -383,6 +422,16 @@ span.small-link { font-size:0.9em; display:block; padding: 0 24px; margin:0.5em;
 #logg-inn-her { font-family: 'Sacramento', cursive; font-size:32px;
                 line-height: 1.2em; color: #c12121; margin-left: -10px; }
 #logg-inn-pil { position: absolute; left:5px;}
+
+/* Mine lister */
+
+.single-list { background:#ddd; padding: 2px;}
+.single-list ol { padding-left: 20px;}
+.single-list ol li { font-size:12px; text-align: left; background:#eee; border:1px solid #ddd; padding:0 2px;}
+.liste-navn { width: 150px; margin-right:10px; font-size: 14px;}
+.save-list { font-size: 14px;}
+a.remove { margin-right:10px; font-size:12px; float: right; cursor: pointer;}
+.sortable-placeholder { border: 1px dashed #888 !important;}
 
 /* skrivetips bar */
 
