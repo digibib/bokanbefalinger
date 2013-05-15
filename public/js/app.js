@@ -38,6 +38,13 @@ $('document').ready(function() {
 		var uri = $(this).parents('.liste-info').find('input.uri').val();
 		var title = $(this).parents('.liste-info').find('.liste-title a').text()
 
+		// open list if not open
+		var $list = $('.single-list:first')
+		if ( $list.find('.triangle').hasClass('open')) {
+			$list.find('.triangle').trigger('click');
+		}
+
+		// append review to list
 		$('.single-list:first ol').append('<li><a href="' + uri +'">'+title+'</a><a class="remove">x</a></li>');
 
 		// refresh drag and sort
