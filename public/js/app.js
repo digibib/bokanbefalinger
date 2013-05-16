@@ -56,8 +56,8 @@ $('document').ready(function() {
 
 		// open list if not open
 		var $list = $('.single-list:first')
-		if ( $list.find('.triangle').hasClass('open')) {
-			$list.find('.triangle').trigger('click');
+		if ( $list.find('.mytriangle').hasClass('open')) {
+			$list.find('.mytriangle').trigger('click');
 		}
 
 		// append review to list
@@ -75,19 +75,19 @@ $('document').ready(function() {
 	});
 
 	// Show list when clicking on title or triangle
-	$('.single-list').on('click', '.triangle.close', function() {
+	$('.single-list').on('click', '.mytriangle.close', function() {
 		$(this).removeClass("close").addClass("open");
 		$(this).next().next().slideUp();
 	});
 
-	$('.single-list').on('click', '.triangle.open', function() {
-		$('.liste-innhold').slideUp();
-		$('.close').removeClass("close").addClass("open");
+	$('.single-list').on('click', '.mytriangle.open', function() {
+		$('.myliste-innhold').slideUp();
+		$('.mytriangle.close').removeClass("close").addClass("open");
 		$(this).removeClass("open").addClass("close");
 		$(this).next().next().slideDown();
 	});
 
-	$('.liste-tittel').on('click', function() {
+	$('.myliste-tittel').on('click', function() {
 		$(this).next().click();
 	});
 

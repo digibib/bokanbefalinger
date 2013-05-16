@@ -40,7 +40,7 @@
 
 		$('.anbefalingsliste').on('click', '.triangle.open', function() {
 			$('.liste-innhold').slideUp();
-			$('.close').removeClass("close").addClass("open");
+			$('triangle.close').removeClass("close").addClass("open");
 			$(this).removeClass("open").addClass("close");
 			$(this).next().next().slideDown();
 		});
