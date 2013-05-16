@@ -28,6 +28,8 @@ class User
     session[:source_uri] = res["reviewer"]["userAccount"]["accountServiceHomepage"]
     session[:name] = res["reviewer"]["name"]
     session[:user_uri] = res["reviewer"]["uri"]
+    # store lists if any
+    mylists = res["reviewer"]["userAccount"]["myLists"]
 
     # 3. Get source api_key: api/sources source=x (or preferably from cache)
     res = Cache.get(session[:source_uri]) {
@@ -44,6 +46,20 @@ class User
     session[:api_key] = res["api_key"]
     session[:flash_info] = []
     session[:flash_error] = []
+    session[:mylists] = []
+
+    # 4. Populate mylists
+    mylists.each do |list|
+      params = {:api_key => session[:api_key], :list => list,
+                :reviewer => session[:user_uri] }
+      res = API.get(:mylists, params) { next }
+      li = res["mylists"].first
+      li["items"] = li["items"].map do |uri|
+        r = Review.new(uri) { next }
+        {:title => r.title, :uri => r.uri }
+      end
+      session[:mylists] << li
+    end
 
     # Clear reviewer cache, to make sure we're not stuck with an old cached version
     Cache.del session[:user_uri], :reviewers

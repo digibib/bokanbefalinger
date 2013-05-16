@@ -20,7 +20,8 @@ module API
                :works => Faraday.new(:url => Settings::API + "works"),
                :sources => Faraday.new(:url => Settings::API + "sources"),
                :users => Faraday.new(:url => Settings::API + "users"),
-               :authenticate => Faraday.new(:url => Settings::API + "users/authenticate")}
+               :authenticate => Faraday.new(:url => Settings::API + "users/authenticate"),
+               :mylists => Faraday.new(:url => Settings::API + "users/mylists")}
 
   def self.log(msg)
     puts msg # TODO use JBOSS logger
