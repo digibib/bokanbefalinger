@@ -6,6 +6,7 @@
 
 # TODO:
 # * remove debugging puts => use JBoss logger
+# * use API class to perform http requests
 
 require "faraday"
 require "torquebox-messaging"
