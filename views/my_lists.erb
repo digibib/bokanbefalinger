@@ -13,7 +13,7 @@
 						<% end %>
 					</ol>
 					<input class="liste-navn" placeholder="navn på lista" type="text" value="<%= list['label'] %>"><button class="save-list">lagre</button>
-					<p><a href="">Lista som RSS-strøm</a></p>
+					<p><a href="/feed?list=<%= list['uri'] %>&title=<%= list['label']%>">Lista som RSS-strøm</a></p>
 				</div>
 			</div>
 		<% end %>

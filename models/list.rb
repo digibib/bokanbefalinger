@@ -160,6 +160,19 @@ class List
     lista
   end
 
+  def self.from_mylist(list_uri)
+    # Returns an array of the reviews in list_uri
+    res = API.get(:mylists, {:list => list_uri})
+    lista = []
+    res["mylists"].first["items"].each do |uri|
+      error = nil
+      r = Review.new(uri) { |err| error = err }
+      next if error
+      lista << r
+    end
+    lista
+  end
+
   private
 
   def self.params_from_feed_url(url)

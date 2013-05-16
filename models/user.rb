@@ -50,9 +50,7 @@ class User
 
     # 4. Populate mylists
     mylists.each do |list|
-      params = {:api_key => session[:api_key], :list => list,
-                :reviewer => session[:user_uri] }
-      res = API.get(:mylists, params) { next }
+      res = API.get(:mylists, {:list => list}) { next }
       li = res["mylists"].first
       li["items"] = li["items"].map do |uri|
         r = Review.new(uri) { next }

@@ -12,6 +12,8 @@ class BokanbefalingerApp < Sinatra::Application
     else
       if list_params["work"]
         @result = List.from_work(list_params["work"].first, false)
+      elsif list_params["list"]
+        @result = List.from_mylist(list_params["list"].first)
       elsif list_params["reviewer"]
         @result = List.from_reviewer(list_params["reviewer"].first, false)
       elsif list_params["isbn"]
@@ -24,8 +26,8 @@ class BokanbefalingerApp < Sinatra::Application
       end
     end
 
-    # Sort the list by review.issued:
-    @result = @result.sort_by { |r| Time.parse(r.issued).to_i }.reverse
+    # Sort the list by review.issued, but preserve order if its a personal list:
+    @result = @result.sort_by { |r| Time.parse(r.issued).to_i }.reverse unless list_params["list"]
 
     builder :feed, :locals => {:result => @result, :format => request.accept,
             :url => request.url, :title => params["title"]}
