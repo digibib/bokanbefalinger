@@ -8,6 +8,10 @@
 # All methods yields to a block if unsucsessfull, so client must suply a block
 # to handle failures.
 
+# TODO refactor requests so that get/post/put/delete uses one request method,
+#      with one rescue etc
+# TODO Make sure all connection errors are rescued (check Errno::xxx)
+
 require "faraday"
 
 module API
@@ -31,7 +35,7 @@ module API
       req.body = params.to_json
       log "API REQUEST to #{ENDPOINTS[endpoint].url_prefix.path}: #{req.body}"
     end
-  rescue Faraday::Error, Errno::ETIMEDOUT => err
+  rescue Faraday::Error, Errno::ENOENT, Errno::ETIMEDOUT, Errno::ECONNREFUSED => err
      log "API request to #{ENDPOINTS[endpoint].url_prefix.path} with params" +
          " #{params} failed because: #{err.message}"
      yield StandardError.new("Forespørsel til eksternt API(#{Settings::API})" +
