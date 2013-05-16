@@ -1,14 +1,21 @@
 <div id="mylist-box" class="right-bar">
 	<h3>Mine lister</h3>
 	<div class="my-lists">
-		<div class="single-list">
-			<div class="myliste-tittel">Uten tittel</div>
-			<div class="mytriangle open"></div>
-			<div class="clearfix"></div>
-			<div class="myliste-innhold" style="display:none">
-				<ol class="sortable"></ol>
-				<input class="liste-navn" placeholder="navn på lista" type="text"><button class="save-list">lagre</button>
+		<% session[:mylists].each do |list| %>
+			<div class="single-list">
+				<div class="myliste-tittel"><%= list["label"] %></div>
+				<div class="mytriangle open"></div>
+				<div class="clearfix"></div>
+				<div class="myliste-innhold" style="display:none">
+					<ol class="sortable">
+						<% list["items"].each do |review| %>
+							<li><a href="/anbefaling/<%= review[:uri][24,200] %>"><%= review[:title] %></a><a class="remove">x</a></li>
+						<% end %>
+					</ol>
+					<input class="liste-navn" placeholder="navn på lista" type="text" value="<%= list['label'] %>"><button class="save-list">lagre</button>
+					<p><a href="">Lista som RSS-strøm</a></p>
+				</div>
 			</div>
-		</div>
+		<% end %>
 	</div>
 </div>

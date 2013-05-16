@@ -425,11 +425,11 @@ span.small-link { font-size:0.9em; display:block; padding: 0 24px; margin:0.5em;
 
 /* Mine lister */
 
-.single-list { background:#ddd; padding: 2px;}
-.single-list ol { padding-left: 20px;}
-.single-list ol li { font-size:12px; text-align: left; background:#eee; border:1px solid #ddd; padding:0 2px;}
+.single-list { background:#ddd; padding: 2px; margin-bottom: 8px;}
+ol.sortable { padding-left: 20px;}
+ol.sortable li { font-size:12px; text-align: left; background:#eee; border:1px solid #ddd; padding:0 2px;}
 .liste-navn { width: 150px; margin-right:10px; font-size: 14px;}
-.save-list { font-size: 14px;}
+.save-list { font-size: 14px; width: 46px;}
 a.remove { margin-right:10px; font-size:12px; float: right; cursor: pointer;}
 .sortable-placeholder { border: 1px dashed #888 !important;}
 
@@ -613,8 +613,11 @@ select.kriterium { vertical-align:top;}
 .anbefalingsliste li { margin: 0.5em;}
 .rss-link { margin-left:6px; width:67%; font-size: 13px; padding: 2px; height:18px;}
 .liste-tittel { font-size: 1.5em; display:inline-block; float:left; cursor: pointer;}
+.myliste-tittel { font-size: 16px; display:inline-block; float:left; cursor: pointer;}
+
 .liste-innhold { clear: both;}
 .triangle { font-size:1.5em; display:inline-block; float:right; cursor: pointer;}
+.mytriangle { font-size:20px; display:inline-block; float:right; cursor: pointer;}
 .close:after {content: '▲'; }
 .open:after {content: '▼'; }
 .rss-copy { margin-left: 1em;}
