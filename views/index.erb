@@ -18,7 +18,7 @@
 				<% if review.book_cover %>
 					<img src="<%= review.book_cover %>">
 				<% else %>
-					<p class="cover-author"><%= authors_links(review.book_authors) %></p>
+					<p class="cover-author"><%= review.book_authors.map { |a| a["name"] }.join(", ") %></p>
 					<p class="cover-title"><%= review.book_title %></p>
 				<% end %>
 			</div>
