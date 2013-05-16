@@ -33,6 +33,22 @@ setInterval(function() {
 // My list logic
 $('document').ready(function() {
 
+	// function to send an request to store my-list in the session object
+	function storeList() {
+		console.log("storing list in session.");
+		$.ajax({
+			type: "POST",
+			url: '/mylist',
+			data: { mylist: "de e lista mi" }
+		});
+		return;
+	}
+
+	// update session on rearranging
+	$('.sortable').sortable().bind('sortupdate', function() {
+		storeList();
+	});
+
 	// Add to my list
 	$('button.pluss').on('click', function() {
 		var uri = $(this).parents('.liste-info').find('input.uri').val();
@@ -49,11 +65,13 @@ $('document').ready(function() {
 
 		// refresh drag and sort
 		$('.sortable').sortable();
+		storeList();
 	});
 
 	// remove review on click 'x'
 	$('.my-lists').on('click', '.remove', function() {
 		$(this).parents('li').remove();
+		storeList();
 	});
 
 	// Show list when clicking on title or triangle
@@ -72,4 +90,5 @@ $('document').ready(function() {
 	$('.liste-tittel').on('click', function() {
 		$(this).next().click();
 	});
+
 });
