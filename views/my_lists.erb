@@ -3,13 +3,14 @@
 	<div class="my-lists">
 		<% session[:mylists].each do |list| %>
 			<div class="single-list">
+				<input type="hidden" class="list_uri" value="<%= list['uri'] %>">
 				<div class="myliste-tittel"><%= list["label"] %></div>
 				<div class="mytriangle open"></div>
 				<div class="clearfix"></div>
 				<div class="myliste-innhold" style="display:none">
 					<ol class="sortable">
 						<% list["items"].each do |review| %>
-							<li><a href="/anbefaling/<%= review[:uri][24,200] %>"><%= review[:title] %></a><a class="remove">x</a></li>
+							<li><a class="mylist-review" href="/anbefaling/<%= review[:uri][24,200] %>"><%= review[:title] %></a><a class="remove">x</a></li>
 						<% end %>
 					</ol>
 					<input class="liste-navn" placeholder="navn på lista" type="text" value="<%= list['label'] %>"><button class="save-list">lagre</button>
