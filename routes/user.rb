@@ -52,4 +52,24 @@ class BokanbefalingerApp < Sinatra::Application
     end
     redirect "/innstillinger"
   end
+
+  post "/mylist" do
+    # This route is called by frontend to store personal list in session object
+    #session[:mylists] = params["mylist"]
+    puts "mine lister session updated: #{session[:mylists]}"
+  end
+
+  post "/savemylist" do
+    # Save personal list
+    uri, label = params["uri"], params["label"]
+    items = JSON.parse(params["items"]).map { |i| i["uri"] }
+
+    params = {:uri => uri, :label => label, :items => items,
+              :api_key => session[:api_key], :reviewer => session[:user_uri]}
+    API.put(:mylists, params) { |err| @error_message = err.message}
+
+    halt 400 if @error_message
+    return "OK"
+  end
+
 end

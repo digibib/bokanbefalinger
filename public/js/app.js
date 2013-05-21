@@ -35,7 +35,8 @@ $('document').ready(function() {
 
 	// function to send an request to store my-list in the session object
 	function storeList() {
-		console.log("storing list in session.");
+		console.log("Storing list in session");
+
 		$.ajax({
 			type: "POST",
 			url: '/mylist',
@@ -61,11 +62,11 @@ $('document').ready(function() {
 		}
 
 		// append review to list
-		$('.single-list:first ol').append('<li><a href="' + uri +'">'+title+'</a><a class="remove">x</a></li>');
+		$('.single-list:first ol').append('<li><a class="mylist-review" href="/anbefaling/' + uri.substr(24) +'">'+title+'</a><a class="remove">x</a></li>');
 
 		// refresh drag and sort
 		$('.sortable').sortable();
-		storeList();
+		storeList($list.find('.list_uri').val());
 	});
 
 	// remove review on click 'x'
@@ -80,6 +81,7 @@ $('document').ready(function() {
 		$(this).next().next().slideUp();
 	});
 
+	// open/close list
 	$('.single-list').on('click', '.mytriangle.open', function() {
 		$('.myliste-innhold').slideUp();
 		$('.mytriangle.close').removeClass("close").addClass("open");
@@ -89,6 +91,29 @@ $('document').ready(function() {
 
 	$('.myliste-tittel').on('click', function() {
 		$(this).next().click();
+	});
+
+	// Save list
+	$('.my-lists').on('click', '.save-list', function() {
+		var $list = $(this).parents('.single-list');
+		var uri = $list.find('.list_uri').val();
+		var label = $list.find('.liste-navn').val();
+		var items = [];
+		$list.find('.mylist-review').each(function() {
+			items.push({ title: $(this).text(),
+			             uri: "http://data.deichman.no"+ $(this).attr("href").substr(11) });
+		});
+
+		var request = $.ajax({
+			type: "POST",
+			url: '/savemylist',
+			data: { uri: uri, items: JSON.stringify(items), label: label},
+		});
+
+		request.done(function(data) {
+			console.log(data);
+		})
+
 	});
 
 });
