@@ -199,8 +199,8 @@ class BokanbefalingerApp < Sinatra::Application
       res
     }
     @dropdown.formats = Cache.get("dropdown:formats", :dropdowns) {
-      res = SPARQL::Dropdown.formates
-      Cache.set("dropdown:formates", res, :dropdowns)
+      res = SPARQL::Dropdown.formats
+      Cache.set("dropdown:formats", res, :dropdowns)
       res
     }
     @dropdown.nationalities = Cache.get("dropdown:nationalities", :dropdowns) {
