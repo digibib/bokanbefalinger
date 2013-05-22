@@ -26,7 +26,7 @@
 				<p class="liste-title"><a href="/anbefaling/<%= review.uri[24,200] %>"><%= review.book_title %></a></p>
 				<p class="liste-author">av <%= authors_links(review.book_authors) %></p>
 				<p class="liste-under">anbefalt av <%= reviewer_link(review) %></a> <span class="liste-date"><%= dateformat(review.issued) %></span> </p>
-				<p class="liste-teaser"><%= review.teaser %></p>
+				<p class="liste-teaser"><%= review.teaser %> <a href="/anbefaling/<%= review.uri[24,200] %>">Les mer.</a></p>
 			</div>
 		</div>
 	<% end %>
