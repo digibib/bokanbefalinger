@@ -485,8 +485,7 @@ a.remove { margin-right:10px; font-size:12px; float: right; cursor: pointer;}
 .checklabel { width:100px; line-height:15px; display:inline-block; height:15px;}
 .missing { border:2px solid #E87600 !important;}
 
-.reviewform-other { width: 200px; display: block; position:absolute; border: 1px solid red;
-                 background: #eee; padding: 1em; top: 130px; right:100px;}
+.reviewform-other { position:absolute; top: 175px; left:172px;}
 
 /* isbn search */
 .isbn-form { background-color:#eee; padding:15px; width:90%; border: 2px solid #ccc;}

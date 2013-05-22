@@ -16,8 +16,13 @@
 			<p><strong><%= authors_links(@work.authors) %></strong></p>
 		</div>
 		<div class="reviewform-other">
-			<%= @work.title %> har<br>
-			<span class="red-text"><%= @work.reviews.count %> andre anbefalinger</span>
+			<% if @work.reviews.count == 0 %>
+				<p>Du er den første som anmelder denne boka, gratulerer!</p>
+			<% elsif @work.reviews.count == 1 %>
+				<p><a href="/anbefaling/<%= @work.reviews.first.uri[24..200] %>">Boka har 1 annen anbefaling</a></p>
+			<% else %>
+				<p><a href="/sok?tittel=<%= @work.uri %>">Boka har <%= @work.reviews.count %> andre anbefalinger</a></p>
+			<% end %>
 		</div>
 	</div>
 	<div class="clearfix"></div>
