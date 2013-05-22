@@ -17,7 +17,7 @@ class Work
         params = {:uri => param, :reviews => true}
         @raw = Cache.get(uri, :works) {
           res = API.get(:works, params) { |error| yield(error); return }
-          Cache.set(uri, res, :works)
+          Cache.set(param, res, :works)
           res
         }
       else                    # Create a review from ISBN
