@@ -146,12 +146,13 @@ module SPARQL
       q = QUERY.select(:subject, :subject_label)
       q.distinct
       q.from(BOOKGRAPH)
+      q.from_named(REVIEWGRAPH)
       q.where([:work, RDF::FABIO.hasManifestation, :book],
               [:book, RDF::REV.hasReview, :review],
               [:book, RDF::DC.subject, :subject_narrower],
               [:subject, RDF::SKOS.narrower, :subject_narrower],
               [:subject, RDF::SKOS.prefLabel, :subject_label])
-      #q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
+      q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
       res = REPO.select(q)
       subjects = {}
 
@@ -167,12 +168,13 @@ module SPARQL
       q = QUERY.select(:person, :person_name, :lifespan)
       q.distinct
       q.from(BOOKGRAPH)
+      q.from_named(REVIEWGRAPH)
       q.where([:work, RDF::FABIO.hasManifestation, :book],
               [:book, RDF::REV.hasReview, :review],
               [:book, RDF::DC.subject, :person],
               [:person, RDF::FOAF.name, :person_name],
               [:person, RDF::URI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), RDF::FOAF.Person])
-      #q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
+      q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
       q.optional([:person, RDF::DEICHMAN.lifespan, :lifespan])
       res = REPO.select(q)
       persons = {}
@@ -195,12 +197,13 @@ module SPARQL
       q = QUERY.select(:genre, :genre_label)
       q.distinct
       q.from(BOOKGRAPH)
+      q.from_named(REVIEWGRAPH)
       q.where([:work, RDF::FABIO.hasManifestation, :book],
               [:book, RDF::REV.hasReview, :review],
               [:book, RDF::DBO.literaryGenre, :narrower],
               [:narrower, RDF::SKOS.broader, :genre],
               [:genre, RDF::RDFS.label, :genre_label])
-      #q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
+      q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
       res = REPO.select(q)
       genres = {}
 
@@ -217,11 +220,12 @@ module SPARQL
       q = QUERY.select(:language, :language_label)
       q.distinct
       q.from(BOOKGRAPH)
+      q.from_named(REVIEWGRAPH)
       q.where([:work, RDF::FABIO.hasManifestation, :book],
               [:book, RDF::REV.hasReview, :review],
               [:book, RDF::DC.language, :language],
               [:language, RDF::RDFS.label, :language_label])
-      #q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
+      q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
       res = REPO.select(q)
       languages = {}
 
@@ -238,11 +242,12 @@ module SPARQL
       q = QUERY.select(:author, :author_name)
       q.distinct
       q.from(BOOKGRAPH)
+      q.from_named(REVIEWGRAPH)
       q.where([:work, RDF::FABIO.hasManifestation, :book],
               [:work, RDF::DC.creator, :author],
               [:author, RDF::FOAF.name, :author_name],
               [:book, RDF::REV.hasReview, :review])
-      #q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
+      q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
       res = REPO.select(q)
       authors = {}
 
@@ -259,11 +264,12 @@ module SPARQL
       q = QUERY.select(:format, :format_label)
       q.distinct
       q.from(BOOKGRAPH)
+      q.from_named(REVIEWGRAPH)
       q.where([:work, RDF::FABIO.hasManifestation, :book],
               [:book, RDF::REV.hasReview, :review],
               [:book, RDF::DEICHMAN.literaryFormat, :format],
               [:format, RDF::RDFS.label, :format_label])
-      #q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
+      q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
       res = REPO.select(q)
       formats = {}
 
@@ -280,12 +286,13 @@ module SPARQL
       q = QUERY.select(:nationality, :nationality_label)
       q.distinct
       q.from(BOOKGRAPH)
+      q.from_named(REVIEWGRAPH)
       q.where([:work, RDF::FABIO.hasManifestation, :book],
               [:book, RDF::REV.hasReview, :review],
               [:work, RDF::DC.creator, :creator],
               [:creator, RDF::XFOAF.nationality, :nationality],
               [:nationality, RDF::RDFS.label, :nationality_label])
-      #q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
+      q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
       res = REPO.select(q)
       nationalities = {}
 
@@ -303,11 +310,12 @@ module SPARQL
       q.sample(:original_title)
       q.distinct
       q.from(BOOKGRAPH)
+      q.from_named(REVIEWGRAPH)
       q.where([:work, RDF::FABIO.hasManifestation, :book],
               [:work, RDF::DC.title, :original_title],
               [:book, RDF::REV.hasReview, :review],
               [:book, RDF::DC.title, :title])
-      #q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
+      q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
       res = REPO.select(q)
       titles = {}
 
