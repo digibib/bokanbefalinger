@@ -44,7 +44,7 @@
 			<p class="other-teaser"><%= r.teaser %></p>
 		<% end %>
 	<% else %>
-		<h3 class="no-bold border">Det finnes ingen andre anbefalinger av <em><%= @review.title %></em></h3>
+		<h3 class="no-bold border">Det finnes ingen andre anbefalinger av <em><%= @review.book_title %></em></h3>
 	<% end %>
 	<% if session[:user] %>
 		<div class="clearfix"></div>
