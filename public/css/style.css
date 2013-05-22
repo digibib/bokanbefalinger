@@ -491,7 +491,7 @@ a.remove { margin-right:10px; font-size:12px; float: right; cursor: pointer;}
 /* isbn search */
 .isbn-form { background-color:#eee; padding:15px; width:90%; border: 2px solid #ccc;}
 .isbn-form-new { background-color:#eee; padding:15px; width:82%;
-                  text-align: right; border: 2px solid #ccc; margin-top: 20px;}
+                  text-align: left; border: 2px solid #ccc; margin-top: 20px;}
 
 #isbn { margin:10px}
 #isbn-notfound { display: none;}
