@@ -34,69 +34,107 @@ setInterval(function() {
 $('document').ready(function() {
 
 	// function to send an request to store my-list in the session object
-	function storeList() {
-		console.log("Storing list in session");
+	function storeList(id) {
+		var list_uri = 'http://data.deichman.no/mylist/'+id;
+		var $list = $('#'+id);
+		var label = $list.find('.liste-navn').val();
+		var items = [];
+		$list.find('.mylist-review').each(function() {
+			items.push({ title: $(this).text(),
+			             uri: "http://data.deichman.no"+ $(this).attr("href").substr(11) });
+		});
 
 		$.ajax({
 			type: "POST",
 			url: '/mylist',
-			data: { mylist: "de e lista mi" }
+			data: {uri: list_uri, items: JSON.stringify(items), label: label}
 		});
-		return;
+
 	}
 
 	// update session on rearranging
 	$('.sortable').sortable().bind('sortupdate', function() {
-		storeList();
+		storeList($(this).parents('.single-list').attr('id'));
+	});
+
+	// Show dropdown to select which list to add to
+	$('button.pluss').on('click', function() {
+		$(this).parents('.liste-info').find('.select-list').show();
+	});
+
+	// Cancel add to my list
+	$('button.cancel-add-to-list').on('click', function() {
+		$(this).parents('.liste-info').find('.select-list').hide();
 	});
 
 	// Add to my list
-	$('button.pluss').on('click', function() {
+	$('button.add-to-list').on('click', function() {
 		var uri = $(this).parents('.liste-info').find('input.uri').val();
 		var title = $(this).parents('.liste-info').find('.liste-title a').text()
 
+		var which_list = $(this).parents('.select-list').find('option:selected').val().substr(31);
+
+		if (which_list == "id_new") {
+			var $list = $('.single-list:first').clone().prependTo('.my-lists');
+			$list.show();
+		} else {
+			var $list = $("#" + which_list);
+		}
+
 		// open list if not open
-		var $list = $('.single-list:first')
 		if ( $list.find('.mytriangle').hasClass('open')) {
 			$list.find('.mytriangle').trigger('click');
 		}
 
 		// append review to list
-		$('.single-list:first ol').append('<li><a class="mylist-review" href="/anbefaling/' + uri.substr(24) +'">'+title+'</a><a class="remove">x</a></li>');
+		$list.find('ol').append('<li><a class="mylist-review" href="/anbefaling/' + uri.substr(24) +'">'+title+'</a><a class="remove">x</a></li>');
 
 		// refresh drag and sort
 		$('.sortable').sortable();
-		storeList($list.find('.list_uri').val());
+		storeList($list.attr('id'));
+
+		// Hide select dropdown
+		$(this).parents('.liste-info').find('.select-list').hide();
 	});
 
 	// remove review on click 'x'
 	$('.my-lists').on('click', '.remove', function() {
 		$(this).parents('li').remove();
-		storeList();
+		storeList($(this).parents('.single-list').attr('id'));
 	});
 
 	// Show list when clicking on title or triangle
-	$('.single-list').on('click', '.mytriangle.close', function() {
+	$('.my-lists').on('click', '.mytriangle.close', function() {
 		$(this).removeClass("close").addClass("open");
 		$(this).next().next().slideUp();
 	});
 
 	// open/close list
-	$('.single-list').on('click', '.mytriangle.open', function() {
+	$('.my-lists').on('click', '.mytriangle.open', function() {
 		$('.myliste-innhold').slideUp();
 		$('.mytriangle.close').removeClass("close").addClass("open");
 		$(this).removeClass("open").addClass("close");
 		$(this).next().next().slideDown();
 	});
 
-	$('.myliste-tittel').on('click', function() {
+	$('.my-lists').on('click', '.myliste-tittel', function() {
 		$(this).next().click();
 	});
 
 	// Save list
 	$('.my-lists').on('click', '.save-list', function() {
+		var $btn = $(this);
+		$btn.html("<img style='height:14px' src='img/loading.gif'>");
 		var $list = $(this).parents('.single-list');
-		var uri = $list.find('.list_uri').val();
+		var uri = $list.attr('id');
+
+		if (uri == "id_new") {
+			console.log("POST");
+			return;
+		} else {
+			console.log("PUT");
+		}
+
 		var label = $list.find('.liste-navn').val();
 		var items = [];
 		$list.find('.mylist-review').each(function() {
@@ -107,11 +145,14 @@ $('document').ready(function() {
 		var request = $.ajax({
 			type: "POST",
 			url: '/savemylist',
-			data: { uri: uri, items: JSON.stringify(items), label: label},
+			data: { uri: "http://data.deichman.no/mylist/" + uri, items: JSON.stringify(items), label: label},
 		});
+
 
 		request.done(function(data) {
 			console.log(data);
+			$btn.html("lagre");
+			$list.find('.myliste-tittel').html(label);
 		})
 
 	});

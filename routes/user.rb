@@ -55,8 +55,21 @@ class BokanbefalingerApp < Sinatra::Application
 
   post "/mylist" do
     # This route is called by frontend to store personal list in session object
-    #session[:mylists] = params["mylist"]
-    puts "mine lister session updated: #{session[:mylists]}"
+    items = Array(JSON.parse(params["items"]))
+    uri = params["uri"]
+    label = params["label"]
+
+    list = {"uri" => uri, "label" => label, "items" => items}
+    puts list
+
+    idx = session[:mylists].find_index { |l| l["uri"] == uri}
+    if idx # update session list
+      session[:mylists][idx] = list
+    else # add new list
+      session[:mylists].unshift(list)
+    end
+
+    return "OK"
   end
 
   post "/savemylist" do

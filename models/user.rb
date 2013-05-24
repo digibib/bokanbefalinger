@@ -52,10 +52,9 @@ class User
     mylists.each do |list|
       res = API.get(:mylists, {:list => list}) { next }
       li = res["mylists"].first
-      next unless li
       li["items"] = Array(li["items"]).map do |uri|
         r = Review.new(uri) { next }
-        {:title => r.title, :uri => r.uri }
+        {"title" => r.book_title, "uri" => r.uri }
       end
       session[:mylists] << li
     end
