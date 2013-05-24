@@ -92,8 +92,8 @@ class BokanbefalingerApp < Sinatra::Application
       session[:mylists].delete("http://data.deichman.no/mylist/id_new")
       return session[:mylists][new_uri].to_json
     else
-      session[:mylists][uri]["label"] = res["mylist"].first["label"]
-      session[:mylists][uri]["uri"] = res["mylist"].first["uri"]
+      session[:mylists][uri]["label"] = res["mylists"].first["label"]
+      session[:mylists][uri]["uri"] = res["mylists"].first["uri"]
       return session[:mylists][uri].to_json
     end
   end
