@@ -77,6 +77,7 @@ $('document').ready(function() {
 		if (which_list == "id_new") {
 			var $list = $('.single-list:first').clone().prependTo('.my-lists');
 			$list.show();
+			// TODO add to add-to-list dropdown
 		} else {
 			var $list = $("#" + which_list);
 		}
@@ -124,16 +125,9 @@ $('document').ready(function() {
 	// Save list
 	$('.my-lists').on('click', '.save-list', function() {
 		var $btn = $(this);
-		$btn.html("<img style='height:14px' src='img/loading.gif'>");
+		$btn.html("<img style='height:12px' src='img/loading.gif'>");
 		var $list = $(this).parents('.single-list');
 		var uri = $list.attr('id');
-
-		if (uri == "id_new") {
-			console.log("POST");
-			return;
-		} else {
-			console.log("PUT");
-		}
 
 		var label = $list.find('.liste-navn').val();
 		var items = [];
@@ -145,6 +139,7 @@ $('document').ready(function() {
 		var request = $.ajax({
 			type: "POST",
 			url: '/savemylist',
+			dataType: "json",
 			data: { uri: "http://data.deichman.no/mylist/" + uri, items: JSON.stringify(items), label: label},
 		});
 
@@ -153,6 +148,26 @@ $('document').ready(function() {
 			console.log(data);
 			$btn.html("lagre");
 			$list.find('.myliste-tittel').html(label);
+			$list.attr("id", (data.uri.substr(31)));
+		})
+
+	});
+
+	// Delete list
+	$('.my-lists').on('click', '.delete-list', function() {
+		var $list = $(this).parents('.single-list');
+		var uri = $list.attr('id');
+
+		var request = $.ajax({
+			type: "POST",
+			url: '/deletemylist',
+			data: { uri: "http://data.deichman.no/mylist/" + uri},
+		});
+
+
+		request.done(function() {
+			$list.remove();
+			// TODO remove from add-to-list dropdown
 		})
 
 	});

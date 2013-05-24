@@ -46,7 +46,7 @@ class User
     session[:api_key] = res["api_key"]
     session[:flash_info] = []
     session[:flash_error] = []
-    session[:mylists] = []
+    session[:mylists] = {}
 
     # 4. Populate mylists
     mylists.each do |list|
@@ -56,7 +56,7 @@ class User
         r = Review.new(uri) { next }
         {"title" => r.book_title, "uri" => r.uri }
       end
-      session[:mylists] << li
+      session[:mylists][li["uri"]] = li
     end
 
     # Clear reviewer cache, to make sure we're not stuck with an old cached version

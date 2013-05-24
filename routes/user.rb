@@ -60,15 +60,8 @@ class BokanbefalingerApp < Sinatra::Application
     label = params["label"]
 
     list = {"uri" => uri, "label" => label, "items" => items}
-    puts list
 
-    idx = session[:mylists].find_index { |l| l["uri"] == uri}
-    if idx # update session list
-      session[:mylists][idx] = list
-    else # add new list
-      session[:mylists].unshift(list)
-    end
-
+    session[:mylists][uri] = list
     return "OK"
   end
 
@@ -77,11 +70,44 @@ class BokanbefalingerApp < Sinatra::Application
     uri, label = params["uri"], params["label"]
     items = JSON.parse(params["items"]).map { |i| i["uri"] }
 
-    params = {:uri => uri, :label => label, :items => items,
+    params = {:label => label, :items => items,
               :api_key => session[:api_key], :reviewer => session[:user_uri]}
-    API.put(:mylists, params) { |err| @error_message = err.message}
+    respo = false
+    if uri == "http://data.deichman.no/mylist/id_new"
+      respo = API.post(:mylists, params) { |err| @error_message = err.message}
+    else
+      params[:uri] = uri
+      res = API.put(:mylists, params) { |err| @error_message = err.message}
+    end
 
     halt 400 if @error_message
+    # update list label+id (the list items will allready be updated by /mylist)
+    # TODO check response w Benjamin
+    if respo
+      new_uri = respo["mylists"].first["uri"]
+      session[:mylists][new_uri] = {}
+      session[:mylists][new_uri]["uri"] = new_uri
+      session[:mylists][new_uri]["label"] = respo["mylists"].first["label"]
+      session[:mylists][new_uri]["items"] = session[:mylists]["http://data.deichman.no/mylist/id_new"]["items"]
+      session[:mylists].delete("http://data.deichman.no/mylist/id_new")
+      return session[:mylists][new_uri].to_json
+    else
+      session[:mylists][uri]["label"] = res["mylist"].first["label"]
+      session[:mylists][uri]["uri"] = res["mylist"].first["uri"]
+      return session[:mylists][uri].to_json
+    end
+  end
+
+  post "/deletemylist" do
+    u = params["uri"]
+
+    unless u == "http://data.deichman.no/mylist/id_new"
+      _ = API.delete(:mylists, {:uri => u, :api_key => session[:api_key]}) { |err| @error_message = err.message}
+      halt 400 if @error_message
+    end
+
+    # remove the list from session object
+    session[:mylists].delete(u)
     return "OK"
   end
 

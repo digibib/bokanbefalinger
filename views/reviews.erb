@@ -33,7 +33,7 @@
 					<div class="select-list">
 						<label>Velg hvilken liste:</label></br>
 						<select class="select-list-list">
-							<% session[:mylists].each do |list| %>
+							<% session[:mylists].values.each do |list| %>
 								<option value="<%= list["uri"] %>"><%= list["label"] %></option>
 								<% end %>
 							<option value="http://data.deichman.no/mylist/id_new">Lag ny liste</option>

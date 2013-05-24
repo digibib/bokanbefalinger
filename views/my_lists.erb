@@ -7,11 +7,11 @@
 			<div class="clearfix"></div>
 			<div class="myliste-innhold" style="display:none">
 				<ol class="sortable"></ol>
-			<input autocomplete="off" class="liste-navn" placeholder="navn på lista" type="text" value="Uten tittel"><button class="save-list">lagre</button>
+			<input autocomplete="off" class="liste-navn" placeholder="navn på lista" type="text" value="Uten tittel"><br><button class="save-list">lagre</button><button class="delete-list">slett</button>
 				<p><a href="" style="display:none">Lista som RSS-strøm</a></p>
 			</div>
 		</div>
-		<% session[:mylists].each do |list| %>
+		<% session[:mylists].values.each do |list| %>
 			<div class="single-list" id="<%= list['uri'][31..-1] %>">
 				<div class="myliste-tittel"><%= list["label"] %></div>
 				<div class="mytriangle open"></div>
@@ -22,7 +22,7 @@
 							<li><a class="mylist-review" href="/anbefaling/<%= review["uri"][24,200] %>"><%= review["title"] %></a><a class="remove">x</a></li>
 						<% end %>
 					</ol>
-					<input autocomplete="off" class="liste-navn" placeholder="navn på lista" type="text" value="<%= list['label'] %>"><button class="save-list">lagre</button>
+					<input autocomplete="off" class="liste-navn" placeholder="navn på lista" type="text" value="<%= list['label'] %>"><button class="save-list">lagre</button><button class="delete-list">slett</button>
 					<p><a href="/feed?list=<%= list['uri'] %>&title=<%= list['label']%>">Lista som RSS-strøm</a></p>
 				</div>
 			</div>
