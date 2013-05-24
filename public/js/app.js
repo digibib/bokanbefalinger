@@ -167,7 +167,8 @@ $('document').ready(function() {
 
 		request.done(function() {
 			$list.remove();
-			// TODO remove from add-to-list dropdown
+			// remove from add-to-list dropdowns
+			$("option[value='http://data.deichman.no/mylist/"+uri+"']").remove();
 		})
 
 	});
