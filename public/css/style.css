@@ -576,7 +576,8 @@ a:hover.work-link { text-decoration: underline }
   font-size: 14px;
   display: inline-block;
   margin: 0;
-  padding-top: 10px;
+  margin-top: 10px;
+  position:relative;
 }
 
 .review-teaser { padding: 1em;}
@@ -654,7 +655,7 @@ select.kriterium { vertical-align:top;}
 .liste-img { float: left; width: 100px; height: 150px; display: inline-block; overflow: hidden; text-align: center; padding:4px;}
 .liste-img img { width: 100px; }
 .liste-info { float: left; width: 550px; font-size: 14px; display: inline-block;
-              padding-left:2em; position: relative;}
+              padding-left:2em; position:relative; }
 .liste-title { color: #c12121; font-weight: bold; font-size:16px; margin:0;}
 .liste-title a { text-decoration: none;}
 .liste-title a:hover { text-decoration: underline;}
