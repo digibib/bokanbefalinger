@@ -20,6 +20,9 @@ class Review
       uri = param
        raw = Cache.get(uri, :reviews) {
          res = API.get(:reviews, {:uri => uri}) { |error| yield(error); return }
+         if res["error"] == "no reviews found"
+           yield StandardError.new("Finnes ikke"); return
+         end
          Cache.set(uri, res, :reviews)
          res
       }
