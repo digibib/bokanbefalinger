@@ -10,7 +10,7 @@ when format.include?('application/atom+xml')
 
     result.each do |review|
       xml.entry do
-        xml.title review.title
+        xml.title "#{review.book_title} av #{review.book_authors.map { |a| a["name"] }.join(', ')}"
         xml.author do
           xml.name review.reviewer["name"]
           xml.uri review.reviewer["uri"]
@@ -33,7 +33,7 @@ else
 
       result.each do |review|
         xml.item do
-          xml.title review.title
+          xml.title "#{review.book_title} av #{review.book_authors.map { |a| a["name"] }.join(', ')}"
           xml.link "http://anbefalinger.deichman.no/anbefaling/#{review.uri[24..-1]}"
           if review.text and not review.text.empty?
             xml.description review.text
