@@ -26,8 +26,7 @@
 					<p class="cover-title"><%= review.book_title %></p>
 				<% end %>
 			</div>
-			<div class="liste-info">
-				<input type="hidden" class="uri" value="<%= review.uri %>">
+			<div class="liste-info mylist-parent">
 				<% if session[:user] %>
 					<button class="pluss" tooltip="Legg til i 'Mine lister'">+</button>
 					<div class="select-list">
@@ -36,10 +35,16 @@
 							<% session[:mylists].values.each do |list| %>
 								<option value="<%= list["uri"] %>"><%= list["label"] %></option>
 								<% end %>
-							<option value="http://data.deichman.no/mylist/id_new">Lag ny liste</option>
+							<% unless session[:mylists].values.select { |l| l["uri"] == "http://data.deichman.no/mylist/id_new"}.count > 0 %>
+								<option value="http://data.deichman.no/mylist/id_new">Lag ny liste</option>
+							<% end %>
 						</select><br>
-						<button class="add-to-list">OK</button>
-						<button class="cancel-add-to-list">Avbryt</button>
+						<div class="uri-title">
+							<input type="hidden" class="uri" value="<%= review.uri %>">
+							<input type="hidden" class="title" value="<%= review.book_title %>">
+							<button class="add-to-list">OK</button>
+							<button class="cancel-add-to-list">Avbryt</button>
+						</div>
 					</div>
 				<% end %>
 				<p class="liste-title"><a href="/anbefaling/<%= review.uri[24,200] %>"><%= review.book_title %></a></p>

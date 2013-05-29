@@ -30,28 +30,27 @@ setInterval(function() {
 }, 500);
 
 
+// function to send an request to store my-list in the session object
+function storeList(id) {
+	var list_uri = 'http://data.deichman.no/mylist/'+id;
+	var $list = $('#'+id);
+	var label = $list.find('.liste-navn').val();
+	var items = [];
+	$list.find('.mylist-review').each(function() {
+		items.push({ title: $(this).text(),
+		             uri: "http://data.deichman.no"+ $(this).attr("href").substr(11) });
+	});
+
+	$.ajax({
+		type: "POST",
+		url: '/mylist',
+		data: {uri: list_uri, items: JSON.stringify(items), label: label}
+	});
+
+}
+
 // My list logic
 $('document').ready(function() {
-
-	// function to send an request to store my-list in the session object
-	function storeList(id) {
-		var list_uri = 'http://data.deichman.no/mylist/'+id;
-		var $list = $('#'+id);
-		var label = $list.find('.liste-navn').val();
-		var items = [];
-		$list.find('.mylist-review').each(function() {
-			items.push({ title: $(this).text(),
-			             uri: "http://data.deichman.no"+ $(this).attr("href").substr(11) });
-		});
-
-		$.ajax({
-			type: "POST",
-			url: '/mylist',
-			data: {uri: list_uri, items: JSON.stringify(items), label: label}
-		});
-
-	}
-
 	// update session on rearranging
 	$('.sortable').sortable().bind('sortupdate', function() {
 		storeList($(this).parents('.single-list').attr('id'));
@@ -59,23 +58,19 @@ $('document').ready(function() {
 
 	// Show dropdown to select which list to add to
 	$('button.pluss').on('click', function() {
-		$(this).parents('.liste-info').find('.select-list').show();
-	});
-
-	// Cancel add to my list
-	$('button.cancel-add-to-list').on('click', function() {
-		$(this).parents('.liste-info').find('.select-list').hide();
+		$(this).parents('.mylist-parent').find('.select-list').show();
 	});
 
 	// Add to my list
 	$('button.add-to-list').on('click', function() {
-		var uri = $(this).parents('.liste-info').find('input.uri').val();
-		var title = $(this).parents('.liste-info').find('.liste-title a').text()
+		var uri = $(this).parents('.uri-title').find('input.uri').val();
+		var title = $(this).parents('.uri-title').find('input.title').val();
 
 		var which_list = $(this).parents('.select-list').find('option:selected').val().substr(31);
 
-		if (which_list == "id_new") {
+		if ( $('#id_new').length == 0 ) {
 			var $list = $('.single-list:first').clone().prependTo('.my-lists');
+			$list.attr("id", "id_new");
 			$list.show();
 			// TODO add to add-to-list dropdown
 		} else {
@@ -95,7 +90,12 @@ $('document').ready(function() {
 		storeList($list.attr('id'));
 
 		// Hide select dropdown
-		$(this).parents('.liste-info').find('.select-list').hide();
+		$(this).parents('.mylist-parent').find('.select-list').hide();
+	});
+
+	// Cancel add to my list
+	$('button.cancel-add-to-list').on('click', function() {
+		$(this).parents('.mylist-parent').find('.select-list').hide();
 	});
 
 	// remove review on click 'x'
