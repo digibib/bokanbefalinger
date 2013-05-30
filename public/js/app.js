@@ -47,6 +47,11 @@ function storeList(id) {
 		data: {uri: list_uri, items: JSON.stringify(items), label: label}
 	});
 
+	// Autosave list
+	if ( id != "id_new") {
+		$list.find('.save-list').click();
+	}
+
 }
 
 // My list logic
@@ -68,7 +73,7 @@ $('document').ready(function() {
 
 		var which_list = $(this).parents('.select-list').find('option:selected').val().substr(31);
 
-		if ( $('#id_new').length == 0 ) {
+		if ( $('#id_new').length == 0  && which_list == "id_new" ) {
 			var $list = $('.single-list:first').clone().prependTo('.my-lists');
 			$list.attr("id", "id_new");
 			$list.show();
