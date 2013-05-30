@@ -163,7 +163,7 @@ $('document').ready(function() {
 			$list.find('.edit-title').hide();
 			$list.find('.mylist-buttons').show()
 			$list.find('.edit-list-title').show();
-			$list.find('a').show(); // show RSS link
+			$list.find('.list-rss-link').attr("href", "/feed?list=" +data.uri + "&title=" + label).show(); // show RSS link
 
 			if (uri == "id_new") {
 				// add new list to dropdown, and change "uten tittel" to "lag ny liste"
