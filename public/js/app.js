@@ -73,10 +73,10 @@ $('document').ready(function() {
 
 		var which_list = $(this).parents('.select-list').find('option:selected').val().substr(31);
 
-		if ( $('#id_new').length == 0  && which_list == "id_new" ) {
-			var $list = $('.single-list:first').clone().prependTo('.my-lists');
+		if ( ( $('#id_new').length == 0 ) && ( which_list == "id_new" ) ) {
+			var $list = $('.template-list').clone().removeClass('template-list');
 			$list.attr("id", "id_new");
-			$list.show();
+			$list.prependTo('.my-lists').show();
 			$("option[value='http://data.deichman.no/mylist/id_new']").text("Uten tittel");
 		} else {
 			var $list = $("#" + which_list);
@@ -157,7 +157,6 @@ $('document').ready(function() {
 
 
 		request.done(function(data) {
-			console.log(data);
 			$btn.html("lagre");
 			$list.find('.myliste-tittel').html(label);
 			$list.attr("id", (data.uri.substr(31)));
@@ -165,6 +164,12 @@ $('document').ready(function() {
 			$list.find('.mylist-buttons').show()
 			$list.find('.edit-list-title').show();
 			$list.find('a').show(); // show RSS link
+
+			if (uri == "id_new") {
+				// add new list to dropdown, and change "uten tittel" to "lag ny liste"
+				$('.select-list-list').append("<option value='" + data.uri + "'>" + data.label + "</option>");
+				$("option[value='http://data.deichman.no/mylist/id_new']").text("Lag ny liste");
+			}
 		})
 
 	});
@@ -188,7 +193,6 @@ $('document').ready(function() {
 
 			// add new "lag ny liste" if the removed list was unsaved
 			if (uri == 'id_new') {
-				console.log("addddzzz");
 				$('.select-list-list').append("<option value='http://data.deichman.no/mylist/id_new'>Lag ny liste</option>");
 			}
 		})
