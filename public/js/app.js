@@ -122,6 +122,13 @@ $('document').ready(function() {
 		$(this).next().click();
 	});
 
+	// edit list title
+	$('.my-lists').on('click', '.edit-list-title', function() {
+		// hide link and show input
+		$(this).parents('.mylist-buttons').hide();
+		$(this).parents('.single-list').find('.edit-title').show();
+	});
+
 	// Save list
 	$('.my-lists').on('click', '.save-list', function() {
 		var $btn = $(this);
@@ -149,6 +156,8 @@ $('document').ready(function() {
 			$btn.html("lagre");
 			$list.find('.myliste-tittel').html(label);
 			$list.attr("id", (data.uri.substr(31)));
+			$list.find('.edit-title').hide();
+			$list.find('.mylist-buttons').show()
 		})
 
 	});

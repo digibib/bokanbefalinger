@@ -428,10 +428,11 @@ span.small-link { font-size:0.9em; display:block; padding: 0 24px; margin:0.5em;
 .single-list { background:#ddd; padding: 2px; margin-bottom: 8px;}
 ol.sortable { padding-left: 20px;}
 ol.sortable li { font-size:12px; text-align: left; background:#eee; border:1px solid #ddd; padding:0 2px;}
-.liste-navn { width: 204px; margin-left:15px; font-size: 14px;}
-.save-list, .delete-list { font-size: 14px; width: 46px; margin:8px;}
+.liste-navn { width: 140px; margin-left:15px; font-size: 14px;}
+.save-list, .delete-list, .edit-list-title { font-size: 14px; min-width: 46px; margin:8px;}
 a.remove { margin-right:10px; font-size:12px; float: right; cursor: pointer;}
 .sortable-placeholder { border: 1px dashed #888 !important;}
+
 
 /* skrivetips bar */
 

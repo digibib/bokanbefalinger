@@ -7,7 +7,14 @@
 			<div class="clearfix"></div>
 			<div class="myliste-innhold" style="display:none">
 				<ol class="sortable"></ol>
-			<input autocomplete="off" class="liste-navn" placeholder="navn på lista" type="text" value="Uten tittel"><br><button class="save-list">lagre</button><button class="delete-list">slett</button>
+				<div class="edit-title">
+					<input autocomplete="off" class="liste-navn" placeholder="navn på lista" type="text" value="Uten tittel">
+					<button class="save-list">lagre</button>
+				</div>
+				<div class="mylist-buttons">
+					<button style="display:none" class="edit-list-title">endre tittel</button>
+					<button class="delete-list">slett lista</button>
+				</div>
 				<p><a href="" style="display:none">Lista som RSS-strøm</a></p>
 			</div>
 		</div>
@@ -22,7 +29,15 @@
 							<li><a class="mylist-review" href="/anbefaling/<%= review["uri"][24,200] %>"><%= review["title"] %></a><a class="remove">x</a></li>
 						<% end %>
 					</ol>
-					<input autocomplete="off" class="liste-navn" placeholder="navn på lista" type="text" value="<%= list['label'] %>"><button class="save-list">lagre</button><button class="delete-list">slett</button>
+					<div class="edit-title" style="<%= 'display:none' unless list["uri"][31..-1] == "id_new" %>">
+
+						<input autocomplete="off" class="liste-navn" placeholder="navn på lista" type="text" value="<%= list['label'] %>">
+						<button class="save-list">lagre</button>
+					</div>
+					<div class="mylist-buttons">
+						<button style="<%= 'display:none' if list["uri"][31..-1] == "id_new" %>" class="edit-list-title">endre tittel</button>
+						<button class="delete-list">slett lista</button>
+					</div>
 					<p><a href="/feed?list=<%= list['uri'] %>&title=<%= list['label']%>">Lista som RSS-strøm</a></p>
 				</div>
 			</div>
