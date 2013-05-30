@@ -158,6 +158,8 @@ $('document').ready(function() {
 			$list.attr("id", (data.uri.substr(31)));
 			$list.find('.edit-title').hide();
 			$list.find('.mylist-buttons').show()
+			$list.find('.edit-list-title').show();
+			$list.find('a').show(); // show RSS link
 		})
 
 	});
