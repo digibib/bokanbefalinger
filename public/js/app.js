@@ -178,6 +178,12 @@ $('document').ready(function() {
 			$list.remove();
 			// remove from add-to-list dropdowns
 			$("option[value='http://data.deichman.no/mylist/"+uri+"']").remove();
+
+			// add new "lag ny liste" if the removed list was unsaved
+			if (uri == 'id_new') {
+				console.log("addddzzz");
+				$('.select-list-list').append("<option value='http://data.deichman.no/mylist/id_new'>Lag ny liste</option>");
+			}
 		})
 
 	});
