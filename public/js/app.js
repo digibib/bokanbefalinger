@@ -72,7 +72,7 @@ $('document').ready(function() {
 			var $list = $('.single-list:first').clone().prependTo('.my-lists');
 			$list.attr("id", "id_new");
 			$list.show();
-			// TODO add to add-to-list dropdown
+			$("option[value='http://data.deichman.no/mylist/id_new']").text("Uten tittel");
 		} else {
 			var $list = $("#" + which_list);
 		}
