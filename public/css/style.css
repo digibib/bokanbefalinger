@@ -609,6 +609,7 @@ a:hover.work-link { text-decoration: underline }
     z-index: 99;
 }
 
+.select-list { font-size: 14px; z-index:5000;}
 .select-list select { width: 100%;}
 .select-list button { float: right; margin: 8px 0 8px 8px;}
 
@@ -704,7 +705,7 @@ span.error { background-color: #F9D654; display:none; padding:0.2em;}
 
 #search-results { margin: 40px 0; }
 #search-results p { font-size:14px; margin:0;}
-.search-hit { clear:left; width: 90%; border-bottom: 1px solid #ccc; display:block; margin-top:1em; }
+.search-hit { clear:left; width: 90%; border-bottom: 1px solid #ccc; display:block; margin-top:1em; position:relative;}
 .search-hit span { display:inline-block;}
 .num { font-size:14px;}
 p.search { width: 90%;}

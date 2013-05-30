@@ -13,7 +13,7 @@
 				<% if session[:user] %>
 					<button class="pluss" tooltip="Legg til i 'Mine lister'">+</button>
 					<div class="select-list">
-						<label>Velg hvilken liste:</label></br>
+						<label>Velg hvilken liste:</label><br>
 						<select class="select-list-list">
 							<% session[:mylists].values.each do |list| %>
 								<option value="<%= list["uri"] %>"><%= list["label"] %></option>

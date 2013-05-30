@@ -61,7 +61,7 @@
 						<% if session[:user] %>
 							<button class="pluss" tooltip="Legg til i 'Mine lister'">+</button>
 							<div class="select-list">
-								<label>Velg hvilken liste:</label></br>
+								<label>Velg hvilken liste:</label><br>
 								<select class="select-list-list">
 									<% session[:mylists].values.each do |list| %>
 										<option value="<%= list["uri"] %>"><%= list["label"] %></option>
@@ -106,7 +106,29 @@
 			<% end %>
 		<% else %>
 			<% @result.each do |review| %>
-				<div class="search-hit">
+				<div class="search-hit mylist-parent">
+					<input type="hidden" class="uri" value="<%= review.uri %>">
+					<% if session[:user] %>
+						<button class="pluss" tooltip="Legg til i 'Mine lister'">+</button>
+						<div class="select-list">
+							<label>Velg hvilken liste:</label><br>
+							<select class="select-list-list">
+								<% session[:mylists].values.each do |list| %>
+									<option value="<%= list["uri"] %>"><%= list["label"] %></option>
+									<% end %>
+								<% unless session[:mylists].values.select { |l| l["uri"] == "http://data.deichman.no/mylist/id_new"}.count > 0 %>
+									<option value="http://data.deichman.no/mylist/id_new">Lag ny liste</option>
+								<% end %>
+							</select><br>
+							<div class="uri-title">
+								<input type="hidden" class="uri" value="<%= review.uri %>">
+								<input type="hidden" class="title" value="<%= review.book_title %>">
+								<button class="add-to-list">OK</button>
+								<button class="cancel-add-to-list">Avbryt</button>
+							</div>
+						</div>
+					<% end %>
+
 					<span class="left">
 						<strong class="red-text"><a href="/anbefaling<%= review.uri[23..-1] %>"><%= review.title%></a></strong>
 					</span><br>
@@ -120,7 +142,7 @@
 		<% if @feed_url %>
 			<div class="liste-link">
 				<h3>Abonnér på dette søket:</h3>
-				<span class="hint hint--bottom" data-hint="RSS også kalt «levende bokmerker» er en ordning der en nettleser på en datamaskin henter nyheter eller annet materiale fra Internett fortløpende og automatisk. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Du kan legge inn lenken på din blogg eller abonnere på i din RSS-leser"><img class="rss" src="img/feed-icon-28x28.png"></span><input class="rss-link" class="text" disabled="disabled" value="<%= @feed_url %>"><button class="medium green" id="rss-copy">Kopier</button>
+				<span class="hint hint--bottom" data-hint="RSS også kalt «levende bokmerker» er en ordning der en nettleser på en datamaskin henter nyheter eller annet materiale fra Internett fortløpende og automatisk. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Du kan legge inn lenken på din blogg eller abonnere på i din RSS-leser"><img class="rss" src="img/feed-icon-28x28.png"></span><input class="rss-link" type="text" disabled="disabled" value="<%= @feed_url %>"><button class="medium green" id="rss-copy">Kopier</button>
 			</div>
 		<% end %>
 	</div>
