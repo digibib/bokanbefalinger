@@ -62,12 +62,12 @@ $('document').ready(function() {
 	});
 
 	// Show dropdown to select which list to add to
-	$('button.pluss').on('click', function() {
+	$('.main-left').on('click', 'button.pluss', function() {
 		$(this).parents('.mylist-parent').find('.select-list').show();
 	});
 
 	// Add to my list
-	$('button.add-to-list').on('click', function() {
+	$('.main-left').on('click', 'button.add-to-list', function() {
 		var uri = $(this).parents('.uri-title').find('input.uri').val();
 		var title = $(this).parents('.uri-title').find('input.title').val();
 
@@ -99,7 +99,7 @@ $('document').ready(function() {
 	});
 
 	// Cancel add to my list
-	$('button.cancel-add-to-list').on('click', function() {
+	$('.main-left').on('click', 'button.cancel-add-to-list', function() {
 		$(this).parents('.mylist-parent').find('.select-list').hide();
 	});
 
