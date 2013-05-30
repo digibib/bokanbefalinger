@@ -43,11 +43,13 @@ class BokanbefalingerApp < Sinatra::Application
     end
 
     if params["tittel"] and not params["tittel"].empty?
-      work = Work.new(params["tittel"])
-      @result = work.reviews.reject {|r| r.published == false }
-      @results_title = "Fant #{@result.count} anbefalinger av #{work.title} av #{work.authors.map {|n| n["name"]} .join(", ")}"
-      @feed_url =  "http://anbefalinger.deichman.no/feed?work=#{CGI.escape(params['tittel'])}"
-      @type = "list"
+      work = Work.new(params["tittel"]) { |err| @not_found = true }
+      unless @not_found
+        @result = work.reviews.reject {|r| r.published == false }
+        @results_title = "Fant #{@result.count} anbefalinger av #{work.title} av #{work.authors.map {|n| n["name"]} .join(", ")}"
+        @feed_url =  "http://anbefalinger.deichman.no/feed?work=#{CGI.escape(params['tittel'])}"
+        @type = "list"
+      end
     end
 
     if params["anmelder"] and not params["anmelder"].empty?
