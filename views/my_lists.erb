@@ -19,6 +19,7 @@
 			</div>
 		</div>
 		<% session[:mylists].values.each do |list| %>
+			<% next if String(list['label']).empty? %>
 			<div class="single-list" id="<%= list['uri'][31..-1] %>">
 				<div class="myliste-tittel"><%= list["label"] %></div>
 				<div class="mytriangle open"></div>
