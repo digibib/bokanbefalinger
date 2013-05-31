@@ -39,7 +39,7 @@
 						<button style="<%= 'display:none' if list["uri"][31..-1] == "id_new" %>" class="edit-list-title">endre tittel</button>
 						<button class="delete-list">slett lista</button>
 					</div>
-					<p><a class="list-rss-link" href="/feed?list=<%= list['uri'] %>&title=<%= list['label']%>">Lista som RSS-strøm</a></p>
+					<p><a style="<%= 'display:none' if list['uri'][31..-1] == 'id_new' %>" class="list-rss-link" href="/feed?list=<%= list['uri'] %>&title=<%= list['label']%>">Lista som RSS-strøm</a></p>
 				</div>
 			</div>
 		<% end %>
