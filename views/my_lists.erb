@@ -45,3 +45,11 @@
 		<% end %>
 	</div>
 </div>
+<script>
+$(document).ready(function() {
+	// update session on rearranging
+	$('.sortable').sortable().bind('sortupdate', function() {
+		storeList($(this).parents('.single-list').attr('id'));
+	});
+});
+</script>

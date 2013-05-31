@@ -82,7 +82,8 @@ class BokanbefalingerApp < Sinatra::Application
 
     halt 400 if @error_message
     # update list label+id (the list items will allready be updated by /mylist)
-    # TODO check response w Benjamin
+
+    # TODO fix this mess!
     if respo
       new_uri = respo["mylists"].first["uri"]
       session[:mylists][new_uri] = {}
@@ -109,6 +110,11 @@ class BokanbefalingerApp < Sinatra::Application
     # remove the list from session object
     session[:mylists].delete(u)
     return "OK"
+  end
+
+  get "/refreshmylists" do
+    # reload mylists to show an updated version when users use back-button
+    erb :my_lists, :layout => false
   end
 
 end

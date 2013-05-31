@@ -56,9 +56,15 @@ function storeList(id) {
 
 // My list logic
 $('document').ready(function() {
-	// update session on rearranging
-	$('.sortable').sortable().bind('sortupdate', function() {
-		storeList($(this).parents('.single-list').attr('id'));
+	// Reload list on mouse over, in case of user uses the back buttond
+	var mylists_refreshed = false;
+	$('.my-lists').mouseover(function() {
+		if (!mylists_refreshed) {
+			console.log("reloading mylists");
+			$('#mylists-container').load('/refreshmylists');
+		}
+		mylists_refreshed = true;
+
 	});
 
 	// Show dropdown to select which list to add to
@@ -104,42 +110,44 @@ $('document').ready(function() {
 	});
 
 	// remove review on click 'x'
-	$('.my-lists').on('click', '.remove', function() {
+	$('#mylists-container').on('click', '.remove', function() {
+		var list_id = $(this).parents('.single-list').attr('id');
 		$(this).parents('li').remove();
-		storeList($(this).parents('.single-list').attr('id'));
+		storeList(list_id);
 	});
 
 	// Show list when clicking on title or triangle
-	$('.my-lists').on('click', '.mytriangle.close', function() {
+	$('#mylists-container').on('click', '.mytriangle.close', function() {
 		$(this).removeClass("close").addClass("open");
 		$(this).next().next().slideUp();
 	});
 
 	// open/close list
-	$('.my-lists').on('click', '.mytriangle.open', function() {
+	$('#mylists-container').on('click', '.mytriangle.open', function() {
 		$('.myliste-innhold').slideUp();
 		$('.mytriangle.close').removeClass("close").addClass("open");
 		$(this).removeClass("open").addClass("close");
 		$(this).next().next().slideDown();
 	});
 
-	$('.my-lists').on('click', '.myliste-tittel', function() {
+	$('#mylists-container').on('click', '.myliste-tittel', function() {
 		$(this).next().click();
 	});
 
 	// edit list title
-	$('.my-lists').on('click', '.edit-list-title', function() {
+	$('#mylists-container').on('click', '.edit-list-title', function() {
 		// hide link and show input
 		$(this).parents('.mylist-buttons').hide();
 		$(this).parents('.single-list').find('.edit-title').show();
 	});
 
 	// Save list
-	$('.my-lists').on('click', '.save-list', function() {
+	$('#mylists-container').on('click', '.save-list', function() {
 		var $btn = $(this);
-		$btn.html("<img style='height:12px' src='img/loading.gif'>");
+		$btn.html("<img style='height:12px' src='/img/loading.gif'>");
 		var $list = $(this).parents('.single-list');
 		var uri = $list.attr('id');
+		console.log("saving list: " + uri);
 
 		var label = $list.find('.liste-navn').val();
 		var items = [];
@@ -157,6 +165,7 @@ $('document').ready(function() {
 
 
 		request.done(function(data) {
+			console.log("list saved");
 			$btn.html("lagre");
 			$list.find('.myliste-tittel').html(label);
 			$list.attr("id", (data.uri.substr(31)));
@@ -175,7 +184,7 @@ $('document').ready(function() {
 	});
 
 	// Delete list
-	$('.my-lists').on('click', '.delete-list', function() {
+	$('#mylists-container').on('click', '.delete-list', function() {
 		var $list = $(this).parents('.single-list');
 		var uri = $list.attr('id');
 
