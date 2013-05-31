@@ -162,7 +162,7 @@
 				$kdiv.addClass("chosen");
 				if ( $('#kriterium-container .kriterium-inner').length == 0 || k == "s8" || k == "s9" || $("."+k+".chosen").length >= 1 ) {
 					// Add inner select if first criteria, same criteria, or non-dropdown criteria
-					console.log("First criteria, same criteria or non-dropdown criteria");
+					//console.log("First criteria, same criteria or non-dropdown criteria");
 					$('img.loading').remove();
 					var $kspan = $('.'+k+':last').clone().appendTo($kdiv).show()
 
@@ -183,7 +183,7 @@
 
 				} else {
 					// perform POST /dropdown and repopulate input options to avoid non-matching uris
-					console.log("repopulate dropdown");
+					//console.log("repopulate dropdown");
 					$kdiv.append("<img class='loading' src='img/loading.gif'>");
 					// disable submit when loading:
 					$('#generate-list').prop("disabled", true);
@@ -203,7 +203,7 @@
 						$('#generate-list').prop("disabled", false);
 
 						$('img.loading').remove();
-						console.log(data);
+						//console.log(data);
 
 						var $kspan = $('.'+k+':last').clone()
 						$kspan.find('option').each(function() {
