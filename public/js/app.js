@@ -60,7 +60,7 @@ $('document').ready(function() {
 	var mylists_refreshed = false;
 	$('.my-lists').mouseover(function() {
 		if (!mylists_refreshed) {
-			console.log("reloading mylists");
+			//console.log("reloading mylists");
 			$('#mylists-container').load('/refreshmylists');
 		}
 		mylists_refreshed = true;
@@ -147,7 +147,7 @@ $('document').ready(function() {
 		$btn.html("<img style='height:12px' src='/img/loading.gif'>");
 		var $list = $(this).parents('.single-list');
 		var uri = $list.attr('id');
-		console.log("saving list: " + uri);
+		//console.log("saving list: " + uri);
 
 		var label = $list.find('.liste-navn').val();
 		var items = [];
@@ -165,7 +165,7 @@ $('document').ready(function() {
 
 
 		request.done(function(data) {
-			console.log("list saved");
+			//console.log("list saved");
 			$btn.html("lagre");
 			$list.find('.myliste-tittel').html(label);
 			$list.attr("id", (data.uri.substr(31)));
