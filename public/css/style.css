@@ -115,6 +115,22 @@ h1, h2, h3 { color :#333; line-height: 1.1em;}
 
 .border { border-bottom: 1px solid #ccc;}
 
+
+@-webkit-keyframes yellow-fade {
+   0% {background: #FFFDD0;}
+   100% {background: #eee;}
+}
+
+@keyframes yellow-fade {
+   0% {background: #FFFDD0;}
+   100% {background: #eee;}
+}
+
+.highlight {
+   -webkit-animation: yellow-fade 1s ease-in 1;
+   animation: yellow-fade 1s ease-in 1;
+}
+
 img.loading { margin: 0 1.5em;}
 
 img.rss { width: 22px; height: 22px; margin: auto; margin-bottom:-6px;}

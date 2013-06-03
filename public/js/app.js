@@ -100,6 +100,11 @@ $('document').ready(function() {
 		$('.sortable').sortable();
 		storeList($list.attr('id'));
 
+		$('#mylist-box').addClass('highlight');
+		setTimeout(function() {
+			$('#mylist-box').removeClass('highlight');
+		}, 1500);
+
 		// Hide select dropdown
 		$(this).parents('.mylist-parent').find('.select-list').hide();
 	});
@@ -147,7 +152,7 @@ $('document').ready(function() {
 		$btn.html("<img style='height:12px' src='/img/loading.gif'>");
 		var $list = $(this).parents('.single-list');
 		var uri = $list.attr('id');
-		console.log("saving list: " + uri);
+		//console.log("saving list: " + uri);
 
 		var label = $list.find('.liste-navn').val();
 		var items = [];
@@ -165,7 +170,7 @@ $('document').ready(function() {
 
 
 		request.done(function(data) {
-			console.log("list saved");
+			//console.log("list saved");
 			$btn.html("lagre");
 			$list.find('.myliste-tittel').html(label);
 			$list.attr("id", (data.uri.substr(31)));
