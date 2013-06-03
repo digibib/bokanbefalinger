@@ -51,6 +51,33 @@ $ rake torquebox:upstart:install # NB må kjøres av bruker med tilatelse til å
 $ sudo service torquebox start
 ```
 
+Overnevnte kommanda skal skrive følgende til /etc/init/torquebox.conf:
+
+```bash
+description "This is an upstart job file for TorqueBox"
+
+pre-start script
+bash << "EOF"
+  mkdir -p /var/log/torquebox
+  chown -R torquebox /var/log/torquebox
+EOF
+end script
+
+start on started network-services
+stop on stopped network-services
+respawn
+
+limit nofile 4096 4096
+
+script
+bash << "EOF"
+  su - torquebox
+  /home/torquebox/.lein/immutant/current/jboss/bin/standalone.sh >> /var/log/torquebox/torquebox.log 2>&1
+EOF
+end script
+```
+
+
 ### Apache routing
 JBoss server til port 8080.
 
@@ -79,17 +106,10 @@ JBoss server til port 8080.
 ```
 
 ### Cache
-JBoss har en egen cache-modul (Infinispan), men appen bruker fremdeles [Redis](http://redis.io/) til å cache anbefalingene. Redis er superrask og fungerer så bra at jeg vet ikke om det er noe vits å bytte. Må teste ut Infinispan litt mere først.
+JBoss har en egen cache-modul (Infinispan), men appen bruker fremdeles [Redis](http://redis.io/) til å cache anbefalingene. Redis er superrask og fungerer så bra at jeg vet ikke om det er noe poeng å bytte.
 
 For å installere Redis:
 ```shell
-wget http://download.redis.io/redis-stable.tar.gz
-tar xvzf redis-stable.tar.gz
-cd redis-stable
-make
+sudo apt-get install redis-server
 ```
-
-Starte ved å kjøre `/redis-stable/src/redis-server`. Hvis du ikke angir en konfigurasjonsfil som første parameter, vil Redis bruke standardverdier, og serve fra port 6379.
-
-#### Innstillinger i redis.conf:
-`deamonize yes`
+Dette vil også konfigurere redis som upstart service.
