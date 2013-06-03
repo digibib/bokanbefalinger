@@ -18,7 +18,7 @@
 				<p><a class="list-rss-link" href="" style="display:none">Lista som RSS-strøm</a></p>
 			</div>
 		</div>
-		<% session[:mylists].values.each do |list| %>
+		<% session[:mylists].values.reverse.each do |list| %>
 			<% next if String(list['label']).empty? %>
 			<div class="single-list" id="<%= list['uri'][31..-1] %>">
 				<div class="myliste-tittel"><%= list["label"] %></div>
