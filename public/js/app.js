@@ -47,10 +47,12 @@ function storeList(id) {
 		data: {uri: list_uri, items: JSON.stringify(items), label: label}
 	});
 
-	// Autosave list
-	if ( id != "id_new") {
-		$list.find('.save-list').click();
-	}
+	setTimeout(function() {
+		// Autosave list
+		if ( id != "id_new") {
+			$list.find('.save-list').click();
+		}
+	}, 100); // make sure list is stored in session before saving
 
 }
 
@@ -61,7 +63,13 @@ $('document').ready(function() {
 	$('#mylists-container').mouseover(function() {
 		if (!mylists_refreshed) {
 			//console.log("reloading mylists");
+			// remember if a list is open
+			var openid = $('.mytriangle.close').parents('.single-list').attr('id');
+			// console.log(openid);
 			$('#mylists-container').load('/refreshmylists');
+			$('#mylists-container').ajaxStop(function() {
+			 	$('#'+openid).find('.myliste-innhold').show().end().find('.mytriangle').removeClass('open').addClass('close');
+			});
 		}
 		mylists_refreshed = true;
 
