@@ -9,7 +9,8 @@ require "lib/api"
 require "lib/formatting"
 
 class BokanbefalingerApp < Sinatra::Application
-  enable :sessions
+
+  use TorqueBox::Session::ServletStore
 
   configure :development do
     require "sinatra/reloader"
