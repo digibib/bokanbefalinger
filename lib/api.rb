@@ -104,7 +104,7 @@ module API
     # if the request failed.
     resp = ENDPOINTS[endpoint].delete do |req|
         req.headers = headers.merge({"Content-Type" => "application/json"})
-        req.body = params.to_json
+        req.params = params
         log "API REQUEST to #{ENDPOINTS[endpoint].url_prefix.path}: #{req.body}"
       end
     rescue Faraday::Error, Errno::ETIMEDOUT => err
