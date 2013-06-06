@@ -33,7 +33,7 @@ module API
     # if the request failed.
     resp = ENDPOINTS[endpoint].get do |req|
       req.headers = headers
-      req.body = params.to_json
+      req.params = params
       log "API REQUEST to #{ENDPOINTS[endpoint].url_prefix.path}: #{req.body}"
     end
   rescue Faraday::Error, Errno::ENOENT, Errno::ETIMEDOUT, Errno::ECONNREFUSED => err
