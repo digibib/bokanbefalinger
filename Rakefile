@@ -31,8 +31,8 @@ namespace :cache do
 
       begin
         resp = API.get do |req|
-          req.body = {:limit => limit, :offset => offset, :published => true,
-                      :order_by => "issued", :order => "desc"}.to_json
+          req.params = {:limit => limit, :offset => offset, :published => true,
+                      :order_by => "issued", :order => "desc"}
         end
       rescue => error
         puts error
@@ -57,8 +57,8 @@ namespace :cache do
 
     begin
       resp = API.get do |req|
-        req.body = {:limit => 100, :offset => 0, :published => true,
-                    :order_by => "issued", :order => "desc"}.to_json
+        req.params = {:limit => 100, :offset => 0, :published => true,
+                    :order_by => "issued", :order => "desc"}
       end
     rescue => error
       puts error
