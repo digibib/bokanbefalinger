@@ -43,7 +43,7 @@ module Refresh
   def review(uri)
     begin
       resp = REVIEWS_ENDPOINT.get do |req|
-       req.body = {:uri => uri}.to_json
+       req.params = {:uri => uri}
       end
     rescue StandardError => e
       puts "Could't refresh cache because #{e}"
@@ -59,8 +59,8 @@ module Refresh
   def work(uri)
     begin
       resp = WORKS_ENDPOINT.get do |req|
-        req.body = {:uri => uri, :reviews => true,
-                    :order_by => "issued", :order => "desc"}.to_json
+        req.params = {:uri => uri, :reviews => true,
+                    :order_by => "issued", :order => "desc"}
       end
     rescue StandardError => e
       puts "Could't refresh cache because #{e}"
@@ -75,8 +75,8 @@ module Refresh
   def author(uri)
     begin
       resp = WORKS_ENDPOINT.get do |req|
-        req.body = {:author => uri, :reviews => true,
-                    :order_by => "issued", :order => "desc"}.to_json
+        req.params = {:author => uri, :reviews => true,
+                    :order_by => "issued", :order => "desc"}
       end
     rescue StandardError => e
       puts "Could't refresh cache because #{e}"
@@ -91,8 +91,8 @@ module Refresh
   def reviewer(uri)
     begin
       resp = REVIEWS_ENDPOINT.get do |req|
-        req.body = {:reviewer => uri, :limit => 100, :reviews => true,
-                    :order_by => "issued", :order => "desc"}.to_json
+        req.params = {:reviewer => uri, :limit => 100, :reviews => true,
+                    :order_by => "issued", :order => "desc"}
       end
     rescue StandardError => e
       puts "Could't refresh cache because #{e}"
@@ -107,9 +107,9 @@ module Refresh
   def source(uri)
     begin
       resp = REVIEWS_ENDPOINT.get do |req|
-        req.body = {:source => uri, :limit => 25,
+        req.params = {:source => uri, :limit => 25,
                     :order_by => "issued", :order => "desc",
-                    :published => true}.to_json
+                    :published => true}
       end
     rescue StandardError => e
       puts "Could't refresh cache because #{e}"
