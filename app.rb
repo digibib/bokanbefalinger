@@ -22,6 +22,10 @@ class BokanbefalingerApp < Sinatra::Application
 
   helpers FormattingHelpers
 
+  not_found do
+    "<h1>404 - Siden finnes ikke</h1>"
+  end
+
   before do
     @error_message = nil
   end
