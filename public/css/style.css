@@ -136,8 +136,8 @@ img.loading { margin: 0 1.5em;}
 img.rss { width: 22px; height: 22px; margin: auto; margin-bottom:-6px;}
 
 img.cover {
-  max-width: 150px;
-  height: 200px;
+  width: 150px;
+  max-height: 200px;
 }
 
 button:active { position:relative; top: 3px; }
