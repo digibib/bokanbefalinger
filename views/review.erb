@@ -34,7 +34,7 @@
 				<p class="liste-author">av <%= authors_links(@review.book_authors) %></p>
 				<p class="liste-under">anbefalt av <%= reviewer_link(@review) %> <span class="liste-date"><%= dateformat(@review.issued) %></span> </p>
 				<% if @review.teaser %>
-					<p class="review-teaser"><%= @review.teaser %></p>
+					<p class="review-teaser"><strong><%= @review.teaser %></strong></p>
 				<% end %>
 			</div>
 	</div>
