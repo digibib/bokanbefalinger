@@ -36,7 +36,7 @@ figure { margin: 0; }
 fieldset { border: 2px solid white; margin: 0 2px; padding: 0.35em 0.625em 0.75em; }
 legend { border: 0; padding: 0; }
 
-textarea { overflow: auto; vertical-align: top; }
+textarea { overflow: auto; vertical-align: top; resize: none;}
 button, input, select, textarea { font-family: inherit;   font-size: 100%;
     margin: 0; }
 table { border-collapse: collapse; border-spacing: 0; }
