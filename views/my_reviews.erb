@@ -22,7 +22,11 @@
 					<% else %>
 						<a href="/rediger?uri=<%= review.uri %>"><%= [review.title, "Uten tittel"].reject { |x| x.empty? } .first %></a></p>
 					<% end %>
-					<p class="my-reviews-teaser"><%= enforce_length(review.teaser, 200) %></p>
+					<p class="my-reviews-teaser"><%= enforce_length(review.teaser, 200) %>
+						<% if review.issued %>
+							<a href="/anbefaling<%=review.uri[23..-1] %>">Les mer.</a>
+						<% end %>
+					</p>
 
 					<div class="bottom">
 						<p class="my-reviews-audiences">Målgruppe for anbefalingen:
