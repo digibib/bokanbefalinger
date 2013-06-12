@@ -54,7 +54,7 @@
 	<% end %>
 	<div class="clearfix" style="margin-top:50px"></div>
 	<% if @other_reviews.size > 0 %>
-		<h3 class="no-bold border">Andre anbefalinger av <em><%= @review.title %></em></h3>
+		<h3 class="no-bold border">Andre anbefalinger av <em><%= @review.book_title %></em></h3>
 		<% @other_reviews.each do |r| %>
 			<div class="border">
 				<span class="left">
