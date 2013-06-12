@@ -111,7 +111,7 @@ $('document').ready(function() {
 		$('#mylist-box').addClass('highlight');
 		setTimeout(function() {
 			$('#mylist-box').removeClass('highlight');
-		}, 1500);
+		}, 2500);
 
 		// Hide select dropdown
 		$(this).parents('.mylist-parent').find('.select-list').hide();
