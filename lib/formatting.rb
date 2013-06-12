@@ -102,7 +102,7 @@ module FormattingHelpers
 
   def authors_links(authors)
     # Make each author of a book clickable
-    Array(authors).map { |a| "<a href='/sok?forfatter=#{a['uri']}'>#{a['name']}</a>" } .join(", ")
+    Array(authors).delete_if { |e| e.empty? }.map { |a| "<a href='/sok?forfatter=#{a['uri']}'>#{a['name']}</a>" } .join(", ")
   end
 
   def enforce_length(s, length)
