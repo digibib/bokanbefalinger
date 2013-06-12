@@ -65,11 +65,17 @@
 			<p class="other-teaser"><%= r.teaser %></p>
 		<% end %>
 	<% else %>
-		<h3 class="no-bold border">Det finnes ingen andre anbefalinger av <em><%= @review.book_title %></em></h3>
+		<p class="border">Det finnes ingen andre anbefalinger av <em><%= @review.book_title %></em></p>
 	<% end %>
 	<% if session[:user] and @review.book_isbn %>
 		<div class="clearfix"></div>
 		<p><a href="/ny?isbn=<%= @review.book_isbn %>"><button class="big green" style="margin-right:150px">Skriv en anbefaling av denne boka</button></a></p>
+	<% end %>
+	<% unless session[:user] %>
+		<% if @other_reviews.size > 0 %>
+			<p class="border"><br></p>
+		<% end %>
+		<p class="other-teaser">Logg inn for å skrive en anbefaling av denne boka. Ta kontakt med <a href="mailto:digitalutvikling@gmail.com">Deichmanske bibliotek</a> for å få en brukerkonto</p>
 	<% end %>
 	<p><br></p>
 </div>
