@@ -4,7 +4,46 @@
 	<button class="long green" id="rss-copy">Kopier RSS-lenken</button>
 </div>
 
-<h3><%= @count %> treff<%= ', viser de siste 10' if @count > 10 %></h3>
+<h3><%= @count %> treff</h3>
+<% if @count > 10 %>
+	<div class="liste-pagination tops">
+		<% if @offset > 9 %>
+			<a href="">Forrige</a>
+		<% end %>
+		<% if (@count / 10) > 4 %>
+			<% [1,2].map do |i| %>
+				<% if @page == i %>
+					<strong><%= i %></strong>
+				<% else %>
+					<a href=''><%= i %></a>
+				<% end %>
+			<% end %>
+			<% if @page > 2 and @page < ((@count /10).to_i -1) %>
+				&nbsp;<strong><%= @page %></strong><&nbsp;
+			<% else %>
+				&nbsp;...&nbsp;
+			<% end %>
+			<% [(@count / 10).to_i - 1, (@count / 10).to_i].map do |i| %>
+				<% if @page == i %>
+					<strong><%= i %></strong>
+				<% else %>
+					<a href=''><%= i %></a>
+				<% end %>
+			<% end %>
+		<% else %>
+			<% (@count / 10).to_i.times do |i| %>
+				<% if @page == i+1 %>
+					<strong><%= i+1 %></strong>
+				<% else %>
+					<a href=''><%= i+1 %></a>
+				<% end %>
+			<% end %>
+		<% end %>
+		<% if @count > @offset - 10 %>
+			<a href="">Neste</a>
+		<% end %>
+	</div>
+<% end %>
 <% @reviews.each do |review| %>
 	<div class="clearfix"></div>
 	<div class="listevisning">

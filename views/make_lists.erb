@@ -294,7 +294,7 @@
 			window.prompt("Trykk Ctrl+C, så Enter for å kopiere", $('#rss-link').val());
 		});
 
-		function collectCriteria() {
+		function collectCriteria(o, l) {
 			var subjects = [];
 			$('.inner-input.emne option:selected').each(function(i, e) {
 				if (e.value != "" ) {
@@ -384,11 +384,11 @@
 			          pages: JSON.stringify(pages), years: JSON.stringify(years),
 			          audience: audience, review_audience: review_audience,
 			          genres: genres, languages: languages, formats: formats,
-			          nationalities: nationalities}
+			          nationalities: nationalities, offset: o, limit: l}
 		}
 
 		$('#generate-list').on('click', function() {
-			data = collectCriteria();
+			data = collectCriteria(0,9);
 
 			var request = $.ajax({
 			  url: '/lister',
