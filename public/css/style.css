@@ -460,7 +460,7 @@ a.remove { margin-right:10px; font-size:12px; float: right; cursor: pointer;}
   letter-spacing: 0.03em;
 }
 
-#tips-box ol { margin-left: -16px; font-weight: bold; }
+#tips-box ol { margin-left: -16px; font-weight: normal; }
 #tips-box li { font-size: 1.1em; height:2.5em; }
 #tips-box a, #tips-box a:visited  { color: #444;}
 
