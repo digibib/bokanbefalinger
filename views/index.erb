@@ -1,15 +1,6 @@
 <div class="main-left">
 	<p class="lokkeskrift">Hei og velkommen!</p>
 	<p class="lokkeskrift" style="font-size:31px">Her finner du bokanbefalinger skrevet av bibliotekansatte fra hele Norge</p>
-	<a href="/se-lister"><div class="forside-boks">
-		<p>Se eksempler på lister med anbefalinger du kan bruke. Helt gratis!</p>
-	</div></a>
-	<a href="/lag-lister"><div class="forside-boks">
-		<p>Lag din egen liste med anbefalinger og vis den som en RSS-strøm på nettsiden din!</p>
-	</div></a>
-	<a href="/om"><div class="forside-boks">
-		<p>Vil du og ditt bibliotek bidra med anbefalinger til basen? Slik gjør du det!</p>
-	</div></a>
 	<h3 style="margin-top:50px">Nyeste anbefalinger</h3>
 	<% @reviews.each do |review| %>
 		<div class="clearfix"></div>
@@ -50,7 +41,17 @@
 			</div>
 		</div>
 	<% end %>
+
 	<div class="clearfix"></div>
+	<p><br></p>
+
+	<a href="/lag-lister"><div class="forside-boks">
+		<p>Lag en liste med anbefalinger og vis den som en RSS-strøm på nettsiden din.</p>
+	</div></a>
+	<a href="/om"><div class="forside-boks">
+		<p>Vil du og ditt bibliotek bidra med anbefalinger til basen? Slik gjør du det!</p>
+	</div></a>
+
 	<p><br></p>
 </div>
 <div class="main-right">
