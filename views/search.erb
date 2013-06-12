@@ -90,7 +90,7 @@
 			<% @result.each do |work| %>
 				<div class="search-hit">
 					<span class="left">
-						<strong class="red-text"><%= work.title %></strong>
+						<strong><%= work.title %></strong>
 					</span>
 					<span class="right num">
 						<%= work.reviews.count %> anbefaling<%= 'er' if work.reviews.count > 1 %>
