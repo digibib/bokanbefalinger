@@ -47,7 +47,7 @@
 		<% else %>
 			<%= text %>
 		<% end %>
-		<p><em>Målgruppe for denne anbefalingen er <%= @review.audiences.map { |a| a.downcase } .join("/") %></em></p>
+		<p><em>Denne anbefalingen er skrevet for <%= @review.audiences.map { |a| a.downcase } .join("/") %></em></p>
 	</div>
 	<% if session[:user] and session[:user_uri] == @review.reviewer["uri"] %>
 		<a href="<%= '/rediger?uri=' + @review.uri %>"><button class="medium green">Rediger</button></a>
