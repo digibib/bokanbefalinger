@@ -227,6 +227,9 @@ class BokanbefalingerApp < Sinatra::Application
       end
     end
     reviews = SPARQL::List.generate(list_params)
+    # Store in session to be used in pagination
+    session[:temp_list] = reviews
+
     @count = reviews.count
     offset = (@page * 10) - 10
     @reviews = List.from_uris(reviews, offset)
@@ -234,6 +237,16 @@ class BokanbefalingerApp < Sinatra::Application
     @feed_url = create_feed_url(params.each { |k,v| params[k] = JSON.parse(v) if v.class == String })
 
     erb :list, :layout => false
+  end
+
+  post "/paginate_list" do
+    @page = params["page"].to_i
+    reviews = Array(session[:temp_list])
+    @count = reviews.count
+    offset = (@page * 10) - 10
+
+    @reviews = List.from_uris(reviews, offset)
+    erb :list_inner, :layout => false
   end
 
   post "/dropdown" do

@@ -1,0 +1,79 @@
+<input id="current-page" type="hidden" value="<%= @page %>">
+<% if @count > 10 %>
+	<div class="liste-pagination tops">
+		<% if @page > 1 %>
+			<span class='jslink prev-page'>Forrige</span>
+		<% end %>
+		<% if (@count / 10) > 4 %>
+			<% [1,2].map do |i| %>
+				<% if @page == i %>
+					<strong><%= i %></strong>
+				<% else %>
+					<span class='jslink page'><%= i %></span>
+				<% end %>
+			<% end %>
+			<% if @page > 2 and @page <= (@count / 10 - 1) %>
+				&nbsp;<strong><%= @page %></strong>&nbsp;
+			<% else %>
+				&nbsp;...&nbsp;
+			<% end %>
+			<% [@count / 10, @count / 10+1].map do |i| %>
+				<% if @page == i %>
+					<strong><%= i %></strong>
+				<% else %>
+					<span class='jslink page'><%= i %></span>
+				<% end %>
+			<% end %>
+		<% else %>
+			<% (@count / 10).times do |i| %>
+				<% if @page == i+1 %>
+					<strong><%= i+1 %></strong>
+				<% else %>
+					<span class='jslink page'><%= i+1 %></span>
+				<% end %>
+			<% end %>
+		<% end %>
+		<% if @count > (@page * 10) %>
+			<span class='jslink next-page'>Neste</span>
+		<% end %>
+	</div>
+<% end %>
+<% @reviews.each do |review| %>
+	<div class="clearfix"></div>
+	<div class="listevisning">
+		<div class="liste-img <%= "light-gray" unless review.book_cover %>">
+			<% if review.book_cover %>
+				<img src="<%= review.book_cover %>">
+			<% else %>
+				<p class="cover-author"><%= review.book_authors.map { |a| a["name"] }.join(", ")%></p>
+				<p class="cover-title"><%= review.book_title %></p>
+			<% end %>
+		</div>
+		<div class="liste-info mylist-parent">
+			<% if session[:user] %>
+				<button class="pluss" tooltip="Legg til i 'Mine lister'">+</button>
+				<div class="select-list">
+					<label>Velg hvilken liste:</label><br>
+					<select class="select-list-list">
+						<% session[:mylists].values.each do |list| %>
+							<option value="<%= list["uri"] %>"><%= list["label"] %></option>
+							<% end %>
+						<% unless session[:mylists].values.select { |l| l["uri"] == "http://data.deichman.no/mylist/id_new"}.count > 0 %>
+							<option value="http://data.deichman.no/mylist/id_new">Lag ny liste</option>
+						<% end %>
+					</select><br>
+					<div class="uri-title">
+						<input type="hidden" class="uri" value="<%= review.uri %>">
+						<input type="hidden" class="title" value="<%= review.book_title %>">
+						<button class="add-to-list">OK</button>
+						<button class="cancel-add-to-list">Avbryt</button>
+					</div>
+				</div>
+			<% end %>
+			<p class="liste-title"><a href="/anbefaling/<%= review.uri[24,200] %>"><%= review.book_title %></a></p>
+			<p class="liste-author">av <%= authors_links(review.book_authors) %></p>
+			<p class="liste-under">anbefalt av <%= reviewer_link(review) %> <span class="liste-date"><%= dateformat(review.issued) %></span> </p>
+				<p class="liste-teaser"><%= review.teaser %></p>
+		</div>
+	</div>
+<% end %>

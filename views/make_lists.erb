@@ -399,82 +399,54 @@
 
 			$('#list-results').html("<img class='loading' src='img/loading.gif'>").show();
 
-		    function printReviews(element, index, array) {
-		    	$('#list-results').append('<p>'+element+'</p>');
-		    }
 			request.done(function(data) {
 				$('#list-results').html(data);
-				// var l = data.length;
-				// if (l > 10) {
-				// 	$('#list-results').html("<h2>"+ data.length +" treff, viser de første 10:</h2>");
-				// } else {
-				// 	$('#list-results').html("<h2>"+ data.length +" treff:</h2>");
-				// }
-				// data.forEach(printReviews);
 			});
 		});
 
 		// Pagination
 		$('#list-results').on('click', '.page', function() {
 			var page = parseInt($(this).text());
-			console.log(page);			data = collectCriteria(page);
 
 			var request = $.ajax({
-			  url: '/lister',
+			  url: '/paginate_list',
 			  type: "POST",
-			  data: data,
+			  data: {page :page},
 			  dataType: "html"
 			});
 
-			$('#list-results').html("<img class='loading' src='img/loading.gif'>").show();
-
-		    function printReviews(element, index, array) {
-		    	$('#list-results').append('<p>'+element+'</p>');
-		    }
 			request.done(function(data) {
-				$('#list-results').html(data);
+				$('#results_inner').html(data);
 			});
 		});
 
 		$('#list-results').on('click', '.prev-page', function() {
 			var page = parseInt($("#current-page").val()) - 1;
-			data = collectCriteria(page);
 
 			var request = $.ajax({
-			  url: '/lister',
+			  url: '/paginate_list',
 			  type: "POST",
-			  data: data,
+			  data: {page: page},
 			  dataType: "html"
 			});
 
-			$('#list-results').html("<img class='loading' src='img/loading.gif'>").show();
-
-		    function printReviews(element, index, array) {
-		    	$('#list-results').append('<p>'+element+'</p>');
-		    }
 			request.done(function(data) {
-				$('#list-results').html(data);
+				$('#results_inner').html(data);
 			});
 		});
 
 		$('#list-results').on('click', '.next-page', function() {
 			var page = parseInt($("#current-page").val()) + 1;
-			data = collectCriteria(page);
 
 			var request = $.ajax({
-			  url: '/lister',
+			  url: '/paginate_list',
 			  type: "POST",
-			  data: data,
+			  data: {page: page},
 			  dataType: "html"
 			});
 
-			$('#list-results').html("<img class='loading' src='img/loading.gif'>").show();
-
-		    function printReviews(element, index, array) {
-		    	$('#list-results').append('<p>'+element+'</p>');
-		    }
 			request.done(function(data) {
-				$('#list-results').html(data);
+				$('#results_inner').html(data);
 			});
 		});
 
