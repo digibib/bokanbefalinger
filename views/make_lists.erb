@@ -318,22 +318,22 @@
 
 			var pages_from = [], pages_to = [];
 			$('#kriterium-container input.pages-from').each(function(i, e) {
-				e.value == "" ? pages_from.push(0) : pages_from.push(e.value);
+				e.value == "" ? pages_from.push("0") : pages_from.push(e.value);
 			});
 
 			$('#kriterium-container input.pages-to').each(function(i, e) {
-				e.value == "" ? pages_to.push(10000) : pages_to.push(e.value);
+				e.value == "" ? pages_to.push("10000") : pages_to.push(e.value);
 			});
 
 			var pages = _.zip(pages_from, pages_to);
 
 			var years_from = [], years_to = [];
 			$('#kriterium-container input.years-from').each(function(i, e) {
-				e.value == "" ? years_from.push(0) : years_from.push(e.value);
+				e.value == "" ? years_from.push("0") : years_from.push(e.value);
 			});
 
 			$('#kriterium-container input.years-to').each(function(i, e) {
-				e.value == "" ? years_to.push(10000) : years_to.push(e.value);
+				e.value == "" ? years_to.push("10000") : years_to.push(e.value);
 			});
 
 			var years = _.zip(years_from, years_to);
