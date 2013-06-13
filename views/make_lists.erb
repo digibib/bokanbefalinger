@@ -294,7 +294,7 @@
 			window.prompt("Trykk Ctrl+C, så Enter for å kopiere", $('#rss-link').val());
 		});
 
-		function collectCriteria(o, l) {
+		function collectCriteria(p) {
 			var subjects = [];
 			$('.inner-input.emne option:selected').each(function(i, e) {
 				if (e.value != "" ) {
@@ -384,11 +384,11 @@
 			          pages: JSON.stringify(pages), years: JSON.stringify(years),
 			          audience: audience, review_audience: review_audience,
 			          genres: genres, languages: languages, formats: formats,
-			          nationalities: nationalities, offset: o, limit: l}
+			          nationalities: nationalities, page: p}
 		}
 
 		$('#generate-list').on('click', function() {
-			data = collectCriteria(0,9);
+			data = collectCriteria(1);
 
 			var request = $.ajax({
 			  url: '/lister',
@@ -411,6 +411,70 @@
 				// 	$('#list-results').html("<h2>"+ data.length +" treff:</h2>");
 				// }
 				// data.forEach(printReviews);
+			});
+		});
+
+		// Pagination
+		$('#list-results').on('click', '.page', function() {
+			var page = parseInt($(this).text());
+			console.log(page);			data = collectCriteria(page);
+
+			var request = $.ajax({
+			  url: '/lister',
+			  type: "POST",
+			  data: data,
+			  dataType: "html"
+			});
+
+			$('#list-results').html("<img class='loading' src='img/loading.gif'>").show();
+
+		    function printReviews(element, index, array) {
+		    	$('#list-results').append('<p>'+element+'</p>');
+		    }
+			request.done(function(data) {
+				$('#list-results').html(data);
+			});
+		});
+
+		$('#list-results').on('click', '.prev-page', function() {
+			var page = parseInt($("#current-page").val()) - 1;
+			data = collectCriteria(page);
+
+			var request = $.ajax({
+			  url: '/lister',
+			  type: "POST",
+			  data: data,
+			  dataType: "html"
+			});
+
+			$('#list-results').html("<img class='loading' src='img/loading.gif'>").show();
+
+		    function printReviews(element, index, array) {
+		    	$('#list-results').append('<p>'+element+'</p>');
+		    }
+			request.done(function(data) {
+				$('#list-results').html(data);
+			});
+		});
+
+		$('#list-results').on('click', '.next-page', function() {
+			var page = parseInt($("#current-page").val()) + 1;
+			data = collectCriteria(page);
+
+			var request = $.ajax({
+			  url: '/lister',
+			  type: "POST",
+			  data: data,
+			  dataType: "html"
+			});
+
+			$('#list-results').html("<img class='loading' src='img/loading.gif'>").show();
+
+		    function printReviews(element, index, array) {
+		    	$('#list-results').append('<p>'+element+'</p>');
+		    }
+			request.done(function(data) {
+				$('#list-results').html(data);
 			});
 		});
 

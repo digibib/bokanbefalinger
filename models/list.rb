@@ -128,11 +128,11 @@ class List
     works
   end
 
-  def self.from_uris(uris, offset=0, limit=9)
+  def self.from_uris(uris, offset=0, limit=10)
     # Returns an array of Review instances from a list of uris.
     # Returns an empty array if no reviews found, or something went wrong.
     lista = []
-    uris[0..9].each do |uri|
+    uris[offset...(offset+limit)].each do |uri|
       error = nil
       r = Review.new(uri) { |err| error = err }
       next if error

@@ -215,10 +215,9 @@ class BokanbefalingerApp < Sinatra::Application
 
   post "/lister" do
     list_params = params
-    @offset = list_params["offset"].to_i
-    @limit = list_params["limit"].to_i
-    list_params.delete "offset"
-    list_params.delete "limit"
+
+    @page = list_params["page"].to_i
+    list_params.delete "page"
 
     list_params.map do |k,v|
       if k == "years" || k == "pages"
@@ -229,8 +228,8 @@ class BokanbefalingerApp < Sinatra::Application
     end
     reviews = SPARQL::List.generate(list_params)
     @count = reviews.count
-    @reviews = List.from_uris(reviews, @offset, @limit)
-    @page = (@offset / 9) + 1
+    offset = (@page * 10) - 10
+    @reviews = List.from_uris(reviews, offset)
 
     @feed_url = create_feed_url(params.each { |k,v| params[k] = JSON.parse(v) if v.class == String })
 

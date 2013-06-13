@@ -651,6 +651,9 @@ select.kriterium { vertical-align:top;}
 #rss-link { margin-left:6px; width:68%; font-size: 13px; padding: 2px; height:18px;}
 #rss-copy { margin-left: 1em;}
 .inner-input { width: 250px ;}
+span.jslink { cursor: pointer; color: #c12121;}
+span.jslink:hover { text-decoration: underline;}
+
 
 /* se lister */
 .anbefalingsliste { background:#eee; font-size: 14px; width:90%; padding: 1%; margin-bottom:1em;}

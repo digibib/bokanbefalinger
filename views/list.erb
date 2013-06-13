@@ -5,42 +5,43 @@
 </div>
 
 <h3><%= @count %> treff</h3>
+<input id="current-page" type="hidden" value="<%= @page %>">
 <% if @count > 10 %>
 	<div class="liste-pagination tops">
-		<% if @offset > 9 %>
-			<a href="">Forrige</a>
+		<% if @page > 1 %>
+			<span class='jslink prev-page'>Forrige</span>
 		<% end %>
 		<% if (@count / 10) > 4 %>
 			<% [1,2].map do |i| %>
 				<% if @page == i %>
 					<strong><%= i %></strong>
 				<% else %>
-					<a href=''><%= i %></a>
+					<span class='jslink page'><%= i %></span>
 				<% end %>
 			<% end %>
-			<% if @page > 2 and @page < ((@count /10).to_i -1) %>
-				&nbsp;<strong><%= @page %></strong><&nbsp;
+			<% if @page > 2 and @page < (@count / 10 - 1) %>
+				&nbsp;<strong><%= @page %></strong>&nbsp;
 			<% else %>
 				&nbsp;...&nbsp;
 			<% end %>
-			<% [(@count / 10).to_i - 1, (@count / 10).to_i].map do |i| %>
+			<% [@count / 10, @count / 10+1].map do |i| %>
 				<% if @page == i %>
 					<strong><%= i %></strong>
 				<% else %>
-					<a href=''><%= i %></a>
+					<span class='jslink page'><%= i %></span>
 				<% end %>
 			<% end %>
 		<% else %>
-			<% (@count / 10).to_i.times do |i| %>
+			<% (@count / 10).times do |i| %>
 				<% if @page == i+1 %>
 					<strong><%= i+1 %></strong>
 				<% else %>
-					<a href=''><%= i+1 %></a>
+					<span class='jslink page'><%= i+1 %></span>
 				<% end %>
 			<% end %>
 		<% end %>
-		<% if @count > @offset - 10 %>
-			<a href="">Neste</a>
+		<% if @count > (@page * 10) %>
+			<span class='jslink next-page'>Neste</span>
 		<% end %>
 	</div>
 <% end %>
