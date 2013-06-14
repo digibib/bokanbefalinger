@@ -27,11 +27,11 @@
 		<span>Målgruppe for anbefalingen<span class="redstar">*</span></span>
 		<fieldset id="audiences-fieldset">
 			<label for="a1" class="checklabel">barn
-			<input id="a1" class="audiences" name="a1" <%= 'checked="checked"' if @review.audiences.include? "Barn" %> type="checkbox" value="barn"></label><br>
+			<input id="a1" class="audiences" name="a1" <%= 'checked="checked"' if @review.audiences.include? "barn" %> type="checkbox" value="barn"></label><br>
 			<label for="a2" class="checklabel">ungdom
-			<input id="a2" class="audiences" name="a2" <%= 'checked="checked"' if @review.audiences.include? "Ungdom" %> type="checkbox" value="ungdom"></label><br>
+			<input id="a2" class="audiences" name="a2" <%= 'checked="checked"' if @review.audiences.include? "ungdom" %> type="checkbox" value="ungdom"></label><br>
 			<label for="a3" class="checklabel">voksne
-			<input id="a3" class="audiences" name="a3" <%= 'checked="checked"' if @review.audiences.include? "Voksen" %> type="checkbox" value="voksen"></label><br>
+			<input id="a3" class="audiences" name="a3" <%= 'checked="checked"' if @review.audiences.include? "voksen" %> type="checkbox" value="voksen"></label><br>
 		</fieldset>
 		</div>
 

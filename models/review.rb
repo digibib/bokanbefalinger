@@ -48,7 +48,7 @@ class Review
     @title     = review["title"]
     @teaser    = review["teaser"]
     @text      = review["text"]
-    @audiences = review["audience"]
+    @audiences = review["audience"].map { |a| a.downcase }
     @published = review["published"] || false
 
     # Review data (read only)

@@ -47,8 +47,8 @@
 		<% else %>
 			<%= text %>
 		<% end %>
-		<% if @review.audiences.find_index "Voksen" %>
-			<% i = @review.audiences.find_index "Voksen" %>
+		<% if @review.audiences.find_index "voksen" %>
+			<% i = @review.audiences.find_index "voksen" %>
 			<% audiences = @review.audiences %>
 			<% audiences[i] = "Voksne" %>
 		<% else %>
