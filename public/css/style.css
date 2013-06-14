@@ -267,11 +267,14 @@ label { font-weight: bold;}
   position: absolute;
   margin-top:100px;
   padding: 10px;
-  border: 3px solid #AF8A31;
-  background-color: #FFC848;
+  border: 2px solid #555;
+  background-color: #FFFDD0;
   width: 600px;
+  font-size:15px;
 }
 
+.tooltiplist { font-size: 15px;}
+.tooltiplist li { margin-top: 0.5em;}
 .tooltip-target {
   cursor: pointer;
 }
