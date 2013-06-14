@@ -1,4 +1,4 @@
-<div class="main-left">
+<div class="main-left grid_unit l-grid_unit--span-5">
 	<p class="lokkeskrift">Hei og velkommen!</p>
 	<h3>Her finner du bokanbefalinger skrevet av bibliotekansatte fra hele Norge</h2>
 	<h2 style="margin-top:50px">Nyeste anbefalinger</h3>
@@ -44,16 +44,19 @@
 
 	<div class="clearfix"></div>
 	<p><br></p>
-
-	<a href="/lag-lister"><div class="forside-boks">
-		<p>Lag en liste med anbefalinger og vis den som en RSS-strøm på nettsiden din.</p>
-	</div></a>
-	<a href="/om"><div class="forside-boks">
-		<p>Vil du og ditt bibliotek bidra med anbefalinger til basen? Slik gjør du det!</p>
-	</div></a>
-
+	<div class="m-grid m-grid--divide-2">
+		<div class="grid_unit">
+			<div class="forside-boks">
+				<a href="/lag-lister"><p>Lag en liste med anbefalinger og vis den som en RSS-strøm på nettsiden din.</p></a>
+			</div>
+		</div><div class="grid_unit">
+			<div class="forside-boks">
+				<a href="/om"><p>Vil du og ditt bibliotek bidra med anbefalinger til basen? Slik gjør du det!</p></a>
+			</div>
+		</div>
+	</div>
 	<p><br></p>
 </div>
-<div class="main-right">
+<div class="main-right grid_unit l-grid_unit--span-2">
 	<%= erb :login %>
 </div>

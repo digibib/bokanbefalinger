@@ -1,4 +1,4 @@
-<div class="main-left">
+<div class="main-left grid_unit l-grid_unit--span-5">
 	<% if request.referrer =~ /sok?\?/ %>
 		<p><a href="javascript: history.back()">← tilbake til trefflista</a></p>
 	<% end %>
@@ -86,6 +86,6 @@
 	<% end %>
 	<p><br></p>
 </div>
-<div class="main-right">
+<div class="main-right grid_unit l-grid_unit--span-2">
 	<%= erb :login %>
 </div>

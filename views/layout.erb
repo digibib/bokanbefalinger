@@ -11,6 +11,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/css/style.css" type="text/css">
   <link rel="stylesheet" href="/css/chosen.css" type="text/css">
+  <link rel="stylesheet" href="/css/ingrid.css" type="text/css">
   <link href='http://fonts.googleapis.com/css?family=Sacramento' rel='stylesheet' type='text/css'>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
   <script src="/js/chosen.jquery.min.js"></script>
@@ -42,34 +43,35 @@
       </div>
     </header>
     <div id="top"></div>
-    <div id="main" role="main">
-
-      <ul id="navbar">
-        <li <%= 'class="active"' if request.path_info == '/' %>>
-          <a href="/"><span class="inner-navbutton">Forside</span></a>
-        </li>
-        <li <%= 'class="active"' if request.path_info == '/anbefalinger' %>>
-          <a href="/anbefalinger"><span class="inner-navbutton">Nye anbefalinger</span></a>
-        </li>
-        <li <%= 'class="active"' if request.path_info == '/se-lister' %>>
-          <a href="/se-lister"><span class="inner-navbutton">Se lister</span></a>
-        </li>
-        <li <%= 'class="active"' if request.path_info == '/lag-lister' %>>
-          <a href="/lag-lister"><span class="inner-navbutton">Lag lister</span></a>
-        </li>
-        <li <%= 'class="active"' if request.path_info.match /sok/ %>>
-          <a href="/sok"><span class="inner-navbutton">Søk</span></a>
-        </li>
-      </ul>
-      <div id="messages">
-        <% Array(session[:flash_info]).each do |info| %>
-          <p class="info"><%= info %></p>
-        <% end %>
-        <% Array(session[:flash_error]).each do |error| %>
-          <p class="error"><%= error %></p>
-        <% end %>
-        <% session[:flash_error] = [] %>
-        <% session[:flash_info] = [] %>
+    <div id="main" class="l-grid l-grid--divide-7" role="main">
+      <div class="grid_field-unit">
+        <ul id="navbar">
+          <li <%= 'class="active"' if request.path_info == '/' %>>
+            <a href="/"><span class="inner-navbutton">Forside</span></a>
+          </li>
+          <li <%= 'class="active"' if request.path_info == '/anbefalinger' %>>
+            <a href="/anbefalinger"><span class="inner-navbutton">Nye anbefalinger</span></a>
+          </li>
+          <li <%= 'class="active"' if request.path_info == '/se-lister' %>>
+            <a href="/se-lister"><span class="inner-navbutton">Se lister</span></a>
+          </li>
+          <li <%= 'class="active"' if request.path_info == '/lag-lister' %>>
+            <a href="/lag-lister"><span class="inner-navbutton">Lag lister</span></a>
+          </li>
+          <li <%= 'class="active"' if request.path_info.match /sok/ %>>
+            <a href="/sok"><span class="inner-navbutton">Søk</span></a>
+          </li>
+        </ul>
+        <div id="messages">
+          <% Array(session[:flash_info]).each do |info| %>
+            <p class="info"><%= info %></p>
+          <% end %>
+          <% Array(session[:flash_error]).each do |error| %>
+            <p class="error"><%= error %></p>
+          <% end %>
+          <% session[:flash_error] = [] %>
+          <% session[:flash_info] = [] %>
+        </div>
       </div>
 
       <%= yield %>

@@ -68,22 +68,11 @@ h1, h2, h3 { color :#333; line-height: 1.1em;}
 /* main layout */
 
 #main {
-  margin-top: 80px;
+  margin-top: 70px;
   margin-left: auto;
   margin-right: auto;
-  width: 1000px;
-}
-
-.main-left {
-  width: 720px;
-  padding-right:20px;
-  float: left;
-}
-
-.main-right {
-  margin-top: 20px;
-  width: 260px;
-  float: left;
+  max-width: 1000px;
+  padding: 1em;
 }
 
 /* global styles */
@@ -223,7 +212,7 @@ p.error {
   background: #F9D654;
   padding: 15px;
   margin:5px 0;
-  width: 970px;
+  max-width: 970px;
   clear: both;
   color: #222;
   font-weight: bold;
@@ -233,7 +222,7 @@ p.error-small {
   background: #F9D654;
   padding: 15px;
   margin:10px 0;
-  width: 667px;
+  max-width: 667px;
   clear: both;
   color: #222;
   font-weight: bold;
@@ -243,7 +232,7 @@ p.info {
   background: #eee;
   padding: 15px;
   margin: 5px 0;
-  width: 970px;
+  max-width: 970px;
   clear: both;
   color: #222;
   font-weight: bold;
@@ -286,7 +275,7 @@ header {
   background: #c12121;
   color: #fff;
   width: 100%;
-  height: 60px;
+  min-height: 60px;
   position: fixed;
   top:0;
   left:0;
@@ -294,7 +283,7 @@ header {
 }
 
 #header-inner {
-  width: 1000px;
+  max-width: 1000px;
   height: 100%;
   margin: auto;
 }
@@ -348,19 +337,20 @@ header {
 
 #navbar {
   list-style:none;
-  background: #444;
   color:#fff;
-  height: 46px;
-  border-radius:5px;
+  min-height: 46px;
+  padding:0;
 }
 
 #navbar li {
+  background: #444;
   position: relative;
   display: inline-block;
   height: 100%;
   width: 150px;
-  border-right:1px solid white;
+  margin-bottom:2px;
   text-align: center;
+  border-radius: 2px;
   line-height:46px;
 }
 
@@ -378,15 +368,17 @@ span.inner-navbutton:hover {
   font-weight: bold;
 }
 
-#navbar li.active :after {
-  position: absolute;
-  content: ' ';
-  height: 0;
-  width: 0;
-  top: 45px;
-  left:62px;
-  border: 10px solid transparent;
-  border-top-color: #444;
+@media only screen and (min-width: 830px) {
+  #navbar li.active :after {
+    position: absolute;
+    content: ' ';
+    height: 0;
+    width: 0;
+    top: 45px;
+    left:62px;
+    border: 10px solid transparent;
+    border-top-color: #444;
+  }
 }
 
 #navbar a, #nabbar a:visited  {
@@ -399,7 +391,8 @@ span.inner-navbutton:hover {
 .right-bar {
   border: 2px solid #ccc;
   background: #eee;
-  width: 234px;
+  width: 100%;
+  box-sizing: border-box;
   padding: 10px;
   margin-bottom: 30px;
 }
@@ -470,10 +463,8 @@ a.remove { margin-right:10px; font-size:12px; float: right; cursor: pointer;}
 /* forside */
 
 .forside-boks {
-  display: inline-block;
-  width: 300px;
   background:#eee;
-  margin-left: 20px;
+  margin: 10px;
   padding: 5px;
   font-size:14px;
   color: #c12121;
@@ -482,7 +473,7 @@ a.remove { margin-right:10px; font-size:12px; float: right; cursor: pointer;}
 
 /* new review */
 
-#review-form { width: 600px; margin-top: 30px;}
+#review-form { max-width: 600px; margin-top: 30px;}
 
 #review-form input,#review-form textarea {
   width:100%;
@@ -592,7 +583,7 @@ a:hover.work-link { text-decoration: underline }
 
 .review-info {
   float: left;
-  width: 520px;
+  width: 70%;
   font-size: 14px;
   display: inline-block;
   margin: 0;
@@ -632,12 +623,6 @@ a:hover.work-link { text-decoration: underline }
 .select-list select { width: 100%;}
 .select-list button { float: right; margin: 8px 0 8px 8px;}
 
-/* work page */
-
-.review-teaser-work {
-  float: left;
-  width: 535px;
-}
 
 /* listegenertor */
 #kriterium-container label { font-weight: normal;}
@@ -676,10 +661,9 @@ span.jslink:hover { text-decoration: underline;}
 
 .search-all { width: 300px; display:inline-block; float:left;}
 .listevisning { margin: 30px 0;}
-.liste-img { float: left; width: 100px; height: 150px; display: inline-block; overflow: hidden; text-align: center; padding:4px;}
+.liste-img { float: left; width: 100px; height: 150px; display: inline-block; overflow: hidden; text-align: center; padding:4px;margin-right:1em;}
 .liste-img img { width: 100px; }
-.liste-info { float: left; width: 550px; font-size: 14px; display: inline-block;
-              padding-left:2em; position:relative; }
+.liste-info { float: left; width: 77%; font-size: 14px; display: inline-block; position:relative; }
 .liste-title { color: #c12121; font-weight: bold; font-size:16px; margin:0;}
 .liste-title a { text-decoration: none;}
 .liste-title a:hover { text-decoration: underline;}
