@@ -7,6 +7,14 @@
 require "time"
 require "cgi"
 
+class Fixnum
+  def roundup
+    # Round up to nearest multiple of 10
+    return self if self % 10 == 0   # already a factor of 10
+    return self + 10 - (self % 10)  # go to nearest factor 10
+  end
+end
+
 module FormattingHelpers
 
   def create_uri(path)
