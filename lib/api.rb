@@ -28,7 +28,7 @@ module API
   end
 
   def self.get(endpoint, params, headers={})
-    # Perform GET request with parmas as JSON-encoded body.
+    # Perform GET request with parmas as query-params.
     # It returns the parsed JSON result, or yields to a block with an error
     # if the request failed.
     resp = ENDPOINTS[endpoint].get do |req|
@@ -99,7 +99,7 @@ module API
   end
 
   def self.delete(endpoint, params, headers={})
-    # Perform a DELETE request with parmas as JSON-encoded body.
+    # Perform a DELETE request with parmas as query-params.
     # It returns the parsed JSON result, or yields to a block with an error
     # if the request failed.
     resp = ENDPOINTS[endpoint].delete do |req|
