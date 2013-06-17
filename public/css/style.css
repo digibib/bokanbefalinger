@@ -644,7 +644,7 @@ span.jslink:hover { text-decoration: underline;}
 
 
 /* se lister */
-.anbefalingsliste { background:#eee; font-size: 14px; width:90%; padding: 1%; margin-bottom:1em;}
+.anbefalingsliste { background:#eee; font-size: 14px; width:95%; padding: 1%; margin-bottom:1em;}
 .anbefalingsliste li { margin: 0.5em;}
 .rss-link { margin-left:6px; width:67%; font-size: 13px; padding: 2px; height:18px;}
 .liste-tittel { font-size: 1.5em; display:inline-block; float:left; cursor: pointer;}
