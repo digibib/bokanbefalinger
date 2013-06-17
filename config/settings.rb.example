@@ -33,8 +33,8 @@ module Settings
    :feed => "http://anbefalinger.deichman.no/feed?audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fjuvenile&audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fages_0-5&audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fages_6-7&audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fages_8-9&audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fages_10-11&audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fages_12-15"},
    {:title => "Anbefalte fantasybøker for barn og ungdom",
     :feed => "http://anbefalinger.deichman.no/feed?audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fjuvenile&audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fages_0-5&audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fages_6-7&audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fages_8-9&audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fages_10-11&audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fages_12-15&genres=http%3A%2F%2Fdata.deichman.no%2FgenreBroader%2Ffantastisk"},
-   {:title => "Anbefalte bøker fra 90-tallet",
-    :feed => "http://anbefalinger.deichman.no/feed?years_from=1990&years_to=2000"},
+   {:title => "Anbefalte bøker på nynorsk",
+    :feed => "http://anbefalinger.deichman.no/feed?languages=http%3A%2F%2Flexvo.org%2Fid%2Fiso639-3%2Fnno"},
    {:title => "Tynne bøker (under 200 sider) for voksne",
     :feed => "http://anbefalinger.deichman.no/feed?audience=http%3A%2F%2Fdata.deichman.no%2Faudience%2Fadult&pages_from=0&pages_to=200"},
    {:title => "Anbefalinger av Karin Fossums krimbøker",
@@ -42,5 +42,11 @@ module Settings
    {:title => "Anbefalinger av bøker om Henrik Ibsen",
    :feed => "http://anbefalinger.deichman.no/feed?persons=http%3A%2F%2Fdata.deichman.no%2Fperson%2Fx14062100"},
    {:title => "Bøker av amerikanske forfattere",
-    :feed => "http://anbefalinger.deichman.no/feed?nationalities=http%3A%2F%2Fdata.deichman.no%2Fnationality%2Fam"}]
+    :feed => "http://anbefalinger.deichman.no/feed?nationalities=http%3A%2F%2Fdata.deichman.no%2Fnationality%2Fam"},
+   {:title => "Anbefalte engelske bøker",
+    :feed =>  "http://anbefalinger.deichman.no/feed?languages=http%3A%2F%2Flexvo.org%2Fid%2Fiso639-3%2Feng"},
+   {:title => "Anbefalte julebøker",
+   :feed => "http://anbefalinger.deichman.no/feed?subjects=http%3A%2F%2Fdata.deichman.no%2Fsubject%2Fjul&subjects=http%3A%2F%2Fdata.deichman.no%2Fsubject%2Fjuleevangeliet&subjects=http%3A%2F%2Fdata.deichman.no%2Fsubject%2Fjulemat"},
+   {:title => "Anbefalte novellesamlinger",
+   :feed => "http://anbefalinger.deichman.no/feed?formats=http%3A%2F%2Fdbpedia.org%2Fresource%2FShort_stories"}]
 end
