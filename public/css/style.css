@@ -347,7 +347,7 @@ header {
   position: relative;
   display: inline-block;
   height: 100%;
-  width: 150px;
+  width: 189px;
   margin-bottom:2px;
   text-align: center;
   border-radius: 2px;
@@ -368,14 +368,14 @@ span.inner-navbutton:hover {
   font-weight: bold;
 }
 
-@media only screen and (min-width: 830px) {
+@media only screen and (min-width: 1030px) {
   #navbar li.active :after {
     position: absolute;
     content: ' ';
     height: 0;
     width: 0;
     top: 45px;
-    left:62px;
+    left:89px;
     border: 10px solid transparent;
     border-top-color: #444;
   }
