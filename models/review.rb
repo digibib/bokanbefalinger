@@ -67,8 +67,8 @@ class Review
     @book_work    = work["uri"]
     @book_authors = work["authors"]
     @book_title   = work["prefTitle"] || work["originalTitle"]
-    # TODO fix this next line: make sure it never fails, witouh rescue nil
-    @book_cover   = work["editions"].select { |e| e["uri"] == review["edition"] }.first["cover_url"] || work["cover_url"] rescue nil
+    edition = work["editions"].select { |e| e["uri"] == review["edition"] }.first || {}
+    @book_cover   = edition["cover_url"] || edition["altDepictedBy"]
   end
 
   def self.create(params)
