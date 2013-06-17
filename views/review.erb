@@ -31,7 +31,7 @@
 					</div>
 				<% end %>
 				<p class="liste-title"><%= @review.book_title %></p>
-				<p class="liste-author">av <%= authors_links(@review.book_authors) %></p>
+				<p class="liste-author"><%= authors_links(@review.book_authors) %></p>
 				<p class="liste-under">anbefalt av <%= reviewer_link(@review) %> <span class="liste-date"><%= dateformat(@review.issued) %></span> </p>
 				<% if @review.teaser %>
 					<p class="review-teaser"><strong><%= @review.teaser %></strong></p>
