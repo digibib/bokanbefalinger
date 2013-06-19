@@ -103,7 +103,7 @@
 				<% end %>
 			<% end %>
 		<% else %>
-			<% (@count / 10).times do |i| %>
+			<% (@count.roundup / 10).times do |i| %>
 				<% if @page == i+1 %>
 					<strong><%= i+1 %></strong>
 				<% else %>
