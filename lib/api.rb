@@ -11,6 +11,7 @@
 # TODO refactor requests so that get/post/put/delete uses one request method,
 #      with one rescue etc
 # TODO Make sure all connection errors are rescued (check Errno::xxx)
+# TODO set request timeout! a few secounds
 
 require "faraday"
 
