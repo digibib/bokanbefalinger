@@ -71,7 +71,7 @@
 				</div>
 			<% end %>
 			<p class="liste-title"><a href="/anbefaling/<%= review.uri[24,200] %>"><%= review.book_title %></a></p>
-			<p class="liste-author">av <%= authors_links(review.book_authors) %></p>
+			<p class="liste-author"><%= authors_links(review.book_authors) %></p>
 			<p class="liste-under">anbefalt av <%= reviewer_link(review) %> <span class="liste-date"><%= dateformat(review.issued) %></span> </p>
 				<p class="liste-teaser"><%= review.teaser %></p>
 		</div>
