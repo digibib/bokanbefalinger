@@ -262,8 +262,8 @@ label { font-weight: bold;}
   font-size:15px;
 }
 
-.tooltiplist { font-size: 15px;}
-.tooltiplist li { margin-top: 0.5em;}
+.tooltiplist { font-size: 14px;}
+.tooltiplist li { margin-bottom: 0.5em;}
 .tooltip-target {
   cursor: pointer;
 }
