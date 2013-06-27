@@ -93,7 +93,7 @@
 						<strong><%= work.title %></strong>
 					</span>
 					<span class="right num">
-						<%= work.reviews.count %> anbefaling<%= 'er' if work.reviews.count > 1 %>
+						<%= work.reviews.reject { |r| r.published == false }.count %> anbefaling<%= 'er' if work.reviews.count > 1 %>
 					</span><br/>
 				</div>
 				<% work.reviews.each do |review| %>
