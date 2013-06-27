@@ -42,6 +42,7 @@ else
           end
           xml.enclosure(:url=>"#{review.book_cover}", :type=>"image/jpeg") if review.book_cover
           xml.pubDate Time.parse(review.issued.to_s).rfc822
+          xml.author "#{review.reviewer['name']} / #{review.source['name']}"
           xml.guid review.uri
         end
       end
