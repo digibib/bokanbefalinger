@@ -32,7 +32,7 @@ class Review
       raw = param
     end
 
-    unless raw["works"].size > 0
+    unless Array(raw["works"]).size > 0
       # TEMP to handle responses like:
       # http get marc2rdf.deichman.no/api/reviews uri=http://data.deichman.no/bookreviews/tfb/id_172
       # {
