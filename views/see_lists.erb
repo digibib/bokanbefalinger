@@ -10,7 +10,7 @@
 			<div class="liste-innhold" style="display:none">
 				<ol>
 					<% list[:reviews].each do |r| %>
-						<li><a href="/anbefaling/<%= r.uri[24,200] %>"><%= r.book_title %></a> av <%= authors_links(r.book_authors) %></li>
+						<li><a href="/anbefaling/<%= r.uri[24,200] %>"><%= r.book_title %></a><%= authors_links(r.book_authors) %></li>
 					<% end %>
 				</ol>
 				<div class="liste-link">
