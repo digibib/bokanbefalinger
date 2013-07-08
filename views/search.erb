@@ -86,6 +86,7 @@
 				</div>
 			<% end %>
 		<% elsif @type == "work-list" %>
+			<% @result = @result.delete_if { |w| w.reviews.all? { |r| r.published == false } } %>
 			<p style="color: #aaa"><%= @result.map {|w| w.reviews.reject { |r| r.published == false} .length } .inject(&:+) %> anbefalinger av <%= @result.count %> ulike bøker</p>
 			<% @result.each do |work| %>
 				<div class="search-hit">
