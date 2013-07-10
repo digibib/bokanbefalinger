@@ -43,6 +43,14 @@
 			<p class="error"><strong><%= @error_message %></strong></p>
 		<% end %>
 
+		<% if @feed_url %>
+			<div class="liste-link">
+				<h4>Abonnér på dette søket:</h4>
+				<span class="hint hint--bottom" data-hint="RSS også kalt «levende bokmerker» er en ordning der en nettleser på en datamaskin henter nyheter eller annet materiale fra Internett fortløpende og automatisk. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Du kan legge inn lenken på din blogg eller abonnere på i din RSS-leser"><img class="rss" src="img/feed-icon-28x28.png"></span><input class="rss-link" type="text" disabled="disabled" value="<%= @feed_url %>"><button class="medium green" id="rss-copy">Kopier</button>
+			</div>
+		<% end %>
+		<p><br></p>
+
 		<h3><%= @results_title %></h3>
 		<% if @type == "images" %>
 			<% @result.each do |review| %>
@@ -140,12 +148,6 @@
 		<% end %>
 		<div class="clearfix" style="margin:20px"></div>
 		<p><br></p>
-		<% if @feed_url %>
-			<div class="liste-link">
-				<h3>Abonnér på dette søket:</h3>
-				<span class="hint hint--bottom" data-hint="RSS også kalt «levende bokmerker» er en ordning der en nettleser på en datamaskin henter nyheter eller annet materiale fra Internett fortløpende og automatisk. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Du kan legge inn lenken på din blogg eller abonnere på i din RSS-leser"><img class="rss" src="img/feed-icon-28x28.png"></span><input class="rss-link" type="text" disabled="disabled" value="<%= @feed_url %>"><button class="medium green" id="rss-copy">Kopier</button>
-			</div>
-		<% end %>
 	</div>
 </div>
 
