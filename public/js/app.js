@@ -154,13 +154,17 @@ $('document').ready(function() {
 		$(this).parents('.single-list').find('.edit-title').show();
 	});
 
+	// copy rss link
+	$('#mylists-container').on('click', '.mylist-rss-copy', function() {
+		window.prompt("Trykk Ctrl+C, så Enter for å kopiere", $(this).parents(".single-list").find(".mylist-rss-link").val());
+	});
+
 	// Save list
 	$('#mylists-container').on('click', '.save-list', function() {
 		var $btn = $(this);
 		$btn.html("<img style='height:12px' src='/img/loading.gif'>");
 		var $list = $(this).parents('.single-list');
 		var uri = $list.attr('id');
-		//console.log("saving list: " + uri);
 
 		var label = $list.find('.liste-navn').val();
 		var items = [];
@@ -178,14 +182,15 @@ $('document').ready(function() {
 
 
 		request.done(function(data) {
-			//console.log("list saved");
+			// list saved
 			$btn.html("lagre");
 			$list.find('.myliste-tittel').html(label);
 			$list.attr("id", (data.uri.substr(31)));
 			$list.find('.edit-title').hide();
 			$list.find('.mylist-buttons').show()
 			$list.find('.edit-list-title').show();
-			$list.find('.list-rss-link').attr("href", "/feed?list=" +data.uri + "&title=" + label).show(); // show RSS link
+			$list.find(".mylist-rss-link").val("http://anbefalinger.deichman.no/feed?list=" + data.uri+ "&title=" + data.label);
+			$list.find('.mylist-rss-copy').show();
 
 			if (uri == "id_new") {
 				// add new list to dropdown, and change "uten tittel" to "lag ny liste"

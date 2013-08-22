@@ -39,7 +39,10 @@
 						<button style="<%= 'display:none' if list["uri"][31..-1] == "id_new" %>" class="edit-list-title">endre tittel</button>
 						<button class="delete-list">slett lista</button>
 					</div>
-					<p><a style="<%= 'display:none' if list['uri'][31..-1] == 'id_new' %>" class="list-rss-link" href="/feed?list=<%= list['uri'] %>&title=<%= list['label']%>">Lista som RSS-strøm</a></p>
+					<p>
+					<input type="hidden" class="mylist-rss-link" value="http://anbefalinger.deichman.no/feed?list=<%= list['uri'] %>&title=<%= list['label']%>"></input>
+					<button style="<%= 'display:none' if list['uri'][31..-1] == 'id_new' %>" class="long green mylist-rss-copy">Kopier RSS-lenken</button>
+					</p>
 				</div>
 			</div>
 		<% end %>
