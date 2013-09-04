@@ -25,7 +25,7 @@ Innstaller [Torquebox](http://torquebox.org) og [Immutant](http://immutang.org):
 
 ```bash
 $ cat > /home/torquebox/.lein/profiles.clj <<EOF
-$ {:user {:plugins [[lein-immutant "0.18.0"]] }}
+$ {:user {:plugins [[lein-immutant "1.0.1"]] }}
 $ EOF
 $ lein immutant install
 $ lein immutant overlay
@@ -34,7 +34,7 @@ $ lein immutant overlay
 Set opp environment. Legg til i `/home/torquebox/.bashrc`:
 
 ```bash
-export TORQUEBOX_HOME=/home/torquebox/.lein/immutant/current
+export TORQUEBOX_HOME=/home/torquebox/.immutant/current
 export IMMUTANT_HOME=$TORQUEBOX_HOME
 export JBOSS_HOME=$TORQUEBOX_HOME/jboss
 export JRUBY_HOME=$TORQUEBOX_HOME/jruby
@@ -72,7 +72,7 @@ limit nofile 4096 4096
 script
 bash << "EOF"
   su - torquebox
-  /home/torquebox/.lein/immutant/current/jboss/bin/standalone.sh >> /var/log/torquebox/torquebox.log 2>&1
+  /home/torquebox/.immutant/current/jboss/bin/standalone.sh >> /var/log/torquebox/torquebox.log 2>&1
 EOF
 end script
 ```
@@ -100,8 +100,8 @@ JBoss server til port 8080.
     ProxyPassReverse http://localhost:8080/
   </Proxy>
 
-  ErrorLog /var/log/apache2/nyeanbefalinger.deichman.no_error
-  CustomLog /var/log/apache2/nyeanbefalinger.deichman.no_access combined
+  ErrorLog /var/log/apache2/anbefalinger.deichman.no_error
+  CustomLog /var/log/apache2/anbefalinger.deichman.no_access combined
 </VirtualHost>
 ```
 
