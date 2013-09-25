@@ -1,31 +1,30 @@
 <div class="main-left grid_unit l-grid_unit--span-5">
 	<h2>API</h2>
-	<h3>Om API-et</h3>
+	<h3>Om APIet</h3>
 	<p>Et API er et programmeringsgrensesnitt som skal gjøre det enklest mulig for applikasjoner å kommunisere om de viktigste funksjonene: opprette, finne, oppdatere og slette ressurser.</p>
 	<p>Dette gjør det mulig å enkelt koble seg på fra andre applikasjoner og bruke bokanbefalingsbasen både til å finne og lagre anbefalinger. Vi har forsøkt å gjøre det enklest mulig ved å bruke REST/JSON som er dagens kommunikasjonsform/standard.</p>
 	<h3>Slik kan du og ditt bibliotek bidra</h3>
-	<p>Hvis biblioteket ditt har en egen Wordpress-installasjon (blogg), har vi allerede laget et <a href="https://github.com/digibib/wp-review-publish">plugin</a> som kobler seg direkte til bokanbefalingsbasen. Biblioteket trenger bare fylle inn noen ekstra felt, bl.a. isbn på omtalt bok, og pluginet vil sørge for å koble anmeldelsen til basen.</p>
-	<p><a href="mailto:digitalutvikling@gmail.com">Ta kontakt med oss</a> for å få en unik API-nøkkel til ditt bibliotek</p>
+	<p>Hvis biblioteket ditt har en egen Wordpress-installasjon (blogg), har vi allerede laget et <a href=”https://github.com/digibib/wp-review-publish”>plugin</a> som kobler seg direkte til bokanbefalingsbasen. Biblioteket trenger bare å fylle inn noen ekstra felt, blant annet isbn på omtalt bok, og pluginet vil sørge for å koble anmeldelsen til basen.</p>
+	<p><a href=”mailto:digitalutvikling@gmail.com”>Ta kontakt med oss</a> for å få en unik API-nøkkel til ditt bibliotek.</p>
 	<h3>Slik gjør du</h3>
-	<p>For å kunne hente ut anbefalinger fra basen er det bare å bruke APIet vårt som beskrevet nedenfor. Hvis dere vil dele egne anbefalinger med andre bibliotek i Norge (noe mange vil sette pris på!) er det bare å kontakte oss for å få en api-nøkkel som gir tilgang til å publisere i basen.</p>
-	<p>APIet bruker standard CRUD (Create, Read, Update & Delete) som betyr at transaksjonene skjer via nettprotokollen 'http' som alle nettlesere kjenner. Metodene nedenfor beskriver basistransaksjonene i APIet for å finne, lage, oppdatere og slette anbefalinger. Disse kan brukes i skjema eller applikasjoner på nettsiden eller bloggen deres.</p>
-	<h3>API-methoder</h3>
+	<p>For å kunne hente ut anbefalinger fra basen, er det bare å bruke APIet vårt som beskrevet nedenfor. Hvis dere vil dele egne anbefalinger med andre bibliotek i Norge (noe mange vil sette pris på!), er det bare å kontakte oss for å få en API-nøkkel som gir tilgang til å publisere i basen.</p>
+	<p>APIet bruker standard CRUD (Create, Read, Update & Delete) som betyr at transaksjonene skjer via nettprotokollen 'http' som alle nettlesere kjenner. Metodene nedenfor beskriver basistransaksjonene i APIet for å finne, lage, oppdatere og slette anbefalinger. Disse kan brukes i skjema eller i applikasjoner på nettsiden eller bloggen deres.</p>
+	<h3>API-metoder</h3>
 	<p>Noen eksempler:</p>
-
-	<p>hent anbefalinger:<br/>
-	<pre>GET anbefalinger.deichman.no/api/reviews limit=10 order_by=issued</pre>
-	</p>
+	<p>hent anbefalinger:<br>
+	<pre>GET anbefalinger.deichman.no/api/reviews limit=10 order_by=issued</pre></p>
 	<p>slå opp en bok på isbn og finn anbefalinger:<br>
 	<pre>GET anbefalinger.deichman.no/api/works isbn=9789512075997 reviews=true</pre></p>
 	<p>legg til en ny anbefaling:<br>
-	<pre>POST anbefalinger.deichman.no/api/reviews isbn=9789512075997 api_key=(din apinøkkel her) title="Vent ikke, les boka" teaser="Denne boka gir deg sjøbein!" text="Her er den fulle og hele omtalen av favorittboka di!" reviewer=(din brukerid)</pre></p>
-	<p>(i responsen er det generert en unik id (URI) til anbefalingen som må brukes til å oppdatere eller slette)</p>
+	<pre>POST anbefalinger.deichman.no/api/reviews isbn=9789512075997 api_key=(din api-nøkkel her) title="Vent ikke, les boka" teaser="Denne boka gir deg sjøbein!" text="Her er den fulle og hele omtalen av favorittboka di!" reviewer=(din bruker-id)</pre>
+	(i responsen er det generert en unik ID (URI) til anbefalingen som må brukes til å oppdatere eller slette)</p>
 	<p>oppdater en anbefaling:<br>
-	<pre>PUT anbefalinger.deichman.no/api/reviews uri=(den unike id-en som kom når den ble opprettet) api_key=(din apinøkkel her) title="Vent ikke, les boka" teaser="Denne boka gir deg sjøbein!" text="Her er den fulle og hele omtalen av favorittboka di!"</pre></p>
+	<pre>PUT anbefalinger.deichman.no/api/reviews uri=(den unike id-en som kom når den ble opprettet) api_key=(din api-nøkkel her) title="Vent ikke, les boka" teaser="Denne boka gir deg sjøbein!" text="Her er den fulle og hele omtalen av favorittboka di!"</pre></p>
 	<p>slett en anbefaling:<br>
-	<pre>DELETE anbefalinger.deichman.no/api/reviews uri=(den unike id-en som kom når den ble opprettet) api_key=(din apinøkkel her)</pre></p>
-	<h3>API-dokumetasjon</h3>
-	<p>Se <a href="https://github.com/digibib/data.deichman.api">github</a> for utfyllende dokumentasjon.</p>
+	<pre>DELETE anbefalinger.deichman.no/api/reviews uri=(den unike id-en som kom da den ble opprettet) api_key=(din api-nøkkel her)</pre></p>
+	<h3>API-dokumentasjon</h3>
+	<p>Se <a href=”https://github.com/digibib/data.deichman.api”>github</a> for utfyllende dokumentasjon.</p>
+
 
 </div>
 <div class="main-right grid_unit l-grid_unit--span-2">
