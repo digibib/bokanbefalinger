@@ -59,6 +59,7 @@ $(document).ready(function() {
 			$('#isbn').prop("disabled", false);
 			$('.loading-message').hide();
 			$('#isbn-notfound').hide();
+			$('#isbn-author').html("");
 			$('#isbn-author').html(data.authors[0].name);
 			if (data.prefTitle) {
 				$('#isbn-title').html(data.prefTitle);
