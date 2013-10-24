@@ -66,7 +66,7 @@ class BokanbefalingerApp < Sinatra::Application
       unless @not_found
         @result = work.reviews.reject {|r| r.published == false }
         @type = "list"
-        @results_title = "Fant #{work.reviews.count} anbefalinger av #{work.reviews.first.book_title} av #{work.authors.map {|n| n["name"]} .join(", ")}"
+        @results_title = "Fant #{work.reviews.count} anbefalinger av #{work.title} av #{work.authors.map {|n| n["name"]} .join(", ")}"
         @feed_url = "http://anbefalinger.deichman.no/feed?isbn=#{isbn}"
       end
     end
