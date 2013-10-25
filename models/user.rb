@@ -15,7 +15,7 @@ class User
     # Returns two values: error/nil + authorized true/false
 
     # 1. Check username+password: api/users/authenticate
-    params = {:username => username.downcase, :password => password.downcase}
+    params = {:username => username, :password => password}
     res = API.post(:authenticate, params) { |err| return err.message, false }
     return [nil, false] unless res["authenticated"]
     # user+pass OK, set session user
