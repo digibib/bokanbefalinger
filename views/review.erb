@@ -1,6 +1,6 @@
 <div class="main-left grid_unit l-grid_unit--span-5">
 	<% if request.referrer =~ /sok?\?/ %>
-		<p><a href="javascript: history.back()">← tilbake til trefflista</a></p>
+		<p><a href="javascript: history.back()">← Tilbake til trefflista</a></p>
 	<% end %>
 	<div id="review-heading">
 		<div class="book-cover <%= "light-gray" unless @review.book_cover %>">
@@ -32,7 +32,7 @@
 				<% end %>
 				<p class="liste-title"><%= @review.book_title %></p>
 				<p class="liste-author"><%= authors_links(@review.book_authors) %></p>
-				<p class="liste-under">anbefalt av <%= reviewer_link(@review) %> <span class="liste-date"><%= dateformat(@review.issued) %></span> </p>
+				<p class="liste-under">Anbefalt av <%= reviewer_link(@review) %> <span class="liste-date"><%= dateformat(@review.issued) %></span> </p>
 				<% if @review.teaser %>
 					<p class="review-teaser"><strong><%= @review.teaser %></strong></p>
 				<% end %>
@@ -68,7 +68,7 @@
 					<strong class="red-text"><a href="/anbefaling<%= r.uri[23..-1] %>"><%= r.title%></a></strong>
 				</span><br>
 			</div>
-			<p class="other-reviews">anbefalt av <%= reviewer_link(r) %> <span class="liste-date"><%= dateformat(r.issued) %></span> </p>
+			<p class="other-reviews">Anbefalt av <%= reviewer_link(r) %> <span class="liste-date"><%= dateformat(r.issued) %></span> </p>
 			<p class="other-teaser"><%= r.teaser %></p>
 		<% end %>
 	<% else %>

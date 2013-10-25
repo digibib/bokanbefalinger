@@ -32,12 +32,12 @@
 					</ol>
 					<div class="edit-title" style="<%= 'display:none' unless list["uri"][31..-1] == "id_new" %>">
 
-						<input autocomplete="off" class="liste-navn" placeholder="navn på lista" type="text" value="<%= list['label'] %>">
-						<button class="save-list">lagre</button>
+						<input autocomplete="off" class="liste-navn" placeholder="Navn på lista" type="text" value="<%= list['label'] %>">
+						<button class="save-list">Lagre</button>
 					</div>
 					<div class="mylist-buttons">
-						<button style="<%= 'display:none' if list["uri"][31..-1] == "id_new" %>" class="edit-list-title">endre tittel</button>
-						<button class="delete-list">slett lista</button>
+						<button style="<%= 'display:none' if list["uri"][31..-1] == "id_new" %>" class="edit-list-title">Endre tittel</button>
+						<button class="delete-list">Slett lista</button>
 					</div>
 					<p>
 					<input type="hidden" class="mylist-rss-link" value="http://anbefalinger.deichman.no/feed?list=<%= list['uri'] %>&title=<%= list['label']%>"></input>
