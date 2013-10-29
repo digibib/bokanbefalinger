@@ -11,6 +11,7 @@ class BokanbefalingerApp < Sinatra::Application
 
     @isbn = params["isbn"]
     @work = Work.new(@isbn) { |err| @error_message = err.message }
+    @work.reviews = @work.reviews.reject { |r| r.published == false }
 
     # TODO check this
     @cover = @work.editions.select { |e| e["isbn"] == params["isbn"].gsub(/[^0-9Xx]/, "") }.first["cover_url"] || @work.cover
