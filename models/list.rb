@@ -61,7 +61,7 @@ class List
     # Returns an array of all (or up to max 100) reviews by a reviewer.
     # Returns an empty array if no reviews found, or something went wrong.
     raw = Cache.get(reviewer_uri, :reviewers) {
-      params = {:reviewer => reviewer_uri, :limit => 500,
+      params = {:reviewer => reviewer_uri, :limit => 1500,
                 :order_by => "issued", :order => "desc"}
       res = API.get(:reviews, params) { |error| return [] }
       Cache.set(reviewer_uri, res, :reviewers)
