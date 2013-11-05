@@ -20,7 +20,7 @@ when format.include?('application/atom+xml')
         xml.content review.text, :type => "html"
         xml.link(:href => review.book_cover, :rel => "enclosure", :type=>"image/jpg") if review.book_cover
         xml.updated Time.parse(review.issued.to_s).xmlschema
-        xml.id review.uri
+        xml.id "http://anbefalinger.deichman.no/anbefaling/#{review.uri[24..-1]}"
       end
     end
   end
@@ -43,7 +43,7 @@ else
           xml.enclosure(:url=>"#{review.book_cover}", :type=>"image/jpeg") if review.book_cover
           xml.pubDate Time.parse(review.issued.to_s).rfc822
           xml.author "#{review.reviewer['name']} / #{review.source['name']}"
-          xml.guid review.uri
+          xml.guid "http://anbefalinger.deichman.no/anbefaling/#{review.uri[24..-1]}"
         end
       end
     end
