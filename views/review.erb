@@ -55,6 +55,7 @@
 			<% audiences = @review.audiences %>
 		<% end %>
 		<p><em>Denne anbefalingen er skrevet for <%=  audiences.map { |a| a.downcase } .join("/") %></em></p>
+		<p class="licence"><a href="http://creativecommons.org/licenses/by-sa/3.0/no/">Denne anbefalingen er publisert med en Creative Commons lisens</a></p>
 	</div>
 	<% if session[:user] and session[:user_uri] == @review.reviewer["uri"] %>
 		<a href="<%= '/rediger?uri=' + @review.uri %>"><button class="medium green">Rediger</button></a>
