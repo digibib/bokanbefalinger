@@ -75,9 +75,9 @@ module SPARQL
       query.from_named(REVIEWGRAPH)
       query.distinct
       query.where([:work, RDF::FABIO.hasManifestation, :book],
-                  [:work, RDF::DC.creator, :creator],
-                  [:creator, RDF::FOAF.name, :author], # TODO make optional?
                   [:book, RDF::REV.hasReview, :review])
+      query.optional([:work, RDF::DC.creator, :creator],
+                  [:creator, RDF::FOAF.name, :author])
 
       query.where([:book, RDF::DC.language, :language]) if criteria["languages"]
       if criteria["subjects"]
