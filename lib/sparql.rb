@@ -76,8 +76,10 @@ module SPARQL
       query.distinct
       query.where([:work, RDF::FABIO.hasManifestation, :book],
                   [:book, RDF::REV.hasReview, :review])
-      query.optional([:work, RDF::DC.creator, :creator],
-                  [:creator, RDF::FOAF.name, :author])
+      creatorPattern = [[:work, RDF::DC.creator, :creator],
+                        [:creator, RDF::FOAF.name, :author]]
+      creatorPattern.push([:creator, RDF::XFOAF.nationality, :nationality]) if criteria["nationalities"]
+      query.optional(*creatorPattern)
 
       query.where([:book, RDF::DC.language, :language]) if criteria["languages"]
       if criteria["subjects"]
@@ -95,7 +97,6 @@ module SPARQL
         query.where([:narrower, RDF::SKOS.broader, :genre])
       end
       query.where([:book, RDF::DEICHMAN.literaryFormat, :format]) if criteria["formats"]
-      query.where([:creator, RDF::XFOAF.nationality, :nationality]) if criteria["nationalities"]
 
       query.filter("?subject = <" + criteria["subjects"].join("> || ?subject = <") +">") if criteria["subjects"]
       query.filter("?person = <" + criteria["persons"].join("> || ?person = <") +">") if criteria["persons"]
