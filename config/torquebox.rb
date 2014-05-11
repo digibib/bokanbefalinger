@@ -25,7 +25,7 @@ TorqueBox.configure do
     cron "0 0/15 * * * ?"
   end
 
-  job FeedsJob do
-    cron "0 0 5 * * ?"
+  job CacheJob do
+    cron "0 0 4 * * ?"
   end
 end
