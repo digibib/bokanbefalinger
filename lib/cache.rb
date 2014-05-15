@@ -15,6 +15,8 @@
 require "redis"
 require "json"
 
+Encoding.default_external = Encoding::UTF_8
+
 class Cache
 
   # Redis allows us to organize the keys in numbered databases.
