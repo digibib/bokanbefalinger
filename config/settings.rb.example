@@ -20,6 +20,11 @@ module Settings
             :api => "http://data.deichman.no/apigraph",
             :base => "http://data.deichman.no" }
 
+  # Email
+
+  EMAIL = "myemail@gmail.com"
+  EMAIL_PASS = "secret"
+
   # Formatting:
 
   REVIEWS_PER_PAGE = 25

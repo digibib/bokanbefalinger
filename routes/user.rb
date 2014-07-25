@@ -117,4 +117,24 @@ class BokanbefalingerApp < Sinatra::Application
     erb :my_lists, :layout => false
   end
 
+  get "/new-password" do
+    erb :password
+  end
+
+  post "/new-password" do
+    email = params["email"]
+
+    if email == ""
+      session[:flash_error].push "ugyldig epostadresse"
+    else
+      begin
+        Email.new_password(email, rand(36**8).to_s(36))
+        session[:flash_info].push "epost med passord nytt sendt"
+      rescue Net::SMTPAuthenticationError => error
+        session[:flash_error].push "Noe gikk galt - fikk ikke sendt epost :("
+      end
+    end
+
+    erb :password
+  end
 end
