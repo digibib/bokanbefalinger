@@ -1,4 +1,8 @@
 # encoding: utf-8
+
+require "net/smtp"
+require_relative "../lib/email"
+
 class BokanbefalingerApp < Sinatra::Application
 
   post "/login" do

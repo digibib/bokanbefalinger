@@ -2,7 +2,6 @@
 require 'net/smtp'
 
 require_relative "../config/settings"
-require_relative "../lib/email"
 
 class Email
   include TorqueBox::Messaging::Backgroundable
