@@ -1,7 +1,9 @@
 # encoding: utf-8
 
 require "net/smtp"
+require_relative "../config/settings"
 require_relative "../lib/email"
+require_relative "../lib/api"
 
 class BokanbefalingerApp < Sinatra::Application
 
@@ -131,8 +133,35 @@ class BokanbefalingerApp < Sinatra::Application
     if email == ""
       session[:flash_error].push "ugyldig epostadresse"
     else
+      # get user source
+      res = API.get(:users, {:accountName => email}) { |err|
+        session[:flash_error].push err.message
+        return erb :password
+      }
+      user = res["reviewer"]["uri"]
+      source = res["reviewer"]["userAccount"]["accountServiceHomepage"]
+
+      # get source api_key: api/sources source=x (or preferably from cache)
+      res = Cache.get(source) {
+        headers = {:secret_session_key => Settings::SECRET_SESSION_KEY}
+        params = {:uri => source}
+        res = API.get(:sources, params, headers) { |err|
+          session[:flash_error].push err.message
+          return erb :password
+        }
+        Cache.set(session[:source_uri], res["source"])
+        res["source"]
+      }
+      # save new password
+      newpass = rand(36**8).to_s(36)
+      params = {:api_key => res["api_key"], :uri => user, :password => newpass}
+      API.put(:users, params) { |err|
+        session[:flash_error].push err.message
+        return erb :password
+      }
+      # send email
       begin
-        Email.new_password(email, rand(36**8).to_s(36))
+        Email.new_password(email, newpass)
         session[:flash_info].push "epost med passord nytt sendt"
       rescue Net::SMTPAuthenticationError => error
         session[:flash_error].push "Noe gikk galt - fikk ikke sendt epost :("
