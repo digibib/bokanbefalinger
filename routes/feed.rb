@@ -20,7 +20,7 @@ class BokanbefalingerApp < Sinatra::Application
         work = Work.new(list_params["isbn"].first)
         @result = work.reviews.reject { |r| r.published == false }
       elsif list_params["author"]
-        @result = List.from_reviewer(list_params["author"].first, false)
+        @result = List.from_author(list_params["author"].first, false)
       elsif list_params["source"]
         @result = List.from_source(list_params["source"].first)
       else # assume feed is from the list-generator
