@@ -23,7 +23,8 @@ class BokanbefalingerApp < Sinatra::Application
         works = List.from_author(list_params["author"].first)
         @result = []
         works.each do |work| 
-          @result << work.reviews.reject { |r| r.published == false }
+          work.reviews.reject { |r| r.published == false }
+          work.reviews.each {|r| @result << r }
         end
       elsif list_params["source"]
         @result = List.from_source(list_params["source"].first)
