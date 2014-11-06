@@ -21,7 +21,10 @@ class BokanbefalingerApp < Sinatra::Application
         @result = work.reviews.reject { |r| r.published == false }
       elsif list_params["author"]
         works = List.from_author(list_params["author"].first)
-        @result = works.reviews.reject { |r| r.published == false }
+        @result = []
+        works.each do |work| 
+          @result << work.reviews.reject { |r| r.published == false }
+        end
       elsif list_params["source"]
         @result = List.from_source(list_params["source"].first)
       else # assume feed is from the list-generator
