@@ -109,7 +109,7 @@ class List
     reviews.reject { |r| r.published == false }
   end
 
-  def self.from_author(author_uri)
+  def self.from_author(author_uri, include_unpublished=true)
     # Returns an array of all works (which has reviews) by an author.
     # Returns an empty array if no reviews found, or something went wrong.
     raw = Cache.get(author_uri, :authors) {
