@@ -109,7 +109,7 @@ class List
     reviews.reject { |r| r.published == false }
   end
 
-  def self.from_author(author_uri)
+  def self.from_author(author_uri, include_unpublished=true)
     # Returns an array of all works (which has reviews) by an author.
     # Returns an empty array if no reviews found, or something went wrong.
     raw = Cache.get(author_uri, :authors) {
@@ -120,12 +120,18 @@ class List
       res
     }
 
-    works = []
-    Array(raw["works"]).each do |w|
-      copy = {"works" => [w]}
-      works << Work.new(copy) if w["reviews"] and w["reviews"].size > 0
+    reviews = []
+    Array(raw["works"].first["reviews"]).each do |r|
+      copy = raw
+      copy["works"].first["reviews"]=[r]
+      reviews << Review.new(copy)
     end
-    works
+
+    if include_unpublished
+      reviews
+    else
+      reviews.reject { |r| r.published == false }
+    end
   end
 
   def self.from_uris(uris, offset=0, limit=10)
