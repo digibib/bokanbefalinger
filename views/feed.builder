@@ -18,7 +18,11 @@ when format.include?('application/atom+xml')
         xml.link(:href =>"http://anbefalinger.deichman.no/anbefaling/#{review.uri[24..-1]}")
         xml.summary review.teaser if review.teaser and not review.teaser.empty?
         xml.content review.text, :type => "html"
-        xml.link(:href => review.book_cover, :rel => "enclosure", :type=>"image/jpg") if review.book_cover
+        if review.book_cover do
+          xml.media :title "bokomslag"
+          xml.media :thumbnail, :url=>"#{review.book_cover}"
+          xml.link(:href => review.book_cover, :rel => "enclosure", :type=>"image/jpg")
+        end
         xml.updated Time.parse(review.issued.to_s).xmlschema
         xml.id "http://anbefalinger.deichman.no/anbefaling/#{review.uri[24..-1]}"
       end
