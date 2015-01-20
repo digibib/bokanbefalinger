@@ -18,7 +18,7 @@ when format.include?('application/atom+xml')
         xml.link(:href =>"http://anbefalinger.deichman.no/anbefaling/#{review.uri[24..-1]}")
         xml.summary review.teaser if review.teaser and not review.teaser.empty?
         xml.content review.text, :type => "html"
-        if review.book_cover do
+        if review.book_cover
           xml.media :title, "bokomslag"
           xml.media :thumbnail, :url=>"#{review.book_cover}"
           xml.link(:href => review.book_cover, :rel => "enclosure", :type=>"image/jpg")
