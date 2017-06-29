@@ -8,22 +8,17 @@ module Settings
 
   # External data sources:
 
-  SPARQL = "http://host:8890/sparql/"
-  SPARUL = "http://host:8890/sparql-auth/"
-  USER = "user"
-  PASSWORD = "password"
+  SPARQL = "http://virtuoso:8890/sparql/"
+  SPARUL = "http://virtuoso:8890/sparql-auth/"
+  USER = "dba"
+  PASSWORD = "dba"
   AUTH_METHOD = "digest"
-  SECRET_SESSION_KEY = "secret"
-  API = "http://example.com/api"
+  SECRET_SESSION_KEY = ENV['SECRET_SESSION_KEY']
+  API = "http://api:9393/api/"
   GRAPHS = {:review => "http://data.deichman.no/reviews",
             :book => "http://data.deichman.no/books",
-            :api => "http://data.deichman.no/apigraph",
+            :api => "http://data.deichman.no/sources",
             :base => "http://data.deichman.no" }
-
-  # Email
-
-  EMAIL = "myemail@gmail.com"
-  EMAIL_PASS = "secret"
 
   # Formatting:
 

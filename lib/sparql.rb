@@ -20,7 +20,8 @@ REPO        = RDF::Virtuoso::Repository.new(
               :update_uri => Settings::SPARUL,
               :username => Settings::USER,
               :password => Settings::PASSWORD,
-              :auth_method => Settings::AUTH_METHOD)
+              :auth_method => Settings::AUTH_METHOD,
+              :timeout => 30)
 
 REVIEWGRAPH = RDF::URI(Settings::GRAPHS[:review])
 BOOKGRAPH   = RDF::URI(Settings::GRAPHS[:book])
@@ -125,7 +126,6 @@ module SPARQL
         query.filter(years_filter.join(" || "))
       end
 
-      # TODO use Jboss logger
       puts "Fra LISTE-generator:\n", query.pp
 
       # Ideally, result should never be empty, given the dropdowns are always
@@ -465,7 +465,6 @@ module SPARQL
         query.filter(years_filter.join(" || "))
       end
 
-      # TODO use JBoss logger
       puts "REPOPULATE DROPDOWN:\n", query.pp
 
       result = REPO.select(query)

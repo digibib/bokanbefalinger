@@ -164,6 +164,7 @@ class BokanbefalingerApp < Sinatra::Application
         Email.new_password(email, newpass)
         session[:flash_info].push "epost med passord nytt sendt"
       rescue Net::SMTPAuthenticationError => error
+        puts error
         session[:flash_error].push "Noe gikk galt - fikk ikke sendt epost :("
       end
     end

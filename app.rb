@@ -1,16 +1,24 @@
 # encoding: utf-8
 require "sinatra"
-require "torquebox"
-require "torquebox-messaging"
 
 require "config/settings"
 require "lib/cache"
 require "lib/api"
 require "lib/formatting"
+require "lib/refresh"
+
+# Poor man's cron
+Thread.start {
+  loop do
+    Refresh.latest
+    Refresh.dropdowns
+    sleep(900) # 15 minutes
+  end
+}
 
 class BokanbefalingerApp < Sinatra::Application
 
-  use TorqueBox::Session::ServletStore
+  enable :sessions
 
   configure :development do
     require "sinatra/reloader"
@@ -28,6 +36,8 @@ class BokanbefalingerApp < Sinatra::Application
 
   before do
     @error_message = nil
+    session[:flash_error] ||= []
+    session[:flash_info] ||= []
   end
 
 end

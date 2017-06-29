@@ -32,7 +32,7 @@ class Cache
   def self.redis(n=0)
     # Return a Redis client, optionally with a specified database.
     # Defaults to 0 (various).
-    @@clients[n] ||= Redis.new(:db => n)
+    @@clients[n] ||= Redis.new(:host => "redis", :port => 6379, :db => n)
   end
 
   def self.flush(where=:various)

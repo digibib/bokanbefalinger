@@ -2,6 +2,7 @@
 
 require "json"
 require "cgi"
+require_relative "../lib/refresh"
 
 class BokanbefalingerApp < Sinatra::Application
 
@@ -69,8 +70,10 @@ class BokanbefalingerApp < Sinatra::Application
       if @review.published == false
         redirect "/rediger?uri=#{@review.uri}"
       else
-        QUEUE.publish({:type => :review_include_affected, :uri => @review.uri})
-        QUEUE.publish({:type => :latest, :uri => nil})
+        Thread.start {
+          Refresh.affected(@review.uri)
+          Refresh.latest
+        }
         redirect '/minside'
       end
     end

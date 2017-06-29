@@ -43,7 +43,7 @@ module API
      yield StandardError.new("Forespørsel til eksternt API(#{Settings::API})" +
                              " brukte for lang tid på å svare.")
   else
-    log "API RESPONSE [#{resp.status}]: #{JSON.parse(resp.body)}"
+    log "API RESPONSE [#{resp.status}]"
     if resp.body.match(/not found/) || resp.status != 200  #TODO match other bodies as well, remember string can also
                                                            # match review bodies, as 'error' did on astrid werner
       yield StandardError.new("Finner ingen ressurs med denne ID-en:" +
@@ -68,7 +68,7 @@ module API
        yield StandardError.new("Forespørsel til eksternt API(#{Settings::API})" +
                                " brukte for lang tid på å svare.")
     else
-      log "API RESPONSE [#{resp.status}]: #{JSON.parse(resp.body)}"
+      log "API RESPONSE [#{resp.status}]"
       unless [200, 201].include? resp.status
         yield StandardError.new("Forespørsel feilet")
       else
@@ -91,7 +91,7 @@ module API
        yield StandardError.new("Forespørsel til eksternt API(#{Settings::API})" +
                                " brukte for lang tid på å svare.")
     else
-      log "API RESPONSE [#{resp.status}]: #{JSON.parse(resp.body)}"
+      log "API RESPONSE [#{resp.status}]"
       unless resp.status == 200
         yield StandardError.new("Forespørsel feilet")
       else
@@ -114,7 +114,7 @@ module API
        yield StandardError.new("Forespørsel til eksternt API(#{Settings::API})" +
                                " brukte for lang tid på å svare.")
     else
-      log "API RESPONSE [#{resp.status}]: #{JSON.parse(resp.body)}"
+      log "API RESPONSE [#{resp.status}]"
       unless resp.status == 200
         yield StandardError.new("Forespørsel feilet")
       else

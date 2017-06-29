@@ -7,7 +7,7 @@
 require "time"
 require "cgi"
 
-class Fixnum
+class Integer
   def roundup
     # Round up to nearest multiple of 10
     return self if self % 10 == 0   # already a factor of 10

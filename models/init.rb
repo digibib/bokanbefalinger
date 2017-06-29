@@ -5,7 +5,6 @@
 # -----------------------------------------------------------------------------
 
 # Globals:
-QUEUE = TorqueBox::Messaging::Queue.new('/queues/cache')
 
 SearchDropdown = Struct.new(:authors, :titles, :reviewers, :sources)
 Dropdown = Struct.new(:subjects, :persons, :genres, :languages, :authors,

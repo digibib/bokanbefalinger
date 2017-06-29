@@ -42,7 +42,7 @@
 	<% teaser = @review.teaser %>
 	<div class="review-text">
 		<% text = @review.text %>
-		<% if compare_clean(text).start_with? teaser %>
+		<% if compare_clean(text).start_with?(teaser || "") %>
 			<%= text.gsub("#{teaser}", "") %>
 		<% else %>
 			<%= text %>

@@ -5,11 +5,9 @@
 # -----------------------------------------------------------------------------
 
 # TODO:
-# * remove debugging puts => use JBoss logger
 # * use API class to perform http requests
 
 require "faraday"
-require "torquebox-messaging"
 
 require_relative "../config/settings"
 require_relative "../models/init"
@@ -21,12 +19,23 @@ module Refresh
 
   REVIEWS_ENDPOINT = Faraday.new(:url => Settings::API + "reviews")
   WORKS_ENDPOINT = Faraday.new(:url => Settings::API + "works")
-  QUEUE = TorqueBox::Messaging::Queue.new('/queues/cache')
+
+  def affected(uri)
+    rev = review(uri)
+
+    # enqueue other uris affected by the review:
+    work(rev["works"].first["uri"])
+    reviewer(rev["works"].first["reviews"].first["reviewer"]["uri"])
+    rev["works"].first["authors"].each do |a|
+      author(a["uri"])
+    end
+    source(rev["works"].first["reviews"].first["source"]["uri"])
+  end
 
   def latest
     old = Cache.get("reviews:latest") { [] }
 
-    cache = SPARQL::Reviews.latest(0,100)
+    cache = SPARQL::Reviews.latest(0, 100)
     Cache.set("reviews:latest", cache, :various)
 
     # Check if any new reviews
@@ -34,7 +43,7 @@ module Refresh
     new_reviews.each do |n|
       puts "#{n} is a new review"
       u = n.to_s
-      QUEUE.publish({:type => :review_include_affected, :uri => u})
+      affected(u)
     end
 
     puts "Refreshed latest reviews cache"

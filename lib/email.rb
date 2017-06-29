@@ -4,12 +4,9 @@ require 'net/smtp'
 require_relative "../config/settings"
 
 class Email
-  include TorqueBox::Messaging::Backgroundable
 
-  FROM = Settings::EMAIL
+  FROM = ENV['GMAIL_ADR']
   FROM_ALIAS = "Bokanbefalinger/Deichmanske bibliotek"
-
-  always_background :new_user
 
    def self.new_password(email, password)
 
@@ -34,7 +31,7 @@ END_OF_MESSAGE
 
     smtp = Net::SMTP.new('smtp.gmail.com', 587)
     smtp.enable_starttls
-    smtp.start("gmail.com", Settings::EMAIL, Settings::EMAIL_PASS, :login) do
+    smtp.start("gmail.com", ENV['GMAIL_ADR'], ENV['GMAIL_PASS'], :login) do
       smtp.send_message msg, FROM, email
     end
 
