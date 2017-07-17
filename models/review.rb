@@ -67,8 +67,8 @@ class Review
     @book_work    = work["uri"]
     @book_authors = work["authors"]
     @book_title   = work["prefTitle"] || work["originalTitle"]
-    edition = work["editions"].select { |e| e["uri"] == review["edition"] }.first || {}
-    @book_cover   = edition["cover_url"] || edition["altDepictedBy"]
+    edition = work["editions"].select { |e| e["isbn"] == review["subject"] }.first || {}
+    @book_cover   = edition["cover_url"] || edition["altDepictedBy"] || work["cover_url"]
   end
 
   def self.create(params)

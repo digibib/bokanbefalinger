@@ -27,6 +27,7 @@ REVIEWGRAPH = RDF::URI(Settings::GRAPHS[:review])
 BOOKGRAPH   = RDF::URI(Settings::GRAPHS[:book])
 APIGRAPH    = RDF::URI(Settings::GRAPHS[:api])
 QUERY       = RDF::Virtuoso::Query
+AUTHOR_ROLE = RDF::URI("http://data.deichman.no/role#author")
 
 
 # monkeypatch to pretty-print SPARQL queries when debugging
@@ -51,8 +52,8 @@ module SPARQL
       query.distinct
       query.from(BOOKGRAPH)
       query.from_named(REVIEWGRAPH)
-      query.where([:work, RDF::FABIO.hasManifestation, :book],
-                  [:book, RDF::REV.hasReview, :review])
+      query.where([:book, RDF::DEICH.publicationOf, :work])
+      query.where([:work, RDF::REV.hasReview, :review, :context => REVIEWGRAPH])
       query.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
       query.order_by("DESC(?issued)")
       query.limit(100)
@@ -75,29 +76,31 @@ module SPARQL
       query.from(BOOKGRAPH)
       query.from_named(REVIEWGRAPH)
       query.distinct
-      query.where([:work, RDF::FABIO.hasManifestation, :book],
-                  [:book, RDF::REV.hasReview, :review])
-      creatorPattern = [[:work, RDF::DC.creator, :creator],
-                        [:creator, RDF::FOAF.name, :author]]
-      creatorPattern.push([:creator, RDF::XFOAF.nationality, :nationality]) if criteria["nationalities"]
+      query.where([:work, RDF::REV.hasReview, :review, :context => REVIEWGRAPH])
+      if criteria["languages"] || (criteria["pages"] and not criteria["pages"].empty?) || criteria["formats"] || (criteria["years"] and not criteria["years"].empty?)
+        query.where([:book, RDF::DEICH.publicationOf, :work])
+      end
+      creatorPattern = [[:work, RDF::DEICH.contributor, :contrib],
+                        [:contrib, RDF::DEICH.role, AUTHOR_ROLE],
+                        [:contrib, RDF::DEICH.agent, :creator],
+                        [:creator, RDF::DEICH.name, :author]]
+      creatorPattern.push([:creator, RDF::DEICH.nationality, :nationality]) if criteria["nationalities"]
       query.optional(*creatorPattern)
 
-      query.where([:book, RDF::DC.language, :language]) if criteria["languages"]
+      query.where([:book, RDF::DEICH.language, :language]) if criteria["languages"]
       if criteria["subjects"]
-        query.where([:book, RDF::DC.subject, :subject_narrower])
-        query.where([:subject, RDF::SKOS.narrower, :subject_narrower])
+        query.where([:work, RDF::DEICH.subject, :subject])
       end
-      query.where([:book, RDF::DC.subject, :person]) if criteria["persons"]
-      query.where([:book, RDF::BIBO.numPages, :pages]) if criteria["pages"] and not criteria["pages"].empty?
-      query.where([:work, RDF::DEICHMAN.assumedFirstEdition, :year]) if criteria["years"] and not criteria["years"].empty?
-      query.where([:book, RDF::DC.audience, :audience]) if criteria["audience"]
+      query.where([:work, RDF::DEICH.subject, :person]) if criteria["persons"]
+      query.where([:book, RDF::DEICH.numberOfPages, :pages]) if criteria["pages"] and not criteria["pages"].empty?
+      query.where([:book, RDF::DEICH.publicationYear, :year]) if criteria["years"] and not criteria["years"].empty?
+      query.where([:work, RDF::DEICH.audience, :audience]) if criteria["audience"]
       query.where([:review, RDF::DC.audience, :review_audience, :context => REVIEWGRAPH]) if criteria["review_audience"]
       query.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
       if criteria["genres"]
-        query.where([:book, RDF::DBO.literaryGenre, :narrower])
-        query.where([:narrower, RDF::SKOS.broader, :genre])
+        query.where([:work, RDF::DEICH.genre, :genre])
       end
-      query.where([:book, RDF::DEICHMAN.literaryFormat, :format]) if criteria["formats"]
+      query.where([:work, RDF::DEICH.literaryForm, :format]) if criteria["formats"]
 
       query.filter("?subject = <" + criteria["subjects"].join("> || ?subject = <") +">") if criteria["subjects"]
       query.filter("?person = <" + criteria["persons"].join("> || ?person = <") +">") if criteria["persons"]
@@ -121,7 +124,7 @@ module SPARQL
       if criteria["years"] and not criteria["years"].empty?
         years_filter = []
         criteria["years"].each do |from_to|
-          years_filter.push("(xsd:integer(?year) > #{from_to[0]} && xsd:integer(?year) < #{from_to[1]})")
+          years_filter.push("(xsd:integer(xsd:string(?year)) > #{from_to[0]} && xsd:integer(xsd:string(?year)) < #{from_to[1]})")
         end
         query.filter(years_filter.join(" || "))
       end
@@ -148,11 +151,9 @@ module SPARQL
       q.distinct
       q.from(BOOKGRAPH)
       q.from_named(REVIEWGRAPH)
-      q.where([:work, RDF::FABIO.hasManifestation, :book],
-              [:book, RDF::REV.hasReview, :review],
-              [:book, RDF::DC.subject, :subject_narrower],
-              [:subject, RDF::SKOS.narrower, :subject_narrower],
-              [:subject, RDF::SKOS.prefLabel, :subject_label])
+      q.where([:work, RDF::REV.hasReview, :review, :context => REVIEWGRAPH],
+              [:work, RDF::DEICH.subject, :subject],
+              [:subject, RDF::DEICH.prefLabel, :subject_label])
       q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
       res = REPO.select(q)
       subjects = {}
@@ -170,11 +171,10 @@ module SPARQL
       q.distinct
       q.from(BOOKGRAPH)
       q.from_named(REVIEWGRAPH)
-      q.where([:work, RDF::FABIO.hasManifestation, :book],
-              [:book, RDF::REV.hasReview, :review],
-              [:book, RDF::DC.subject, :person],
-              [:person, RDF::FOAF.name, :person_name],
-              [:person, RDF::URI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), RDF::FOAF.Person])
+      q.where([:work, RDF::REV.hasReview, :review, :context => REVIEWGRAPH],
+              [:work, RDF::DEICH.subject, :person],
+              [:person, RDF::DEICH.name, :person_name],
+              [:person, RDF::URI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"), RDF::DEICH.Person])
       q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
       q.optional([:person, RDF::DEICHMAN.lifespan, :lifespan])
       res = REPO.select(q)
@@ -199,11 +199,9 @@ module SPARQL
       q.distinct
       q.from(BOOKGRAPH)
       q.from_named(REVIEWGRAPH)
-      q.where([:work, RDF::FABIO.hasManifestation, :book],
-              [:book, RDF::REV.hasReview, :review],
-              [:book, RDF::DBO.literaryGenre, :narrower],
-              [:narrower, RDF::SKOS.broader, :genre],
-              [:genre, RDF::RDFS.label, :genre_label])
+      q.where([:work, RDF::REV.hasReview, :review, :context => REVIEWGRAPH],
+              [:work, RDF::DEICH.genre, :genre],
+              [:genre, RDF::DEICH.prefLabel, :genre_label])
       q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
       res = REPO.select(q)
       genres = {}
@@ -222,9 +220,9 @@ module SPARQL
       q.distinct
       q.from(BOOKGRAPH)
       q.from_named(REVIEWGRAPH)
-      q.where([:work, RDF::FABIO.hasManifestation, :book],
-              [:book, RDF::REV.hasReview, :review],
-              [:book, RDF::DC.language, :language],
+      q.where([:book, RDF::DEICH.publicationOf, :work],
+              [:work, RDF::REV.hasReview, :review, :context => REVIEWGRAPH],
+              [:book, RDF::DEICH.language, :language],
               [:language, RDF::RDFS.label, :language_label])
       q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
       res = REPO.select(q)
@@ -244,10 +242,11 @@ module SPARQL
       q.distinct
       q.from(BOOKGRAPH)
       q.from_named(REVIEWGRAPH)
-      q.where([:work, RDF::FABIO.hasManifestation, :book],
-              [:work, RDF::DC.creator, :author],
-              [:author, RDF::FOAF.name, :author_name],
-              [:book, RDF::REV.hasReview, :review])
+      q.where([:work, RDF::REV.hasReview, :review, :context => REVIEWGRAPH],
+              [:work, RDF::DEICH.contributor, :contrib],
+              [:contrib, RDF::DEICH.role, AUTHOR_ROLE],
+              [:contrib, RDF::DEICH.agent, :author],
+              [:author, RDF::DEICH.name, :author_name])
       q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
       res = REPO.select(q)
       authors = {}
@@ -266,9 +265,8 @@ module SPARQL
       q.distinct
       q.from(BOOKGRAPH)
       q.from_named(REVIEWGRAPH)
-      q.where([:work, RDF::FABIO.hasManifestation, :book],
-              [:book, RDF::REV.hasReview, :review],
-              [:book, RDF::DEICHMAN.literaryFormat, :format],
+      q.where([:work, RDF::REV.hasReview, :review, :context => REVIEWGRAPH],
+              [:work, RDF::DEICH.literaryForm, :format],
               [:format, RDF::RDFS.label, :format_label])
       q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
       res = REPO.select(q)
@@ -288,12 +286,14 @@ module SPARQL
       q.distinct
       q.from(BOOKGRAPH)
       q.from_named(REVIEWGRAPH)
-      q.where([:work, RDF::FABIO.hasManifestation, :book],
-              [:book, RDF::REV.hasReview, :review],
-              [:work, RDF::DC.creator, :creator],
-              [:creator, RDF::XFOAF.nationality, :nationality],
+      q.where([:work, RDF::REV.hasReview, :review, :context => REVIEWGRAPH],
+              [:work, RDF::DEICH.contributor, :contrib],
+              [:contrib, RDF::DEICH.role, AUTHOR_ROLE],
+              [:contrib, RDF::DEICH.agent, :creator],
+              [:creator, RDF::DEICH.nationality, :nationality],
               [:nationality, RDF::RDFS.label, :nationality_label])
       q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
+      puts q.pp
       res = REPO.select(q)
       nationalities = {}
 
@@ -312,11 +312,14 @@ module SPARQL
       q.distinct
       q.from(BOOKGRAPH)
       q.from_named(REVIEWGRAPH)
-      q.where([:work, RDF::FABIO.hasManifestation, :book],
-              [:work, RDF::DC.title, :original_title],
-              [:book, RDF::REV.hasReview, :review],
-              [:book, RDF::DC.title, :title])
+      q.where([:work, RDF::REV.hasReview, :review, :context => REVIEWGRAPH],
+              [:work, RDF::DEICH.mainTitle, :original_title],
+              [:book, RDF::DEICH.publicationOf, :work],
+              [:book, RDF::DEICH.mainTitle, :title],
+              [:review, RDF::DC.subject, :isbn, :context => REVIEWGRAPH],
+              [:book, RDF::DEICH.isbn, :isbn])
       q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
+      puts q.pp
       res = REPO.select(q)
       titles = {}
 
@@ -334,14 +337,12 @@ module SPARQL
 
       q = QUERY.select(:reviewer, :reviewer_name)
       q.distinct
-      q.from(BOOKGRAPH)
-      q.from_named(REVIEWGRAPH)
+      q.from(REVIEWGRAPH)
       q.from_named(APIGRAPH)
-      q.where([:work, RDF::FABIO.hasManifestation, :book],
-              [:book, RDF::REV.hasReview, :review])
-      q.where([:review, RDF::REV.reviewer, :reviewer, :context => REVIEWGRAPH])
+      q.where([:work, RDF::REV.hasReview, :review])
+      q.where([:review, RDF::REV.reviewer, :reviewer])
       q.where([:reviewer, RDF::FOAF.name, :reviewer_name, :context => APIGRAPH])
-      q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
+      q.where([:review, RDF::DC.issued, :issued])
       res = REPO.select(q)
       reviewers = {}
 
@@ -360,8 +361,7 @@ module SPARQL
       q.from(BOOKGRAPH)
       q.from_named(REVIEWGRAPH)
       q.from_named(APIGRAPH)
-      q.where([:work, RDF::FABIO.hasManifestation, :book],
-              [:book, RDF::REV.hasReview, :review])
+      q.where([:work, RDF::REV.hasReview, :review, :context => REVIEWGRAPH])
       q.where([:review, RDF::DC.source, :source, :context => REVIEWGRAPH])
       q.where([:review, RDF::DC.issued, :issued, :context => REVIEWGRAPH])
       q.where([:source, RDF::FOAF.name, :source_name, :context => APIGRAPH])
@@ -387,24 +387,24 @@ module SPARQL
 
       case dropdown
       when "s1"
-        patterns = [[:book, RDF::DBO.literaryGenre, :genre_narrower],
-                    [:genre_narrower, RDF::SKOS.broader, :uri]]
+        patterns = [:work, RDF::DEICH.genre, :uri]
       when "s2"
-        patterns = [[:book, RDF::DC.subject, :subject_narrower],
-                    [:uri, RDF::SKOS.narrower, :subject_narrower]]
+        pattern =[:work, RDF::DEICH.subject, :uri]
       when "s3"
-        pattern = [:book, RDF::DEICHMAN.literaryFormat, :uri]
+        pattern = [:work, RDF::DEICH.literaryForm, :uri]
       when "s4"
-        pattern = [:book, RDF::DC.audience, :uri]
+        pattern = [:work, RDF::DEICH.audience, :uri]
       when "s5"
-        pattern = [:work, RDF::DC.creator, :uri]
+        patterns = [[:work, RDF::DEICH.contributor, :contrib],
+                   [:contrib, RDF::DEICH.role, AUTHOR_ROLE],
+                   [:contrib, RDF::DEICH.agent, :uri]]
       when "s6"
-        pattern = [:creator, RDF::XFOAF.nationality, :uri]
+        pattern = [:creator, RDF::DEICH.nationality, :uri]
       when "s7"
-        patterns = [[:book, RDF::DC.subject, :uri],
-                    [:uri, RDF.type, RDF::FOAF.Person]]
+        patterns = [[:work, RDF::DEICH.subject, :uri],
+                    [:uri, RDF.type, RDF::DEICH.Person]]
       when "s10"
-        pattern = [:book, RDF::DC.language, :uri]
+        pattern = [:book, RDF::DEICH.language, :uri]
       when "s11"
         pattern = [:review, RDF::DC.audience, :uri, :context => REVIEWGRAPH]
       else
@@ -417,27 +417,31 @@ module SPARQL
       query.from_named(REVIEWGRAPH)
       query.where(pattern) if pattern
       query.where(*patterns) if patterns
-      query.where([:work, RDF::FABIO.hasManifestation, :book],
-                  [:work, RDF::DC.creator, :creator],
-                  [:creator, RDF::FOAF.name, :author],
-                  [:book, RDF::REV.hasReview, :review])
+      query.where([:work, RDF::REV.hasReview, :review, :context => REVIEWGRAPH])
+      unless authors.empty? || nationalities.empty?
+        query.where(
+          [:work, RDF::DEICH.contributor, :contrib],
+          [:contrib, RDF::DEICH.role, AUTHOR_ROLE],
+          [:contrib, RDF::DEICH.agent, :creator])
+      end
 
-      query.where([:book, RDF::DC.language, :language]) unless languages.empty?
-      unless subjects.empty?
-        query.where([:book, RDF::DC.subject, :subject_narrower])
-        query.where([:subject, RDF::SKOS.narrower, :subject_narrower])
+      if languages.size > 0 || !pages.size > 0 || years.size > 0
+        query.where([:book, RDF::DEICH.publicationOf, :work])
       end
-      query.where([:book, RDF::DC.subject, :person]) unless persons.empty?
-      query.where([:book, RDF::BIBO.numPages, :pages]) unless pages.empty?
-      query.where([:work, RDF::DEICHMAN.assumedFirstEdition, :year]) unless years.empty?
-      query.where([:book, RDF::DC.audience, :audience]) unless audience.empty?
+
+      query.where([:book, RDF::DEICH.language, :language]) unless languages.empty?
+      query.where([:book, RDF::DEICH.numberOfPages, :pages]) unless pages.empty?
+
+      query.where([:work, RDF::DEICH.subject, :subject]) unless subjects.empty?
+      query.where([:work, RDF::DEICH.subject, :person]) unless persons.empty?
+      query.where([:book, RDF::DEICH.publicationYear, :year]) unless years.empty?
+      query.where([:work, RDF::DEICH.audience, :audience]) unless audience.empty?
       query.where([:review, RDF::DC.audience, :review_audience, :context => REVIEWGRAPH]) unless review_audience.empty?
-      unless genres.empty?
-        query.where([:book, RDF::DBO.literaryGenre, :narrower])
-        query.where([:narrower, RDF::SKOS.broader, :genre])
+      if genres.size > 0
+        query.where([:work, RDF::DEICH.genre, :genre])
       end
-      query.where([:book, RDF::DEICHMAN.literaryFormat, :format]) unless formats.empty?
-      query.where([:creator, RDF::XFOAF.nationality, :nationality]) unless nationalities.empty?
+      query.where([:work, RDF::DEICH.literaryForm, :format]) unless formats.empty?
+      query.where([:creator, RDF::DEICH.nationality, :nationality]) unless nationalities.empty?
 
       query.filter("?subject = <" + subjects.join("> || ?subject = <") +">") unless subjects.empty?
       query.filter("?person = <" + persons.join("> || ?person = <") +">") unless persons.empty?
@@ -460,7 +464,7 @@ module SPARQL
       unless years.empty?
         years_filter = []
         years.each do |from_to|
-          years_filter.push("(xsd:integer(?year) > #{from_to[0]} && xsd:integer(?year) < #{from_to[1]})")
+          years_filter.push("(xsd:integer(xsd:string(?year)) > #{from_to[0]} && xsd:integer(xsd:string(?year)) < #{from_to[1]})")
         end
         query.filter(years_filter.join(" || "))
       end
