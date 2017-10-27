@@ -368,6 +368,10 @@ span.inner-navbutton:hover {
   font-weight: bold;
 }
 
+#navbar li:focus-within {
+  border: 2px yellow dotted;
+}
+
 @media only screen and (min-width: 1030px) {
   #navbar li.active :after {
     position: absolute;
@@ -848,4 +852,3 @@ p.search { width: 90%;}
 .hint--left:hover:after {
   margin: 0 12px -13px 0;
 }
-
