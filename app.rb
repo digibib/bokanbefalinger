@@ -6,6 +6,10 @@ require "lib/cache"
 require "lib/api"
 require "lib/formatting"
 require "lib/refresh"
+require "rack"
+require "redis-store"
+require "redis-rack"
+
 
 # Poor man's cron
 Thread.start {
@@ -18,7 +22,8 @@ Thread.start {
 
 class BokanbefalingerApp < Sinatra::Application
 
-  enable :sessions
+  #enable :sessions
+  use Rack::Session::Redis, :redis_server => 'redis://redis:6379/0'
 
   configure :development do
     require "sinatra/reloader"

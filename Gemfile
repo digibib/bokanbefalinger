@@ -6,6 +6,8 @@ gem "faraday"
 gem "rdf"
 gem "rdf-virtuoso"
 gem "builder"
+gem "redis-rack"
+gem "redis-store"
 
 group :development do
   gem "sinatra-reloader"
