@@ -425,7 +425,7 @@ module SPARQL
           [:contrib, RDF::DEICH.agent, :creator])
       end
 
-      if languages.size > 0 || !pages.size > 0 || years.size > 0
+      if languages.size > 0 || !(pages.size > 0) || years.size > 0
         query.where([:book, RDF::DEICH.publicationOf, :work])
       end
 
