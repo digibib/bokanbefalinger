@@ -387,9 +387,9 @@ module SPARQL
 
       case dropdown
       when "s1"
-        patterns = [:work, RDF::DEICH.genre, :uri]
+        pattern = [:work, RDF::DEICH.genre, :uri]
       when "s2"
-        pattern =[:work, RDF::DEICH.subject, :uri]
+        pattern = [:work, RDF::DEICH.subject, :uri]
       when "s3"
         pattern = [:work, RDF::DEICH.literaryForm, :uri]
       when "s4"
