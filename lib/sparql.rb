@@ -42,6 +42,79 @@ end
 
 module SPARQL
 
+  module Publications
+    def self.latest(limit, params)
+      query = QUERY.select(:publication)
+      query.distinct
+      query.from(BOOKGRAPH)
+      query.where([:publication, RDF.type, RDF::DEICH.Publication])
+      query.where([:publication, RDF::DEICH.created, :created])
+      query.where([:publication, RDF::DEICH.publicationOf, :work])
+      query.where([:publication, RDF::DEICH.hasImage, :image]) if params["mustHaveImage"]
+      if params["workType"]
+        query.where([:work, RDF::DEICH.hasWorkType, :workType])
+        query.filter("?workType = <http://data.deichman.no/workType#" + params["workType"].join("> || ?workType = <http://data.deichman.no/workType#") +">")
+      end
+      if params["audience"]
+        query.where([:work, RDF::DEICH.audience, :audience])
+        case params["audience"].first
+          when "adult"
+            query.filter("?audience = <http://data.deichman.no/audience#adult> || ?audience = <http://data.deichman.no/audience#ages13To15>")
+          when "juvenile"
+            query.filter("?audience = <http://data.deichman.no/audience#adult>")
+          when "children"
+            query.filter("?audience = <http://data.deichman.no/audience#ages0To2> || ?audience = <http://data.deichman.no/audience#ages3To5> || ?audience = <http://data.deichman.no/audience#ages6o8> || ?audience = <http://data.deichman.no/audience#ages9To10> || ?audience = <http://data.deichman.no/audience#ages11To12>")
+        end
+      end
+      if params["audience"] = "adult"
+         query.where([:work, RDF::DEICH.audience, RDF::URI("http://data.deichman.no/audience#adult")])
+      elsif params["audience"] = "juvenile"
+         query.where([:work, RDF::DEICH.audience, RDF::URI("http://data.deichman.no/audience#juvenile")])
+      elsif params["audience"] = "children"
+
+      end
+      query.order_by("DESC(?created)")
+      query.limit(limit)
+
+      res = REPO.select(query)
+      latest = res.bindings[:publication].map { |p| p.to_s }
+    end
+
+    def self.latest_for_adults(limit)
+      query = QUERY.select(:publication)
+      query.distinct
+      query.from(BOOKGRAPH)
+      query.where([:publication, RDF.type, RDF::DEICH.Publication])
+      query.where([:publication, RDF::DEICH.created, :created])
+      query.where([:publication, RDF::DEICH.publicationOf, :work])
+      query.where([:work, RDF::DEICH.audience, RDF::URI("http://data.deichman.no/audience#adult")])
+      query.order_by("DESC(?created)")
+      query.limit(limit)
+
+      res = REPO.select(query)
+      latest = res.bindings[:publication].map { |p| p.to_s }
+    end
+
+    def self.describe(id)
+      uri = RDF::URI(id)
+      query = QUERY.select(:title, :created, :image, :work, :description, :creator)
+      query.from(BOOKGRAPH)
+      query.where([uri, RDF::DEICH.mainTitle, :title])
+      query.where([uri, RDF::DEICH.created, :created])
+      query.where([uri, RDF::DEICH.publicationOf, :work])
+      query.optional([uri, RDF::DEICH.hasImage, :image])
+      query.optional([:work, RDF::DEICH.hasSummary, :description])
+      query.optional(*[[:work, RDF::DEICH.contributor, :contrib],
+                      [:contrib, RDF.type, RDF::URI("http://data.deichman.no/ontology#MainEntry")],
+                      [:contrib, RDF::DEICH.agent, :agent],
+                      [:agent, RDF::DEICH.name, :creator]])
+      res = REPO.select(query).bindings
+      res[:uri] = "https://sok.deichman.no/#{res[:work].first.to_s[24..-1]}/#{id[24..-1]}"
+      res
+    end
+  end
+
+
   module Reviews
 
     def self.latest(offset, limit)

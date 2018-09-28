@@ -14,6 +14,17 @@ require "cgi"
 
 class List
 
+  def self.publications(limit, params)
+    latest = SPARQL::Publications.latest(limit, params)
+    lista = []
+    latest.each do |uri|
+      error = nil
+      p = SPARQL::Publications.describe(uri)
+      lista << p
+    end
+    lista
+  end
+
   def self.latest(offset, limit)
     # Returns an array of the latest (max 100) published reviews
     # Returns an empty array if no reviews found, or something went wrong.

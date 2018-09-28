@@ -4,6 +4,13 @@ require "builder"
 
 class BokanbefalingerApp < Sinatra::Application
 
+  get '/nye_titler' do
+    params = params_from_feed_url(request.query_string)
+    @result = List.publications(100, params)
+    builder :titles, :locals => {:result => @result, :format => request.accept,
+            :url => request.url, :title => "Nye titler på Deichman"}
+  end
+
   get '/feed' do
     list_params = params_from_feed_url(request.query_string)
 
@@ -22,7 +29,7 @@ class BokanbefalingerApp < Sinatra::Application
       elsif list_params["author"]
         works = List.from_author(list_params["author"].first)
         @result = []
-        works.each do |work| 
+        works.each do |work|
           work.reviews.reject { |r| r.published == false }
           work.reviews.each {|r| @result << r }
         end
